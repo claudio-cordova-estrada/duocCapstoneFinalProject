@@ -23,7 +23,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
         
-        <TextBlock Text="PLANIFICAPP"
+        <TextBlock Text="PlanificApp"
            VerticalAlignment="Center"
            HorizontalAlignment="Left"
            Foreground="White"
