@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|c:\\documentos\\github\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|c:\\documentos\\github\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\core\\relaycomand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\core\\relaycomand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|c:\\documentos\\github\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\theme\\menubuttontheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\theme\\menubuttontheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|c:\\documentos\\github\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|c:\\documentos\\github\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,11 +30,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\App.xaml",
+              "RelativeDocumentMoniker": "PlanificApp\\App.xaml",
+              "ToolTip": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\App.xaml",
+              "RelativeToolTip": "PlanificApp\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-22T14:17:05.348Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MenuButtonTheme.xaml",
+              "DocumentMoniker": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Theme\\MenuButtonTheme.xaml",
+              "RelativeDocumentMoniker": "PlanificApp\\Theme\\MenuButtonTheme.xaml",
+              "ToolTip": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Theme\\MenuButtonTheme.xaml",
+              "RelativeToolTip": "PlanificApp\\Theme\\MenuButtonTheme.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-22T14:03:05.77Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RelayComand.cs",
+              "DocumentMoniker": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Core\\RelayComand.cs",
+              "RelativeDocumentMoniker": "PlanificApp\\Core\\RelayComand.cs",
+              "ToolTip": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Core\\RelayComand.cs",
+              "RelativeToolTip": "PlanificApp\\Core\\RelayComand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T13:35:07.689Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "PlanificApp\\MainWindow.xaml",
+              "ToolTip": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\MainWindow.xaml",
+              "RelativeToolTip": "PlanificApp\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-22T13:12:33.205Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "PlanificApp\\MainWindow.xaml.cs",
@@ -26,8 +91,7 @@
               "RelativeToolTip": "PlanificApp\\MainWindow.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-22T13:12:30.709Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-22T13:12:30.709Z"
             },
             {
               "$type": "Bookmark",

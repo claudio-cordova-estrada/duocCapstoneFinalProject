@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PlanificApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ee44e38b9bfc3b440ca24cd74ac809097956420")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89b2fa32875b11c50c24efd847aef9cab9f9a6b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("PlanificApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PlanificApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
