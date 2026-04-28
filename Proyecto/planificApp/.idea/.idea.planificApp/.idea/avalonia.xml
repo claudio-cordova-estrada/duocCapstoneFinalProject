@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="App.axaml" value="planificApp.csproj" />
+        <entry key="MainWindow.axaml" value="planificApp.csproj" />
+        <entry key="Styles/appDefaultStyles.axaml" value="planificApp.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
