@@ -4,23 +4,27 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-             <Application.Styles>
-                 <FluentTheme />
-        
-                 <StyleInclude Source="Styles/appDefaultStyles.axaml"></StyleInclude>
-             </Application.Styles>
+    <Application.Styles>
+        <FluentTheme />
 
-             <Application.Resources>
-                 <SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
-                 <SolidColorBrush x:Key="PrimaryForeground">#CFCFCF</SolidColorBrush>
-       
+        <StyleInclude Source="Styles/appDefaultStyles.axaml"></StyleInclude>
+    </Application.Styles>
+                 
+    <Application.Resources>
+        <SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryForeground">#CFCFCF</SolidColorBrush>
 
-                 <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
-                     <GradientStop Offset="0" Color="#111214"></GradientStop>
-                     <GradientStop Offset="1" Color="#151E3E"></GradientStop>
-                 </LinearGradientBrush>
-       
-                 <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
-                 <SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
-             </Application.Resources> 
+        <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
+            <GradientStop Offset="0" Color="#111214"></GradientStop>
+            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
+            
+        <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>
+        <FontFamily x:Key="AkkoProBold">avares://planificApp/Assets/Fonts/Akko-Pro-Bold.ttf#Akko Pro</FontFamily>
+        <FontFamily x:Key="Phosphor">avares://planificApp/Assets/Fonts/Phosphor.ttf#Phosphor</FontFamily>
+        <FontFamily x:Key="PhosphorFill">avares://planificApp/Assets/Fonts/Phosphor-Fill.ttf#Phosphor-Fill</FontFamily>
+    </Application.Resources> 
 </Application>
