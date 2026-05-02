@@ -1,6 +1,13 @@
-﻿namespace planificApp.ViewModels;
+﻿using planificApp.Data;
 
-public partial class TodayViewModel : ViewModelBase
+namespace planificApp.ViewModels;
+
+public partial class TodayViewModel : PageViewModel
 {
+
+    public TodayViewModel()
+    {
+        PageName = ApplicationPageNames.Today;
+    }
     public string Test { get; set; } = "Today";
 }

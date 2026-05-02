@@ -1,10 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using planificApp.Data;
+using planificApp.Factories;
 
 namespace planificApp.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
+    private PageFactory _pageFactory;
     private const string buttonActiveClass = "active";
     
     [ObservableProperty] 
@@ -16,18 +20,15 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(InboxPageIsActive))]
     [NotifyPropertyChangedFor(nameof(CalendarioSemanalPageIsActive))]
-    private ViewModelBase _currentPage;
+    private PageViewModel _currentPage;
 
-    public bool InboxPageIsActive => CurrentPage == _inboxPage;
-    public bool CalendarioSemanalPageIsActive => CurrentPage == _calendarioSemanalPage;
+    public bool InboxPageIsActive => CurrentPage.PageName == ApplicationPageNames.Inbox;
+    public bool CalendarioSemanalPageIsActive => CurrentPage.PageName == ApplicationPageNames.CalendarioSemanal;
 
-    private readonly InboxViewModel _inboxPage = new();
-    private readonly TodayViewModel _todayPage = new();
-    private readonly CalendarioSemanalViewModel _calendarioSemanalPage = new();
-
-    public MainViewModel()
+    public MainViewModel(PageFactory pageFactory)
     {
-        CurrentPage = _inboxPage;
+        _pageFactory = pageFactory;
+        GoToInbox();
     }
 
     [RelayCommand]
@@ -37,14 +38,11 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void GoToInbox()
-    {
-        CurrentPage = _inboxPage;
-    }
+    private void GoToInbox() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Inbox);
     
     [RelayCommand]
-    private void GoToCalendarioSemanal()
-    {
-        CurrentPage = _calendarioSemanalPage;
-    }
+    private void GoToCalendarioSemanal() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.CalendarioSemanal);
+    
+    [RelayCommand]
+    private void GoToToday() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Today);
 }

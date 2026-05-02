@@ -1,6 +1,12 @@
-﻿namespace planificApp.ViewModels;
+﻿using planificApp.Data;
 
-public partial class InboxViewModel : ViewModelBase
+namespace planificApp.ViewModels;
+
+public partial class InboxViewModel : PageViewModel
 {
+    public InboxViewModel()
+    {
+        PageName = ApplicationPageNames.Inbox;
+    }
     public string Test { get; set; } = "Inbox";
 }
