@@ -88,3 +88,4 @@ C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\planificApp.pdb
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\planificApp.genruntimeconfig.cache
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\ref\planificApp.dll
+C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\CommunityToolkit.Mvvm.dll

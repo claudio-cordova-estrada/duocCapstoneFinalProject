@@ -3,8 +3,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="planificApp.MainWindow"
+        x:Class="planificApp.MainView"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
+        x:DataType="vm:MainViewModel"
         Title="planificApp">
+        
+        <Design.DataContext>
+                <vm:MainViewModel/>
+        </Design.DataContext>
         
         <Grid Background="{DynamicResource PrimaryBackground}" ColumnDefinitions="Auto, *">
                 <Border Padding="20" Background="{DynamicResource PrimaryBackgroundGradient}">
@@ -12,29 +18,30 @@
                                 <StackPanel Spacing="12">
                                         <Button>
                                                 <StackPanel Orientation="Horizontal">
-                                                        <Image Source="avares://planificApp/Assets/Images/userImage.png" Height="40" HorizontalAlignment="Left"></Image>
-                                                        <Label Content="nombreUsuario" FontSize="12" VerticalAlignment="Center" Padding="12"></Label>
+                                                        <Image PointerPressed="InputElement_OnPointerPressed" Source="avares://planificApp/Assets/Images/userImage.png" Height="40" HorizontalAlignment="Left" IsVisible="{Binding SideMenuExpanded}"></Image>
+                                                        <Image PointerPressed="InputElement_OnPointerPressed" Source="avares://planificApp/Assets/Images/userImage.png" Height="35" HorizontalAlignment="Left" IsVisible="{Binding !SideMenuExpanded}"></Image>
+                                                        <Label Content="{Binding User}" FontSize="15" VerticalAlignment="Center" Padding="12 5 2 0 " IsVisible="{Binding SideMenuExpanded}"></Label>
                                                 </StackPanel>
                                         </Button>
                        
                                         <Button HorizontalAlignment="Stretch">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xe188;"></Label>
-                                                        <Label Classes="akko" Content="Tareas"></Label>
+                                                        <Label Classes="akko" Content="Tareas" IsVisible="{Binding SideMenuExpanded}"></Label>
                                                 </StackPanel>
                                         </Button>
                                         
                                         <Button HorizontalAlignment="Stretch">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xE712;"></Label>
-                                                        <Label Classes="akko" Content="Calendario"></Label>
+                                                        <Label Classes="akko" Content="Calendario" IsVisible="{Binding SideMenuExpanded}"></Label>
                                                 </StackPanel>
                                         </Button>
                                         
                                         <Button HorizontalAlignment="Stretch">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xE318;"></Label>
-                                                        <Label Classes="akko" Content="Ubicaciones"></Label>
+                                                        <Label Classes="akko" Content="Ubicaciones" IsVisible="{Binding SideMenuExpanded}"></Label>
                                                 </StackPanel>
                                         </Button>
                                 </StackPanel>
