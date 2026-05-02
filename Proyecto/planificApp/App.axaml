@@ -1,9 +1,14 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="planificApp.App"
+             xmlns:local="clr-namespace:planificApp"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
+    <Application.DataTemplates>
+        <local:ViewLocator></local:ViewLocator>
+    </Application.DataTemplates>
+             
     <Application.Styles>
         <FluentTheme />
 
@@ -20,6 +25,7 @@
         </LinearGradientBrush>
 
         <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryActiveBackground">#663322</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
             
         <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>

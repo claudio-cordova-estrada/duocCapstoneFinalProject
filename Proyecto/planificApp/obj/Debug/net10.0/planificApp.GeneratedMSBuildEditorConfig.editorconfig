@@ -31,8 +31,17 @@ build_property.EnableCodeStyleSeverity =
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/MainView.axaml]
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Styles/AppDefaultStyles.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Styles/AppDefaultStyles.axaml]
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioSemanalView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/InboxView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/MainView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/TodayView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

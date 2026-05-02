@@ -5,6 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="planificApp.MainView"
         xmlns:vm="clr-namespace:planificApp.ViewModels"
+        xmlns:view="clr-namespace:planificApp.Views"
         x:DataType="vm:MainViewModel"
         Title="planificApp">
         
@@ -13,6 +14,9 @@
         </Design.DataContext>
         
         <Grid Background="{DynamicResource PrimaryBackground}" ColumnDefinitions="Auto, *">
+                
+                <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
+                
                 <Border Padding="20" Background="{DynamicResource PrimaryBackgroundGradient}">
                         <Grid RowDefinitions="*, Auto">
                                 <StackPanel Spacing="12">
@@ -24,14 +28,14 @@
                                                 </StackPanel>
                                         </Button>
                        
-                                        <Button HorizontalAlignment="Stretch">
+                                        <Button HorizontalAlignment="Stretch" Classes.active="{Binding InboxPageIsActive}" Command="{Binding GoToInboxCommand}">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xe188;"></Label>
                                                         <Label Classes="akko" Content="Tareas" IsVisible="{Binding SideMenuExpanded}"></Label>
                                                 </StackPanel>
                                         </Button>
                                         
-                                        <Button HorizontalAlignment="Stretch">
+                                        <Button HorizontalAlignment="Stretch" Classes.active="{Binding CalendarioSemanalPageIsActive}" Command="{Binding GoToCalendarioSemanalCommand}">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xE712;"></Label>
                                                         <Label Classes="akko" Content="Calendario" IsVisible="{Binding SideMenuExpanded}"></Label>

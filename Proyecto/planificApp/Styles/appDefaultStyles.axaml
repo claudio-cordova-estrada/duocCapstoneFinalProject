@@ -45,6 +45,7 @@
         <Setter Property="Padding" Value="9 5.5 9.2 5.5"></Setter> <!-- Ajuste de padding por leve desalineamiento visual (me daba toc) -->
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"></Setter>
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
     </Style>
     
     <Style Selector="Button /template/ ContentPresenter">
@@ -64,6 +65,10 @@
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverForeground}"></Setter>
         <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PrimaryActiveBackground}"></Setter>
     </Style>
     
     <Style Selector="Button.transparent">
