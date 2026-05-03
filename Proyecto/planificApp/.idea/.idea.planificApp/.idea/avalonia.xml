@@ -4,9 +4,12 @@
     <option name="projectPerEditor">
       <map>
         <entry key="App.axaml" value="planificApp.csproj" />
+        <entry key="Control/IconButton.axaml" value="planificApp.csproj" />
         <entry key="MainView.axaml" value="planificApp.csproj" />
         <entry key="MainWindow.axaml" value="planificApp.csproj" />
+        <entry key="StyleControl/IconButton.axaml" value="planificApp.csproj" />
         <entry key="Styles/AppDefaultStyles.axaml" value="planificApp.csproj" />
+        <entry key="UserControl/IconButton.axaml" value="planificApp.csproj" />
         <entry key="Views/AboutView.axaml" value="planificApp.csproj" />
         <entry key="Views/AreaInteresView.axaml" value="planificApp.csproj" />
         <entry key="Views/BusquedaUsuarioView.axaml" value="planificApp.csproj" />

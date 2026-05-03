@@ -2,11 +2,111 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="600"
              x:Class="planificApp.Views.SettingsView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
-             x:DataType="vm:SettingsViewModel">
+             x:DataType="vm:SettingsViewModel"
+             Background="{DynamicResource PrimaryBackground}"
+             Foreground="{DynamicResource PrimaryForeground}">
     
     <Design.DataContext><vm:SettingsViewModel/></Design.DataContext>
-    <Label Content="{Binding Test}"></Label>
+    
+    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, *" ShowGridLines="True">
+        <!-- Header -->
+        <Grid Grid.ColumnSpan="2">
+            <Image Source="avares://planificApp/Assets/Images/blueWaveBackgroundPng.png" Height="80" Stretch="UniformToFill"></Image>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label HorizontalAlignment="Center" Content="Configuración"></Label>
+                <Label HorizontalAlignment="Center" Content="Version"></Label>
+            </StackPanel>
+        </Grid>
+        <!-- Lado izquierdo -->
+        <!-- Spacing="10" Margin="10" -->
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Label Content="Configuraciones personales"></Label>
+            
+            <Grid ColumnDefinitions="*, *, *" RowDefinitions="Auto" ShowGridLines="True">
+                <!-- Labels configuracion -->
+                <!-- Spacing="20" Margin="4" -->
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Content="Hora inicio de actividades" VerticalAlignment="Top"></Label>
+                    <Label Content="Hora fin de actividades" VerticalAlignment="Center"></Label>
+                    <Label Content="Ubicación Pred." VerticalAlignment="Center"></Label>
+                    <Label Content="Método transporte Pred." VerticalAlignment="Center"></Label>
+                    <Label Content="Cantidad horas de sueño" VerticalAlignment="Center"></Label>
+                </StackPanel>
+                
+                <!-- Campos editables configuracion -->
+                <!-- Spacing="10" Margin="4" -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                    <!-- Hora inicio actividades -->
+                    <TextBox Text="07:30"></TextBox>
+                    <!-- Hora fin actividades -->
+                    <TextBox Text="22:00"></TextBox>
+                    <!-- Ubicacion predeterminada -->
+                    <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                        <ComboBoxItem IsSelected="True">Casa</ComboBoxItem>
+                    </ComboBox>
+                    <!-- Metodo de transporte predeterminado -->
+                    <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                        <ComboBoxItem IsSelected="True">Caminar</ComboBoxItem>
+                    </ComboBox>
+                    <!-- Cantidad de horas de sueño -->
+                    <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                        <ComboBoxItem IsSelected="True">0</ComboBoxItem>
+                    </ComboBox>
+                </StackPanel>
+                
+                <!-- Botones confirmacion de cambios -->
+                <!-- Margin="4 2 0 0 " FontSize="15" -->
+                <StackPanel Grid.Column="2" HorizontalAlignment="Left">
+                    <!-- Hora inicio actividades -->
+                    <IconButton IconText="&#xEBC6;" Content="">
+                        <!--<Label Content="Confirmar"></Label>-->
+                    </IconButton>
+                    
+                    <!-- Hora fin actividades -->
+                    <IconButton IconText="&#xEBC6;" Content="">
+                        <!--<Label Content="Confirmar"></Label>-->
+                    </IconButton>
+                    
+                    <!-- Ubicación predeterminada -->
+                    <IconButton IconText="&#xEBC6;" Content="">
+                        <!--<Label Content="Confirmar"></Label>-->
+                    </IconButton>
+                    
+                    <!-- Método de transporte predeterminado -->
+                    <IconButton IconText="&#xEBC6;" Content="">
+                        <!--<Label Content="Confirmar"></Label>-->
+                    </IconButton>
+                    
+                    <!-- Cantidad de horas de sueño -->
+                    <IconButton IconText="&#xEBC6;" Content="">
+                        <!--<Label Content="Confirmar"></Label>-->
+                    </IconButton>
+                    
+                </StackPanel>
+                
+            </Grid>
+            
+        </StackPanel>
+        
+        <!-- Lado derecho -->
+        <StackPanel Grid.Column="1" Grid.Row="1" Spacing="10" Margin="15">
+            <Label Content="Días para generación semanal" VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+            <Grid ColumnDefinitions="*" RowDefinitions="*, *">
+                <StackPanel Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Content="Lunes" FontSize="13"></Button>
+                    <Button Content="Martes" FontSize="13"></Button>
+                    <Button Content="Míércoles" FontSize="13"></Button>
+                    <Button Content="Jueves" FontSize="13"></Button>
+                    <Button Content="Viernes" FontSize="13"></Button>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal"  VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                    <Button Content="Sábado" FontSize="13"></Button>
+                    <Button Content="Domingo" FontSize="13"> </Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
 </UserControl>

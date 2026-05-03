@@ -16,6 +16,13 @@
     </Application.Styles>
                  
     <Application.Resources>
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
         <SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryForeground">#CFCFCF</SolidColorBrush>
 

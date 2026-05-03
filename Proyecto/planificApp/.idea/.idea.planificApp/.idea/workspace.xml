@@ -14,30 +14,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViewModels/CalendarioMensualViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViewModels/LocationViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViewModels/SettingsViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViewModels/SugerenciasSemanalesViewModel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/CuentaView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/CuentaView.axaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/LocationView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/LocationView.axaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/SettingsView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/SettingsView.axaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/SugerenciasSemanalesView.axaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/SugerenciasSemanalesView.axaml.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Images/blueWaveBackgroundPng.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StyleControl/IconButton.axaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StyleControl/IconButton.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationPageNames.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationPageNames.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/TodayViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/TodayTaskViewModel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/MainView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/MainView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/TodayView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TodayTaskView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/TodayView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/TodayTaskView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/SettingsView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/SettingsView.axaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" afterDir="false" />
@@ -47,12 +33,16 @@
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
     </list>
@@ -65,7 +55,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1" />
+    <option name="cachedIndexableFilesCount" value="5" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -74,6 +64,8 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Data/ApplicationPageNames.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Factories/PageFactory.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StyleControl/IconButton.axaml" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StyleControl/IconButton.axaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Styles/AppDefaultStyles.axaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ViewLocator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ViewModels/AboutViewModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -228,6 +220,8 @@
       <workItem from="1777735404717" duration="13084000" />
       <workItem from="1777753479152" duration="6131000" />
       <workItem from="1777773172645" duration="13291000" />
+      <workItem from="1777792556596" duration="44000" />
+      <workItem from="1777820780311" duration="22074000" />
     </task>
     <servers />
   </component>

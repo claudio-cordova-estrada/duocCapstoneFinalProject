@@ -1,12 +1,15 @@
 using System;
+using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using planificApp.Factories;
 using planificApp.ViewModels;
 
+[assembly: XmlnsDefinition("https://github.com/avaloniaui", "planificApp.StyleControl")]
 namespace planificApp;
 
 public partial class App : Application

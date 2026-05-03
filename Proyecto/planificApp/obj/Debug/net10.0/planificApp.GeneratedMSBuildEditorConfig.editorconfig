@@ -31,6 +31,9 @@ build_property.EnableCodeStyleSeverity =
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/StyleControl/IconButton.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Styles/AppDefaultStyles.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
