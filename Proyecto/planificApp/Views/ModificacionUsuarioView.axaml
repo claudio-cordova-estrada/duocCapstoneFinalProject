@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="planificApp.Views.TodayView"
+             x:Class="planificApp.Views.ModificacionUsuarioView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
-             x:DataType="vm:TodayViewModel">
+             x:DataType="vm:ModificacionUsuarioViewModel">
     
-    <Design.DataContext><vm:TodayViewModel/></Design.DataContext>
+    <Design.DataContext><vm:ModificacionUsuarioViewModel/></Design.DataContext>
     <Label Content="{Binding Test}"></Label>
 </UserControl>

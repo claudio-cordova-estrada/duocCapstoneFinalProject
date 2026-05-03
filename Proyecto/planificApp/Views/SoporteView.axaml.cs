@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace planificApp.Views;
 
-public partial class TodayView : UserControl
+public partial class SoporteView : UserControl
 {
-    public TodayView()
+    public SoporteView()
     {
         InitializeComponent();
     }

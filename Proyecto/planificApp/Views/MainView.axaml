@@ -17,7 +17,7 @@
                 
                 <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
                 
-                <Border Padding="20" Background="{DynamicResource PrimaryBackgroundGradient}">
+                <Border Grid.Column="0" Padding="20" Background="{DynamicResource PrimaryBackgroundGradient}">
                         <Grid RowDefinitions="*, Auto">
                                 <StackPanel Spacing="12">
                                         <Button>
@@ -42,7 +42,7 @@
                                                 </StackPanel>
                                         </Button>
                                         
-                                        <Button HorizontalAlignment="Stretch">
+                                        <Button HorizontalAlignment="Stretch" Classes.active="{Binding LocationPageIsActive}" Command="{Binding GoToLocationCommand}">
                                                 <StackPanel Orientation="Horizontal">
                                                         <Label Classes="icon" Content="&#xE318;"></Label>
                                                         <Label Classes="akko" Content="Ubicaciones" IsVisible="{Binding SideMenuExpanded}"></Label>
@@ -50,7 +50,7 @@
                                         </Button>
                                 </StackPanel>
                                 
-                                <Button Grid.Row="1" Classes="transparent">
+                                <Button Grid.Row="1" Classes="transparent" Classes.active="{Binding SettingsPageIsActive}" Command="{Binding GoToSettingsCommand}">
                                         <Label Classes="icon-only" Content="&#xE270;"></Label>
                                 </Button>
                         </Grid>

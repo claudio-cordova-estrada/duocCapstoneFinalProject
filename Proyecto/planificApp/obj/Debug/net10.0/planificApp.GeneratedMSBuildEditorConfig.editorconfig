@@ -34,14 +34,59 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Styles/AppDefaultStyles.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AboutView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AreaInteresView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/BusquedaUsuarioView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioMensualView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioSemanalView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CuentaView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/DetalleUsuarioView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/EstadisticaUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/InboxView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/LocationView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/LoginView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/MainView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/TodayView.axaml]
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ModificacionUsuarioView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/RecuperarContraView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/RegistroView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SettingsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SoporteView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SugerenciasSemanalesView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/TodayTaskView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

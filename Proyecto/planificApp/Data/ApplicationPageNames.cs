@@ -4,6 +4,21 @@ public enum ApplicationPageNames
 {
     Unknown,
     Inbox,
-    Today,
-    CalendarioSemanal
+    TodayTask,
+    CalendarioSemanal,
+    Settings,
+    AreaInteres,
+    Location,
+    CalendarioMensual,
+    SugerenciasSemanales,
+    Cuenta,
+    Soporte,
+    About,
+    EstadisticaUsuario,
+    ModificacionUsuario,
+    BusquedaUsuario,
+    DetalleUsuario,
+    Login,
+    Registro,
+    RecuperarContra
 }
