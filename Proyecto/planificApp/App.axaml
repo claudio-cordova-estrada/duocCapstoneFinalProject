@@ -34,10 +34,18 @@
         <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryActiveBackground">#663322</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
+        
+        <SolidColorBrush x:Key="PrimaryOutlineForeground">#CFCFCF</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryOutlineBackground">DarkRed</SolidColorBrush>
+        
+        <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#440000</SolidColorBrush>
+        <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#AAAAAA</SolidColorBrush>
             
         <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>
         <FontFamily x:Key="AkkoProBold">avares://planificApp/Assets/Fonts/Akko-Pro-Bold.ttf#Akko Pro</FontFamily>
         <FontFamily x:Key="Phosphor">avares://planificApp/Assets/Fonts/Phosphor.ttf#Phosphor</FontFamily>
         <FontFamily x:Key="PhosphorFill">avares://planificApp/Assets/Fonts/Phosphor-Fill.ttf#Phosphor-Fill</FontFamily>
+        
+        <FontFamily x:Key="Nunito">avares://planificApp/Assets/Fonts#Nunito</FontFamily>
     </Application.Resources> 
 </Application>

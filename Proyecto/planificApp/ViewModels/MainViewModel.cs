@@ -57,7 +57,8 @@ public partial class MainViewModel : ViewModelBase
     public bool RegistroPageIsActive => CurrentPage.PageName == ApplicationPageNames.Registro;
     public bool RecuperarContraPageIsActive => CurrentPage.PageName == ApplicationPageNames.RecuperarContra;
 
-    // para hacer diseño1
+    // para hacer diseño
+    
     public MainViewModel()
     {
         CurrentPage = new SettingsViewModel();

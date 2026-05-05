@@ -31,15 +31,15 @@
                                         </Button>
                                         
                                         <IconButton IconText="&#xe188;" HorizontalAlignment="Stretch" Classes.active="{Binding InboxPageIsActive}" Command="{Binding GoToInboxCommand}">
-                                                <Label Classes="akko" Content="Tareas" IsVisible="{Binding SideMenuExpanded}"></Label>
+                                                <Label Content="Tareas" IsVisible="{Binding SideMenuExpanded}"></Label>
                                         </IconButton>
                                         
                                         <IconButton IconText="&#xE712;" HorizontalAlignment="Stretch" Classes.active="{Binding CalendarioSemanalPageIsActive}" Command="{Binding GoToCalendarioSemanalCommand}">
-                                                <Label Classes="akko" Content="Calendario" IsVisible="{Binding SideMenuExpanded}"></Label>
+                                                <Label Content="Calendario" IsVisible="{Binding SideMenuExpanded}"></Label>
                                         </IconButton>
                                         
                                         <IconButton IconText="&#xE318;" HorizontalAlignment="Stretch" Classes.active="{Binding LocationPageIsActive}" Command="{Binding GoToLocationCommand}">
-                                                <Label Classes="akko" Content="Ubicaciones" IsVisible="{Binding SideMenuExpanded}"></Label>
+                                                <Label Content="Ubicaciones" IsVisible="{Binding SideMenuExpanded}"></Label>
                                         </IconButton>
                                         
                                 </StackPanel>

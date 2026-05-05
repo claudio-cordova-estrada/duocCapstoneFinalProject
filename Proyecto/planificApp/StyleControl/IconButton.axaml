@@ -5,7 +5,9 @@
     <Border Padding="20">
       <StackPanel Spacing="20">
         <IconButton IconText="&#xE712;" Content="Click Me!" />
+        <IconButton IconText="&#xE712;" Height="100" Content="Click Me!" />
         <IconButton IconText="&#xE318;" Classes="accent" Content="Click Me!" />
+        <IconButton IconText="&#xE318;" Classes="accent" />
         <Button Content="Click Me!" />
         <Button Classes="accent" Content="Click Me!" />
       </StackPanel>
@@ -13,6 +15,7 @@
   </Design.PreviewWith>
 
   <ControlTheme x:Key="{x:Type IconButton}" TargetType="IconButton">
+    <Setter Property="Content" Value="" />
     <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
     <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
@@ -36,18 +39,18 @@
                           BorderThickness="{TemplateBinding BorderThickness}"
                           CornerRadius="{TemplateBinding CornerRadius}"
                           Content="{TemplateBinding Content}"
-                          Padding="{TemplateBinding Padding}"
-                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
+                          Padding="{TemplateBinding Padding}">
           <ContentPresenter.ContentTemplate>
             <DataTemplate DataType="x:Object">
               <StackPanel Orientation="Horizontal">
-                <Label Classes="icon" Content="{Binding $parent[IconButton].IconText}"></Label>
-                <ContentControl DataContext="{Binding $parent[IconButton].DataContext}" Content="{Binding $parent[IconButton].Content}"/>
+                <Label VerticalAlignment="Center" Classes="icon-btn" Content="{Binding $parent[IconButton].IconText}" />
+                <Label VerticalAlignment="Center"
+                       Content="{Binding $parent[IconButton].Content}"
+                       Margin="5 1.5 0 0"
+                       IsVisible="{Binding $parent[IconButton].Content, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
               </StackPanel>
             </DataTemplate>
           </ContentPresenter.ContentTemplate>
-          
         </ContentPresenter>
       </ControlTemplate>
     </Setter>

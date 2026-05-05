@@ -15,6 +15,16 @@
                     <Label Classes="icon-only" Content="&#xE270;"></Label>
                 </Button>
                 
+                <IconButton IconText="&#xe188;" HorizontalAlignment="Stretch">
+                    <Label Content="Tareas"></Label>
+                </IconButton>
+                
+                <Button HorizontalAlignment="Stretch" Classes="outline">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Classes="icon" Content="&#xe188;"></Label>
+                        <Label Content="Tareas"></Label>
+                    </StackPanel>
+                </Button>
                 
             </StackPanel>
         </Border>
@@ -22,6 +32,13 @@
     
     <Style Selector="Window">
         <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector="Label.h2">
+        <Setter Property="Padding" Value="0 0 8 0"></Setter>
+        <Setter Property="FontWeight" Value="Black"></Setter>
+        <Setter Property="FontSize" Value="20"></Setter>
+        <Setter Property="Margin" Value="0 0 0 10"></Setter>
     </Style>
     
     <Style Selector="Label.icon, Label.icon-only">
@@ -39,10 +56,17 @@
     <Style Selector="Label.icon-only">
         <Setter Property="Margin" Value="0"></Setter>
     </Style>
+
+    <Style Selector="Label.icon-btn">
+        <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"></Setter>
+        <Setter Property="FontSize" Value="19"></Setter>
+        <Setter Property="Padding" Value="0 4.5 -0.4 3"></Setter>
+        <Setter Property="Margin" Value="0"></Setter>
+    </Style>
     
     <Style Selector=":is(Button)">
         <Setter Property="FontSize" Value="20"></Setter>
-        <Setter Property="Padding" Value="9 5.5 9.2 5.5"></Setter> <!-- Ajuste de padding por leve desalineamiento visual (me daba toc) -->
+        <Setter Property="Padding" Value="9 4.5 9.2 5.5"></Setter> <!-- Ajuste de padding por leve desalineamiento visual (me daba toc) -->
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"></Setter>
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"></Setter>
         <Setter Property="CornerRadius" Value="10"></Setter>
@@ -58,6 +82,12 @@
         </Setter>
     </Style>
     
+    <Style Selector=":is(Button).outline">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryOutlineForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryOutlineBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+    </Style>
+    
     <Style Selector=":is(Button).transparent:pointerover /template/ ContentPresenter">
         <Setter Property="RenderTransform" Value="scale(1.1)"></Setter>
     </Style>
@@ -65,6 +95,18 @@
     <Style Selector=":is(Button):pointerover /template/ ContentPresenter">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverForeground}"></Setter>
         <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}"></Setter>
+    </Style>
+    
+    <Style Selector=":is(Button).outline">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryOutlineForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryOutlineBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+    </Style>
+    
+    <Style Selector=":is(Button).outline:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryHoverOutlineForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PrimaryHoverOutlineBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
     </Style>
     
     <Style Selector=":is(Button).active /template/ ContentPresenter">

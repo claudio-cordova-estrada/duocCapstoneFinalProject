@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("planificApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a943eb3efc55c456efc3d422fabab56824f0f973")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e43968080c0152f9ed40dcf323a38180d29496c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("planificApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("planificApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
