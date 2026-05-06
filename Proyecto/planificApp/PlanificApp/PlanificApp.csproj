@@ -8,4 +8,19 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="3.8.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="MainWindow.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.axaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
 </Project>

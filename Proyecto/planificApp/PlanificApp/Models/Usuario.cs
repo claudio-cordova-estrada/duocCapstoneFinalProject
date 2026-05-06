@@ -27,6 +27,12 @@ namespace PlanificApp.Models
 
         public string Correo { get; set; } = string.Empty;
 
+        // Añadir al final de la clase Usuario[cite: 2]
+        public string PasswordHash { get; set; } = string.Empty;
+
+        // Para la recuperación de contraseña rápida (Mínimo Producto Viable)[cite: 2]
+        public string RespuestaSeguridad { get; set; } = string.Empty;
+
         // Integración de ubicación administrativa
         public Region? Region { get; set; }
         public Comuna? Comuna { get; set; }

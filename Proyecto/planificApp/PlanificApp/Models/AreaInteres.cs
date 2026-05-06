@@ -28,17 +28,17 @@ namespace PlanificApp.Models
 
         public bool GeneracionSemanal { get; set; } // Determina si el generador debe considerar esta área
 
-        public PrioridadAreaInteres Prioridad { get; set; } = PrioridadAreaInteres.Predeterminado; [cite: 1]
+        public PrioridadAreaInteres Prioridad { get; set; } = PrioridadAreaInteres.Predeterminado;
 
         public int HorasSemanales { get; set; } = 0; // Meta de tiempo para el algoritmo
 
         // Herencia lógica de preferencias para las tareas que pertenezcan a esta área
         public string? UbicacionPred { get; set; }
         public MetodoTransporte? MetodoTransportePred { get; set; }
-        [cite: 1]
+
 
         // Relación con el usuario dueño del área
         public string? IdUsuario { get; set; }
-        [cite: 1]
+
     }
 }
