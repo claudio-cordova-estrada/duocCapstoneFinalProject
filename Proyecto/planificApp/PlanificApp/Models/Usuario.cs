@@ -1,19 +1,35 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace PlanificApp.Models
 {
     public class Usuario
     {
-        [BsonId] // averiguar que es
-        public int IdUsuario { get; set; } // int(10)
-        public string NombreCompleto { get; set; }  // establecer validacion de caracteres numéricos y especiales.
-        public string Correo { get; set; } // establecer validacion de correspondientes a email valido.
-        public DateTime FecNacimiento { get; set; }
-        public Ubicacion Region { get; set; }  // crear clase Region para validar que sea una region valida de chile.
-        public Ubicacion Comuna { get; set; }  // crear clase Comuna para validar que sea una comuna valida de chile.
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? IdUsuario { get; set; } // Identificador estándar de MongoDB
 
-        // Horas funcionales
+        private string _nombreCompleto = string.Empty;
+        public string NombreCompleto
+        {
+            get => _nombreCompleto;
+            set
+            {
+                // Validación: Solo letras y espacios. Rechaza números y símbolos
+                if (Regex.IsMatch(value, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$") || string.IsNullOrEmpty(value))
+                    _nombreCompleto = value;
+                else
+                    throw new ArgumentException("El nombre no es válido.");
+            }
+        }
+
+        public string Correo { get; set; } = string.Empty;
+
+        // Integración de ubicación administrativa
+        public Region? Region { get; set; }
+        public Comuna? Comuna { get; set; }
         public TimeSpan HoraInicioJornada { get; set; }
         public TimeSpan HoraFinJornada { get; set; }
     }

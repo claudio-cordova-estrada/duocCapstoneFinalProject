@@ -83,7 +83,8 @@
               "RelativeToolTip": "Models\\Enums\\Prioridad.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:28:26.187Z"
+              "WhenOpened": "2026-05-01T00:28:26.187Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -95,7 +96,8 @@
               "RelativeToolTip": "Models\\Enums\\MetodoTransporte.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:28:25.025Z"
+              "WhenOpened": "2026-05-01T00:28:25.025Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -107,7 +109,8 @@
               "RelativeToolTip": "Models\\Services\\GeoService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:28:07.569Z"
+              "WhenOpened": "2026-05-01T00:28:07.569Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -119,7 +122,8 @@
               "RelativeToolTip": "Models\\Services\\MongoService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAABrAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:27:52.886Z"
+              "WhenOpened": "2026-05-01T00:27:52.886Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -131,7 +135,8 @@
               "RelativeToolTip": "Models\\Ubicacion.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:27:34.676Z"
+              "WhenOpened": "2026-05-01T00:27:34.676Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -143,7 +148,8 @@
               "RelativeToolTip": "Models\\Usuario.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:27:26.216Z"
+              "WhenOpened": "2026-05-01T00:27:26.216Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -155,7 +161,8 @@
               "RelativeToolTip": "Models\\AreaInteres.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:27:09.883Z"
+              "WhenOpened": "2026-05-01T00:27:09.883Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -167,7 +174,8 @@
               "RelativeToolTip": "Models\\Tarea.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAACAAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T00:26:52.023Z"
+              "WhenOpened": "2026-05-01T00:26:52.023Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -178,7 +186,8 @@
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-29T02:26:32.694Z"
+              "WhenOpened": "2026-04-29T02:26:32.694Z",
+              "EditorCaption": ""
             }
           ]
         }

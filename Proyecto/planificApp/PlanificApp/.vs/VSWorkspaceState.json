@@ -3,8 +3,8 @@
     "",
     "\\Models",
     "\\Models\\Enums",
-    "\\Models\\Services"
+    "\\Models\\Services",
+    "\\MVVM"
   ],
-  "SelectedNode": "\\Models",
   "PreviewInSolutionExplorer": false
 }
