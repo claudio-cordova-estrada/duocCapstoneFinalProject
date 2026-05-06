@@ -11,6 +11,10 @@
       "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\models\\services\\generadorsemanalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\models\\services\\generadorsemanalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -33,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\models\\services\\geoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\models\\services\\geoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\models\\services\\generadorsemanalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|solutionrelative:planificapp\\models\\services\\generadorsemanalservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}|PlanificApp\\PlanificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp\\models\\enums\\prioridad.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,8 +62,16 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -72,7 +80,7 @@
               "RelativeDocumentMoniker": "PlanificApp\\App.axaml.cs",
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\App.axaml.cs",
               "RelativeToolTip": "PlanificApp\\App.axaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T17:22:44.059Z",
               "EditorCaption": ""
@@ -80,19 +88,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Usuario.cs",
-              "RelativeDocumentMoniker": "PlanificApp\\Models\\Usuario.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Usuario.cs",
-              "RelativeToolTip": "PlanificApp\\Models\\Usuario.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwCkAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T17:22:35.34Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
               "Title": "GeneradorSemanalService.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Services\\GeneradorSemanalService.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\Services\\GeneradorSemanalService.cs",
@@ -105,7 +100,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "GeoService.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Services\\GeoService.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\Services\\GeoService.cs",
@@ -144,7 +139,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Ubicacion.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Ubicacion.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\Ubicacion.cs",
@@ -156,29 +151,21 @@
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Tarea.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Tarea.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\Tarea.cs",
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Tarea.cs",
               "RelativeToolTip": "PlanificApp\\Models\\Tarea.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAA1wCgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwCgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T17:12:41.97Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "AreaInteres.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\AreaInteres.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\AreaInteres.cs",
@@ -197,15 +184,28 @@
               "RelativeDocumentMoniker": "PlanificApp\\MainWindow.axaml.cs",
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\MainWindow.axaml.cs",
               "RelativeToolTip": "PlanificApp\\MainWindow.axaml.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAAwBoAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T16:53:19.292Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "PlanificApp\\Models\\Usuario.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Usuario.cs",
+              "RelativeToolTip": "PlanificApp\\Models\\Usuario.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAgwCkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T17:22:35.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "PlanificApp",
+              "Title": "PlanificApp.csproj",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\PlanificApp.csproj",
               "RelativeDocumentMoniker": "PlanificApp\\PlanificApp.csproj",
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\PlanificApp.csproj",
@@ -217,7 +217,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "MongoService.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\Models\\Services\\MongoService.cs",
               "RelativeDocumentMoniker": "PlanificApp\\Models\\Services\\MongoService.cs",

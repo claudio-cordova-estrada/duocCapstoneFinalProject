@@ -28,10 +28,6 @@ public MainWindow()
             ProbarConexionMongo();
         }
 
-        private void InitializeComponent()
-        {
-            throw new NotImplementedException();
-        }
 
         private async void ProbarConexionMongo()
         {
