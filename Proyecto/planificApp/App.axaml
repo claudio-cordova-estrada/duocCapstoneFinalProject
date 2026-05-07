@@ -128,6 +128,20 @@
         <SolidColorBrush x:Key="PillActiveBorder">#3d3060</SolidColorBrush>
         <SolidColorBrush x:Key="PillActiveForeground">#a78bfa</SolidColorBrush>
         
+        <!-- Override Fluent Theme Button resources to remove two-step hover -->
+        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#161616</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBackgroundPressed">#1e1a2e</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled">#0f0f0f</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonForeground">#cccccc</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver">#e2e8f0</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonForegroundPressed">#c4b5fd</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonForegroundDisabled">#555555</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBorderBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled">Transparent</SolidColorBrush>
+        
         <!-- Legacy (kept for backward compatibility) -->
         <SolidColorBrush x:Key="PrimaryBackground">#0f0f0f</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryForeground">#e2e8f0</SolidColorBrush>

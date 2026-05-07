@@ -129,6 +129,8 @@
         <Setter Property="BorderThickness" Value="0"></Setter>
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="Foreground" Value="#444444"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
     </Style>
     
     <Style Selector="Button.sb1-item:pointerover /template/ ContentPresenter">

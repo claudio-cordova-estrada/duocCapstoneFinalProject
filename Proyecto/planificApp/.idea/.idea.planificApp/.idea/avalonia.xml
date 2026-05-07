@@ -11,6 +11,7 @@
         <entry key="Styles/AppDefaultStyles.axaml" value="planificApp.csproj" />
         <entry key="UserControl/IconButton.axaml" value="planificApp.csproj" />
         <entry key="Views/AboutView.axaml" value="planificApp.csproj" />
+        <entry key="Views/AdminMainView.axaml" value="planificApp.csproj" />
         <entry key="Views/AreaInteresView.axaml" value="planificApp.csproj" />
         <entry key="Views/BusquedaUsuarioView.axaml" value="planificApp.csproj" />
         <entry key="Views/CalendarioMensualView.axaml" value="planificApp.csproj" />

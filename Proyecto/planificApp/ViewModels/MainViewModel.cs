@@ -17,6 +17,12 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private PageViewModel _currentPage;
     [ObservableProperty] private bool _isAdminMode = false;
 
+    public MainViewModel()
+    {
+        ActiveUserSection = UserSection.Tareas;
+        CurrentPage = new InboxViewModel();
+    }
+
     public MainViewModel(PageFactory pageFactory)
     {
         _pageFactory = pageFactory;

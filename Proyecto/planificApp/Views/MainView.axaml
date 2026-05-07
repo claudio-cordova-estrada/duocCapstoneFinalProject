@@ -18,53 +18,38 @@
         <Border Grid.Column="0" Background="{DynamicResource SB1Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0">
             <Border Padding="0 12">
                 <StackPanel Spacing="2">
-                <!-- Logo -->
-                <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center" Margin="0 0 0 14">
-                    <Label Classes="icon-only" Content="&#xE465;" Foreground="{DynamicResource AccentColor}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                
-                <!-- Tareas -->
-                <Button Classes="sb1-item active" Command="{Binding GoToTareasCommand}" IsVisible="{Binding IsTareasActive}">
-                    <Label Classes="icon-only" Content="&#xE464;" FontSize="18"/>
-                </Button>
-                <Button Classes="sb1-item" Command="{Binding GoToTareasCommand}" IsVisible="{Binding !IsTareasActive}">
-                    <Label Classes="icon-only" Content="&#xE464;" FontSize="18"/>
-                </Button>
-                
-                <!-- Calendario -->
-                <Button Classes="sb1-item" Command="{Binding GoToCalendarioCommand}" IsVisible="{Binding IsCalendarioActive}">
-                    <Label Classes="icon-only" Content="&#xE712;" FontSize="18"/>
-                </Button>
-                <Button Classes="sb1-item" Command="{Binding GoToCalendarioCommand}" IsVisible="{Binding !IsCalendarioActive}">
-                    <Label Classes="icon-only" Content="&#xE712;" FontSize="18"/>
-                </Button>
-                
-                <!-- Ubicaciones -->
-                <Button Classes="sb1-item" Command="{Binding GoToUbicacionesCommand}" IsVisible="{Binding IsUbicacionesActive}">
-                    <Label Classes="icon-only" Content="&#xE318;" FontSize="18"/>
-                </Button>
-                <Button Classes="sb1-item" Command="{Binding GoToUbicacionesCommand}" IsVisible="{Binding !IsUbicacionesActive}">
-                    <Label Classes="icon-only" Content="&#xE318;" FontSize="18"/>
-                </Button>
-                
-                <!-- Spacer -->
-                <Border Height="1"/>
-                
-                <!-- Mi Cuenta (bottom) -->
-                <Button Classes="sb1-item" Command="{Binding GoToCuentaCommand}" IsVisible="{Binding IsCuentaActive}">
-                    <Label Classes="icon-only" Content="&#xE47D;" FontSize="18"/>
-                </Button>
-                <Button Classes="sb1-item" Command="{Binding GoToCuentaCommand}" IsVisible="{Binding !IsCuentaActive}">
-                    <Label Classes="icon-only" Content="&#xE47D;" FontSize="18"/>
-                </Button>
-                
-                <!-- Configuración -->
-                <Button Classes="sb1-item" Command="{Binding GoToConfigCommand}" IsVisible="{Binding IsConfigActive}">
-                    <Label Classes="icon-only" Content="&#xE495;" FontSize="18"/>
-                </Button>
-                <Button Classes="sb1-item" Command="{Binding GoToConfigCommand}" IsVisible="{Binding !IsConfigActive}">
-                    <Label Classes="icon-only" Content="&#xE495;" FontSize="18"/>
-                </Button>
+                    <!-- Logo -->
+                    <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 14">
+                        <Label Classes="icon-only" Content="&#xE465;" Foreground="{DynamicResource AccentColor}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    
+                    <!-- Tareas -->
+                    <Button Classes="sb1-item" Classes.active="{Binding IsTareasActive}" Command="{Binding GoToTareasCommand}">
+                        <Label Classes="icon-only" Content="&#xE464;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    
+                    <!-- Calendario -->
+                    <Button Classes="sb1-item" Classes.active="{Binding IsCalendarioActive}" Command="{Binding GoToCalendarioCommand}">
+                        <Label Classes="icon-only" Content="&#xE712;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    
+                    <!-- Ubicaciones -->
+                    <Button Classes="sb1-item" Classes.active="{Binding IsUbicacionesActive}" Command="{Binding GoToUbicacionesCommand}">
+                        <Label Classes="icon-only" Content="&#xE318;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    
+                    <!-- Spacer -->
+                    <Border Height="1"/>
+                    
+                    <!-- Mi Cuenta (bottom) -->
+                    <Button Classes="sb1-item" Classes.active="{Binding IsCuentaActive}" Command="{Binding GoToCuentaCommand}">
+                        <Label Classes="icon-only" Content="&#xE47D;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                    
+                    <!-- Configuración -->
+                    <Button Classes="sb1-item" Classes.active="{Binding IsConfigActive}" Command="{Binding GoToConfigCommand}">
+                        <Label Classes="icon-only" Content="&#xE495;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
                 </StackPanel>
             </Border>
         </Border>
@@ -76,55 +61,28 @@
                     <!-- Tareas SB2 -->
                     <StackPanel IsVisible="{Binding IsTareasActive}">
                         <TextBlock Classes="sb2-header">Tareas</TextBlock>
-                        <Button Classes="sb2-item active" Command="{Binding GoToInboxCommand}" IsVisible="{Binding IsInboxActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsInboxActive}" Command="{Binding GoToInboxCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE462;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Inbox" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE464;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Inbox" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToInboxCommand}" IsVisible="{Binding !IsInboxActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsHoyActive}" Command="{Binding GoToHoyCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE462;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Inbox" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE465;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Hoy" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToHoyCommand}" IsVisible="{Binding IsHoyActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsSemanaActive}" Command="{Binding GoToSemanaCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE435;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Hoy" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Semana" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToHoyCommand}" IsVisible="{Binding !IsHoyActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsMesActive}" Command="{Binding GoToMesCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE435;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Hoy" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToSemanaCommand}" IsVisible="{Binding IsSemanaActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Semana" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToSemanaCommand}" IsVisible="{Binding !IsSemanaActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Semana" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToMesCommand}" IsVisible="{Binding IsMesActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE713;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mes" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToMesCommand}" IsVisible="{Binding !IsMesActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE713;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mes" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Mes" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         
@@ -132,16 +90,10 @@
                         
                         <TextBlock Classes="sb2-section">Áreas de interés</TextBlock>
                         
-                        <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}" IsVisible="{Binding IsAreaInteresActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsAreaInteresActive}" Command="{Binding GoToAreaInteresCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}"/>
-                                <TextBlock Text="Trabajo" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}" IsVisible="{Binding !IsAreaInteresActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}"/>
-                                <TextBlock Text="Trabajo" FontSize="13"/>
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Trabajo" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -149,29 +101,16 @@
                     <!-- Calendario SB2 -->
                     <StackPanel IsVisible="{Binding IsCalendarioActive}">
                         <TextBlock Classes="sb2-header">Calendario</TextBlock>
-                        <Button Classes="sb2-item" Command="{Binding GoToCalendarioSemanalCommand}" IsVisible="{Binding IsCalSemanalActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsCalSemanalActive}" Command="{Binding GoToCalendarioSemanalCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Semanal" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Semanal" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToCalendarioSemanalCommand}" IsVisible="{Binding !IsCalSemanalActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsCalMensualActive}" Command="{Binding GoToCalendarioMensualCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Semanal" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToCalendarioMensualCommand}" IsVisible="{Binding IsCalMensualActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE713;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mensual" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToCalendarioMensualCommand}" IsVisible="{Binding !IsCalMensualActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE713;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mensual" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Mensual" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -179,42 +118,22 @@
                     <!-- Cuenta SB2 -->
                     <StackPanel IsVisible="{Binding IsCuentaActive}">
                         <TextBlock Classes="sb2-header">Mi cuenta</TextBlock>
-                        <Button Classes="sb2-item" Command="{Binding GoToDatosCommand}" IsVisible="{Binding IsDatosActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsDatosActive}" Command="{Binding GoToDatosCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE47D;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mis datos" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE47D;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Mis datos" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToDatosCommand}" IsVisible="{Binding !IsDatosActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsSoporteActive}" Command="{Binding GoToSoporteCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE47D;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Mis datos" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE495;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Soporte" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToSoporteCommand}" IsVisible="{Binding IsSoporteActive}">
+                        <Button Classes="sb2-item" Classes.active="{Binding IsSobreActive}" Command="{Binding GoToSobreCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE4B5;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Soporte" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToSoporteCommand}" IsVisible="{Binding !IsSoporteActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE4B5;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Soporte" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button Classes="sb2-item" Command="{Binding GoToSobreCommand}" IsVisible="{Binding IsSobreActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE4A7;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Sobre la app" FontSize="13"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Classes="sb2-item" Command="{Binding GoToSobreCommand}" IsVisible="{Binding !IsSobreActive}">
-                            <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE4A7;" FontSize="15" Width="16"/>
-                                <TextBlock Text="Sobre la app" FontSize="13"/>
+                                <Label Classes="icon-only" Content="&#xE465;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="Sobre la app" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
