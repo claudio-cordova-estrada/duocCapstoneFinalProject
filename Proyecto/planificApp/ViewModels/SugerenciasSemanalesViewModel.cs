@@ -6,7 +6,7 @@ public partial class SugerenciasSemanalesViewModel : PageViewModel
 {
     public SugerenciasSemanalesViewModel()
     {
-        PageName = ApplicationPageNames.SugerenciasSemanales;
+        PageName = ApplicationPageNames.UserSugerencias;
     }
     public string Test { get; set; } = "Sugerencias Semanales";
 }

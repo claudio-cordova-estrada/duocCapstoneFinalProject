@@ -6,7 +6,7 @@ public partial class InboxViewModel : PageViewModel
 {
     public InboxViewModel()
     {
-        PageName = ApplicationPageNames.Inbox;
+        PageName = ApplicationPageNames.UserInbox;
     }
     public string Test { get; set; } = "Inbox";
 }

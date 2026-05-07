@@ -6,7 +6,7 @@ public partial class SoporteViewModel : PageViewModel
 {
     public SoporteViewModel()
     {
-        PageName = ApplicationPageNames.Soporte;
+        PageName = ApplicationPageNames.UserSoporte;
     }
     public string Test { get; set; } = "Soporte";
 }

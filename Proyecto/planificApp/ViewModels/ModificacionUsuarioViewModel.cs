@@ -6,7 +6,7 @@ public partial class ModificacionUsuarioViewModel : PageViewModel
 {
     public ModificacionUsuarioViewModel()
     {
-        PageName = ApplicationPageNames.ModificacionUsuario;
+        PageName = ApplicationPageNames.AdminUsuarios;
     }
     
     public string Test { get; set; } = "Modificacion de usuario";

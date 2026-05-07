@@ -7,7 +7,7 @@ public partial class TodayTaskViewModel : PageViewModel
 
     public TodayTaskViewModel()
     {
-        PageName = ApplicationPageNames.TodayTask;
+        PageName = ApplicationPageNames.UserHoy;
     }
     public string Test { get; set; } = "Today";
 }

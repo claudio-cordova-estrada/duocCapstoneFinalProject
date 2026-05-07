@@ -6,7 +6,7 @@ public partial class DetalleUsuarioViewModel : PageViewModel
 {
     public DetalleUsuarioViewModel()
     {
-        PageName = ApplicationPageNames.DetalleUsuario;
+        PageName = ApplicationPageNames.AdminUsuarioDetalle;
     }
     public string Test { get; set; } = "Detalle Usuario";
 }

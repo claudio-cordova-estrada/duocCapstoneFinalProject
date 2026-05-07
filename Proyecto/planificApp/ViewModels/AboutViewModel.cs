@@ -6,7 +6,7 @@ public partial class AboutViewModel : PageViewModel
 {
     public AboutViewModel()
     {
-        PageName = ApplicationPageNames.About;
+        PageName = ApplicationPageNames.UserSobre;
     }
     
     public string Test { get; set; } = "About";

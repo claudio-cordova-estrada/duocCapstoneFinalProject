@@ -6,7 +6,7 @@ public partial class CalendarioMensualViewModel : PageViewModel
 {
     public CalendarioMensualViewModel()
     {
-        PageName = ApplicationPageNames.CalendarioMensual;
+        PageName = ApplicationPageNames.UserCalendarioMensual;
     }
     public string Test { get; set; } = "Calendario Mensual";
 }

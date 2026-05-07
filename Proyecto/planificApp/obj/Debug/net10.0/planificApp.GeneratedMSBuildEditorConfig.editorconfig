@@ -40,6 +40,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AboutView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AdminMainView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AreaInteresView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

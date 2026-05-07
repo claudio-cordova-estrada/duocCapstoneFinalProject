@@ -11,7 +11,7 @@ public partial class SettingsViewModel : PageViewModel
 {
     public SettingsViewModel()
     {
-        PageName = ApplicationPageNames.Settings;
+        PageName = ApplicationPageNames.UserConfig;
     }
     public string Test { get; set; } = "Settings";
 

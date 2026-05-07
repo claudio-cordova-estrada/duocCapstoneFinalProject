@@ -1,132 +1,74 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
 using planificApp.Factories;
 
 namespace planificApp.ViewModels;
 
+public enum UserSection { Tareas, Calendario, Ubicaciones, Cuenta, Config }
+public enum AdminSection { Estadisticas, Usuarios }
+
 public partial class MainViewModel : ViewModelBase
 {
-    private PageFactory _pageFactory;
-    private const string buttonActiveClass = "active";
+    private readonly PageFactory _pageFactory;
     
-    [ObservableProperty] 
-    private bool _sideMenuExpanded = true;
-    
-    [ObservableProperty] 
-    private string _user = "Nicolás de Suárez";
+    [ObservableProperty] private bool _sideMenuExpanded = true;
+    [ObservableProperty] private UserSection _activeUserSection = UserSection.Tareas;
+    [ObservableProperty] private PageViewModel _currentPage;
+    [ObservableProperty] private bool _isAdminMode = false;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(InboxPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(CalendarioSemanalPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(TodayTaskPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(SettingsPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(AreaInteresPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(LocationPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(CalendarioMensualPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(SugerenciasSemanalesPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(CuentaPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(SoportePageIsActive))]
-    [NotifyPropertyChangedFor(nameof(AboutPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(EstadisticaUsuarioPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(ModificacionUsuarioPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(BusquedaUsuarioPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(DetalleUsuarioPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(LoginPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(RegistroPageIsActive))]
-    [NotifyPropertyChangedFor(nameof(RecuperarContraPageIsActive))]
-    private PageViewModel _currentPage;
-
-    public bool InboxPageIsActive => CurrentPage.PageName == ApplicationPageNames.Inbox;
-    public bool CalendarioSemanalPageIsActive => CurrentPage.PageName == ApplicationPageNames.CalendarioSemanal;
-    public bool TodayTaskPageIsActive => CurrentPage.PageName == ApplicationPageNames.TodayTask;
-    public bool SettingsPageIsActive => CurrentPage.PageName == ApplicationPageNames.Settings;
-    public bool AreaInteresPageIsActive => CurrentPage.PageName == ApplicationPageNames.AreaInteres;
-    public bool LocationPageIsActive => CurrentPage.PageName == ApplicationPageNames.Location;
-    public bool CalendarioMensualPageIsActive => CurrentPage.PageName == ApplicationPageNames.CalendarioMensual;
-    public bool SugerenciasSemanalesPageIsActive => CurrentPage.PageName == ApplicationPageNames.SugerenciasSemanales;
-    public bool CuentaPageIsActive => CurrentPage.PageName == ApplicationPageNames.Cuenta;
-    public bool SoportePageIsActive => CurrentPage.PageName == ApplicationPageNames.Soporte;
-    public bool AboutPageIsActive => CurrentPage.PageName == ApplicationPageNames.About;
-    public bool EstadisticaUsuarioPageIsActive => CurrentPage.PageName == ApplicationPageNames.EstadisticaUsuario;
-    public bool ModificacionUsuarioPageIsActive => CurrentPage.PageName == ApplicationPageNames.ModificacionUsuario;
-    public bool BusquedaUsuarioPageIsActive => CurrentPage.PageName == ApplicationPageNames.BusquedaUsuario;
-    public bool DetalleUsuarioPageIsActive => CurrentPage.PageName == ApplicationPageNames.DetalleUsuario;
-    public bool LoginPageIsActive => CurrentPage.PageName == ApplicationPageNames.Login;
-    public bool RegistroPageIsActive => CurrentPage.PageName == ApplicationPageNames.Registro;
-    public bool RecuperarContraPageIsActive => CurrentPage.PageName == ApplicationPageNames.RecuperarContra;
-
-    // para hacer diseño
-    
-    public MainViewModel()
-    {
-        CurrentPage = new SettingsViewModel();
-    }
-    
     public MainViewModel(PageFactory pageFactory)
     {
         _pageFactory = pageFactory;
-        GoToInbox();
+        CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
     }
 
-    [RelayCommand]
-    private void SideMenuResize()
-    {
-        SideMenuExpanded = !SideMenuExpanded;
-    }
+    // SB1 Navigation
+    [RelayCommand] private void GoToTareas() { ActiveUserSection = UserSection.Tareas; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); }
+    [RelayCommand] private void GoToCalendario() { ActiveUserSection = UserSection.Calendario; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioSemanal); }
+    [RelayCommand] private void GoToUbicaciones() { ActiveUserSection = UserSection.Ubicaciones; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserUbicaciones); }
+    [RelayCommand] private void GoToCuenta() { ActiveUserSection = UserSection.Cuenta; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserDatos); }
+    [RelayCommand] private void GoToConfig() { ActiveUserSection = UserSection.Config; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserConfig); }
 
-    [RelayCommand]
-    private void GoToInbox() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Inbox);
-    
-    [RelayCommand]
-    private void GoToCalendarioSemanal() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.CalendarioSemanal);
-    
-    [RelayCommand]
-    private void GoToToday() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.TodayTask);
-    
-    [RelayCommand]
-    private void GoToSettings() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Settings);
-    
-    [RelayCommand]
-    private void GoToAreaInteres() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AreaInteres);
-    
-    [RelayCommand]
-    private void GoToLocation() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Location);
-    
-    [RelayCommand]
-    private void GoToCalendarioMensual() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.CalendarioMensual);
-    
-    [RelayCommand]
-    private void GoToSugerenciasSemanales() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.SugerenciasSemanales);
-    
-    [RelayCommand]
-    private void GoToCuenta() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Cuenta);
-    
-    [RelayCommand]
-    private void GoToSoporte() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Soporte);
-    
-    [RelayCommand]
-    private void GoToAbout() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.About);
-    
-    [RelayCommand]
-    private void GoToEstadisticaUsuario() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.EstadisticaUsuario);
-    
-    [RelayCommand]
-    private void GoToModificacionUsuario() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.ModificacionUsuario);
-    
-    [RelayCommand]
-    private void GoToBusquedaUsuario() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.BusquedaUsuario);
-    
-    [RelayCommand]
-    private void GoToDetalleUsuario() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.DetalleUsuario);
-    
-    [RelayCommand]
-    private void GoToLogin() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Login);
-    
-    [RelayCommand]
-    private void GoToRegistro() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.Registro);
-    
-    [RelayCommand]
-    private void GoToRecuperarContra() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.RecuperarContra);
+    // SB2 - Tareas
+    [RelayCommand] private void GoToInbox() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
+    [RelayCommand] private void GoToHoy() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserHoy);
+    [RelayCommand] private void GoToSemana() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSemana);
+    [RelayCommand] private void GoToMes() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserMes);
+    [RelayCommand] private void GoToAreaInteres() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserAreaInteres);
+
+    // SB2 - Calendario
+    [RelayCommand] private void GoToCalendarioSemanal() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioSemanal);
+    [RelayCommand] private void GoToCalendarioMensual() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioMensual);
+
+    // SB2 - Cuenta
+    [RelayCommand] private void GoToDatos() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserDatos);
+    [RelayCommand] private void GoToSoporte() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSoporte);
+    [RelayCommand] private void GoToSobre() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSobre);
+
+    // Active state helpers for SB1
+    public bool IsTareasActive => ActiveUserSection == UserSection.Tareas;
+    public bool IsCalendarioActive => ActiveUserSection == UserSection.Calendario;
+    public bool IsUbicacionesActive => ActiveUserSection == UserSection.Ubicaciones;
+    public bool IsCuentaActive => ActiveUserSection == UserSection.Cuenta;
+    public bool IsConfigActive => ActiveUserSection == UserSection.Config;
+
+    // Active state helpers for SB2 - Tareas
+    public bool IsInboxActive => CurrentPage.PageName == ApplicationPageNames.UserInbox;
+    public bool IsHoyActive => CurrentPage.PageName == ApplicationPageNames.UserHoy;
+    public bool IsSemanaActive => CurrentPage.PageName == ApplicationPageNames.UserSemana;
+    public bool IsMesActive => CurrentPage.PageName == ApplicationPageNames.UserMes;
+    public bool IsAreaInteresActive => CurrentPage.PageName == ApplicationPageNames.UserAreaInteres;
+
+    // Active state helpers for SB2 - Calendario
+    public bool IsCalSemanalActive => CurrentPage.PageName == ApplicationPageNames.UserCalendarioSemanal;
+    public bool IsCalMensualActive => CurrentPage.PageName == ApplicationPageNames.UserCalendarioMensual;
+
+    // Active state helpers for SB2 - Cuenta
+    public bool IsDatosActive => CurrentPage.PageName == ApplicationPageNames.UserDatos;
+    public bool IsSoporteActive => CurrentPage.PageName == ApplicationPageNames.UserSoporte;
+    public bool IsSobreActive => CurrentPage.PageName == ApplicationPageNames.UserSobre;
+
+    // SB2 visibility
+    public bool ShowSB2 => ActiveUserSection is UserSection.Tareas or UserSection.Calendario or UserSection.Cuenta;
 }

@@ -6,7 +6,7 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
 {
     public EstadisticaUsuarioViewModel()
     {
-        PageName = ApplicationPageNames.EstadisticaUsuario;
+        PageName = ApplicationPageNames.AdminEstadisticas;
     }
     public string Test { get; set; } = "Estadisticas de usuario";
 }

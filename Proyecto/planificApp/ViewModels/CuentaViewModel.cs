@@ -6,7 +6,7 @@ public partial class CuentaViewModel : PageViewModel
 {
     public CuentaViewModel()
     {
-        PageName = ApplicationPageNames.Cuenta;
+        PageName = ApplicationPageNames.UserDatos;
     }
     public string Test { get; set; } = "Mi cuenta";
 }

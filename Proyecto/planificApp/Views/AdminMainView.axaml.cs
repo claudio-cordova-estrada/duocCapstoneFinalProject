@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace planificApp;
 
-public partial class MainView : Window
+public partial class AdminMainView : Window
 {
-    public MainView()
+    public AdminMainView()
     {
         InitializeComponent();
     }

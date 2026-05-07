@@ -23,49 +23,68 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var collection = new ServiceCollection();
-        collection.AddSingleton<MainViewModel>();
         
-        collection.AddTransient<InboxViewModel>();
-        collection.AddTransient<CalendarioSemanalViewModel>();
-        collection.AddTransient<TodayTaskViewModel>();
-        collection.AddTransient<SettingsViewModel>();
-        collection.AddTransient<AreaInteresViewModel>();
-        collection.AddTransient<LocationViewModel>();
-        collection.AddTransient<CalendarioMensualViewModel>();
-        collection.AddTransient<SugerenciasSemanalesViewModel>();
-        collection.AddTransient<CuentaViewModel>();
-        collection.AddTransient<SoporteViewModel>();
-        collection.AddTransient<AboutViewModel>();
-        collection.AddTransient<EstadisticaUsuarioViewModel>();
-        collection.AddTransient<ModificacionUsuarioViewModel>();
-        collection.AddTransient<BusquedaUsuarioViewModel>();
-        collection.AddTransient<DetalleUsuarioViewModel>();
+        // Main ViewModels
+        collection.AddSingleton<MainViewModel>();
+        collection.AddSingleton<AdminMainViewModel>();
+        
+        // Auth ViewModels
         collection.AddTransient<LoginViewModel>();
         collection.AddTransient<RegistroViewModel>();
         collection.AddTransient<RecuperarContraViewModel>();
+        
+        // User - Tareas ViewModels
+        collection.AddTransient<InboxViewModel>();
+        collection.AddTransient<HoyViewModel>();
+        collection.AddTransient<SemanaViewModel>();
+        collection.AddTransient<MesViewModel>();
+        collection.AddTransient<AreaInteresViewModel>();
+        
+        // User - Calendario ViewModels
+        collection.AddTransient<CalendarioSemanalViewModel>();
+        collection.AddTransient<CalendarioMensualViewModel>();
+        collection.AddTransient<SugerenciasViewModel>();
+        
+        // User - Otras ViewModels
+        collection.AddTransient<UbicacionesViewModel>();
+        collection.AddTransient<ConfigViewModel>();
+        collection.AddTransient<DatosViewModel>();
+        collection.AddTransient<SoporteViewModel>();
+        collection.AddTransient<SobreViewModel>();
+        
+        // Admin ViewModels
+        collection.AddTransient<EstadisticasViewModel>();
+        collection.AddTransient<UsuariosViewModel>();
+        collection.AddTransient<UsuarioDetalleViewModel>();
 
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {
-            ApplicationPageNames.Inbox => x.GetRequiredService<InboxViewModel>(),
-            ApplicationPageNames.TodayTask => x.GetRequiredService<TodayTaskViewModel>(),
-            ApplicationPageNames.CalendarioSemanal => x.GetRequiredService<CalendarioSemanalViewModel>(),
-            ApplicationPageNames.Settings => x.GetRequiredService<SettingsViewModel>(),
-            ApplicationPageNames.AreaInteres => x.GetRequiredService<AreaInteresViewModel>(),
-            ApplicationPageNames.Location => x.GetRequiredService<LocationViewModel>(),
-            ApplicationPageNames.CalendarioMensual => x.GetRequiredService<CalendarioMensualViewModel>(),
-            ApplicationPageNames.SugerenciasSemanales => x.GetRequiredService<SugerenciasSemanalesViewModel>(),
-            ApplicationPageNames.Cuenta => x.GetRequiredService<CuentaViewModel>(),
-            ApplicationPageNames.Soporte => x.GetRequiredService<SoporteViewModel>(),
-            ApplicationPageNames.About => x.GetRequiredService<AboutViewModel>(),
-            ApplicationPageNames.EstadisticaUsuario => x.GetRequiredService<EstadisticaUsuarioViewModel>(),
-            ApplicationPageNames.ModificacionUsuario => x.GetRequiredService<ModificacionUsuarioViewModel>(),
-            ApplicationPageNames.BusquedaUsuario => x.GetRequiredService<BusquedaUsuarioViewModel>(),
-            ApplicationPageNames.DetalleUsuario => x.GetRequiredService<DetalleUsuarioViewModel>(),
+            // Auth
             ApplicationPageNames.Login => x.GetRequiredService<LoginViewModel>(),
             ApplicationPageNames.Registro => x.GetRequiredService<RegistroViewModel>(),
             ApplicationPageNames.RecuperarContra => x.GetRequiredService<RecuperarContraViewModel>(),
+            // User - Tareas
+            ApplicationPageNames.UserInbox => x.GetRequiredService<InboxViewModel>(),
+            ApplicationPageNames.UserHoy => x.GetRequiredService<HoyViewModel>(),
+            ApplicationPageNames.UserSemana => x.GetRequiredService<SemanaViewModel>(),
+            ApplicationPageNames.UserMes => x.GetRequiredService<MesViewModel>(),
+            ApplicationPageNames.UserAreaInteres => x.GetRequiredService<AreaInteresViewModel>(),
+            // User - Calendario
+            ApplicationPageNames.UserCalendarioSemanal => x.GetRequiredService<CalendarioSemanalViewModel>(),
+            ApplicationPageNames.UserCalendarioMensual => x.GetRequiredService<CalendarioMensualViewModel>(),
+            ApplicationPageNames.UserSugerencias => x.GetRequiredService<SugerenciasViewModel>(),
+            // User - Otras
+            ApplicationPageNames.UserUbicaciones => x.GetRequiredService<UbicacionesViewModel>(),
+            ApplicationPageNames.UserConfig => x.GetRequiredService<ConfigViewModel>(),
+            ApplicationPageNames.UserDatos => x.GetRequiredService<DatosViewModel>(),
+            ApplicationPageNames.UserSoporte => x.GetRequiredService<SoporteViewModel>(),
+            ApplicationPageNames.UserSobre => x.GetRequiredService<SobreViewModel>(),
+            // Admin
+            ApplicationPageNames.AdminEstadisticas => x.GetRequiredService<EstadisticasViewModel>(),
+            ApplicationPageNames.AdminUsuarios => x.GetRequiredService<UsuariosViewModel>(),
+            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<UsuarioDetalleViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
-        } );
+        });
         
         collection.AddSingleton<PageFactory>();
 
