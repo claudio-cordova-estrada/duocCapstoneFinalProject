@@ -28,7 +28,7 @@
             <Grid ColumnDefinitions="*, 30, *, 10, auto" RowDefinitions="Auto" ShowGridLines="True">
                 <!-- Labels configuracion -->
                 <!-- Spacing="20" Margin="4" -->
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="19">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Spacing="20">
                     <Label Content="Hora inicio de actividades"></Label>
                     <Label Content="Hora fin de actividades"></Label>
                     <Label Content="Ubicación Pred."></Label>
