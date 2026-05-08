@@ -1,9 +1,8 @@
-﻿<Application x:Class="PlanificApp.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PlanificApp"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+             x:Class="PlanificApp.App"
+             RequestedThemeVariant="Default">
+             <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
 </Application>

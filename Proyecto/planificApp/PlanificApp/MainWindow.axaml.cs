@@ -1,56 +1,42 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using System.Diagnostics;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using PlanificApp.Models;
+using PlanificApp.Models.Services;
+using System;
 
 namespace PlanificApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
- 
+        private readonly MongoService _mongoService;
 
-// ... dentro de tu clase MainWindow
-public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
-            ProbarConexionMongo();
+            _mongoService = new MongoService(); // Conecta automáticamente al disco D:
         }
 
-
-        private async void ProbarConexionMongo()
+        private async void OnRegistrarClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                // 1. Conectamos al motor que iniciamos hoy en el disco D
-                var client = new MongoClient("mongodb://localhost:27017");
+                var nuevoUsuario = new Usuario
+                {
+                    NombreCompleto = TxtNombre.Text,
+                    Correo = TxtCorreo.Text,
+                    PasswordHash = TxtPassword.Text // Mañana implementas el hash, hoy es funcional
+                };
 
-                // 2. Accedemos (o creamos) la base de datos de tu proyecto
-                var database = client.GetDatabase("PlanificAppDB");
+                await _mongoService.RegistrarUsuario(nuevoUsuario);
 
-                // 3. Comando de "Ping" para ver si responde
-                var ping = await database.RunCommandAsync((Command<BsonDocument>)"{ping:1}");
-
-                Debug.WriteLine("------------------------------------------");
-                Debug.WriteLine("¡CONEXIÓN EXITOSA CON MONGODB EN DISCO D!");
-                Debug.WriteLine("------------------------------------------");
+                LblStatus.Text = "¡Usuario registrado en Disco D!";
+                LblStatus.Foreground = Brushes.LightGreen;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("------------------------------------------");
-                Debug.WriteLine($"ERROR DE CONEXIÓN: {ex.Message}");
-                Debug.WriteLine("------------------------------------------");
+                LblStatus.Text = $"Error: {ex.Message}";
+                LblStatus.Foreground = Brushes.Red;
             }
         }
     }

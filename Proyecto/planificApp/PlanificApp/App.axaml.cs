@@ -8,7 +8,8 @@ namespace PlanificApp
     {
         public override void Initialize()
         {
-            AvaloniaXamlLoader.Load(this); // Esto soluciona el error de 'AvaloniaXamlLoader'
+            // Carga el archivo .axaml
+            AvaloniaXamlLoader.Load(this);
         }
 
         public override void OnFrameworkInitializationCompleted()

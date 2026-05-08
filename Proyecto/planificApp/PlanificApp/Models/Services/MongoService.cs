@@ -1,7 +1,9 @@
 ﻿using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PlanificApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace PlanificApp.Models.Services
 {
@@ -11,13 +13,23 @@ namespace PlanificApp.Models.Services
 
         public MongoService()
         {
-            // Configuración de la conexión a MongoDB Local
-            var client = new MongoClient("mongodb://localhost:27017");
-            _database = client.GetDatabase("PlanificAppDB");
-        }
+            try
+            {
+                string connectionString = "mongodb+srv://admin_test:admin123@iancortes.zeorr8k.mongodb.net/?appName=IanCortes";
 
+                var client = new MongoClient(connectionString);
+
+                _database = client.GetDatabase("PlanificAppDB");
+            }
+            catch (Exception ex)
+            {
+                // Si hay un error aquí, lo sabrás de inmediato
+                Debug.WriteLine($"Error al inicializar Mongo: {ex.Message}");
+            }
+        }
         // Colecciones vinculadas a tus modelos
-        public IMongoCollection<Usuario> Usuarios => _database.GetCollection<Usuario>("Usuarios");
+        public IMongoCollection<Usuario> Usuarios =>
+    _database?.GetCollection<Usuario>("Usuarios") ?? throw new Exception("La base de datos no está inicializada.");
         public IMongoCollection<Tarea> Tareas => _database.GetCollection<Tarea>("Tareas");
 
         // --- SECCIÓN: AUTENTICACIÓN Y USUARIOS ---
