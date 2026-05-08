@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.PropuestasSemanalesView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:PropuestasSemanalesViewModel">
+
+    <ScrollViewer>
+        <Border Padding="28 26" Background="{DynamicResource AppBackground}">
+            <StackPanel Spacing="20">
+
+                <!-- Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Propuestas semanales" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="Basado en tus áreas de interés y ubicaciones" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Classes="transparent" VerticalAlignment="Center" Content="Volver al calendario"/>
+                </Grid>
+
+                <!-- Propuesta 1 -->
+                <Border Classes="card" Padding="20">
+                    <StackPanel Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Propuesta 1: Equilibrada" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="Distribuye tareas de forma pareja entre las áreas" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="accent" Content="Seleccionar"/>
+                        </Grid>
+
+                        <Border Classes="divider" Margin="0"/>
+
+                        <!-- Mini schedule -->
+                        <Grid ColumnDefinitions="Auto,*,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                            <TextBlock Grid.Column="0" Classes="cal-time" Text="7:00" Margin="0 0 8 0"/>
+                            <Border Grid.Column="1" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Column="3" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Column="4" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Classes="cal-time" Text="9:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="1" Grid.Column="2" Height="20" Background="{DynamicResource CalEstudioFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Classes="cal-time" Text="14:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="2" Grid.Column="1" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Row="2" Grid.Column="3" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Classes="cal-time" Text="18:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="3" Grid.Column="3" Height="20" Background="{DynamicResource CalDeporteFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Row="3" Grid.Column="5" Height="20" Background="{DynamicResource CalDeporteFill}" CornerRadius="3" Margin="1"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 4 0 0">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                <TextBlock Text="4 tareas trabajo" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource CalEstudioBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="1 tarea estudio" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource CalDeporteBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="2 tareas deporte" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Propuesta 2 -->
+                <Border Classes="card" Padding="20">
+                    <StackPanel Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Propuesta 2: Intensiva" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="Concentra las tareas en los primeros días" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="accent" Content="Seleccionar"/>
+                        </Grid>
+
+                        <Border Classes="divider" Margin="0"/>
+
+                        <Grid ColumnDefinitions="Auto,*,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                            <TextBlock Grid.Column="0" Classes="cal-time" Text="7:00" Margin="0 0 8 0"/>
+                            <Border Grid.Column="1" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Column="2" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Column="3" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Classes="cal-time" Text="9:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="1" Grid.Column="2" Height="20" Background="{DynamicResource CalEstudioFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Classes="cal-time" Text="14:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="2" Grid.Column="1" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Row="2" Grid.Column="2" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Classes="cal-time" Text="18:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="3" Grid.Column="1" Height="20" Background="{DynamicResource CalDeporteFill}" CornerRadius="3" Margin="1"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 4 0 0">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                <TextBlock Text="5 tareas trabajo" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource CalEstudioBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="1 tarea estudio" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource CalDeporteBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="1 tarea deporte" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Propuesta 3 -->
+                <Border Classes="card" Padding="20">
+                    <StackPanel Spacing="14">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Propuesta 3: Flexible" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="Menos tareas, más tiempo libre" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="accent" Content="Seleccionar"/>
+                        </Grid>
+
+                        <Border Classes="divider" Margin="0"/>
+
+                        <Grid ColumnDefinitions="Auto,*,*,*,*,*,*,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                            <TextBlock Grid.Column="0" Classes="cal-time" Text="10:00" Margin="0 0 8 0"/>
+                            <Border Grid.Column="3" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+                            <Border Grid.Column="5" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Classes="cal-time" Text="14:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="1" Grid.Column="1" Height="20" Background="{DynamicResource CalTrabajoFill}" CornerRadius="3" Margin="1"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Classes="cal-time" Text="18:00" Margin="0 0 8 0"/>
+                            <Border Grid.Row="2" Grid.Column="4" Height="20" Background="{DynamicResource CalDeporteFill}" CornerRadius="3" Margin="1"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 4 0 0">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                <TextBlock Text="3 tareas trabajo" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource CalDeporteBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="1 tarea deporte" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

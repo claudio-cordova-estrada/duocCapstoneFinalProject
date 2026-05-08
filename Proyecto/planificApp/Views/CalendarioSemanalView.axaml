@@ -2,11 +2,189 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
              x:Class="planificApp.Views.CalendarioSemanalView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:CalendarioSemanalViewModel">
-    
-    <Design.DataContext><vm:CalendarioSemanalViewModel/></Design.DataContext>
-    <Label Content="{Binding Test}"></Label>
+
+    <Border Padding="28 26" Background="{DynamicResource AppBackground}">
+        <DockPanel>
+
+            <!-- Header -->
+            <StackPanel DockPanel.Dock="Top" Spacing="16" Margin="0 0 0 16">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Calendario semanal" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="4 al 10 de mayo, 2026" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Classes="transparent" Content="Anterior"/>
+                        <Button Classes="pill active" Content="Esta semana"/>
+                        <Button Classes="transparent" Content="Siguiente"/>
+                        <Button Classes="accent" Click="GenerarSemana_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Label Classes="icon-btn" Content="&#xE465;" FontSize="14"/>
+                                <TextBlock Text="Generar semana" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <!-- Calendar Grid -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid ColumnDefinitions="52,*" RowDefinitions="Auto,Auto">
+
+                    <!-- Day headers row -->
+                    <Grid Grid.Column="1" Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*">
+                        <Border Grid.Column="0" Classes="cal-day-header" Background="{DynamicResource AccentBackgroundLight}" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Lun" FontSize="9" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="4" FontSize="12" Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Classes="cal-day-header" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Mar" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="5" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Classes="cal-day-header" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Mié" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="6" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="3" Classes="cal-day-header" Background="{DynamicResource AccentBackgroundLight}" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Hoy" FontSize="9" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="7" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="4" Classes="cal-day-header" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Vie" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="8" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="5" Classes="cal-day-header" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Sáb" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="9" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="6" Classes="cal-day-header" Padding="4 6">
+                            <StackPanel HorizontalAlignment="Center" Spacing="1">
+                                <TextBlock Text="Dom" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="10" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Time column + Day columns -->
+                    <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" ColumnDefinitions="52,*">
+
+                        <!-- Time labels -->
+                        <StackPanel Grid.Column="0">
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="7:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="8:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="9:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="10:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="11:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="12:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="13:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="14:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="15:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="16:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="17:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="18:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="19:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="20:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="21:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                            <Border Height="50"><TextBlock Classes="cal-time" Text="22:00" VerticalAlignment="Top" Margin="0 -4 0 0"/></Border>
+                        </StackPanel>
+
+                        <!-- Day columns with tasks -->
+                        <Grid Grid.Column="1" ColumnDefinitions="*,*,*,*,*,*,*">
+
+                            <!-- Hour lines spanning all days -->
+                            <Border Grid.ColumnSpan="7" Margin="0 0 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="{DynamicResource CalendarDayBackground}" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 50 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 100 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 150 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 200 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 250 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 300 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 350 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 400 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 450 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 500 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 550 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 600 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 650 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 700 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+                            <Border Grid.ColumnSpan="7" Margin="0 750 0 0" Height="50" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Background="Transparent" VerticalAlignment="Top"/>
+
+                            <!-- Vertical day separators -->
+                            <Border Grid.Column="1" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0"/>
+                            <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0"/>
+                            <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Background="{DynamicResource AccentBackgroundLight}"/>
+                            <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0"/>
+                            <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0"/>
+                            <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0"/>
+
+                            <!-- TASK BLOCKS -->
+                            <!-- Lun 4, 7:00-8:00 — Planificar semana (Trabajo) -->
+                            <Border Grid.Column="0" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 4 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Planificar semana" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                            <!-- Mar 5, 10:00-12:00 — Enviar informe (Trabajo, 2h) -->
+                            <Border Grid.Column="1" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 150 2 0" Height="96" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Enviar informe" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                            <!-- Mar 5, 12:30-13:30 — Traslado -->
+                            <Border Grid.Column="1" Classes="cal-block" Background="{DynamicResource CalTrasladoFill}" BorderBrush="{DynamicResource CalTrasladoBorder}" BorderThickness="1 0 0 2" Margin="2 275 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Traslado" FontSize="10" Foreground="{DynamicResource CalTrasladoBorder}"/>
+                            </Border>
+
+                            <!-- Mié 6, 9:00-11:00 — Estudiar (Estudio, 2h) -->
+                            <Border Grid.Column="2" Classes="cal-block" Background="{DynamicResource CalEstudioFill}" BorderBrush="{DynamicResource CalEstudioBorder}" BorderThickness="1 0 0 2" Margin="2 100 2 0" Height="96" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Estudiar cap. 5" FontSize="10" Foreground="{DynamicResource CalEstudioText}"/>
+                            </Border>
+
+                            <!-- Jue 7, 10:00-11:00 — Enviar informe semanal (Trabajo) -->
+                            <Border Grid.Column="3" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 150 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Informe semanal" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                            <!-- Jue 7, 14:00-15:30 — Reunión de equipo (Trabajo) -->
+                            <Border Grid.Column="3" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 350 2 0" Height="72" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Reunión equipo" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                            <!-- Jue 7, 18:00-19:00 — Clase de spinning (Deporte) -->
+                            <Border Grid.Column="3" Classes="cal-block" Background="{DynamicResource CalDeporteFill}" BorderBrush="{DynamicResource CalDeporteBorder}" BorderThickness="1 0 0 2" Margin="2 550 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Spinning" FontSize="10" Foreground="{DynamicResource CalDeporteText}"/>
+                            </Border>
+
+                            <!-- Vie 8, 9:00-10:30 — Preparar presentación (Trabajo) -->
+                            <Border Grid.Column="4" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 100 2 0" Height="72" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Preparar presentación" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                            <!-- Vie 8, 16:00-17:00 — Revisión de código (Trabajo) -->
+                            <Border Grid.Column="4" Classes="cal-block" Background="{DynamicResource CalTrabajoFill}" BorderBrush="{DynamicResource CalTrabajoBorder}" BorderThickness="1 0 0 2" Margin="2 450 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                                <TextBlock Text="Revisión código" FontSize="10" Foreground="{DynamicResource CalTrabajoText}"/>
+                            </Border>
+
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </ScrollViewer>
+
+        </DockPanel>
+    </Border>
 </UserControl>

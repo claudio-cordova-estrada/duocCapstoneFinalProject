@@ -1,9 +1,25 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
+    <!-- Global font -->
+    <Style Selector="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector=":is(Button)">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector="TextBox">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector="ComboBox">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
     <!-- Window base -->
     <Style Selector="Window">
-        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
         <Setter Property="Background" Value="{DynamicResource AppBackground}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"></Setter>
     </Style>
@@ -70,17 +86,6 @@
         <Setter Property="CornerRadius" Value="7"></Setter>
     </Style>
     
-    <Style Selector="Button /template/ ContentPresenter">
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition Property="Foreground" Duration="0:0:0.15"></BrushTransition>
-                <BrushTransition Property="Background" Duration="0:0:0.15"></BrushTransition>
-                <BrushTransition Property="BorderBrush" Duration="0:0:0.15"></BrushTransition>
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15"/>
-            </Transitions>
-        </Setter>
-    </Style>
-    
     <Style Selector="Button:pointerover /template/ ContentPresenter">
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"></Setter>
         <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
@@ -92,25 +97,39 @@
     
     <!-- Accent button -->
     <Style Selector="Button.accent">
-        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="Background" Value="#241f45"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
     </Style>
     
-    <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
-        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    <Style Selector="Button.accent /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#241f45"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4c4080"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#3d3060"></Setter>
+        <Setter Property="Foreground" Value="#c4b5fd"></Setter>
     </Style>
     
     <!-- Transparent button -->
     <Style Selector="Button.transparent">
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
     </Style>
     
     <Style Selector="Button.transparent:pointerover /template/ ContentPresenter">
         <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
     </Style>
     
     <!-- Danger button -->
@@ -120,7 +139,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
     </Style>
     
-    <!-- SB1 Icon Button -->
+    <!-- SB1 Icon Button (Button) -->
     <Style Selector="Button.sb1-item">
         <Setter Property="Width" Value="38"></Setter>
         <Setter Property="Height" Value="38"></Setter>
@@ -139,7 +158,31 @@
     </Style>
     
     <Style Selector="Button.sb1-item.active /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    
+    <!-- SB1 Icon Button (IconButton) -->
+    <Style Selector="IconButton.sb1-item">
+        <Setter Property="Width" Value="38"></Setter>
+        <Setter Property="Height" Value="38"></Setter>
+        <Setter Property="CornerRadius" Value="9"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#444444"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
     </Style>
     
@@ -150,6 +193,16 @@
     </Style>
     
     <Style Selector="Button.sb1-item.admin.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.admin:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.admin.active /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
     </Style>
@@ -172,7 +225,7 @@
     </Style>
     
     <Style Selector="Button.sb2-item.active /template/ ContentPresenter">
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
     </Style>
     
@@ -337,6 +390,25 @@
         <Setter Property="ClipToBounds" Value="True"></Setter>
     </Style>
     
+    <!-- Calendar task block -->
+    <Style Selector="Border.cal-block">
+        <Setter Property="CornerRadius" Value="4"></Setter>
+        <Setter Property="Padding" Value="4 3"></Setter>
+        <Setter Property="Margin" Value="1 0"></Setter>
+    </Style>
+    
+    <!-- Calendar hour line -->
+    <Style Selector="Border.cal-hour-line">
+        <Setter Property="Background" Value="{DynamicResource CalendarHourLine}"></Setter>
+        <Setter Property="Height" Value="1"></Setter>
+    </Style>
+    
+    <!-- Calendar time label -->
+    <Style Selector="TextBlock.cal-time">
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+    </Style>
+    
     <!-- Calendar day header -->
     <Style Selector="Border.cal-day-header">
         <Setter Property="Background" Value="{DynamicResource CalendarDayHeader}"></Setter>
@@ -370,6 +442,22 @@
     
     <Style Selector="TextBox:focus">
         <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocus}"></Setter>
+    </Style>
+    
+    <!-- Add-task inline input -->
+    <Style Selector="TextBox.add-task">
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtle}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="8"></Setter>
+        <Setter Property="Padding" Value="14 12"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="FontSize" Value="13"></Setter>
+        <Setter Property="Watermark" Value="Añadir tarea..."></Setter>
+    </Style>
+    
+    <Style Selector="TextBox.add-task:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
     </Style>
     
     <Style Selector="ComboBox">

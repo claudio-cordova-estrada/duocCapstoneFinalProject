@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="200"
+        x:Class="planificApp.Views.NewTaskWindow"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
+        x:DataType="vm:NewTaskViewModel"
+        Title="Nueva tarea"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
+        Width="420"
+        CanResize="False"
+        Background="{DynamicResource ModalBackground}">
+
+    <Design.DataContext><vm:NewTaskViewModel/></Design.DataContext>
+
+    <Border Classes="modal-panel" Margin="0" Padding="24">
+        <StackPanel Spacing="18">
+
+            <TextBlock Text="Nueva tarea" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+
+            <TextBox Watermark="Nombre de la tarea"
+                     Text="{Binding TaskName}"
+                     Classes="modal-input"
+                     FontSize="13"/>
+
+            <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 4 0 0">
+                <Border Width="0" Grid.Column="0"/>
+                <Button Grid.Column="1" Classes="transparent"
+                        Margin="0 0 8 0"
+                        x:Name="CancelButton"
+                        Content="Cancelar"/>
+                <Button Grid.Column="2" Classes="accent"
+                        x:Name="SaveButton"
+                        Content="Guardar"/>
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</Window>

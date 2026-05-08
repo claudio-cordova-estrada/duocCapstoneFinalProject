@@ -15,6 +15,7 @@ public enum ApplicationPageNames
     UserAreaInteres,
     UserCalendarioSemanal,
     UserCalendarioMensual,
+    UserPropuestasSemanales,
     UserUbicaciones,
     UserConfig,
     UserDatos,

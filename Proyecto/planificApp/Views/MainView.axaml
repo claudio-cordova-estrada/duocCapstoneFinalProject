@@ -12,50 +12,43 @@
         <vm:MainViewModel/>
     </Design.DataContext>
     
-    <Grid Background="{DynamicResource AppBackground}" ColumnDefinitions="56,168,*">
+    <Grid Background="{DynamicResource AppBackground}" ColumnDefinitions="56,Auto,*">
         
         <!-- SB1 — Icon Navigation -->
         <Border Grid.Column="0" Background="{DynamicResource SB1Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0">
             <Border Padding="0 12">
-                <StackPanel Spacing="2">
-                    <!-- Logo -->
-                    <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 14">
-                        <Label Classes="icon-only" Content="&#xE465;" Foreground="{DynamicResource AccentColor}" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    
-                    <!-- Tareas -->
-                    <Button Classes="sb1-item" Classes.active="{Binding IsTareasActive}" Command="{Binding GoToTareasCommand}">
-                        <Label Classes="icon-only" Content="&#xE464;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
-                    
-                    <!-- Calendario -->
-                    <Button Classes="sb1-item" Classes.active="{Binding IsCalendarioActive}" Command="{Binding GoToCalendarioCommand}">
-                        <Label Classes="icon-only" Content="&#xE712;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
-                    
-                    <!-- Ubicaciones -->
-                    <Button Classes="sb1-item" Classes.active="{Binding IsUbicacionesActive}" Command="{Binding GoToUbicacionesCommand}">
-                        <Label Classes="icon-only" Content="&#xE318;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
-                    
-                    <!-- Spacer -->
-                    <Border Height="1"/>
-                    
+                <Grid ColumnDefinitions="Auto" RowDefinitions="*, Auto, Auto" HorizontalAlignment="Center">
+                    <StackPanel>
+                        <!-- Logo -->
+                        <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 14">
+                            <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AccentColor}" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        
+                        <!-- Tareas -->
+                        <IconButton IconText="&#xE464;" Classes="sb1-item" Classes.active="{Binding IsTareasActive}" Command="{Binding GoToTareasCommand}" />
+                        
+                        <!-- Calendario -->
+                        <IconButton IconText="&#xE712;" Classes="sb1-item" Classes.active="{Binding IsCalendarioActive}" Command="{Binding GoToCalendarioCommand}" />
+                        
+                        <!-- Ubicaciones -->
+                        <IconButton IconText="&#xE318;" Classes="sb1-item" Classes.active="{Binding IsUbicacionesActive}" Command="{Binding GoToUbicacionesCommand}" />
+                        
+                        <!-- Spacer -->
+                        <Border Height="1"/>
+                        
+                    </StackPanel>
                     <!-- Mi Cuenta (bottom) -->
-                    <Button Classes="sb1-item" Classes.active="{Binding IsCuentaActive}" Command="{Binding GoToCuentaCommand}">
-                        <Label Classes="icon-only" Content="&#xE47D;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
-                    
+                    <IconButton Grid.Row="1" IconText="&#xE4C2;" Classes="sb1-item" Classes.active="{Binding IsCuentaActive}" Command="{Binding GoToCuentaCommand}" />
+                        
                     <!-- Configuración -->
-                    <Button Classes="sb1-item" Classes.active="{Binding IsConfigActive}" Command="{Binding GoToConfigCommand}">
-                        <Label Classes="icon-only" Content="&#xE495;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Button>
-                </StackPanel>
+                    <IconButton Grid.Row="2" IconText="&#xE270;" Classes="sb1-item" Classes.active="{Binding IsConfigActive}" Command="{Binding GoToConfigCommand}" />
+                </Grid>
+                
             </Border>
         </Border>
         
         <!-- SB2 — Sub Navigation (dynamic) -->
-        <Border Grid.Column="1" Background="{DynamicResource SB2Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0" IsVisible="{Binding ShowSB2}">
+        <Border Grid.Column="1" Width="168" Background="{DynamicResource SB2Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0" IsVisible="{Binding ShowSB2}">
             <ScrollViewer>
                 <StackPanel>
                     <!-- Tareas SB2 -->
@@ -69,19 +62,19 @@
                         </Button>
                         <Button Classes="sb2-item" Classes.active="{Binding IsHoyActive}" Command="{Binding GoToHoyCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE465;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Classes="icon-only" Content="&#xE10A;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBlock Text="Hoy" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="sb2-item" Classes.active="{Binding IsSemanaActive}" Command="{Binding GoToSemanaCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Classes="icon-only" Content="&#xE7B2;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBlock Text="Semana" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Classes="sb2-item" Classes.active="{Binding IsMesActive}" Command="{Binding GoToMesCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Label Classes="icon-only" Content="&#xE712;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Classes="icon-only" Content="&#xE7B4;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBlock Text="Mes" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -92,8 +85,26 @@
                         
                         <Button Classes="sb2-item" Classes.active="{Binding IsAreaInteresActive}" Command="{Binding GoToAreaInteresCommand}">
                             <StackPanel Orientation="Horizontal" Spacing="9">
-                                <Ellipse Classes="area-dot" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AreaTrabajoBorder}" VerticalAlignment="Center"/>
                                 <TextBlock Text="Trabajo" FontSize="13" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="9">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AreaEstudioBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Estudio" FontSize="13" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="9">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AreaDeporteBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Deporte" FontSize="13" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="9">
+                                <Ellipse Classes="area-dot" Fill="{DynamicResource AreaLaboresBorder}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Labores" FontSize="13" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

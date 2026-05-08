@@ -13,8 +13,29 @@ public partial class MainViewModel : ViewModelBase
     private readonly PageFactory _pageFactory;
     
     [ObservableProperty] private bool _sideMenuExpanded = true;
-    [ObservableProperty] private UserSection _activeUserSection = UserSection.Tareas;
-    [ObservableProperty] private PageViewModel _currentPage;
+    
+    [ObservableProperty] 
+    [NotifyPropertyChangedFor(nameof(IsTareasActive))]
+    [NotifyPropertyChangedFor(nameof(IsCalendarioActive))]
+    [NotifyPropertyChangedFor(nameof(IsUbicacionesActive))]
+    [NotifyPropertyChangedFor(nameof(IsCuentaActive))]
+    [NotifyPropertyChangedFor(nameof(IsConfigActive))]
+    [NotifyPropertyChangedFor(nameof(ShowSB2))]
+    private UserSection _activeUserSection = UserSection.Tareas;
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsInboxActive))]
+    [NotifyPropertyChangedFor(nameof(IsHoyActive))]
+    [NotifyPropertyChangedFor(nameof(IsSemanaActive))]
+    [NotifyPropertyChangedFor(nameof(IsMesActive))]
+    [NotifyPropertyChangedFor(nameof(IsAreaInteresActive))]
+    [NotifyPropertyChangedFor(nameof(IsCalSemanalActive))]
+    [NotifyPropertyChangedFor(nameof(IsCalMensualActive))]
+    [NotifyPropertyChangedFor(nameof(IsDatosActive))]
+    [NotifyPropertyChangedFor(nameof(IsSoporteActive))]
+    [NotifyPropertyChangedFor(nameof(IsSobreActive))]
+    private PageViewModel _currentPage;
+    
     [ObservableProperty] private bool _isAdminMode = false;
 
     public MainViewModel()
@@ -46,6 +67,7 @@ public partial class MainViewModel : ViewModelBase
     // SB2 - Calendario
     [RelayCommand] private void GoToCalendarioSemanal() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioSemanal);
     [RelayCommand] private void GoToCalendarioMensual() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioMensual);
+    public void GoToPropuestasSemanales() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserPropuestasSemanales);
 
     // SB2 - Cuenta
     [RelayCommand] private void GoToDatos() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserDatos);

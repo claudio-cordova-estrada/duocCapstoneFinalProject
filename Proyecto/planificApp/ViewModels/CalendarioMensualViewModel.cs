@@ -8,5 +8,4 @@ public partial class CalendarioMensualViewModel : PageViewModel
     {
         PageName = ApplicationPageNames.UserCalendarioMensual;
     }
-    public string Test { get; set; } = "Calendario Mensual";
 }

@@ -8,6 +8,4 @@ public partial class AreaInteresViewModel : PageViewModel
     {
         PageName = ApplicationPageNames.UserAreaInteres;
     }
-    
-    public string Test { get; set; } = "Calendario Semanal";
 }

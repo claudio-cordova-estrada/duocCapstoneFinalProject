@@ -8,5 +8,4 @@ public partial class InboxViewModel : PageViewModel
     {
         PageName = ApplicationPageNames.UserInbox;
     }
-    public string Test { get; set; } = "Inbox";
 }

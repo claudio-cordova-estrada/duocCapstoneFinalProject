@@ -22,7 +22,7 @@
     <Setter Property="BorderThickness" Value="{DynamicResource ButtonBorderThemeThickness}" />
     <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
     <Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
-    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="VerticalAlignment" Value="Center" />
     <Setter Property="RenderTransform" Value="none" />
     <Setter Property="Transitions">
@@ -39,12 +39,14 @@
                           BorderThickness="{TemplateBinding BorderThickness}"
                           CornerRadius="{TemplateBinding CornerRadius}"
                           Content="{TemplateBinding Content}"
-                          Padding="{TemplateBinding Padding}">
+                          Padding="{TemplateBinding Padding}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
           <ContentPresenter.ContentTemplate>
             <DataTemplate DataType="x:Object">
               <StackPanel Orientation="Horizontal">
-                <Label VerticalAlignment="Center" Classes="icon-btn" Content="{Binding $parent[IconButton].IconText}" />
-                <Label VerticalAlignment="Center"
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center" Classes="icon-btn" Content="{Binding $parent[IconButton].IconText}" />
+                <Label VerticalAlignment="Center" HorizontalAlignment="Center"
                        Content="{Binding $parent[IconButton].Content}"
                        Margin="5 1.5 0 0"
                        IsVisible="{Binding $parent[IconButton].Content, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />

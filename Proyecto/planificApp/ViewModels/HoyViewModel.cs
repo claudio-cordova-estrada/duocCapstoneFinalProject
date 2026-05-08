@@ -4,5 +4,8 @@ namespace planificApp.ViewModels;
 
 public partial class HoyViewModel : PageViewModel
 {
-    public HoyViewModel() => PageName = ApplicationPageNames.UserHoy;
+    public HoyViewModel()
+    {
+        PageName = ApplicationPageNames.UserHoy;
+    }
 }

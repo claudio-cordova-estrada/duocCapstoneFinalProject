@@ -49,6 +49,7 @@
         <SolidColorBrush x:Key="AccentColor">#a78bfa</SolidColorBrush>
         <SolidColorBrush x:Key="AccentHover">#c4b5fd</SolidColorBrush>
         <SolidColorBrush x:Key="AccentBackground">#1e1a2e</SolidColorBrush>
+        <SolidColorBrush x:Key="AccentBackgroundLight">#2d2650</SolidColorBrush>
         <SolidColorBrush x:Key="AccentBorder">#3d3060</SolidColorBrush>
         
         <!-- Admin Accent (Orange) -->
@@ -111,6 +112,22 @@
         <SolidColorBrush x:Key="CalendarHourLine">#141414</SolidColorBrush>
         <SolidColorBrush x:Key="CalendarDayOther">#222222</SolidColorBrush>
         
+        <!-- Calendar task blocks (translucent) -->
+        <SolidColorBrush x:Key="CalTrabajoFill">#5241a855</SolidColorBrush>
+        <SolidColorBrush x:Key="CalTrabajoBorder">#a78bfa</SolidColorBrush>
+        <SolidColorBrush x:Key="CalTrabajoText">#c4b5fd</SolidColorBrush>
+        <SolidColorBrush x:Key="CalEstudioFill">#34d39944</SolidColorBrush>
+        <SolidColorBrush x:Key="CalEstudioBorder">#34d399</SolidColorBrush>
+        <SolidColorBrush x:Key="CalEstudioText">#6ee7b7</SolidColorBrush>
+        <SolidColorBrush x:Key="CalDeporteFill">#f472b644</SolidColorBrush>
+        <SolidColorBrush x:Key="CalDeporteBorder">#f472b6</SolidColorBrush>
+        <SolidColorBrush x:Key="CalDeporteText">#f9a8d4</SolidColorBrush>
+        <SolidColorBrush x:Key="CalLaboresFill">#60a5fa44</SolidColorBrush>
+        <SolidColorBrush x:Key="CalLaboresBorder">#60a5fa</SolidColorBrush>
+        <SolidColorBrush x:Key="CalLaboresText">#93c5fd</SolidColorBrush>
+        <SolidColorBrush x:Key="CalTrasladoFill">#ef444444</SolidColorBrush>
+        <SolidColorBrush x:Key="CalTrasladoBorder">#ef4444</SolidColorBrush>
+        
         <!-- Delete / Danger -->
         <SolidColorBrush x:Key="DangerBackground">#2d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="DangerBorder">#3d1a1a</SolidColorBrush>
@@ -152,6 +169,9 @@
         <SolidColorBrush x:Key="PrimaryOutlineBackground">#3d3060</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#2d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#f87171</SolidColorBrush>
+        
+        <!-- Override Fluent system accent color -->
+        <Color x:Key="SystemAccentColor">#a78bfa</Color>
         
         <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>
         <FontFamily x:Key="AkkoProBold">avares://planificApp/Assets/Fonts/Akko-Pro-Bold.ttf#Akko Pro</FontFamily>

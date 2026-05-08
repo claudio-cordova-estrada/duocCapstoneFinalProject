@@ -1,0 +1,134 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.HoyView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:HoyViewModel">
+
+    <ScrollViewer>
+        <Border Padding="28 26" Background="{DynamicResource AppBackground}">
+            <StackPanel Spacing="20">
+
+                <!-- Header -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="3">
+                        <TextBlock Text="Hoy" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="Jueves 7 de mayo, 2026" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Classes="accent" VerticalAlignment="Center" Click="NewTaskButton_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Label Classes="icon-btn" Content="&#xE4A0;" FontSize="14"/>
+                            <TextBlock Text="Nueva tarea" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <!-- Add task input -->
+                <TextBox Classes="add-task"/>
+
+                <!-- Stats row -->
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Border Classes="card" Padding="16 12">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="3" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="Pendientes" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="card" Padding="16 12">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="5" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource AreaEstudioText}"/>
+                            <TextBlock Text="Completadas" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="card" Padding="16 12">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="1" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource DangerForeground}"/>
+                            <TextBlock Text="Vencida" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Timeline -->
+                <TextBlock Classes="section-label" Text="9:00 — MAÑANA"/>
+
+                <!-- Task 1 -->
+                <Border Classes="card">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
+                        <Border Classes="task-check" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0"/>
+                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                            <TextBlock Text="Enviar informe semanal" Foreground="{DynamicResource TextPrimary}" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Classes="badge-info" VerticalAlignment="Center">
+                                    <TextBlock Text="Trabajo" FontSize="9" Foreground="{DynamicResource BadgeInfoForeground}"/>
+                                </Border>
+                                <Label Classes="icon-btn" Content="&#xE318;" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Oficina central" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="10:00" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Classes="section-label" Text="12:00 — MEDIODÍA"/>
+
+                <!-- Traslado -->
+                <Border Classes="card">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
+                        <Border Grid.Column="0" Width="17" Height="17" CornerRadius="8.5" Background="Transparent" BorderBrush="{DynamicResource TrasladoBorder}" BorderThickness="1.5" VerticalAlignment="Center" Margin="0 0 12 0"/>
+                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                            <TextBlock Text="Traslado: Oficina → Cliente" Foreground="{DynamicResource TextPrimary}" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Background="{DynamicResource TrasladoBackground}" CornerRadius="4" Padding="7 2" VerticalAlignment="Center">
+                                    <TextBlock Text="Traslado" FontSize="9" Foreground="{DynamicResource TrasladoBorder}"/>
+                                </Border>
+                                <Label Classes="icon-btn" Content="&#xE318;" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Av. Providencia 1234" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="12:30" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <TextBlock Classes="section-label" Text="14:00 — TARDE"/>
+
+                <!-- Task 2 -->
+                <Border Classes="card">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
+                        <Border Classes="task-check" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0"/>
+                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                            <TextBlock Text="Reunión de equipo" Foreground="{DynamicResource TextPrimary}" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Classes="badge-info" VerticalAlignment="Center">
+                                    <TextBlock Text="Trabajo" FontSize="9" Foreground="{DynamicResource BadgeInfoForeground}"/>
+                                </Border>
+                                <Label Classes="icon-btn" Content="&#xE318;" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Sala reuniones B" FontSize="10" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="14:00" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Overdue task -->
+                <TextBlock Classes="section-label" Text="VENCIDAS"/>
+                <Border Classes="card" BorderBrush="{DynamicResource DangerBorder}">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">
+                        <Border Classes="task-check" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 12 0" BorderBrush="{DynamicResource DangerForeground}"/>
+                        <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                            <TextBlock Text="Revisión contrato" Foreground="{DynamicResource DangerForeground}" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Border Classes="badge-danger" VerticalAlignment="Center">
+                                    <TextBlock Text="Vencida" FontSize="9" Foreground="{DynamicResource BadgeDangerForeground}"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Grid.Column="2" Text="Ayer" FontSize="11" Foreground="{DynamicResource DangerForeground}" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

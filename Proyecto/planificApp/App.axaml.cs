@@ -44,6 +44,7 @@ public partial class App : Application
         collection.AddTransient<CalendarioSemanalViewModel>();
         collection.AddTransient<CalendarioMensualViewModel>();
         collection.AddTransient<SugerenciasViewModel>();
+        collection.AddTransient<PropuestasSemanalesViewModel>();
         
         // User - Otras ViewModels
         collection.AddTransient<UbicacionesViewModel>();
@@ -72,6 +73,7 @@ public partial class App : Application
             // User - Calendario
             ApplicationPageNames.UserCalendarioSemanal => x.GetRequiredService<CalendarioSemanalViewModel>(),
             ApplicationPageNames.UserCalendarioMensual => x.GetRequiredService<CalendarioMensualViewModel>(),
+            ApplicationPageNames.UserPropuestasSemanales => x.GetRequiredService<PropuestasSemanalesViewModel>(),
             ApplicationPageNames.UserSugerencias => x.GetRequiredService<SugerenciasViewModel>(),
             // User - Otras
             ApplicationPageNames.UserUbicaciones => x.GetRequiredService<UbicacionesViewModel>(),
