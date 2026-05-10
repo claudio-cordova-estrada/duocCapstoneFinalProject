@@ -1,13 +1,170 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
-         x:Class="planificApp.Views.UbicacionesView"
-         xmlns:vm="clr-namespace:planificApp.ViewModels"
-         x:DataType="vm:UbicacionesViewModel">
-    <Border Background="{DynamicResource AppBackground}" Padding="22 26">
-        <TextBlock Text="Ubicaciones" FontSize="18" Foreground="{DynamicResource TextPrimary}" />
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.UbicacionesView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:UbicacionesViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="16" Margin="28 26">
+
+                <TextBlock Text="Mis ubicaciones" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+
+                <!-- Map -->
+                <Border x:Name="MapContainer" Classes="map-frame" Height="420">
+                    <Grid>
+                        <Image Source="avares://planificApp/Assets/Images/GoogleMapsimagenfondostock.png" Stretch="UniformToFill"/>
+                        <Canvas x:Name="PinCanvas"/>
+                        <!-- Zoom buttons -->
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8" Spacing="4">
+<Button Classes="map-zoom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                        <Label Content="&#xE3D4;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button Classes="map-zoom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                                        <Label Content="&#xE32A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Bottom section: Locations (2 cols) + Detail (1 col) -->
+                <Grid ColumnDefinitions="1*,1*,1*" ColumnSpacing="12" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+
+                    <!-- Casa -->
+                    <Border Grid.Column="0" Grid.Row="0" x:Name="LocCasa" Classes="loc-item active" Tapped="LocCasa_Tapped">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#34d399" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Casa" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="Hogar" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ActionsCasa" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="True">
+                                <Button Classes="loc-action" Click="EditCasa_Click">
+                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Classes="loc-action" Click="DeleteCasa_Click">
+                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Trabajo -->
+                    <Border Grid.Column="1" Grid.Row="0" x:Name="LocTrabajo" Classes="loc-item" Tapped="LocTrabajo_Tapped">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#a78bfa" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Trabajo" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="Trabajo" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ActionsTrabajo" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
+                                <Button Classes="loc-action" Click="EditTrabajo_Click">
+                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Classes="loc-action" Click="DeleteTrabajo_Click">
+                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Detail panel -->
+                    <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" Classes="card" Padding="14" VerticalAlignment="Stretch">
+                        <StackPanel>
+                            <TextBlock x:Name="DetailName" Text="Casa" FontSize="16" FontWeight="Medium" Foreground="#34d399" Margin="0 0 0 12"/>
+                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
+                                <StackPanel Orientation="Horizontal" Spacing="0">
+                                    <TextBlock Text="Tipo &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock x:Name="DetailType" Text="Hogar" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8" Margin="0 8 0 0">
+                                <StackPanel Orientation="Horizontal" Spacing="0">
+                                    <TextBlock FontSize="14" Foreground="{DynamicResource TextDisabled}"><Run Text="&#xDA;ltima visita"/></TextBlock>
+                                    <TextBlock Text=" &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock x:Name="DetailVisit" Text="12 abr 2026" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Padding="0 8 0 0" Margin="0 0 0 0">
+                                <StackPanel Orientation="Horizontal" Spacing="0">
+                                    <TextBlock Text="Transporte &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock x:Name="DetailTransport" Text="Metro" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Iglesia -->
+                    <Border Grid.Column="0" Grid.Row="1" x:Name="LocIglesia" Classes="loc-item" Tapped="LocIglesia_Tapped">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#f472b6" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Iglesia" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="Social" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ActionsIglesia" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
+                                <Button Classes="loc-action" Click="EditIglesia_Click">
+                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Classes="loc-action" Click="DeleteIglesia_Click">
+                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- M&#xE9;dico 1 -->
+                    <Border Grid.Column="1" Grid.Row="1" x:Name="LocMedico1" Classes="loc-item" Tapped="LocMedico1_Tapped">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#60a5fa" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="M&#xE9;dico 1" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="Salud" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ActionsMedico1" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
+                                <Button Classes="loc-action" Click="EditMedico1_Click">
+                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Classes="loc-action" Click="DeleteMedico1_Click">
+                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- M&#xE9;dico 2 -->
+                    <Border Grid.Column="0" Grid.Row="2" x:Name="LocMedico2" Classes="loc-item" Tapped="LocMedico2_Tapped">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#60a5fa" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="M&#xE9;dico 2" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                <TextBlock Text="Salud" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                            <StackPanel x:Name="ActionsMedico2" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
+                                <Button Classes="loc-action" Click="EditMedico2_Click">
+                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                                <Button Classes="loc-action" Click="DeleteMedico2_Click">
+                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+
+                <!-- Add location button (below detail panel) -->
+                <Border Classes="add-loc-btn" Tapped="AddLocation_Tapped">
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                        <Label Content="&#xE3D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Agregar ubicaci&#xF3;n" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
     </Border>
 </UserControl>
-

@@ -17,28 +17,17 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationPageNames.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationPageNames.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StyleControl/IconButton.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/StyleControl/IconButton.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/CalendarioMensualViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CalendarioMensualViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/CalendarioSemanalViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CalendarioSemanalViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/HoyViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/HoyViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/MesViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/MesViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/SemanaViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/SemanaViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/AreaInteresView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/DialogHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/DialogHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Styles/appDefaultStyles.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Styles/appDefaultStyles.axaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/InboxView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/InboxView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/InboxView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/InboxView.axaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/MainView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/MainView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/PropuestasSemanalesView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/PropuestasSemanalesView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/UbicacionesView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/UbicacionesView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/UbicacionesView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/UbicacionesView.axaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
@@ -50,6 +39,7 @@
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" afterDir="false" />
@@ -60,19 +50,12 @@
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.AssemblyReference.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
     </list>
@@ -85,8 +68,11 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="7" />
+    <option name="cachedIndexableFilesCount" value="1" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../planificApp\exportToHTML" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -170,6 +156,7 @@
   &quot;keyToString&quot;: {
     &quot;.NET Project.planificApp.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Publish to folder.Build 2 PlanificApp.executor&quot;: &quot;Run&quot;,
     &quot;Publish to folder.PlanificApp primer avance.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -193,6 +180,14 @@
   }
 }</component>
   <component name="RunManager" selected=".NET Project.planificApp">
+    <configuration name="Build 2 PlanificApp" type="DotNetFolderPublish" factoryName="Publish to folder">
+      <riderPublish configuration="Release" platform="Any CPU" target_folder="$PROJECT_DIR$/../../../planificApp Builds/Build 2" target_framework="net10.0" uuid_high="4293820685832307931" uuid_low="-5708682657203047451">
+        <runtimes>
+          <item value="Portable" />
+        </runtimes>
+      </riderPublish>
+      <method v="2" />
+    </configuration>
     <configuration name="PlanificApp primer avance" type="DotNetFolderPublish" factoryName="Publish to folder">
       <riderPublish configuration="Release" platform="Any CPU" target_folder="$PROJECT_DIR$/../../../planificApp Solution Temp" target_framework="net10.0" uuid_high="4293820685832307931" uuid_low="-5708682657203047451">
         <runtimes>
@@ -274,7 +269,10 @@
       <workItem from="1778124109456" duration="618000" />
       <workItem from="1778125057958" duration="2761000" />
       <workItem from="1778184508409" duration="1614000" />
-      <workItem from="1778189599341" duration="21469000" />
+      <workItem from="1778189599341" duration="21965000" />
+      <workItem from="1778272153282" duration="12315000" />
+      <workItem from="1778335314824" duration="5319000" />
+      <workItem from="1778367371110" duration="5865000" />
     </task>
     <servers />
   </component>

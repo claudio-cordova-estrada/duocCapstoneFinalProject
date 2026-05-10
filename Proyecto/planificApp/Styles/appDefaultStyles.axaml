@@ -128,7 +128,7 @@
     </Style>
     
     <Style Selector="Button.transparent:pointerover /template/ ContentPresenter">
-        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Background" Value="#575757"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
     </Style>
     
@@ -386,8 +386,83 @@
         <Setter Property="CornerRadius" Value="10"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
         <Setter Property="BorderThickness" Value="1"></Setter>
-        <Setter Property="Height" Value="220"></Setter>
         <Setter Property="ClipToBounds" Value="True"></Setter>
+    </Style>
+    
+    <!-- Location item -->
+    <Style Selector="Border.loc-item">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+        <Setter Property="Padding" Value="10 12"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.loc-item:pointer-over">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+    </Style>
+    <Style Selector="Border.loc-item.active">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+    
+    <!-- Location action icon buttons -->
+    <Style Selector="Button.loc-action">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Padding" Value="6"></Setter>
+        <Setter Property="Width" Value="32"></Setter>
+        <Setter Property="Height" Value="32"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+    <Style Selector="Button.loc-action:pointer-over /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+    
+    <!-- Add location button -->
+    <Style Selector="Border.add-loc-btn">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDashed}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="8"></Setter>
+        <Setter Property="Padding" Value="8 12"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.add-loc-btn:pointer-over">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+    
+    <!-- Map zoom button -->
+    <Style Selector="Button.map-zoom">
+        <Setter Property="Width" Value="32"></Setter>
+        <Setter Property="Height" Value="32"></Setter>
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="6"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+    
+    <!-- Color option circle -->
+    <Style Selector="Border.color-opt">
+        <Setter Property="Width" Value="26"></Setter>
+        <Setter Property="Height" Value="26"></Setter>
+        <Setter Property="CornerRadius" Value="13"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    
+    <!-- Transport pill -->
+    <Style Selector="Border.transport-pill">
+        <Setter Property="CornerRadius" Value="5"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Padding" Value="8 4"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
     </Style>
     
     <!-- Calendar task block -->

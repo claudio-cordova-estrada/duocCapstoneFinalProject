@@ -29,8 +29,10 @@
         <entry key="Views/MainView.axaml" value="planificApp.csproj" />
         <entry key="Views/MesView.axaml" value="planificApp.csproj" />
         <entry key="Views/ModificacionUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/PropuestasSemanalesView.axaml" value="planificApp.csproj" />
         <entry key="Views/RecuperarContraView.axaml" value="planificApp.csproj" />
         <entry key="Views/RegistroView.axaml" value="planificApp.csproj" />
+        <entry key="Views/SemanaView.axaml" value="planificApp.csproj" />
         <entry key="Views/SettingsView.axaml" value="planificApp.csproj" />
         <entry key="Views/SoporteView.axaml" value="planificApp.csproj" />
         <entry key="Views/SugerenciaSemanalView.axaml" value="planificApp.csproj" />
