@@ -269,18 +269,44 @@
         <Setter Property="CornerRadius" Value="5"></Setter>
         <Setter Property="FontSize" Value="10"></Setter>
     </Style>
+
+    <Style Selector="Button.pill /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+    </Style>
     
-    <Style Selector="Button.pill.active">
+    <Style Selector="Button.pill.active /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource PillActiveBackground}"></Setter>
-        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource PillActiveForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
     </Style>
     
     <!-- Admin Pill -->
-    <Style Selector="Button.pill.admin.active">
+    <Style Selector="Button.pill.admin.active /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
-        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
     </Style>
     
     <!-- Rounded pills (region/comuna filters) -->
@@ -292,17 +318,44 @@
         <Setter Property="CornerRadius" Value="20"></Setter>
         <Setter Property="FontSize" Value="12"></Setter>
     </Style>
-    
-    <Style Selector="Button.pill-rounded.active">
-        <Setter Property="Background" Value="{DynamicResource PillActiveBackground}"></Setter>
-        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
-        <Setter Property="Foreground" Value="{DynamicResource PillActiveForeground}"></Setter>
+
+    <Style Selector="Button.pill-rounded /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
     </Style>
     
-    <Style Selector="Button.pill-rounded.admin.active">
+    <Style Selector="Button.pill-rounded.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource PillActiveForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.pill-rounded.admin.active /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
-        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
     </Style>
     
     <!-- Cards -->

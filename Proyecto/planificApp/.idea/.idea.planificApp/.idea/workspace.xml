@@ -14,32 +14,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Helpers/DialogHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/DialogHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Styles/appDefaultStyles.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Styles/appDefaultStyles.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioMensualView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/PropuestasSemanalesView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/PropuestasSemanalesView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/UbicacionesView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/UbicacionesView.axaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Views/UbicacionesView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/UbicacionesView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/ConfigView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/ConfigView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DatosView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/DatosView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DatosView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/DatosView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/SobreView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/SobreView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/SoporteView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/SoporteView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/SoporteView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/SoporteView.axaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" afterDir="false" />
@@ -49,8 +42,6 @@
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" afterDir="false" />
@@ -272,7 +263,7 @@
       <workItem from="1778189599341" duration="21965000" />
       <workItem from="1778272153282" duration="12315000" />
       <workItem from="1778335314824" duration="5319000" />
-      <workItem from="1778367371110" duration="5865000" />
+      <workItem from="1778367371110" duration="9232000" />
     </task>
     <servers />
   </component>
