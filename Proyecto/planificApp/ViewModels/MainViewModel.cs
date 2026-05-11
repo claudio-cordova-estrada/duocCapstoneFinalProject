@@ -7,6 +7,7 @@ namespace planificApp.ViewModels;
 
 public enum UserSection { Tareas, Calendario, Ubicaciones, Cuenta, Config }
 public enum AdminSection { Estadisticas, Usuarios }
+public enum AuthPage { Login, Registro, RecuperarContra }
 
 public partial class MainViewModel : ViewModelBase
 {
@@ -22,6 +23,11 @@ public partial class MainViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsConfigActive))]
     [NotifyPropertyChangedFor(nameof(ShowSB2))]
     private UserSection _activeUserSection = UserSection.Tareas;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsAdminEstadisticasActive))]
+    [NotifyPropertyChangedFor(nameof(IsAdminUsuariosActive))]
+    private AdminSection _activeAdminSection = AdminSection.Estadisticas;
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsInboxActive))]
@@ -38,6 +44,20 @@ public partial class MainViewModel : ViewModelBase
     
     [ObservableProperty] private bool _isAdminMode = false;
 
+    // Auth state
+    [ObservableProperty] private bool _isLoggedIn = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowSB2))]
+    private bool _isAdminToggle = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowAppLayout))]
+    [NotifyPropertyChangedFor(nameof(ShowSB2))]
+    private AuthPage _currentAuthPage = AuthPage.Login;
+
+    public bool ShowAppLayout => IsLoggedIn;
+
     public MainViewModel()
     {
         ActiveUserSection = UserSection.Tareas;
@@ -47,8 +67,49 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel(PageFactory pageFactory)
     {
         _pageFactory = pageFactory;
-        CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
+        NavigateToAuth(ApplicationPageNames.Login);
     }
+
+    private void NavigateToAuth(ApplicationPageNames page)
+    {
+        var vm = _pageFactory.GetPageViewModel(page);
+        if (vm is LoginViewModel login) login.Main = this;
+        else if (vm is RegistroViewModel registro) registro.Main = this;
+        else if (vm is RecuperarContraViewModel recuperar) recuperar.Main = this;
+        CurrentPage = vm;
+    }
+
+    // Auth navigation
+    [RelayCommand] private void GoToLogin() { CurrentAuthPage = AuthPage.Login; NavigateToAuth(ApplicationPageNames.Login); }
+    [RelayCommand] private void GoToRegistro() { CurrentAuthPage = AuthPage.Registro; NavigateToAuth(ApplicationPageNames.Registro); }
+    [RelayCommand] private void GoToRecuperarContra() { CurrentAuthPage = AuthPage.RecuperarContra; NavigateToAuth(ApplicationPageNames.RecuperarContra); }
+
+    [RelayCommand] private void Login()
+    {
+        IsLoggedIn = true;
+        if (IsAdminToggle)
+        {
+            ActiveAdminSection = AdminSection.Estadisticas;
+            CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminEstadisticas);
+        }
+        else
+        {
+            ActiveUserSection = UserSection.Tareas;
+            CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
+        }
+    }
+
+    [RelayCommand] private void Logout()
+    {
+        IsLoggedIn = false;
+        IsAdminToggle = false;
+        NavigateToAuth(ApplicationPageNames.Login);
+    }
+
+    // Admin navigation
+    [RelayCommand] private void GoToAdminEstadisticas() { ActiveAdminSection = AdminSection.Estadisticas; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminEstadisticas); }
+    [RelayCommand] private void GoToAdminUsuarios() { ActiveAdminSection = AdminSection.Usuarios; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarios); }
+    public void GoToAdminUsuarioDetalle() { CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarioDetalle); }
 
     // SB1 Navigation
     [RelayCommand] private void GoToTareas() { ActiveUserSection = UserSection.Tareas; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); }
@@ -74,12 +135,16 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] private void GoToSoporte() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSoporte);
     [RelayCommand] private void GoToSobre() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSobre);
 
-    // Active state helpers for SB1
+    // Active state helpers for SB1 - User
     public bool IsTareasActive => ActiveUserSection == UserSection.Tareas;
     public bool IsCalendarioActive => ActiveUserSection == UserSection.Calendario;
     public bool IsUbicacionesActive => ActiveUserSection == UserSection.Ubicaciones;
     public bool IsCuentaActive => ActiveUserSection == UserSection.Cuenta;
     public bool IsConfigActive => ActiveUserSection == UserSection.Config;
+
+    // Active state helpers for SB1 - Admin
+    public bool IsAdminEstadisticasActive => ActiveAdminSection == AdminSection.Estadisticas;
+    public bool IsAdminUsuariosActive => ActiveAdminSection == AdminSection.Usuarios;
 
     // Active state helpers for SB2 - Tareas
     public bool IsInboxActive => CurrentPage.PageName == ApplicationPageNames.UserInbox;
@@ -98,5 +163,5 @@ public partial class MainViewModel : ViewModelBase
     public bool IsSobreActive => CurrentPage.PageName == ApplicationPageNames.UserSobre;
 
     // SB2 visibility
-    public bool ShowSB2 => ActiveUserSection is UserSection.Tareas or UserSection.Calendario or UserSection.Cuenta;
+    public bool ShowSB2 => !IsAdminToggle && ActiveUserSection is UserSection.Tareas or UserSection.Calendario or UserSection.Cuenta;
 }

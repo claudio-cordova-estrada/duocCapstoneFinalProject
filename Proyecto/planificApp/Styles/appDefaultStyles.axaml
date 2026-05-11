@@ -120,6 +120,58 @@
         <Setter Property="Foreground" Value="#c4b5fd"></Setter>
     </Style>
     
+    <!-- Admin accent button -->
+    <Style Selector="Button.accent-admin">
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4a2a10"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#3d2510"></Setter>
+        <Setter Property="Foreground" Value="#fdba74"></Setter>
+    </Style>
+    
+    <!-- Danger button -->
+    <Style Selector="Button.danger">
+        <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4d1a1a"></Setter>
+        <Setter Property="Foreground" Value="#fca5a5"></Setter>
+        <Setter Property="BorderBrush" Value="#5d2a2a"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#5d1a1a"></Setter>
+        <Setter Property="Foreground" Value="#fecaca"></Setter>
+        <Setter Property="BorderBrush" Value="#6d2a2a"></Setter>
+    </Style>
+    
     <!-- Transparent button -->
     <Style Selector="Button.transparent">
         <Setter Property="Background" Value="Transparent"></Setter>
@@ -141,9 +193,9 @@
     
     <!-- SB1 Icon Button (Button) -->
     <Style Selector="Button.sb1-item">
-        <Setter Property="Width" Value="38"></Setter>
-        <Setter Property="Height" Value="38"></Setter>
-        <Setter Property="CornerRadius" Value="9"></Setter>
+        <Setter Property="Width" Value="44"></Setter>
+        <Setter Property="Height" Value="44"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
         <Setter Property="Padding" Value="0"></Setter>
         <Setter Property="BorderThickness" Value="0"></Setter>
         <Setter Property="Background" Value="Transparent"></Setter>
@@ -164,9 +216,9 @@
     
     <!-- SB1 Icon Button (IconButton) -->
     <Style Selector="IconButton.sb1-item">
-        <Setter Property="Width" Value="38"></Setter>
-        <Setter Property="Height" Value="38"></Setter>
-        <Setter Property="CornerRadius" Value="9"></Setter>
+        <Setter Property="Width" Value="44"></Setter>
+        <Setter Property="Height" Value="44"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
         <Setter Property="Padding" Value="0"></Setter>
         <Setter Property="BorderThickness" Value="0"></Setter>
         <Setter Property="Background" Value="Transparent"></Setter>
@@ -313,7 +365,7 @@
     <Style Selector="Button.pill-rounded">
         <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
-        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="Foreground" Value="#777777"></Setter>
         <Setter Property="Padding" Value="12 6"></Setter>
         <Setter Property="CornerRadius" Value="20"></Setter>
         <Setter Property="FontSize" Value="12"></Setter>
@@ -321,7 +373,7 @@
 
     <Style Selector="Button.pill-rounded /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
-        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="Foreground" Value="#777777"></Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
         <Setter Property="CornerRadius" Value="20"></Setter>
     </Style>
@@ -357,6 +409,36 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
         <Setter Property="CornerRadius" Value="20"></Setter>
     </Style>
+
+    <Style Selector="Button.pill-rounded.admin.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.admin.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+    </Style>
+
+    <!-- Disabled pill-rounded -->
+    <Style Selector="Button.pill-rounded.disabled">
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="Opacity" Value="0.45"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.disabled:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+    </Style>
     
     <!-- Cards -->
     <Style Selector="Border.card">
@@ -365,6 +447,14 @@
         <Setter Property="BorderThickness" Value="1"></Setter>
         <Setter Property="CornerRadius" Value="10"></Setter>
         <Setter Property="Padding" Value="16"></Setter>
+    </Style>
+
+    <!-- User row hover -->
+    <Style Selector="Border.user-row">
+        <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+    <Style Selector="Border.user-row:pointerover">
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
     </Style>
     
     <!-- Panel -->

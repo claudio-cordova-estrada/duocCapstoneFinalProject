@@ -2,11 +2,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
              x:Class="planificApp.Views.LoginView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:LoginViewModel">
-    
-    <Design.DataContext><vm:LoginViewModel/></Design.DataContext>
-    <Label Content="{Binding Test}"></Label>
+
+    <Border Background="{DynamicResource AppBackground}">
+        <Grid RowDefinitions="*,Auto,*">
+            
+            <Border Grid.Row="0"/>
+            
+            <!-- Login card -->
+            <Border Grid.Row="1" Classes="card" Padding="40" Width="420" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Spacing="20">
+                    
+                    <!-- Logo + title -->
+                    <StackPanel HorizontalAlignment="Center" Spacing="8" Margin="0 0 0 4">
+                        <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center">
+                            <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AccentColor}" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="PlanificApp" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Inicia sesión en tu cuenta" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Correo -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <TextBox FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                    </StackPanel>
+
+                    <!-- Contraseña -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <TextBox FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                    </StackPanel>
+
+                    <!-- Admin toggle (temporary) -->
+                    <Grid ColumnDefinitions="*,Auto" Margin="0 4 0 0">
+                        <TextBlock Grid.Column="0" Text="Modo administrador" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Main.IsAdminToggle}" OnContent="" OffContent="" Margin="0 0 -8 0"/>
+                    </Grid>
+
+                    <!-- Login button -->
+                    <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding Main.LoginCommand}" Margin="0 4 0 0">
+                        <TextBlock Text="Iniciar sesión" FontSize="14" HorizontalAlignment="Center"/>
+                    </Button>
+
+                    <!-- Links -->
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">
+                        <TextBlock Text="¿Olvidaste tu contraseña?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        <Button Classes="transparent" Command="{Binding Main.GoToRecuperarContraCommand}" Padding="4 2">
+                            <TextBlock Text="Recuperar" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
+                        </Button>
+                    </StackPanel>
+
+                    <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Margin="0 4"/>
+
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4">
+                        <TextBlock Text="¿No tienes cuenta?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        <Button Classes="transparent" Command="{Binding Main.GoToRegistroCommand}" Padding="4 2">
+                            <TextBlock Text="Crear cuenta" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2"/>
+            
+        </Grid>
+    </Border>
 </UserControl>

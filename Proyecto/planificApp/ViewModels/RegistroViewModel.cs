@@ -4,9 +4,10 @@ namespace planificApp.ViewModels;
 
 public partial class RegistroViewModel : PageViewModel
 {
+    public MainViewModel Main { get; set; }
+    
     public RegistroViewModel()
     {
         PageName = ApplicationPageNames.Registro;
     }
-    public string Test { get; set; } = "Registro";
 }

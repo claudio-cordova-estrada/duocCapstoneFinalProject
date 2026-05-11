@@ -2,11 +2,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
              x:Class="planificApp.Views.RecuperarContraView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:RecuperarContraViewModel">
-    
-    <Design.DataContext><vm:RecuperarContraViewModel/></Design.DataContext>
-    <Label Content="{Binding Test}"></Label>
+
+    <Border Background="{DynamicResource AppBackground}">
+        <Grid RowDefinitions="*,Auto,*">
+            
+            <Border Grid.Row="0"/>
+            
+            <!-- Recuperar card -->
+            <Border Grid.Row="1" Classes="card" Padding="40" Width="420" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Spacing="20">
+                    
+                    <!-- Logo + title -->
+                    <StackPanel HorizontalAlignment="Center" Spacing="8" Margin="0 0 0 4">
+                        <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center">
+                            <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AccentColor}" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Recuperar contraseña" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Ingresa tu correo y te enviaremos un enlace de recuperación" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="320"/>
+                    </StackPanel>
+
+                    <!-- Correo -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <TextBox FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                    </StackPanel>
+
+                    <!-- Enviar button -->
+                    <Button Classes="accent" HorizontalAlignment="Stretch" Click="Enviar_Click" Margin="0 4 0 0">
+                        <TextBlock Text="Enviar enlace de recuperación" FontSize="14" HorizontalAlignment="Center"/>
+                    </Button>
+
+                    <!-- Link to login -->
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">
+                        <TextBlock Text="¿Recordaste tu contraseña?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        <Button Classes="transparent" Command="{Binding Main.GoToLoginCommand}" Padding="4 2">
+                            <TextBlock Text="Iniciar sesión" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2"/>
+            
+        </Grid>
+    </Border>
 </UserControl>

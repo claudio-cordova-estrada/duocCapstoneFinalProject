@@ -22,6 +22,7 @@
         <entry key="Views/DatosView.axaml" value="planificApp.csproj" />
         <entry key="Views/DetalleUsuarioView.axaml" value="planificApp.csproj" />
         <entry key="Views/EstadisticaUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/EstadisticasView.axaml" value="planificApp.csproj" />
         <entry key="Views/HoyView.axaml" value="planificApp.csproj" />
         <entry key="Views/InboxView.axaml" value="planificApp.csproj" />
         <entry key="Views/LocationView.axaml" value="planificApp.csproj" />
@@ -39,6 +40,8 @@
         <entry key="Views/TodayTaskView.axaml" value="planificApp.csproj" />
         <entry key="Views/TodayView.axaml" value="planificApp.csproj" />
         <entry key="Views/UbicacionesView.axaml" value="planificApp.csproj" />
+        <entry key="Views/UsuarioDetalleView.axaml" value="planificApp.csproj" />
+        <entry key="Views/UsuariosView.axaml" value="planificApp.csproj" />
       </map>
     </option>
   </component>
