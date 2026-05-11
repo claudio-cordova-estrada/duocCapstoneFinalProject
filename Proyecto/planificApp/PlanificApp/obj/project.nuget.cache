@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "F/JusWlfVdE=",
+  "dgSpecHash": "UazG6BwXbOE=",
   "success": true,
   "projectFilePath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\PlanificApp.csproj",
   "expectedPackageFiles": [
@@ -30,7 +30,7 @@
     "C:\\Users\\ian20\\.nuget\\packages\\mongodb.bson\\3.8.0\\mongodb.bson.3.8.0.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\mongodb.driver\\3.8.0\\mongodb.driver.3.8.0.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\reactiveui\\18.3.1\\reactiveui.18.3.1.nupkg.sha512",
-    "C:\\Users\\ian20\\.nuget\\packages\\sharpcompress\\0.30.1\\sharpcompress.0.30.1.nupkg.sha512",
+    "C:\\Users\\ian20\\.nuget\\packages\\sharpcompress\\0.48.0\\sharpcompress.0.48.0.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\skiasharp\\2.88.7\\skiasharp.2.88.7.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\skiasharp.nativeassets.linux\\2.88.7\\skiasharp.nativeassets.linux.2.88.7.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.7\\skiasharp.nativeassets.macos.2.88.7.nupkg.sha512",
@@ -40,21 +40,8 @@
     "C:\\Users\\ian20\\.nuget\\packages\\splat\\14.4.1\\splat.14.4.1.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\system.componentmodel.annotations\\4.5.0\\system.componentmodel.annotations.4.5.0.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\system.reactive\\5.0.0\\system.reactive.5.0.0.nupkg.sha512",
-    "C:\\Users\\ian20\\.nuget\\packages\\tmds.dbus.protocol\\0.15.0\\tmds.dbus.protocol.0.15.0.nupkg.sha512",
+    "C:\\Users\\ian20\\.nuget\\packages\\tmds.dbus.protocol\\0.93.0\\tmds.dbus.protocol.0.93.0.nupkg.sha512",
     "C:\\Users\\ian20\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "El paquete \"Tmds.DBus.Protocol\" 0.15.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-xrw6-gwf8-vvr9",
-      "projectPath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\PlanificApp.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\PlanificApp\\PlanificApp.csproj",
-      "libraryId": "Tmds.DBus.Protocol",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }
