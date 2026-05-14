@@ -4,8 +4,44 @@
     <option name="projectPerEditor">
       <map>
         <entry key="App.axaml" value="planificApp.csproj" />
+        <entry key="Control/IconButton.axaml" value="planificApp.csproj" />
+        <entry key="MainView.axaml" value="planificApp.csproj" />
         <entry key="MainWindow.axaml" value="planificApp.csproj" />
-        <entry key="Styles/appDefaultStyles.axaml" value="planificApp.csproj" />
+        <entry key="StyleControl/IconButton.axaml" value="planificApp.csproj" />
+        <entry key="Styles/AppDefaultStyles.axaml" value="planificApp.csproj" />
+        <entry key="UserControl/IconButton.axaml" value="planificApp.csproj" />
+        <entry key="Views/AboutView.axaml" value="planificApp.csproj" />
+        <entry key="Views/AdminMainView.axaml" value="planificApp.csproj" />
+        <entry key="Views/AreaInteresView.axaml" value="planificApp.csproj" />
+        <entry key="Views/BusquedaUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/CalendarioMensualView.axaml" value="planificApp.csproj" />
+        <entry key="Views/CalendarioSemanalView.axaml" value="planificApp.csproj" />
+        <entry key="Views/CalendarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/ConfigView.axaml" value="planificApp.csproj" />
+        <entry key="Views/CuentaView.axaml" value="planificApp.csproj" />
+        <entry key="Views/DatosView.axaml" value="planificApp.csproj" />
+        <entry key="Views/DetalleUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/EstadisticaUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/EstadisticasView.axaml" value="planificApp.csproj" />
+        <entry key="Views/HoyView.axaml" value="planificApp.csproj" />
+        <entry key="Views/InboxView.axaml" value="planificApp.csproj" />
+        <entry key="Views/LocationView.axaml" value="planificApp.csproj" />
+        <entry key="Views/LoginView.axaml" value="planificApp.csproj" />
+        <entry key="Views/MainView.axaml" value="planificApp.csproj" />
+        <entry key="Views/MesView.axaml" value="planificApp.csproj" />
+        <entry key="Views/ModificacionUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/PropuestasSemanalesView.axaml" value="planificApp.csproj" />
+        <entry key="Views/RecuperarContraView.axaml" value="planificApp.csproj" />
+        <entry key="Views/RegistroView.axaml" value="planificApp.csproj" />
+        <entry key="Views/SemanaView.axaml" value="planificApp.csproj" />
+        <entry key="Views/SettingsView.axaml" value="planificApp.csproj" />
+        <entry key="Views/SoporteView.axaml" value="planificApp.csproj" />
+        <entry key="Views/SugerenciaSemanalView.axaml" value="planificApp.csproj" />
+        <entry key="Views/TodayTaskView.axaml" value="planificApp.csproj" />
+        <entry key="Views/TodayView.axaml" value="planificApp.csproj" />
+        <entry key="Views/UbicacionesView.axaml" value="planificApp.csproj" />
+        <entry key="Views/UsuarioDetalleView.axaml" value="planificApp.csproj" />
+        <entry key="Views/UsuariosView.axaml" value="planificApp.csproj" />
       </map>
     </option>
   </component>

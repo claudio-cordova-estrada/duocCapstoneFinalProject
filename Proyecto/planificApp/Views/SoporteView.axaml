@@ -1,0 +1,47 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.SoporteView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:SoporteViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="18" Margin="28 26">
+
+                <TextBlock Text="Soporte" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+
+                <!-- Support form card -->
+                <Border Classes="card" Padding="20">
+                    <StackPanel Spacing="16">
+                        <!-- Type selector -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="TIPO DE AYUDA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <ComboBox SelectedIndex="0" HorizontalAlignment="Stretch">
+                                <ComboBoxItem Content="Reporte de error"/>
+                                <ComboBoxItem Content="Sugerencia"/>
+                                <ComboBoxItem Content="Consulta general"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Message -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="MENSAJE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox AcceptsReturn="True" Height="160" TextWrapping="Wrap" PlaceholderText="Explica tu problema o sugerencia aqu&#xED;&#x2026;" VerticalContentAlignment="Top" Padding="12 14" FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- Send button -->
+                        <Grid>
+                            <Button Classes="accent" HorizontalAlignment="Right" Click="Enviar_Click" Padding="16 8">
+                                <TextBlock Text="Enviar" FontSize="14"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>

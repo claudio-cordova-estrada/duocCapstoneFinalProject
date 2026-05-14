@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.UsuariosView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:UsuariosViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="18" Margin="28 26">
+
+                <TextBlock Text="Modificación de usuarios" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                <TextBlock Text="Busca y edita los datos de cualquier usuario" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0 -12 0 0"/>
+
+                <!-- Region pills -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="REGIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="RegionPills"/>
+                </StackPanel>
+
+                <!-- Comuna pills -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="ComunaPills"/>
+                </StackPanel>
+
+                <!-- Search bar -->
+                <TextBox x:Name="SearchBox" FontSize="14" PlaceholderText="Buscar por nombre o ID..." Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+
+                <!-- Users table -->
+                <Border Classes="card" Padding="0" CornerRadius="10">
+                    <Grid>
+                        <!-- Header -->
+                        <Grid x:Name="TableHeader" ColumnDefinitions="80,2*,1*,1*,1*,1*" Margin="14 10" ShowGridLines="False">
+                            <TextBlock Grid.Column="0" Text="ID" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="1" Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="2" Text="REGIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="3" Text="COMUNA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="4" Text="ESTADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="MESES" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        </Grid>
+
+                        <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Margin="0 0 0 0"/>
+
+                        <!-- Rows -->
+                        <StackPanel x:Name="TableRows" Margin="0 30 0 0"/>
+                    </Grid>
+                </Border>
+
+                <!-- Pagination -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" x:Name="PaginationPills"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>
