@@ -28,26 +28,35 @@
                     <!-- Nombre -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="NOMBRE COMPLETO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PlaceholderText="Tu nombre" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding NombreCompleto}" FontSize="14" PlaceholderText="Tu nombre" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
                     <!-- Correo -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding Correo}" FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
                     <!-- Contraseña -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding Password}" FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
                     <!-- Repetir contraseña -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="REPETIR CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PasswordChar="*" PlaceholderText="Repetir contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding RepetirPassword}" FontSize="14" PasswordChar="*" PlaceholderText="Repetir contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
+
+                    <!-- Respuesta de seguridad -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="RESPUESTA DE SEGURIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <TextBox Text="{Binding RespuestaSeguridad}" FontSize="14" PlaceholderText="Ej: Nombre de tu mascota" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                    </StackPanel>
+
+                    <!-- Error message -->
+                    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
                     <!-- Crear cuenta button -->
                     <Button Classes="accent" HorizontalAlignment="Stretch" Click="CrearCuenta_Click" Margin="0 4 0 0">

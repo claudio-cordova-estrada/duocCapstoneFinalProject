@@ -13,7 +13,9 @@
           "Avalonia.Fonts.Inter": "12.0.1",
           "Avalonia.Themes.Fluent": "12.0.1",
           "CommunityToolkit.Mvvm": "8.4.2",
-          "Microsoft.Extensions.DependencyInjection": "10.0.7"
+          "Microsoft.Extensions.Configuration.Json": "10.0.8",
+          "Microsoft.Extensions.DependencyInjection": "10.0.7",
+          "MongoDB.Driver": "3.8.1"
         },
         "runtime": {
           "planificApp.dll": {}
@@ -243,6 +245,14 @@
           }
         }
       },
+      "DnsClient/1.6.1": {
+        "runtime": {
+          "lib/net5.0/DnsClient.dll": {
+            "assemblyVersion": "1.6.1.0",
+            "fileVersion": "1.6.1.0"
+          }
+        }
+      },
       "HarfBuzzSharp/8.3.1.3": {
         "dependencies": {
           "HarfBuzzSharp.NativeAssets.Win32": "8.3.1.3",
@@ -365,6 +375,58 @@
           }
         }
       },
+      "Microsoft.Extensions.Configuration/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Primitives": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.FileExtensions/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.8",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.8",
+          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.8",
+          "Microsoft.Extensions.FileProviders.Physical": "10.0.8",
+          "Microsoft.Extensions.Primitives": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Configuration.FileExtensions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Json/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "10.0.8",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.8",
+          "Microsoft.Extensions.Configuration.FileExtensions": "10.0.8",
+          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Configuration.Json.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
       "Microsoft.Extensions.DependencyInjection/10.0.7": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7"
@@ -381,6 +443,89 @@
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
             "assemblyVersion": "10.0.0.0",
             "fileVersion": "10.0.726.21808"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Abstractions/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.FileProviders.Abstractions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileProviders.Physical/10.0.8": {
+        "dependencies": {
+          "Microsoft.Extensions.FileProviders.Abstractions": "10.0.8",
+          "Microsoft.Extensions.FileSystemGlobbing": "10.0.8",
+          "Microsoft.Extensions.Primitives": "10.0.8"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.FileProviders.Physical.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/10.0.8": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.FileSystemGlobbing.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.7"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/10.0.8": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
+          }
+        }
+      },
+      "MongoDB.Bson/3.8.1": {
+        "runtime": {
+          "lib/net6.0/MongoDB.Bson.dll": {
+            "assemblyVersion": "3.8.1.0",
+            "fileVersion": "3.8.1.0"
+          }
+        }
+      },
+      "MongoDB.Driver/3.8.1": {
+        "dependencies": {
+          "DnsClient": "1.6.1",
+          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
+          "MongoDB.Bson": "3.8.1",
+          "SharpCompress": "0.30.1",
+          "Snappier": "1.3.1",
+          "ZstdSharp.Port": "0.7.3"
+        },
+        "runtime": {
+          "lib/net6.0/MongoDB.Driver.dll": {
+            "assemblyVersion": "3.8.1.0",
+            "fileVersion": "3.8.1.0"
+          }
+        }
+      },
+      "SharpCompress/0.30.1": {
+        "runtime": {
+          "lib/net5.0/SharpCompress.dll": {
+            "assemblyVersion": "0.30.1.0",
+            "fileVersion": "0.30.1.0"
           }
         }
       },
@@ -498,11 +643,27 @@
           }
         }
       },
+      "Snappier/1.3.1": {
+        "runtime": {
+          "lib/net8.0/Snappier.dll": {
+            "assemblyVersion": "1.3.1.0",
+            "fileVersion": "1.3.1.0"
+          }
+        }
+      },
       "Tmds.DBus.Protocol/0.92.0": {
         "runtime": {
           "lib/net9.0/Tmds.DBus.Protocol.dll": {
             "assemblyVersion": "0.92.0.0",
             "fileVersion": "0.92.0.0"
+          }
+        }
+      },
+      "ZstdSharp.Port/0.7.3": {
+        "runtime": {
+          "lib/net7.0/ZstdSharp.dll": {
+            "assemblyVersion": "0.7.3.0",
+            "fileVersion": "0.7.3.0"
           }
         }
       }
@@ -612,6 +773,13 @@
       "path": "communitytoolkit.mvvm/8.4.2",
       "hashPath": "communitytoolkit.mvvm.8.4.2.nupkg.sha512"
     },
+    "DnsClient/1.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4H/f2uYJOZ+YObZjpY9ABrKZI+JNw3uizp6oMzTXwDw6F+2qIPhpRl/1t68O/6e98+vqNiYGu+lswmwdYUy3gg==",
+      "path": "dnsclient/1.6.1",
+      "hashPath": "dnsclient.1.6.1.nupkg.sha512"
+    },
     "HarfBuzzSharp/8.3.1.3": {
       "type": "package",
       "serviceable": true,
@@ -647,6 +815,34 @@
       "path": "microcom.runtime/0.11.4",
       "hashPath": "microcom.runtime.0.11.4.nupkg.sha512"
     },
+    "Microsoft.Extensions.Configuration/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ehZcoPbjzWzS4XFvuz7R3V55SmpdkyMqFURLH3yXaN9NtXd9tR6CGB7pd49HYtCkenl+G7ctXSFLhNI08xLfRg==",
+      "path": "microsoft.extensions.configuration/10.0.8",
+      "hashPath": "microsoft.extensions.configuration.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-I63esIFbL3h5pSt7gXpXOlmcwDmYBUoYNEglKfDPFUqtYvSV84f2l28hO2lfVXsV0wdlplgAM7IVz16matapSg==",
+      "path": "microsoft.extensions.configuration.abstractions/10.0.8",
+      "hashPath": "microsoft.extensions.configuration.abstractions.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.FileExtensions/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1g9mzuu8gIHkjYb0jLxOTQVl/QDG5nn0b0JzgT/gbgNKr6gXZzxOHRAsdYRc1eDApB7LdHR8uK5vQrNjIQdRrQ==",
+      "path": "microsoft.extensions.configuration.fileextensions/10.0.8",
+      "hashPath": "microsoft.extensions.configuration.fileextensions.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Json/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KLtAZ6A38s1pIfCO2ns6aG14NNGMYNZ4PBYfFK4M+R4A+xuSc6oklhqDcpHZxvDpyBWeFtR5C8iQBw2ng8tUHQ==",
+      "path": "microsoft.extensions.configuration.json/10.0.8",
+      "hashPath": "microsoft.extensions.configuration.json.10.0.8.nupkg.sha512"
+    },
     "Microsoft.Extensions.DependencyInjection/10.0.7": {
       "type": "package",
       "serviceable": true,
@@ -660,6 +856,62 @@
       "sha512": "sha512-Z6mfFEaFcwCfSboxJwOLfu7/31npCY9q70WUamHW/vRQhDvBKOT4Vf9YkZj5J6hLvJpb0oDEYfHunQZj0xxvKw==",
       "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.7",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U+oquaPxFdY8lYeEIWO/AD7jDIl9sPW6aVWMQRHU/pZ/SWpLcOrAj2fcLe1HwXl4sYw1ONI56K/eELT3xr4RRQ==",
+      "path": "microsoft.extensions.fileproviders.abstractions/10.0.8",
+      "hashPath": "microsoft.extensions.fileproviders.abstractions.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Physical/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GkPvQe6IdidLu6Q3Lw6+B8NJpW8feW8czZ5mBKt5rXM/x8MvZfEp5WvAsjznzDGd23chIDrW0b2mmt+ScnEgiw==",
+      "path": "microsoft.extensions.fileproviders.physical/10.0.8",
+      "hashPath": "microsoft.extensions.fileproviders.physical.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileSystemGlobbing/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IUQet3SY51xIFcFZKtAB6a54/Zdxs7T3SQ84kJtOD6yeXfZgiOMksACWD5qtTmXGQGFH4QYGBOT0KIO8Uy/dJw==",
+      "path": "microsoft.extensions.filesystemglobbing/10.0.8",
+      "hashPath": "microsoft.extensions.filesystemglobbing.10.0.8.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-arDBqTgFCyS0EvRV7O3MZturChstm50OJ0y9bDJvAcmEPJm0FFpFyjU/JLYyStNGGey081DvnQYlncNX5SJJGA==",
+      "path": "microsoft.extensions.logging.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/10.0.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OBPo4nYhMyIbtueoC10CBm6AGAbo/A9IV8QQ/6ryZS7VvmqpGT7hunazeHLxFawRzn3oLOq4jhqhpBX4tfswWQ==",
+      "path": "microsoft.extensions.primitives/10.0.8",
+      "hashPath": "microsoft.extensions.primitives.10.0.8.nupkg.sha512"
+    },
+    "MongoDB.Bson/3.8.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-b4jm2QxBQcB3zBBM+l0Jdjmn8TYBB+J0QDNaJypkmR1qDC6v5w8IMeYaFPvn/kqo0PvCUGVSQkXm0nVCBjjNYg==",
+      "path": "mongodb.bson/3.8.1",
+      "hashPath": "mongodb.bson.3.8.1.nupkg.sha512"
+    },
+    "MongoDB.Driver/3.8.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UgmjqgJdxiiiDedoYZBBcYKjblS4I8RvxIF5rZmDQN97xAhRVolN5q70LzkamKwbrDLt944+24eD3uL96A6Ozg==",
+      "path": "mongodb.driver/3.8.1",
+      "hashPath": "mongodb.driver.3.8.1.nupkg.sha512"
+    },
+    "SharpCompress/0.30.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XqD4TpfyYGa7QTPzaGlMVbcecKnXy4YmYLDWrU+JIj7IuRNl7DH2END+Ll7ekWIY8o3dAMWLFDE1xdhfIWD1nw==",
+      "path": "sharpcompress/0.30.1",
+      "hashPath": "sharpcompress.0.30.1.nupkg.sha512"
     },
     "SkiaSharp/3.119.3-preview.1.1": {
       "type": "package",
@@ -689,12 +941,26 @@
       "path": "skiasharp.nativeassets.win32/3.119.3-preview.1.1",
       "hashPath": "skiasharp.nativeassets.win32.3.119.3-preview.1.1.nupkg.sha512"
     },
+    "Snappier/1.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DOdDQiO8YZ5rBtVLY+6CmR1yp9WYoJRgEEktPBrR0tEj9QO2djA/zv0O3DX0OZpEAfosbY8pytQ9tQUogwQsEA==",
+      "path": "snappier/1.3.1",
+      "hashPath": "snappier.1.3.1.nupkg.sha512"
+    },
     "Tmds.DBus.Protocol/0.92.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-h7IMakm0PF2jxiagoysoAjrzzLQ0UBdnSXQL5kb17YW0Fvyo12Tg96A99QkzwktWRrd7H+Uw9EzjasNLUfGYlA==",
       "path": "tmds.dbus.protocol/0.92.0",
       "hashPath": "tmds.dbus.protocol.0.92.0.nupkg.sha512"
+    },
+    "ZstdSharp.Port/0.7.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U9Ix4l4cl58Kzz1rJzj5hoVTjmbx1qGMwzAcbv1j/d3NzrFaESIurQyg+ow4mivCgkE3S413y+U9k4WdnEIkRA==",
+      "path": "zstdsharp.port/0.7.3",
+      "hashPath": "zstdsharp.port.0.7.3.nupkg.sha512"
     }
   }
 }

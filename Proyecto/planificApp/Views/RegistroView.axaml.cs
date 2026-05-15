@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using planificApp.ViewModels;
 
 namespace planificApp.Views;
 
@@ -12,6 +13,11 @@ public partial class RegistroView : UserControl
 
     private async void CrearCuenta_Click(object? sender, RoutedEventArgs e)
     {
+        if (DataContext is not RegistroViewModel vm) return;
+        await vm.RegistroCommand.ExecuteAsync(null);
+
+        if (!vm.RegistroExitoso) return;
+
         var dialog = new Window
         {
             Title = "Cuenta creada",
@@ -35,7 +41,7 @@ public partial class RegistroView : UserControl
 
         stack.Children.Add(new TextBlock
         {
-            Text = "Se envió un mensaje al correo de confirmación de cuenta, por favor confirma tu cuenta.",
+            Text = "Ya puedes iniciar sesión con tu cuenta.",
             FontSize = 13,
             Foreground = Avalonia.Media.Brush.Parse("#aaaaaa"),
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
@@ -57,9 +63,7 @@ public partial class RegistroView : UserControl
         btn.Click += (_, _) =>
         {
             dialog.Close();
-            ViewModels.MainViewModel? mainVm = null;
-            if (DataContext is ViewModels.RegistroViewModel rvm) mainVm = rvm.Main;
-            if (mainVm != null) mainVm.GoToLoginCommand.Execute(null);
+            vm.Main.GoToLoginCommand.Execute(null);
         };
 
         var owner = TopLevel.GetTopLevel(this) as Window;

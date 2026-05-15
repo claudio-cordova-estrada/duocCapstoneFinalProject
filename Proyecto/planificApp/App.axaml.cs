@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using planificApp.Factories;
 using planificApp.ViewModels;
+using PlanificApp.Models.Services;
 
 [assembly: XmlnsDefinition("https://github.com/avaloniaui", "planificApp.StyleControl")]
 namespace planificApp;
@@ -57,6 +58,10 @@ public partial class App : Application
         collection.AddTransient<EstadisticasViewModel>();
         collection.AddTransient<UsuariosViewModel>();
         collection.AddTransient<UsuarioDetalleViewModel>();
+
+        // Services
+        collection.AddSingleton<MongoService>();
+        collection.AddSingleton<SesionService>();
 
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {

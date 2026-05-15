@@ -22,19 +22,43 @@
                             <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AccentColor}" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="Recuperar contraseña" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Ingresa tu correo y te enviaremos un enlace de recuperación" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="320"/>
+                        <TextBlock Text="Ingresa tu correo para recuperar tu contraseña" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="320"/>
                     </StackPanel>
 
-                    <!-- Correo -->
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                    <!-- Error message -->
+                    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+
+                    <!-- Success message -->
+                    <TextBlock Text="Contraseña cambiada exitosamente." IsVisible="{Binding RecuperacionExitosa}" FontSize="13" Foreground="{DynamicResource AreaEstudioText}" HorizontalAlignment="Center"/>
+
+                    <!-- Paso 1: Correo -->
+                    <StackPanel Spacing="20" IsVisible="{Binding !MostrarPaso2}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox Text="{Binding Correo}" FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
+
+                        <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding VerificarCorreoCommand}" Margin="0 4 0 0">
+                            <TextBlock Text="Verificar correo" FontSize="14" HorizontalAlignment="Center"/>
+                        </Button>
                     </StackPanel>
 
-                    <!-- Enviar button -->
-                    <Button Classes="accent" HorizontalAlignment="Stretch" Click="Enviar_Click" Margin="0 4 0 0">
-                        <TextBlock Text="Enviar enlace de recuperación" FontSize="14" HorizontalAlignment="Center"/>
-                    </Button>
+                    <!-- Paso 2: Respuesta + nueva contraseña -->
+                    <StackPanel Spacing="20" IsVisible="{Binding MostrarPaso2}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="RESPUESTA DE SEGURIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox Text="{Binding RespuestaSeguridad}" FontSize="14" PlaceholderText="Tu respuesta de seguridad" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
+
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="NUEVA CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox Text="{Binding NuevaPassword}" FontSize="14" PasswordChar="*" PlaceholderText="Nueva contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
+
+                        <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding CambiarPasswordCommand}" Margin="0 4 0 0">
+                            <TextBlock Text="Cambiar contraseña" FontSize="14" HorizontalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
 
                     <!-- Link to login -->
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">

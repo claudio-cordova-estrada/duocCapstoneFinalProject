@@ -28,14 +28,17 @@
                     <!-- Correo -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding Correo}" FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
                     <!-- Contraseña -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBox Text="{Binding Password}" FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
+
+                    <!-- Error message -->
+                    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
                     <!-- Admin toggle (temporary) -->
                     <Grid ColumnDefinitions="*,Auto" Margin="0 4 0 0">
@@ -44,7 +47,7 @@
                     </Grid>
 
                     <!-- Login button -->
-                    <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding Main.LoginCommand}" Margin="0 4 0 0">
+                    <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding LoginCommand}" Margin="0 4 0 0">
                         <TextBlock Text="Iniciar sesión" FontSize="14" HorizontalAlignment="Center"/>
                     </Button>
 
