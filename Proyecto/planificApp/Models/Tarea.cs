@@ -10,7 +10,7 @@ namespace PlanificApp.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdTarea { get; set; } // Consistente con el estándar de MongoDB
+        public string? IdTarea { get; set; }
 
         private string _nombre = string.Empty;
         public string Nombre
@@ -18,24 +18,38 @@ namespace PlanificApp.Models
             get => _nombre;
             set
             {
-                // Validación para evitar caracteres especiales dañinos en el nombre de la tarea
-                if (Regex.IsMatch(value, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-\.]+$") || string.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
+                {
                     _nombre = value;
-                else
+                    return;
+                }
+                if (value.Length > 500)
+                    throw new ArgumentException("El nombre de la tarea no puede superar los 500 caracteres.");
+                if (!Regex.IsMatch(value, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-\.]+$"))
                     throw new ArgumentException("El nombre de la tarea contiene caracteres no permitidos.");
+                _nombre = value;
             }
         }
 
         public DateTime? FecLimite { get; set; }
-        public PrioridadTarea Prioridad { get; set; } = PrioridadTarea.Baja;
-
-        // ID de AreaInteres como string para coincidir con el nuevo estándar
-        public string? IdAreaInteres { get; set; }
-        public bool CompletadoEnTiempo { get; internal set; }
-
-        // Propiedades añadidas para la generación de agenda semanal
+        public DateTime? FecInicio { get; set; }
         public TimeSpan? HoraInicio { get; set; }
         public TimeSpan? HoraFin { get; set; }
+        public string? Ubicacion { get; set; }
+        public MetodoTransporte? MetodoTransporte { get; set; }
+        public int TiempoEstimado { get; set; }
+        public string? IdAreaInteres { get; set; }
+        public DateTime? Recordatorio { get; set; }
+
+        public int Prioridad { get; set; } = 1;
+
         public bool UsoGeneracion { get; set; }
+        public bool ModificacionGeneracion { get; set; }
+        public bool CompletadoEnTiempo { get; set; }
+
+        public DateTime FecCreacion { get; set; }
+        public DateTime? FecCompletado { get; set; }
+
+        public string? IdUsuario { get; set; }
     }
 }

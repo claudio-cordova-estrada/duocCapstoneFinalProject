@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
+using planificApp.ViewModels;
 
 namespace planificApp.Views;
 
@@ -30,6 +34,52 @@ public partial class DatosView : UserControl
         FieldCorreo.GotFocus += Field_GotFocus;
         FieldFecha.GotFocus += Field_GotFocus;
         FieldUbicacion.GotFocus += Field_GotFocus;
+
+        BtnCambiarFoto.PointerEntered += Avatar_PointerEntered;
+        BtnCambiarFoto.PointerExited += Avatar_PointerExited;
+    }
+
+    private void Avatar_PointerEntered(object? sender, PointerEventArgs e)
+    {
+        AvatarOverlay.IsVisible = true;
+    }
+
+    private void Avatar_PointerExited(object? sender, PointerEventArgs e)
+    {
+        AvatarOverlay.IsVisible = false;
+    }
+
+    private async void BtnCambiarFoto_Click(object? sender, RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel == null) return;
+
+        var storageProvider = topLevel.StorageProvider;
+
+        var files = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Seleccionar foto de perfil",
+            AllowMultiple = false,
+            FileTypeFilter = new[]
+            {
+                new FilePickerFileType("Imágenes")
+                {
+                    Patterns = new[] { "*.png", "*.jpg", "*.jpeg" }
+                }
+            }
+        });
+
+        if (files.Count == 0) return;
+
+        await using var stream = await files[0].OpenReadAsync();
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        var bytes = ms.ToArray();
+
+        if (DataContext is DatosViewModel vm)
+        {
+            await vm.GuardarFotoAsync(bytes);
+        }
     }
 
     private void EnterEditMode(TextBox field)

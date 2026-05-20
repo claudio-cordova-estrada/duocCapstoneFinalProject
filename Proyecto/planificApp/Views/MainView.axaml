@@ -11,9 +11,9 @@
     <Design.DataContext>
         <vm:MainViewModel/>
     </Design.DataContext>
-
+    
     <Grid Background="{DynamicResource AppBackground}">
-
+        
         <!-- Auth overlay (visible when NOT logged in) -->
         <Border IsVisible="{Binding !IsLoggedIn}" Background="{DynamicResource AppBackground}">
             <ContentControl Content="{Binding CurrentPage}"/>
@@ -150,19 +150,19 @@
                             <TextBlock Classes="sb2-header">Mi cuenta</TextBlock>
                             <Button Classes="sb2-item" Classes.active="{Binding IsDatosActive}" Command="{Binding GoToDatosCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Label Classes="icon-only" Content="&#xE47D;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Classes="icon-only" Content="&#xE4C4;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <TextBlock Text="Mis datos" FontSize="13" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Classes="sb2-item" Classes.active="{Binding IsSoporteActive}" Command="{Binding GoToSoporteCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Label Classes="icon-only" Content="&#xE495;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Classes="icon-only" Content="&#xE584;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <TextBlock Text="Soporte" FontSize="13" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Classes="sb2-item" Classes.active="{Binding IsSobreActive}" Command="{Binding GoToSobreCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Label Classes="icon-only" Content="&#xE465;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Label Classes="icon-only" Content="&#xE2CE;" FontSize="15" Width="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <TextBlock Text="Sobre la app" FontSize="13" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>

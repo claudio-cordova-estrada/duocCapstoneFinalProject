@@ -1,17 +1,26 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
+using PlanificApp.Models.Services;
+using planificApp.ViewModels;
 using planificApp.Views;
 
 namespace planificApp.Helpers;
 
 public static class DialogHelper
 {
-    public static async void ShowNewTaskDialog(Control parent)
+    public static async Task<bool> ShowNewTaskDialog(Control parent)
     {
         var window = TopLevel.GetTopLevel(parent) as Window;
-        if (window == null) return;
+        if (window == null) return false;
 
-        var dialog = new NewTaskWindow();
-        await dialog.ShowDialog(window);
+        var mongo = App.Services.GetRequiredService<MongoService>();
+        var sesion = App.Services.GetRequiredService<SesionService>();
+
+        var viewModel = new NewTaskViewModel(mongo, sesion);
+        var dialog = new NewTaskWindow { DataContext = viewModel };
+        await dialog.ShowDialog<bool>(window);
+        return dialog.Result;
     }
 
     public static async void ShowGenerarSemanaDialog(Control parent)
@@ -19,7 +28,11 @@ public static class DialogHelper
         var window = TopLevel.GetTopLevel(parent) as Window;
         if (window == null) return;
 
-        var dialog = new NewTaskWindow { Title = "Generar semana" };
+        var mongo = App.Services.GetRequiredService<MongoService>();
+        var sesion = App.Services.GetRequiredService<SesionService>();
+
+        var viewModel = new NewTaskViewModel(mongo, sesion);
+        var dialog = new NewTaskWindow { DataContext = viewModel, Title = "Generar semana" };
         var result = await dialog.ShowDialog<bool>(window);
 
         if (result)

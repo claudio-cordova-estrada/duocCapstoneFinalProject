@@ -41,5 +41,13 @@ namespace PlanificApp.Models
 
         public bool CuentaConfirmada { get; set; }
         public string? TokenConfirmacion { get; set; }
+        
+        // Fecha de creacion de la cuenta
+        public DateTime FecCreacion { get; set; }
+        public DateTime FecNacimiento { get; set; }
+
+        public string Ubicacion { get; set; } = string.Empty;
+        
+        public string? FotoPerfil { get; set; }
     }
 }

@@ -184,6 +184,17 @@
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
     </Style>
     
+    <!-- Avatar button (no hover bg) -->
+    <Style Selector="Button.avatar-btn">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
+    </Style>
+    
+    <Style Selector="Button.avatar-btn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    
     <!-- Danger button -->
     <Style Selector="Button.danger">
         <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
@@ -509,6 +520,19 @@
     <Style Selector="Ellipse.area-dot">
         <Setter Property="Width" Value="7"></Setter>
         <Setter Property="Height" Value="7"></Setter>
+    </Style>
+    
+    <!-- Task item (clickable card) -->
+    <Style Selector="Border.task-item">
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.task-item:pointer-over">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+    </Style>
+    <Style Selector="Border.task-item.selected">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
     </Style>
     
     <!-- Location pin dot -->

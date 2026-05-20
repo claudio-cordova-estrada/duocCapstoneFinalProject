@@ -7,10 +7,10 @@ namespace PlanificApp.Models.Services
 {
     public class GeneradorSemanalService
     {
-        public List<Tarea> OrganizarSemana(Usuario usuario, List<Tarea> tareasPendientes, List<AreaInteres> areas)
+        public List<Tarea> OrganizarSemana(Usuario usuario, List<Tarea> tareasActivas, List<AreaInteres> areas)
         {
             // Ordenar por prioridad: Fija (4) es la primera
-            var tareasPriorizadas = tareasPendientes
+            var tareasPriorizadas = tareasActivas
                 .Where(t => !t.CompletadoEnTiempo)
                 .OrderByDescending(t => (int)t.Prioridad)
                 .ToList();

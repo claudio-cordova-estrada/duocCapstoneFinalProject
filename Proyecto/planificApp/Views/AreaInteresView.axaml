@@ -18,7 +18,7 @@
                             <Ellipse Classes="area-dot" Fill="{DynamicResource AreaTrabajoBorder}" VerticalAlignment="Center"/>
                             <TextBlock Text="Trabajo" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource AreaTrabajoText}"/>
                         </StackPanel>
-                        <TextBlock Text="8 tareas pendientes" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                        <TextBlock Text="8 tareas activas" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
                     </StackPanel>
                     <Button Grid.Column="1" Classes="accent" VerticalAlignment="Center" Click="NewTaskButton_Click">
                         <StackPanel Orientation="Horizontal" Spacing="6">
@@ -36,7 +36,7 @@
                     <Border Classes="card" Padding="16 12">
                         <StackPanel Spacing="2">
                             <TextBlock Text="8" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
-                            <TextBlock Text="Pendientes" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                            <TextBlock Text="Activas" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
                         </StackPanel>
                     </Border>
                     <Border Classes="card" Padding="16 12">
@@ -54,7 +54,7 @@
                 </StackPanel>
 
                 <!-- Sin agrupación — tareas directas -->
-                <TextBlock Classes="section-label" Text="PENDIENTES"/>
+                <TextBlock Classes="section-label" Text="ACTIVAS"/>
 
                 <Border Classes="card">
                     <Grid ColumnDefinitions="Auto,*,Auto" Margin="0">

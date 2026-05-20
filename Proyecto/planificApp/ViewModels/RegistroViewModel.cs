@@ -19,7 +19,7 @@ public partial class RegistroViewModel : PageViewModel
     [ObservableProperty] private string _correo = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
     [ObservableProperty] private string _repetirPassword = string.Empty;
-    [ObservableProperty] private string _respuestaSeguridad = string.Empty;
+    [ObservableProperty] private DateTime? _fecNacimiento = null;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError = false;
     [ObservableProperty] private bool _registroExitoso = false;
@@ -46,6 +46,11 @@ public partial class RegistroViewModel : PageViewModel
             ErrorMessage = "Ingresa tu correo.";
             HasError = true; return;
         }
+        if (FecNacimiento == null)
+        {
+            ErrorMessage = "Ingresa tu fecha de nacimiento.";
+            HasError = true; return;
+        }
         if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
         {
             ErrorMessage = "La contraseña debe tener al menos 6 caracteres.";
@@ -56,11 +61,6 @@ public partial class RegistroViewModel : PageViewModel
             ErrorMessage = "Las contraseñas no coinciden.";
             HasError = true; return;
         }
-        if (string.IsNullOrWhiteSpace(RespuestaSeguridad))
-        {
-            ErrorMessage = "Ingresa una respuesta de seguridad.";
-            HasError = true; return;
-        }
 
         try
         {
@@ -69,10 +69,12 @@ public partial class RegistroViewModel : PageViewModel
                 NombreCompleto = NombreCompleto,
                 Correo = Correo,
                 PasswordHash = PasswordHelper.HashPassword(Password),
-                RespuestaSeguridad = PasswordHelper.HashPassword(RespuestaSeguridad),
                 CuentaConfirmada = true,
                 HoraInicioJornada = TimeSpan.FromHours(9),
                 HoraFinJornada = TimeSpan.FromHours(18),
+                FecCreacion = DateTime.Now,
+                FecNacimiento = FecNacimiento!.Value,
+                Ubicacion = "Concepción",
             };
 
             await _mongo.RegistrarUsuario(nuevoUsuario);

@@ -9,6 +9,15 @@ public partial class RegistroView : UserControl
     public RegistroView()
     {
         InitializeComponent();
+        DatePickerNacimiento.SelectedDateChanged += DatePickerNacimiento_SelectedDateChanged;
+    }
+
+    private void DatePickerNacimiento_SelectedDateChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is RegistroViewModel vm && DatePickerNacimiento.SelectedDate.HasValue)
+        {
+            vm.FecNacimiento = DatePickerNacimiento.SelectedDate.Value;
+        }
     }
 
     private async void CrearCuenta_Click(object? sender, RoutedEventArgs e)

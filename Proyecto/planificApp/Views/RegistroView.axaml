@@ -49,10 +49,16 @@
                         <TextBox Text="{Binding RepetirPassword}" FontSize="14" PasswordChar="*" PlaceholderText="Repetir contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
-                    <!-- Respuesta de seguridad -->
+                    <!-- Fecha de nacimiento -->
                     <StackPanel Spacing="6">
-                        <TextBlock Text="RESPUESTA DE SEGURIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox Text="{Binding RespuestaSeguridad}" FontSize="14" PlaceholderText="Ej: Nombre de tu mascota" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        <TextBlock Text="FECHA DE NACIMIENTO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <CalendarDatePicker x:Name="DatePickerNacimiento" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona tu fecha de nacimiento" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <!-- Ubicación -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                        <TextBox Text="Concepción" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" IsReadOnly="True"/>
                     </StackPanel>
 
                     <!-- Error message -->

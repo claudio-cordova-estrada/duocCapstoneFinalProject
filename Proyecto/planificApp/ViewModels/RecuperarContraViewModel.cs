@@ -14,12 +14,10 @@ public partial class RecuperarContraViewModel : PageViewModel
     public MainViewModel Main { get; set; }
 
     [ObservableProperty] private string _correo = string.Empty;
-    [ObservableProperty] private string _respuestaSeguridad = string.Empty;
     [ObservableProperty] private string _nuevaPassword = string.Empty;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError = false;
     [ObservableProperty] private bool _recuperacionExitosa = false;
-    [ObservableProperty] private bool _mostrarPaso2 = false;
 
     public RecuperarContraViewModel(MongoService mongo)
     {
@@ -28,7 +26,7 @@ public partial class RecuperarContraViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private async Task VerificarCorreoAsync()
+    private async Task CambiarPasswordAsync()
     {
         HasError = false;
         ErrorMessage = string.Empty;
@@ -39,29 +37,7 @@ public partial class RecuperarContraViewModel : PageViewModel
             HasError = true; return;
         }
 
-        var usuario = await _mongo.BuscarPorCorreo(Correo);
-        if (usuario == null)
-        {
-            ErrorMessage = "Correo no encontrado.";
-            HasError = true; return;
-        }
-
-        MostrarPaso2 = true;
-    }
-
-    [RelayCommand]
-    private async Task CambiarPasswordAsync()
-    {
-        HasError = false;
-        ErrorMessage = string.Empty;
-
-        if (string.IsNullOrWhiteSpace(RespuestaSeguridad) || string.IsNullOrWhiteSpace(NuevaPassword))
-        {
-            ErrorMessage = "Completa todos los campos.";
-            HasError = true; return;
-        }
-
-        if (NuevaPassword.Length < 6)
+        if (string.IsNullOrWhiteSpace(NuevaPassword) || NuevaPassword.Length < 6)
         {
             ErrorMessage = "La contraseña debe tener al menos 6 caracteres.";
             HasError = true; return;
@@ -70,13 +46,7 @@ public partial class RecuperarContraViewModel : PageViewModel
         var usuario = await _mongo.BuscarPorCorreo(Correo);
         if (usuario == null)
         {
-            ErrorMessage = "Usuario no encontrado.";
-            HasError = true; return;
-        }
-
-        if (!PasswordHelper.VerifyPassword(RespuestaSeguridad, usuario.RespuestaSeguridad))
-        {
-            ErrorMessage = "Respuesta de seguridad incorrecta.";
+            ErrorMessage = "Correo no encontrado.";
             HasError = true; return;
         }
 

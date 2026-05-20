@@ -15,6 +15,8 @@ namespace planificApp;
 
 public partial class App : Application
 {
+    public static IServiceProvider Services { get; private set; } = null!;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -36,9 +38,7 @@ public partial class App : Application
         
         // User - Tareas ViewModels
         collection.AddTransient<InboxViewModel>();
-        collection.AddTransient<HoyViewModel>();
-        collection.AddTransient<SemanaViewModel>();
-        collection.AddTransient<MesViewModel>();
+        collection.AddTransient<NewTaskViewModel>();
         collection.AddTransient<AreaInteresViewModel>();
         
         // User - Calendario ViewModels
@@ -71,9 +71,9 @@ public partial class App : Application
             ApplicationPageNames.RecuperarContra => x.GetRequiredService<RecuperarContraViewModel>(),
             // User - Tareas
             ApplicationPageNames.UserInbox => x.GetRequiredService<InboxViewModel>(),
-            ApplicationPageNames.UserHoy => x.GetRequiredService<HoyViewModel>(),
-            ApplicationPageNames.UserSemana => x.GetRequiredService<SemanaViewModel>(),
-            ApplicationPageNames.UserMes => x.GetRequiredService<MesViewModel>(),
+            ApplicationPageNames.UserHoy => x.GetRequiredService<InboxViewModel>(),
+            ApplicationPageNames.UserSemana => x.GetRequiredService<InboxViewModel>(),
+            ApplicationPageNames.UserMes => x.GetRequiredService<InboxViewModel>(),
             ApplicationPageNames.UserAreaInteres => x.GetRequiredService<AreaInteresViewModel>(),
             // User - Calendario
             ApplicationPageNames.UserCalendarioSemanal => x.GetRequiredService<CalendarioSemanalViewModel>(),
@@ -96,6 +96,7 @@ public partial class App : Application
         collection.AddSingleton<PageFactory>();
 
         var services = collection.BuildServiceProvider();
+        Services = services;
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

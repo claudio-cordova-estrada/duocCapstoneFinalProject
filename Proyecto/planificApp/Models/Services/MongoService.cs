@@ -74,11 +74,64 @@ namespace PlanificApp.Models.Services
         public async Task<List<Tarea>> ObtenerTareasPorArea(string areaId) =>
             await Tareas.Find(t => t.IdAreaInteres == areaId).ToListAsync();
 
-        public async Task<List<Tarea>> ObtenerTareasPorUsuario(string idUsuario)
+        public async Task<List<Tarea>> ObtenerTareasPorUsuario(string idUsuario) =>
+            await Tareas.Find(t => t.IdUsuario == idUsuario).ToListAsync();
+
+        public async Task<List<Tarea>> ObtenerTareasPorFecha(string idUsuario, DateTime fecha)
         {
-            var areas = await AreasInteres.Find(a => a.IdUsuario == idUsuario).ToListAsync();
-            var areaIds = areas.Select(a => a.IdAreaInteres).ToList();
-            return await Tareas.Find(t => areaIds.Contains(t.IdAreaInteres)).ToListAsync();
+            var inicioDia = fecha.Date;
+            var finDia = fecha.Date.AddDays(1);
+            return await Tareas.Find(t =>
+                t.IdUsuario == idUsuario &&
+                t.FecCompletado == null &&
+                (t.FecInicio >= inicioDia && t.FecInicio < finDia ||
+                 t.FecLimite >= inicioDia && t.FecLimite < finDia)).ToListAsync();
+        }
+
+        public async Task<List<Tarea>> ObtenerTareasPorRango(string idUsuario, DateTime desde, DateTime hasta)
+        {
+            return await Tareas.Find(t =>
+                t.IdUsuario == idUsuario &&
+                (t.FecInicio >= desde && t.FecInicio < hasta ||
+                 t.FecLimite >= desde && t.FecLimite < hasta ||
+                 t.FecCompletado >= desde && t.FecCompletado < hasta)).ToListAsync();
+        }
+
+        public async Task<List<Tarea>> ObtenerTareasActivas(string idUsuario) =>
+            await Tareas.Find(t => t.IdUsuario == idUsuario && t.FecCompletado == null).ToListAsync();
+
+        public async Task<List<Tarea>> ObtenerTareasCompletadas(string idUsuario) =>
+            await Tareas.Find(t => t.IdUsuario == idUsuario && t.FecCompletado != null).ToListAsync();
+
+        public async Task<List<Tarea>> ObtenerTareasVencidas(string idUsuario)
+        {
+            var ahora = DateTime.Now;
+            return await Tareas.Find(t =>
+                t.IdUsuario == idUsuario &&
+                t.FecCompletado == null &&
+                t.FecLimite < ahora).ToListAsync();
+        }
+
+        public async Task CompletarTarea(string idTarea)
+        {
+            var filter = Builders<Tarea>.Filter.Eq(t => t.IdTarea, idTarea);
+            var tarea = await Tareas.Find(filter).FirstOrDefaultAsync();
+            if (tarea == null) return;
+
+            tarea.FecCompletado = DateTime.Now;
+            tarea.CompletadoEnTiempo = tarea.FecLimite == null || tarea.FecCompletado <= tarea.FecLimite;
+            await Tareas.ReplaceOneAsync(filter, tarea);
+        }
+
+        public async Task DescompletarTarea(string idTarea)
+        {
+            var filter = Builders<Tarea>.Filter.Eq(t => t.IdTarea, idTarea);
+            var tarea = await Tareas.Find(filter).FirstOrDefaultAsync();
+            if (tarea == null) return;
+
+            tarea.FecCompletado = null;
+            tarea.CompletadoEnTiempo = false;
+            await Tareas.ReplaceOneAsync(filter, tarea);
         }
 
         public async Task ActualizarTarea(string id, Tarea tareaActualizada) =>
@@ -86,5 +139,12 @@ namespace PlanificApp.Models.Services
 
         public async Task EliminarTarea(string id) =>
             await Tareas.DeleteOneAsync(t => t.IdTarea == id);
+        
+        public async Task ActualizarFotoPerfil(string idUsuario, string fotoBase64)
+        {
+            var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
+            var update = Builders<Usuario>.Update.Set(u => u.FotoPerfil, fotoBase64);
+            await Usuarios.UpdateOneAsync(filter, update);
+        }
     }
 }

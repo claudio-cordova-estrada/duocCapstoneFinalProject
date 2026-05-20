@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
 using planificApp.Factories;
+using PlanificApp.Models.Services;
 
 namespace planificApp.ViewModels;
 
@@ -12,6 +13,7 @@ public enum AuthPage { Login, Registro, RecuperarContra }
 public partial class MainViewModel : ViewModelBase
 {
     private readonly PageFactory _pageFactory;
+    private readonly SesionService _sesion;
     
     [ObservableProperty] private bool _sideMenuExpanded = true;
     
@@ -58,15 +60,10 @@ public partial class MainViewModel : ViewModelBase
 
     public bool ShowAppLayout => IsLoggedIn;
 
-    public MainViewModel()
-    {
-        ActiveUserSection = UserSection.Tareas;
-        CurrentPage = new InboxViewModel();
-    }
-
-    public MainViewModel(PageFactory pageFactory)
+    public MainViewModel(PageFactory pageFactory, SesionService sesion)
     {
         _pageFactory = pageFactory;
+        _sesion = sesion;
         NavigateToAuth(ApplicationPageNames.Login);
     }
 
@@ -95,12 +92,15 @@ public partial class MainViewModel : ViewModelBase
         else
         {
             ActiveUserSection = UserSection.Tareas;
-            CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
+            var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
+            vm.SetModo(ModoVista.Inbox);
+            CurrentPage = vm;
         }
     }
 
     [RelayCommand] private void Logout()
     {
+        _sesion.CerrarSesion();
         IsLoggedIn = false;
         IsAdminToggle = false;
         NavigateToAuth(ApplicationPageNames.Login);
@@ -112,17 +112,17 @@ public partial class MainViewModel : ViewModelBase
     public void GoToAdminUsuarioDetalle() { CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarioDetalle); }
 
     // SB1 Navigation
-    [RelayCommand] private void GoToTareas() { ActiveUserSection = UserSection.Tareas; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); }
+    [RelayCommand] private void GoToTareas() { ActiveUserSection = UserSection.Tareas; var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Inbox); CurrentPage = vm; }
     [RelayCommand] private void GoToCalendario() { ActiveUserSection = UserSection.Calendario; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioSemanal); }
     [RelayCommand] private void GoToUbicaciones() { ActiveUserSection = UserSection.Ubicaciones; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserUbicaciones); }
     [RelayCommand] private void GoToCuenta() { ActiveUserSection = UserSection.Cuenta; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserDatos); }
     [RelayCommand] private void GoToConfig() { ActiveUserSection = UserSection.Config; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserConfig); }
 
     // SB2 - Tareas
-    [RelayCommand] private void GoToInbox() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
-    [RelayCommand] private void GoToHoy() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserHoy);
-    [RelayCommand] private void GoToSemana() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserSemana);
-    [RelayCommand] private void GoToMes() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserMes);
+    [RelayCommand] private void GoToInbox() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Inbox); CurrentPage = vm; }
+    [RelayCommand] private void GoToHoy() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Hoy); CurrentPage = vm; }
+    [RelayCommand] private void GoToSemana() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Semana); CurrentPage = vm; }
+    [RelayCommand] private void GoToMes() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Mes); CurrentPage = vm; }
     [RelayCommand] private void GoToAreaInteres() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserAreaInteres);
 
     // SB2 - Calendario
@@ -147,10 +147,10 @@ public partial class MainViewModel : ViewModelBase
     public bool IsAdminUsuariosActive => ActiveAdminSection == AdminSection.Usuarios;
 
     // Active state helpers for SB2 - Tareas
-    public bool IsInboxActive => CurrentPage.PageName == ApplicationPageNames.UserInbox;
-    public bool IsHoyActive => CurrentPage.PageName == ApplicationPageNames.UserHoy;
-    public bool IsSemanaActive => CurrentPage.PageName == ApplicationPageNames.UserSemana;
-    public bool IsMesActive => CurrentPage.PageName == ApplicationPageNames.UserMes;
+    public bool IsInboxActive => CurrentPage is InboxViewModel vm && vm.ModoActual == ModoVista.Inbox;
+    public bool IsHoyActive => CurrentPage is InboxViewModel vm && vm.ModoActual == ModoVista.Hoy;
+    public bool IsSemanaActive => CurrentPage is InboxViewModel vm && vm.ModoActual == ModoVista.Semana;
+    public bool IsMesActive => CurrentPage is InboxViewModel vm && vm.ModoActual == ModoVista.Mes;
     public bool IsAreaInteresActive => CurrentPage.PageName == ApplicationPageNames.UserAreaInteres;
 
     // Active state helpers for SB2 - Calendario

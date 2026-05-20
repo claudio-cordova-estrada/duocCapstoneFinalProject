@@ -2,25 +2,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="planificApp.App"
              xmlns:local="clr-namespace:planificApp"
+             xmlns:helpers="clr-namespace:planificApp.Helpers"
               RequestedThemeVariant="Dark">
 
-    <Application.DataTemplates>
+<Application.DataTemplates>
         <local:ViewLocator></local:ViewLocator>
     </Application.DataTemplates>
-             
+
     <Application.Styles>
         <FluentTheme />
 
         <StyleInclude Source="Styles/appDefaultStyles.axaml"></StyleInclude>
     </Application.Styles>
-                 
-    <Application.Resources>
-        
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+
+<Application.Resources>
+    
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
+        </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+    
+    <helpers:TareaCheckIconConverter x:Key="TareaCheckIconConverter"/>
+        <helpers:TareaNombreBrushConverter x:Key="TareaNombreBrushConverter"/>
+        <helpers:BoolToChevronConverter x:Key="BoolToChevronConverter"/>
+        <helpers:TareaVencidaBrushConverter x:Key="TareaVencidaBrushConverter"/>
+        <helpers:TareaVencidaBackgroundConverter x:Key="TareaVencidaBackgroundConverter"/>
+        <helpers:TareaVencidaBorderConverter x:Key="TareaVencidaBorderConverter"/>
+        <helpers:TareaAtrasadaForegroundConverter x:Key="TareaAtrasadaForegroundConverter"/>
+        <helpers:TareaAtrasadaBackgroundConverter x:Key="TareaAtrasadaBackgroundConverter"/>
+        <helpers:TareaAtrasadaBorderConverter x:Key="TareaAtrasadaBorderConverter"/>
         
         <!-- App Backgrounds -->
         <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>
