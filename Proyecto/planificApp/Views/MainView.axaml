@@ -100,32 +100,29 @@
                             
                             <Border Classes="divider" Margin="12 6"/>
                             
-                            <TextBlock Classes="sb2-section">Áreas de interés</TextBlock>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0 0 15 0">
+                                <TextBlock Classes="sb2-section" Text="Áreas de interés" FontSize="13"/>
+                                <Button Grid.Column="1" Classes="transparent" Padding="2" 
+                                        Click="NewAreaInteresButton_Click" Cursor="Hand">
+                                    <Label Classes="icon-btn" Content="&#xE3D4;" FontSize="14"
+                                           Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding AreasInteres}" x:CompileBindings="False">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Classes="sb2-item" Command="{Binding DataContext.GoToAreaEspecificaCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
+                                            <StackPanel Orientation="Horizontal" Spacing="9">
+                                                <Ellipse Width="7" Height="7" Fill="{Binding ColorHex, Converter={StaticResource HexToBrushConverter}}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Nombre}" FontSize="13" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             
-                            <Button Classes="sb2-item" Classes.active="{Binding IsAreaInteresActive}" Command="{Binding GoToAreaInteresCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Ellipse Classes="area-dot" Fill="{DynamicResource AreaTrabajoBorder}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Trabajo" FontSize="13" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Ellipse Classes="area-dot" Fill="{DynamicResource AreaEstudioBorder}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Estudio" FontSize="13" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Ellipse Classes="area-dot" Fill="{DynamicResource AreaDeporteBorder}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Deporte" FontSize="13" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Classes="sb2-item" Command="{Binding GoToAreaInteresCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="9">
-                                    <Ellipse Classes="area-dot" Fill="{DynamicResource AreaLaboresBorder}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Labores" FontSize="13" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
+                            
                         </StackPanel>
                         
                         <!-- Calendario SB2 -->

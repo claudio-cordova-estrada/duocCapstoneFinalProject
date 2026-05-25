@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,7 @@ public partial class NewTaskViewModel : ViewModelBase
 {
     private readonly MongoService _mongo;
     private readonly SesionService _sesion;
+    private readonly Task _initTask;
 
     [ObservableProperty] private string _nombre = string.Empty;
     [ObservableProperty] private DateTime? _fecInicio = DateTime.Now;
@@ -23,6 +25,9 @@ public partial class NewTaskViewModel : ViewModelBase
     [ObservableProperty] private DateTime? _recordatorio;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
+    [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
+
+    public string? IdAreaInteres { get; set; }
 
     public bool GuardadoExitoso { get; private set; }
 
@@ -30,6 +35,14 @@ public partial class NewTaskViewModel : ViewModelBase
     {
         _mongo = mongo;
         _sesion = sesion;
+        _initTask = LoadAreasAsync();
+    }
+
+    private async Task LoadAreasAsync()
+    {
+        if (_sesion.UsuarioActual?.IdUsuario == null) return;
+        var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario);
+        AreasInteres = new ObservableCollection<AreaInteres>(areas);
     }
 
     [RelayCommand]
@@ -58,6 +71,7 @@ public partial class NewTaskViewModel : ViewModelBase
                 TiempoEstimado = TiempoEstimado,
                 Ubicacion = string.IsNullOrWhiteSpace(Ubicacion) ? null : Ubicacion,
                 Recordatorio = Recordatorio,
+                IdAreaInteres = IdAreaInteres,
                 IdUsuario = _sesion.UsuarioActual?.IdUsuario,
                 FecCreacion = DateTime.Now,
             };
@@ -71,4 +85,6 @@ public partial class NewTaskViewModel : ViewModelBase
             HasError = true;
         }
     }
+    
+    public Task WaitForAreasAsync() => _initTask;
 }

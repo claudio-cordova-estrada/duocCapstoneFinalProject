@@ -30,15 +30,16 @@ namespace PlanificApp.Models
 
         public PrioridadAreaInteres Prioridad { get; set; } = PrioridadAreaInteres.Predeterminado;
 
-        public int HorasSemanales { get; set; } = 0; // Meta de tiempo para el algoritmo
+        public int HorasSemanales { get; set; } = 0; // Meta de tiempo para el algoritmo de generacion semanal
 
         // Herencia lógica de preferencias para las tareas que pertenezcan a esta área
         public string? UbicacionPred { get; set; }
         public MetodoTransporte? MetodoTransportePred { get; set; }
-
-
-        // Relación con el usuario dueño del área
+        
         public string? IdUsuario { get; set; }
+        
+        // Violeta por defecto
+        public string ColorHex { get; set; } = "#a78bfa"; 
 
     }
 }

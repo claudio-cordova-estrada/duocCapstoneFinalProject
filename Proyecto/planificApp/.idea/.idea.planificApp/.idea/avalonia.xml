@@ -31,6 +31,7 @@
         <entry key="Views/MainView.axaml" value="planificApp.csproj" />
         <entry key="Views/MesView.axaml" value="planificApp.csproj" />
         <entry key="Views/ModificacionUsuarioView.axaml" value="planificApp.csproj" />
+        <entry key="Views/NewAreaWindow.axaml" value="planificApp.csproj" />
         <entry key="Views/NewTaskWindow.axaml" value="planificApp.csproj" />
         <entry key="Views/PropuestasSemanalesView.axaml" value="planificApp.csproj" />
         <entry key="Views/RecuperarContraView.axaml" value="planificApp.csproj" />

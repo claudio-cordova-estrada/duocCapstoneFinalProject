@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using planificApp.Helpers;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -8,63 +9,27 @@ namespace planificApp.Views;
 public partial class NewTaskWindow : Window
 {
     public bool Result { get; private set; }
+    public string? PreSelectedAreaId { get; set; }
 
     public NewTaskWindow()
     {
         InitializeComponent();
+        Loaded += NewTaskWindow_Loaded;
+    }
 
-        PickerFecInicio.SelectedDateChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm && PickerFecInicio.SelectedDate.HasValue)
-                vm.FecInicio = PickerFecInicio.SelectedDate.Value;
-        };
+    private async void NewTaskWindow_Loaded(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not NewTaskViewModel vm) return;
 
-        PickerFecLimite.SelectedDateChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm && PickerFecLimite.SelectedDate.HasValue)
-                vm.FecLimite = PickerFecLimite.SelectedDate.Value;
-        };
-
-        PickerHoraInicio.SelectedTimeChanged += (_, e) =>
-        {
-            if (DataContext is NewTaskViewModel vm)
-                vm.HoraInicio = e.NewTime;
-        };
-
-        PickerHoraFin.SelectedTimeChanged += (_, e) =>
-        {
-            if (DataContext is NewTaskViewModel vm)
-                vm.HoraFin = e.NewTime;
-        };
-
-        CmbPrioridad.SelectionChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm)
-                vm.Prioridad = CmbPrioridad.SelectedIndex + 1;
-        };
-
-        CmbUbicacion.SelectionChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm)
-                vm.Ubicacion = CmbUbicacion.SelectedIndex <= 0 ? null : UbicacionFromIndex(CmbUbicacion.SelectedIndex);
-        };
-
-        CmbTiempoEstimado.SelectionChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm)
-                vm.TiempoEstimado = TiempoEstimadoFromIndex(CmbTiempoEstimado.SelectedIndex);
-        };
-
-        PickerRecordatorio.SelectedDateChanged += (_, _) =>
-        {
-            if (DataContext is NewTaskViewModel vm && PickerRecordatorio.SelectedDate.HasValue)
-                vm.Recordatorio = PickerRecordatorio.SelectedDate.Value;
-        };
+        await vm.WaitForAreasAsync();
+        DetalleTareaHelper.PopulateAreaComboBox(CmbAreaInteres, vm.AreasInteres, PreSelectedAreaId);
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not NewTaskViewModel vm) return;
+
+        vm.IdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(CmbAreaInteres);
 
         await vm.GuardarCommand.ExecuteAsync(null);
 
@@ -108,18 +73,4 @@ public partial class NewTaskWindow : Window
         if (DataContext is NewTaskViewModel vm)
             vm.HoraFin = null;
     }
-
-    private static string? UbicacionFromIndex(int index) => index switch
-    {
-        1 => "Casa", 2 => "Trabajo", 3 => "Universidad",
-        4 => "Gimnasio", 5 => "Supermercado", 6 => "Otro",
-        _ => null
-    };
-
-    private static int TiempoEstimadoFromIndex(int index) => index switch
-    {
-        1 => 5, 2 => 10, 3 => 15, 4 => 30, 5 => 45,
-        6 => 60, 7 => 90, 8 => 120, 9 => 180, 10 => 240,
-        _ => 0
-    };
 }

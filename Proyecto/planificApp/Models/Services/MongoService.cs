@@ -40,6 +40,7 @@ namespace PlanificApp.Models.Services
         public IMongoCollection<AreaInteres> AreasInteres =>
             _database.GetCollection<AreaInteres>("AreasInteres");
 
+        // modulo cuentas
         public async Task RegistrarUsuario(Usuario nuevoUsuario)
         {
             var existe = await Usuarios.Find(u => u.Correo == nuevoUsuario.Correo).AnyAsync();
@@ -70,9 +71,6 @@ namespace PlanificApp.Models.Services
 
         public async Task CrearTarea(Tarea nuevaTarea) =>
             await Tareas.InsertOneAsync(nuevaTarea);
-
-        public async Task<List<Tarea>> ObtenerTareasPorArea(string areaId) =>
-            await Tareas.Find(t => t.IdAreaInteres == areaId).ToListAsync();
 
         public async Task<List<Tarea>> ObtenerTareasPorUsuario(string idUsuario) =>
             await Tareas.Find(t => t.IdUsuario == idUsuario).ToListAsync();
@@ -140,11 +138,30 @@ namespace PlanificApp.Models.Services
         public async Task EliminarTarea(string id) =>
             await Tareas.DeleteOneAsync(t => t.IdTarea == id);
         
+        // detalle cuenta
+        
         public async Task ActualizarFotoPerfil(string idUsuario, string fotoBase64)
         {
             var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
             var update = Builders<Usuario>.Update.Set(u => u.FotoPerfil, fotoBase64);
             await Usuarios.UpdateOneAsync(filter, update);
         }
+        
+        // areas de interes
+        
+        public async Task<List<Tarea>> ObtenerTareasPorArea(string areaId) =>
+            await Tareas.Find(t => t.IdAreaInteres == areaId).ToListAsync();
+        
+        public async Task<List<AreaInteres>> ObtenerAreasPorUsuario(string idUsuario) =>
+            await AreasInteres.Find(a => a.IdUsuario == idUsuario).ToListAsync();
+
+        public async Task CrearAreaInteres(AreaInteres nuevaArea) =>
+            await AreasInteres.InsertOneAsync(nuevaArea);
+
+        public async Task ActualizarAreaInteres(string id, AreaInteres areaActualizada) =>
+            await AreasInteres.ReplaceOneAsync(a => a.IdAreaInteres == id, areaActualizada);
+
+        public async Task EliminarAreaInteres(string id) =>
+            await AreasInteres.DeleteOneAsync(a => a.IdAreaInteres == id);
     }
 }

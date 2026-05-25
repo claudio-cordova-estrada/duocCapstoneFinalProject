@@ -94,6 +94,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ModificacionUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewAreaWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewTaskWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

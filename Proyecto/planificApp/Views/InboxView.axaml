@@ -111,6 +111,12 @@
                                 <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <TextBox x:Name="DetailNombre" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                             </StackPanel>
+                            
+                            <!-- Area interes -->
+                             <StackPanel Spacing="4">
+                                 <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                 <ComboBox x:Name="DetailAreaInteres" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+                             </StackPanel>
 
                             <!-- Fecha inicio -->
                             <StackPanel Spacing="4">

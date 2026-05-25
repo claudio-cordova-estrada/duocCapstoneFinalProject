@@ -32,6 +32,7 @@
         <helpers:TareaAtrasadaForegroundConverter x:Key="TareaAtrasadaForegroundConverter"/>
         <helpers:TareaAtrasadaBackgroundConverter x:Key="TareaAtrasadaBackgroundConverter"/>
         <helpers:TareaAtrasadaBorderConverter x:Key="TareaAtrasadaBorderConverter"/>
+        <helpers:HexToBrushConverter x:Key="HexToBrushConverter"/>
         
         <!-- App Backgrounds -->
         <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>

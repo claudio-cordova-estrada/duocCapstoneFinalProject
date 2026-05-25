@@ -152,9 +152,10 @@ public partial class InboxView : UserControl
         DetailFecLimite.SelectedDate = vm.TareaSeleccionada?.FecLimite;
         DetailHoraInicio.SelectedTime = vm.TareaSeleccionada?.HoraInicio;
         DetailHoraFin.SelectedTime = vm.TareaSeleccionada?.HoraFin;
-        DetailUbicacion.SelectedIndex = string.IsNullOrEmpty(vm.TareaSeleccionada?.Ubicacion) ? 0 : UbicacionToIndex(vm.TareaSeleccionada.Ubicacion);
+        DetailUbicacion.SelectedIndex = string.IsNullOrEmpty(vm.TareaSeleccionada?.Ubicacion) ? 0 : DetalleTareaHelper.UbicacionToIndex(vm.TareaSeleccionada.Ubicacion);
         DetailPrioridad.SelectedIndex = vm.DetallePrioridad - 1;
-        DetailTiempoEstimado.SelectedIndex = TiempoEstimadoToIndex(vm.DetalleTiempoEstimado);
+        DetailTiempoEstimado.SelectedIndex = DetalleTareaHelper.TiempoEstimadoToIndex(vm.DetalleTiempoEstimado);
+        DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
         DetailMensaje.IsVisible = false;
     }
@@ -175,8 +176,9 @@ public partial class InboxView : UserControl
         vm.DetalleHoraInicio = DetailHoraInicio.SelectedTime;
         vm.DetalleHoraFin = DetailHoraFin.SelectedTime;
         vm.DetallePrioridad = DetailPrioridad.SelectedIndex + 1;
-        vm.DetalleTiempoEstimado = TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
-        vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : UbicacionFromIndex(DetailUbicacion.SelectedIndex);
+        vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
+        vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : DetalleTareaHelper.UbicacionFromIndex(DetailUbicacion.SelectedIndex);
+        vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
 

@@ -46,6 +46,9 @@ public partial class InboxViewModel : PageViewModel
     public string? DetalleUbicacion { get; set; }
     public int DetallePrioridad { get; set; } = 1;
     public int DetalleTiempoEstimado { get; set; }
+    public string? DetalleIdAreaInteres { get; set; }
+
+    [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
 
     public InboxViewModel(MongoService mongo, SesionService sesion)
     {
@@ -91,6 +94,9 @@ public partial class InboxViewModel : PageViewModel
         if (_sesion.UsuarioActual == null) return;
 
         var idUsuario = _sesion.UsuarioActual.IdUsuario!;
+
+        AreasInteres = new ObservableCollection<AreaInteres>(
+            await _mongo.ObtenerAreasPorUsuario(idUsuario));
 
         var tareas = ModoActual switch
         {
@@ -169,6 +175,7 @@ public partial class InboxViewModel : PageViewModel
         DetalleUbicacion = tarea.Ubicacion;
         DetallePrioridad = tarea.Prioridad;
         DetalleTiempoEstimado = tarea.TiempoEstimado;
+        DetalleIdAreaInteres = tarea.IdAreaInteres;
 
         if (tarea.FecCompletado != null)
             DetalleEstado = "Completada";
@@ -204,6 +211,7 @@ public partial class InboxViewModel : PageViewModel
             TareaSeleccionada.Prioridad = DetallePrioridad;
             TareaSeleccionada.Ubicacion = string.IsNullOrWhiteSpace(DetalleUbicacion) ? null : DetalleUbicacion;
             TareaSeleccionada.TiempoEstimado = DetalleTiempoEstimado;
+            TareaSeleccionada.IdAreaInteres = DetalleIdAreaInteres;
 
             await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
             DetalleMensaje = "Guardado";

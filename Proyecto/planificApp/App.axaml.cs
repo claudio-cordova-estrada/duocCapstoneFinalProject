@@ -40,6 +40,7 @@ public partial class App : Application
         collection.AddTransient<InboxViewModel>();
         collection.AddTransient<NewTaskViewModel>();
         collection.AddTransient<AreaInteresViewModel>();
+        collection.AddTransient<NewAreaViewModel>();
         
         // User - Calendario ViewModels
         collection.AddTransient<CalendarioSemanalViewModel>();

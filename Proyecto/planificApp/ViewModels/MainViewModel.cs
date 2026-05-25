@@ -1,7 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
 using planificApp.Factories;
+using planificApp.Helpers;
+using PlanificApp.Models;
 using PlanificApp.Models.Services;
 
 namespace planificApp.ViewModels;
@@ -12,6 +17,8 @@ public enum AuthPage { Login, Registro, RecuperarContra }
 
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly MongoService _mongo;
+    
     private readonly PageFactory _pageFactory;
     private readonly SesionService _sesion;
     
@@ -25,6 +32,9 @@ public partial class MainViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsConfigActive))]
     [NotifyPropertyChangedFor(nameof(ShowSB2))]
     private UserSection _activeUserSection = UserSection.Tareas;
+    
+    [ObservableProperty] 
+    private ObservableCollection<AreaInteres> _areasInteres = new();
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsAdminEstadisticasActive))]
@@ -60,10 +70,11 @@ public partial class MainViewModel : ViewModelBase
 
     public bool ShowAppLayout => IsLoggedIn;
 
-    public MainViewModel(PageFactory pageFactory, SesionService sesion)
+    public MainViewModel(PageFactory pageFactory, SesionService sesion, MongoService mongo)
     {
         _pageFactory = pageFactory;
         _sesion = sesion;
+        _mongo = mongo;
         NavigateToAuth(ApplicationPageNames.Login);
     }
 
@@ -81,7 +92,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] private void GoToRegistro() { CurrentAuthPage = AuthPage.Registro; NavigateToAuth(ApplicationPageNames.Registro); }
     [RelayCommand] private void GoToRecuperarContra() { CurrentAuthPage = AuthPage.RecuperarContra; NavigateToAuth(ApplicationPageNames.RecuperarContra); }
 
-    [RelayCommand] private void Login()
+    [RelayCommand] private async Task LoginAsync()
     {
         IsLoggedIn = true;
         if (IsAdminToggle)
@@ -91,6 +102,9 @@ public partial class MainViewModel : ViewModelBase
         }
         else
         {
+            var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual!.IdUsuario!);
+            AreasInteres = new ObservableCollection<AreaInteres>(areas);
+            
             ActiveUserSection = UserSection.Tareas;
             var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox);
             vm.SetModo(ModoVista.Inbox);
@@ -104,6 +118,21 @@ public partial class MainViewModel : ViewModelBase
         IsLoggedIn = false;
         IsAdminToggle = false;
         NavigateToAuth(ApplicationPageNames.Login);
+    }
+    
+    [RelayCommand]
+    public void GoToAreaEspecifica(AreaInteres area)
+    {
+        var vm = (AreaInteresViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserAreaInteres);
+        vm.SetArea(area);
+        CurrentPage = vm;
+    }
+    
+    public async Task ReloadAreasAsync()
+    {
+        if (_sesion.UsuarioActual == null) return;
+        var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario!);
+        AreasInteres = new ObservableCollection<AreaInteres>(areas);
     }
 
     // Admin navigation
@@ -123,7 +152,7 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] private void GoToHoy() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Hoy); CurrentPage = vm; }
     [RelayCommand] private void GoToSemana() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Semana); CurrentPage = vm; }
     [RelayCommand] private void GoToMes() { var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Mes); CurrentPage = vm; }
-    [RelayCommand] private void GoToAreaInteres() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserAreaInteres);
+    [RelayCommand] private void GoToNuevaArea() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserAreaInteres);
 
     // SB2 - Calendario
     [RelayCommand] private void GoToCalendarioSemanal() => CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.UserCalendarioSemanal);
