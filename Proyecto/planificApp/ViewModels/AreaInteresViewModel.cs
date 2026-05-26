@@ -63,11 +63,19 @@ public partial class AreaInteresViewModel : PageViewModel
 
         var pendientes = tareas.Where(t => t.FecCompletado == null).ToList();
         var completadas = tareas.Where(t => t.FecCompletado != null).ToList();
-        var vencidas = pendientes.Count(t => t.FecLimite != null && t.FecLimite < DateTime.Now);
+        // me di cuenta de que no se estaba tomando en cuenta el caso donde no existiera fecha limite
+        // por tanto lo agregue como segunda condición
+        var vencidas = pendientes.Count(t => (t.FecLimite != null && t.FecLimite < DateTime.Now) || 
+                                             (t.FecLimite == null && t.FecInicio != null && t.FecInicio < DateTime.Now));
 
         TareasPendientesFiltradas = new ObservableCollection<Tarea>(pendientes);
         TareasCompletadasFiltradas = new ObservableCollection<Tarea>(completadas);
-        TareasPendientes = pendientes.Count;
+        
+        // Invertí la lógica de la variable de vencidas para tener solamente las tareas activas o pendientes
+        // y no vencidas. Soy un genio
+        TareasPendientes = pendientes.Count(t => !((t.FecLimite != null && t.FecLimite < DateTime.Now) ||
+                                                  (t.FecLimite == null && t.FecInicio != null &&
+                                                   t.FecInicio < DateTime.Now)));
         TareasCompletadasCount = completadas.Count;
         TareasVencidasCount = vencidas;
         HayCompletadas = completadas.Count > 0;
