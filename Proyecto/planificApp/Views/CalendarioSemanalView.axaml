@@ -1,0 +1,418 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.CalendarioSemanalView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:CalendarioSemanalViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <DockPanel>
+
+            <!-- Sub-header -->
+            <Border DockPanel.Dock="Top" Padding="10 14" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1">
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                    <Button Grid.Column="0" Classes="transparent" Padding="4" VerticalAlignment="Center">
+                        <Label Classes="icon-only" Content="&#xE51A;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
+                    </Button>
+                    <TextBlock Grid.Column="1" Text="Semana 19" FontSize="13" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Button Grid.Column="2" Classes="transparent" Padding="4" VerticalAlignment="Center">
+                        <Label Classes="icon-only" Content="&#xE52C;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
+                    </Button>
+                    <Button Grid.Column="3" Classes="accent" Click="GenerarSemana_Click" Margin="12 0 0 0">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Label Classes="icon-btn" Content="&#xE6B6;" FontSize="14"/>
+                            <TextBlock Text="Generar semana" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Legend -->
+            <Border DockPanel.Dock="Bottom" Padding="6 10" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 1 0 0">
+                <StackPanel Orientation="Horizontal" Spacing="14">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="12" Height="12" CornerRadius="2" Background="{DynamicResource AreaTrabajoBackground}" BorderBrush="{DynamicResource AreaTrabajoBorder}" BorderThickness="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="Trabajo" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="12" Height="12" CornerRadius="2" Background="{DynamicResource AreaEstudioBackground}" BorderBrush="{DynamicResource AreaEstudioBorder}" BorderThickness="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="Estudio" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="12" Height="12" CornerRadius="2" Background="{DynamicResource AreaDeporteBackground}" BorderBrush="{DynamicResource AreaDeporteBorder}" BorderThickness="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="Deporte" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="12" Height="12" CornerRadius="2" Background="{DynamicResource AreaLaboresBackground}" BorderBrush="{DynamicResource AreaLaboresBorder}" BorderThickness="1" VerticalAlignment="Center"/>
+                        <TextBlock Text="Labores" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="12" Height="12" CornerRadius="2" Background="{DynamicResource TrasladoBackground}" BorderBrush="{DynamicResource TrasladoBorder}" BorderThickness="1 0 0 2" VerticalAlignment="Center"/>
+                        <TextBlock Text="Traslado" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Day headers -->
+            <Border DockPanel.Dock="Top" Background="{DynamicResource CalendarDayHeader}">
+                <Grid ColumnDefinitions="52,*,*,*,*,*,*,*">
+                    <TextBlock Grid.Column="0" Text="" FontSize="9"/>
+                    <Border Grid.Column="1" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Lun" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/><TextBlock Text="4" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="2" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Mar" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/><TextBlock Text="5" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="3" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Mi&#xE9;" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/><TextBlock Text="6" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="4" Padding="4 6" Background="{DynamicResource AccentBackgroundLight}"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Jue" FontSize="9" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/><TextBlock Text="7" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="5" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Vie" FontSize="9" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/><TextBlock Text="8" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="6" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="S&#xE1;b" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/><TextBlock Text="9" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/></StackPanel></Border>
+                    <Border Grid.Column="7" Padding="4 6"><StackPanel HorizontalAlignment="Center" Spacing="1"><TextBlock Text="Dom" FontSize="9" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/><TextBlock Text="10" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/></StackPanel></Border>
+                </Grid>
+            </Border>
+
+            <!-- Scrollable time grid: 64px per hour, 24h = 1536px -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid ColumnDefinitions="52,*,*,*,*,*,*,*">
+
+                    <!-- Time labels -->
+                    <StackPanel Grid.Column="0">
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="0:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="1:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="2:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="3:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="4:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="5:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="6:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="7:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="8:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="9:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="10:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="11:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="12:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="13:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="14:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="15:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="16:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="17:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="18:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="19:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="20:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="21:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="22:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                        <Border Height="64"><TextBlock Classes="cal-time" Text="23:00" Margin="0 0 4 0" HorizontalAlignment="Right" VerticalAlignment="Top"/></Border>
+                    </StackPanel>
+
+                    <!-- LUNES (Col 1) 8-11 Trabajo, 11-11:45 Traslado, 11:45-13:30 Estudio, 13:30-14 Traslado, 14-16 Deporte -->
+                    <Panel Grid.Column="1" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 8:00-11:00 Trabajo top=512 h=190: Reuni&#xF3;n (8-9), gap (~1h), Informe (10-11) -->
+                        <Border Margin="2 512 2 0" Height="190" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <DockPanel Margin="4 3" LastChildFill="False">
+                                <Border DockPanel.Dock="Top" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="60">
+                                    <TextBlock Text="Reuni&#xF3;n" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <Border DockPanel.Dock="Bottom" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="60">
+                                    <TextBlock Text="Informe" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                        <!-- 11:00-11:45 Traslado top=704 h=46 -->
+                        <Border Margin="2 704 2 0" Height="46" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TrasladoBackground}" CornerRadius="3" BorderThickness="2 0 0 0" BorderBrush="{DynamicResource TrasladoBorder}"/>
+                        <!-- 11:45-13:30 Estudio top=752 h=110: Cap.4 (11:45-12:30), gap (~20min), Ejerc. (13:00-13:30) -->
+                        <Border Margin="2 752 2 0" Height="110" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaEstudioBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalEstudioBlockBorder}" ClipToBounds="True">
+                            <DockPanel Margin="4 3" LastChildFill="False">
+                                <Border DockPanel.Dock="Top" Background="{DynamicResource AreaEstudioChipBackground}" CornerRadius="3" Padding="4 2" Height="44">
+                                    <TextBlock Text="Cap.4" FontSize="10" Foreground="{DynamicResource AreaEstudioText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <Border DockPanel.Dock="Bottom" Background="{DynamicResource AreaEstudioChipBackground}" CornerRadius="3" Padding="4 2" Height="38">
+                                    <TextBlock Text="Ejerc." FontSize="10" Foreground="{DynamicResource AreaEstudioText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                        <!-- 13:30-14:00 Traslado top=864 h=30 -->
+                        <Border Margin="2 864 2 0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TrasladoBackground}" CornerRadius="3" BorderThickness="2 0 0 0" BorderBrush="{DynamicResource TrasladoBorder}"/>
+                        <!-- 14:00-16:00 Deporte top=896 h=126: Carrera (14-15), gap (~30min), Elongar (15:30-16) -->
+                        <Border Margin="2 896 2 0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaDeporteBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalDeporteBlockBorder}" ClipToBounds="True">
+                            <DockPanel Margin="4 3" LastChildFill="False">
+                                <Border DockPanel.Dock="Top" Background="{DynamicResource AreaDeporteChipBackground}" CornerRadius="3" Padding="4 2" Height="44">
+                                    <TextBlock Text="Carrera" FontSize="10" Foreground="{DynamicResource AreaDeporteText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <Border DockPanel.Dock="Bottom" Background="{DynamicResource AreaDeporteChipBackground}" CornerRadius="3" Padding="4 2" Height="44">
+                                    <TextBlock Text="Elongar" FontSize="10" Foreground="{DynamicResource AreaDeporteText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                    </Panel>
+
+                    <!-- MARTES (Col 2) 9-11 Estudio, 11-11:30 Traslado, 11:30-14 Trabajo -->
+                    <Panel Grid.Column="2" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 9:00-11:00 Estudio top=576 h=126 single task -->
+                        <Border Margin="2 576 2 0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaEstudioBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalEstudioBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaEstudioChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Clase online" FontSize="10" Foreground="{DynamicResource AreaEstudioText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                        <!-- 11:00-11:30 Traslado top=704 h=30 -->
+                        <Border Margin="2 704 2 0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TrasladoBackground}" CornerRadius="3" BorderThickness="2 0 0 0" BorderBrush="{DynamicResource TrasladoBorder}"/>
+                        <!-- 11:30-14:00 Trabajo top=736 h=158: Proyecto X (11:30-12:30), gap (~30min), Emails (13-14) -->
+                        <Border Margin="2 736 2 0" Height="158" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <DockPanel Margin="4 3" LastChildFill="False">
+                                <Border DockPanel.Dock="Top" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="60">
+                                    <TextBlock Text="Proyecto X" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <Border DockPanel.Dock="Bottom" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="60">
+                                    <TextBlock Text="Emails" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                    </Panel>
+
+                    <!-- MI&#xC9;RCOLES (Col 3) 8-10 Trabajo 2tareas, 10-10:30 Traslado, 10:30-12 Deporte 1tarea -->
+                    <Panel Grid.Column="3" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 8:00-10:00 Trabajo top=512 h=126: Daily (8-9), gap (~30min), Docs (9:30-10) -->
+                        <Border Margin="2 512 2 0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <DockPanel Margin="4 3" LastChildFill="False">
+                                <Border DockPanel.Dock="Top" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="44">
+                                    <TextBlock Text="Daily" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                                <Border DockPanel.Dock="Bottom" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2" Height="44">
+                                    <TextBlock Text="Docs" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                                </Border>
+                            </DockPanel>
+                        </Border>
+                        <!-- 10:00-10:30 Traslado top=640 h=30 -->
+                        <Border Margin="2 640 2 0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TrasladoBackground}" CornerRadius="3" BorderThickness="2 0 0 0" BorderBrush="{DynamicResource TrasladoBorder}"/>
+                        <!-- 10:30-12:00 Deporte top=672 h=94 single task -->
+                        <Border Margin="2 672 2 0" Height="94" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaDeporteBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalDeporteBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaDeporteChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Gym" FontSize="10" Foreground="{DynamicResource AreaDeporteText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                    </Panel>
+
+                    <!-- JUEVES HOY (Col 4) 10-11 Trabajo, 12:30-13:30 Traslado, 14-15:30 Trabajo, 18-19 Deporte -->
+                    <Panel Grid.Column="4" Height="1536" ClipToBounds="False" Background="{DynamicResource AccentBackgroundLight}">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 10:00-12:30 Trabajo top=640 h=160 single task -->
+                        <Border Margin="2 640 2 0" Height="160" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Informe sem." FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                        <!-- 12:30-13:30 Traslado top=800 h=62 -->
+                        <Border Margin="2 800 2 0" Height="62" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource TrasladoBackground}" CornerRadius="3" BorderThickness="2 0 0 0" BorderBrush="{DynamicResource TrasladoBorder}"/>
+                        <!-- 14:00-15:30 Trabajo top=896 h=94 single task -->
+                        <Border Margin="2 896 2 0" Height="94" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="Reuni&#xF3;n equipo"/>
+                            </Border>
+                        </Border>
+                        <!-- 18:00-19:00 Deporte top=1152 h=62 single task -->
+                        <Border Margin="2 1152 2 0" Height="62" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaDeporteBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalDeporteBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaDeporteChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Spinning" FontSize="10" Foreground="{DynamicResource AreaDeporteText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                    </Panel>
+
+                    <!-- VIERNES (Col 5) 9-10:30 Trabajo, 16-17 Trabajo -->
+                    <Panel Grid.Column="5" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 9:00-10:30 Trabajo top=576 h=94 single task -->
+                        <Border Margin="2 576 2 0" Height="94" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Presentaci&#xF3;n" FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                        <!-- 16:00-17:00 Trabajo top=1024 h=62 single task -->
+                        <Border Margin="2 1024 2 0" Height="62" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaTrabajoBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalTrabajoBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaTrabajoChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock FontSize="10" Foreground="{DynamicResource AreaTrabajoText}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Text="Revisi&#xF3;n c&#xF3;digo"/>
+                            </Border>
+                        </Border>
+                    </Panel>
+
+                    <!-- S&#xC1;BADO (Col 6) 9-11 Estudio -->
+                    <Panel Grid.Column="6" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <!-- 9:00-11:00 Estudio top=576 h=126 single task -->
+                        <Border Margin="2 576 2 0" Height="126" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="{DynamicResource AreaEstudioBackground}" CornerRadius="5" BorderThickness="1 0 0 2" BorderBrush="{DynamicResource CalEstudioBlockBorder}" ClipToBounds="True">
+                            <Border Margin="4 3" Background="{DynamicResource AreaEstudioChipBackground}" CornerRadius="3" Padding="4 2">
+                                <TextBlock Text="Estudiar cap.5" FontSize="10" Foreground="{DynamicResource AreaEstudioText}" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                            </Border>
+                        </Border>
+                    </Panel>
+
+                    <!-- DOMINGO (Col 7) vac&#xED;o -->
+                    <Panel Grid.Column="7" Height="1536" ClipToBounds="False">
+                        <Border Margin="0 64 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 128 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 192 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 256 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 320 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 384 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 448 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 512 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 576 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 640 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 704 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 768 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 832 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 896 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 960 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1024 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1088 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1152 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1216 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1280 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1344 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1408 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                        <Border Margin="0 1472 0 0" Height="1" Background="{DynamicResource CalendarHourLine}" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                    </Panel>
+
+                    <!-- Vertical day separators -->
+                    <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Height="1536" VerticalAlignment="Top"/>
+                    <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Height="1536" VerticalAlignment="Top"/>
+                    <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Height="1536" VerticalAlignment="Top"/>
+                    <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Height="1536" VerticalAlignment="Top"/>
+                    <Border Grid.Column="7" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="1 0 0 0" Height="1536" VerticalAlignment="Top"/>
+
+                </Grid>
+            </ScrollViewer>
+
+        </DockPanel>
+    </Border>
+</UserControl>

@@ -1,0 +1,85 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.DatosView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:DatosViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="24" Margin="40 36">
+
+                <TextBlock Text="Mis datos" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+
+                <!-- Profile card -->
+                <Border Classes="card" Padding="28">
+                    <StackPanel Spacing="20">
+                        <!-- Avatar + Name row -->
+                        <Grid ColumnDefinitions="Auto,*" Margin="0 0 0 8">
+                            <Button Grid.Column="0" x:Name="BtnCambiarFoto" Click="BtnCambiarFoto_Click" Padding="0" Width="72" Height="72" Margin="0 0 20 0" Cursor="Hand" Classes="avatar-btn">
+                                <Border CornerRadius="36" ClipToBounds="True">
+                                    <Panel Width="72" Height="72">
+                                        <Border CornerRadius="36" ClipToBounds="True" IsVisible="{Binding TieneFoto}">
+                                            <Image Source="{Binding FotoPerfil}" Stretch="UniformToFill"/>
+                                        </Border>
+                                        <Border CornerRadius="36" Background="{DynamicResource AccentBackground}" IsVisible="{Binding !TieneFoto}">
+                                            <TextBlock Text="{Binding Iniciales}" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource AccentColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <Border x:Name="AvatarOverlay" Background="#80000000" IsVisible="False" IsHitTestVisible="False">
+                                            <Label Content="&#xE7A4;" FontFamily="{DynamicResource Phosphor}" FontSize="26" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Panel>
+                                </Border>
+                            </Button>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                <TextBlock Text="{Binding NombreCompleto}" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="{Binding FecCreacion}" FontSize="15" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1"/>
+
+                        <!-- Nombre completo -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock Grid.Column="0" Text="Nombre completo" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldNombre" Grid.Column="1" IsReadOnly="True" Text="{Binding NombreCompleto}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnNombre" Grid.Column="2" Classes="transparent" Click="BtnNombre_Click" VerticalAlignment="Center">
+                                <Label x:Name="IconNombre" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Correo electrónico -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock Grid.Column="0" Text="Correo electrónico" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldCorreo" Grid.Column="1" IsReadOnly="True" Text="{Binding Correo}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnCorreo" Grid.Column="2" Classes="transparent" Click="BtnCorreo_Click" VerticalAlignment="Center">
+                                <Label x:Name="IconCorreo" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Fecha de nacimiento -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock Grid.Column="0" Text="Fecha de nacimiento" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldFecha" Grid.Column="1" IsReadOnly="True" Text="{Binding FecNacimiento}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnFecha" Grid.Column="2" Classes="transparent" Click="BtnFecha_Click" VerticalAlignment="Center">
+                                <Label x:Name="IconFecha" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
+                            </Button>
+                        </Grid>
+
+                        <!-- Ubicación -->
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock Grid.Column="0" Text="Ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldUbicacion" Grid.Column="1" IsReadOnly="True" Text="{Binding Ubicacion}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnUbicacion" Grid.Column="2" Classes="transparent" Click="BtnUbicacion_Click" VerticalAlignment="Center">
+                                <Label x:Name="IconUbicacion" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>

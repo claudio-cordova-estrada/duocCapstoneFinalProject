@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__avalonia-docs__search_avalonia_docs"
+    ]
+  }
+}

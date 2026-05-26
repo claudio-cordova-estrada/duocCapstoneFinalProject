@@ -1,9 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.37027.9 d17.14
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanificApp", "PlanificApp\PlanificApp.csproj", "{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "planificApp", "planificApp.csproj", "{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F441EAF-0703-4F4E-9070-D1A28CA62A0C}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2714D2D8-E04D-47B1-B49B-7DCC3F56EE6F}
+		{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

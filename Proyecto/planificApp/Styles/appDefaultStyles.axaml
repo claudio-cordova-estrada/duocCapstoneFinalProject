@@ -1,0 +1,715 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Global font -->
+    <Style Selector="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector=":is(Button)">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector="TextBox">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <Style Selector="ComboBox">
+        <Setter Property="FontFamily" Value="{DynamicResource AkkoPro}"></Setter>
+    </Style>
+    
+    <!-- Window base -->
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource AppBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"></Setter>
+    </Style>
+    
+    <!-- Typography -->
+    <Style Selector="TextBlock.view-title">
+        <Setter Property="FontSize" Value="18"></Setter>
+        <Setter Property="FontWeight" Value="Medium"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"></Setter>
+        <Setter Property="Margin" Value="0 0 0 3"></Setter>
+    </Style>
+    
+    <Style Selector="TextBlock.view-sub">
+        <Setter Property="FontSize" Value="12"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}"></Setter>
+        <Setter Property="Margin" Value="0 0 16 0"></Setter>
+    </Style>
+    
+    <Style Selector="TextBlock.section-label">
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}"></Setter>
+        <Setter Property="Margin" Value="16 0 8 0"></Setter>
+    </Style>
+    
+    <Style Selector="TextBlock.sb2-header">
+        <Setter Property="FontSize" Value="11"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="Margin" Value="16 16 8 8"></Setter>
+    </Style>
+    
+    <Style Selector="TextBlock.sb2-section">
+        <Setter Property="FontSize" Value="9"></Setter>
+        <Setter Property="Foreground" Value="#333333"></Setter>
+        <Setter Property="Margin" Value="14 8 14 4"></Setter>
+    </Style>
+    
+    <!-- Icon labels -->
+    <Style Selector="Label.icon, Label.icon-only">
+        <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"></Setter>
+        <Setter Property="FontSize" Value="19"></Setter>
+        <Setter Property="Padding" Value="0 4.5 -0.4 3"></Setter>
+        <Setter Property="Margin" Value="0 0 5 0"></Setter>
+    </Style>
+    
+    <Style Selector="Label.icon-only">
+        <Setter Property="Margin" Value="0"></Setter>
+    </Style>
+
+    <Style Selector="Label.icon-btn">
+        <Setter Property="FontFamily" Value="{DynamicResource Phosphor}"></Setter>
+        <Setter Property="FontSize" Value="19"></Setter>
+        <Setter Property="Padding" Value="0 4.5 -0.4 3"></Setter>
+        <Setter Property="Margin" Value="0"></Setter>
+    </Style>
+    
+    <!-- Buttons base -->
+    <Style Selector="Button">
+        <Setter Property="FontSize" Value="13"></Setter>
+        <Setter Property="Padding" Value="9 5"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+    </Style>
+    
+    <Style Selector="Button:pressed">
+        <Setter Property="RenderTransform" Value="scale(0.98)"></Setter>
+    </Style>
+    
+    <!-- Accent button -->
+    <Style Selector="Button.accent">
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="Background" Value="#241f45"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#241f45"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4c4080"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#3d3060"></Setter>
+        <Setter Property="Foreground" Value="#c4b5fd"></Setter>
+    </Style>
+    
+    <!-- Admin accent button -->
+    <Style Selector="Button.accent-admin">
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4a2a10"></Setter>
+        <Setter Property="Foreground" Value="#ffffff"></Setter>
+    </Style>
+    
+    <Style Selector="Button.accent-admin:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#3d2510"></Setter>
+        <Setter Property="Foreground" Value="#fdba74"></Setter>
+    </Style>
+    
+    <!-- Danger button -->
+    <Style Selector="Button.danger">
+        <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#4d1a1a"></Setter>
+        <Setter Property="Foreground" Value="#fca5a5"></Setter>
+        <Setter Property="BorderBrush" Value="#5d2a2a"></Setter>
+    </Style>
+    
+    <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#5d1a1a"></Setter>
+        <Setter Property="Foreground" Value="#fecaca"></Setter>
+        <Setter Property="BorderBrush" Value="#6d2a2a"></Setter>
+    </Style>
+    
+    <!-- Transparent button -->
+    <Style Selector="Button.transparent">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.transparent:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#575757"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+    </Style>
+    
+    <!-- Avatar button (no hover bg) -->
+    <Style Selector="Button.avatar-btn">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
+    </Style>
+    
+    <Style Selector="Button.avatar-btn:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    
+    <!-- Danger button -->
+    <Style Selector="Button.danger">
+        <Setter Property="Foreground" Value="{DynamicResource DangerForeground}"></Setter>
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerBorder}"></Setter>
+    </Style>
+    
+    <!-- SB1 Icon Button (Button) -->
+    <Style Selector="Button.sb1-item">
+        <Setter Property="Width" Value="44"></Setter>
+        <Setter Property="Height" Value="44"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#444444"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+    
+    <Style Selector="Button.sb1-item:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="Button.sb1-item.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    
+    <!-- SB1 Icon Button (IconButton) -->
+    <Style Selector="IconButton.sb1-item">
+        <Setter Property="Width" Value="44"></Setter>
+        <Setter Property="Height" Value="44"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#444444"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    
+    <!-- Admin SB1 Icon Button -->
+    <Style Selector="Button.sb1-item.admin:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="Button.sb1-item.admin.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.admin:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackgroundSubtle}"></Setter>
+        <Setter Property="Foreground" Value="#888888"></Setter>
+    </Style>
+    
+    <Style Selector="IconButton.sb1-item.admin.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+    </Style>
+    
+    <!-- SB2 Item -->
+    <Style Selector="Button.sb2-item">
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
+        <Setter Property="Padding" Value="12 8"></Setter>
+        <Setter Property="Margin" Value="6 1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.sb2-item:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="#161616"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextTertiary}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.sb2-item.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
+    </Style>
+    
+    <!-- Admin SB2 Item -->
+    <Style Selector="Button.sb2-item.admin.active /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+    </Style>
+    
+    <!-- Tabs -->
+    <Style Selector="Button.tab">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="0 0 0 2"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="Padding" Value="16 12"></Setter>
+        <Setter Property="CornerRadius" Value="0"></Setter>
+    </Style>
+    
+    <Style Selector="Button.tab:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+    
+    <Style Selector="Button.tab.active /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    
+    <!-- Admin Tab -->
+    <Style Selector="Button.tab.admin.active /template/ ContentPresenter">
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+    </Style>
+    
+    <!-- Pills -->
+    <Style Selector="Button.pill">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="Padding" Value="8 3"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+        <Setter Property="FontSize" Value="10"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.pill.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource PillActiveForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+    </Style>
+    
+    <!-- Admin Pill -->
+    <Style Selector="Button.pill.admin.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+    
+    <!-- Rounded pills (region/comuna filters) -->
+    <Style Selector="Button.pill-rounded">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="Foreground" Value="#777777"></Setter>
+        <Setter Property="Padding" Value="12 6"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+        <Setter Property="FontSize" Value="12"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Foreground" Value="#777777"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.pill-rounded.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource PillActiveForeground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PillActiveBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillActiveBorder}"></Setter>
+    </Style>
+    
+    <Style Selector="Button.pill-rounded.admin.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="CornerRadius" Value="20"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.admin.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccentHover}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.admin.active:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AdminAccentBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AdminAccentBorder}"></Setter>
+    </Style>
+
+    <!-- Disabled pill-rounded -->
+    <Style Selector="Button.pill-rounded.disabled">
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="Opacity" Value="0.45"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+    </Style>
+
+    <Style Selector="Button.pill-rounded.disabled:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="Foreground" Value="#555555"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+    </Style>
+    
+    <!-- Cards -->
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+        <Setter Property="Padding" Value="16"></Setter>
+    </Style>
+
+    <!-- User row hover -->
+    <Style Selector="Border.user-row">
+        <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+    <Style Selector="Border.user-row:pointerover">
+        <Setter Property="Background" Value="#2d1a0a"></Setter>
+    </Style>
+    
+    <!-- Panel -->
+    <Style Selector="Border.panel">
+        <Setter Property="Background" Value="{DynamicResource PanelBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="10"></Setter>
+        <Setter Property="Padding" Value="14"></Setter>
+    </Style>
+    
+    <!-- Dividers -->
+    <Style Selector="Border.divider">
+        <Setter Property="Background" Value="{DynamicResource BorderSubtle}"></Setter>
+        <Setter Property="Height" Value="1"></Setter>
+    </Style>
+    
+    <!-- Badges -->
+    <Style Selector="Border.badge-danger">
+        <Setter Property="Background" Value="{DynamicResource BadgeDangerBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="4"></Setter>
+        <Setter Property="Padding" Value="7 2"></Setter>
+    </Style>
+    
+    <Style Selector="Border.badge-warning">
+        <Setter Property="Background" Value="{DynamicResource BadgeWarningBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="4"></Setter>
+        <Setter Property="Padding" Value="7 2"></Setter>
+    </Style>
+    
+    <Style Selector="Border.badge-info">
+        <Setter Property="Background" Value="{DynamicResource BadgeInfoBackground}"></Setter>
+        <Setter Property="CornerRadius" Value="4"></Setter>
+        <Setter Property="Padding" Value="7 2"></Setter>
+    </Style>
+    
+    <!-- Task check circle -->
+    <Style Selector="Border.task-check">
+        <Setter Property="Width" Value="17"></Setter>
+        <Setter Property="Height" Value="17"></Setter>
+        <Setter Property="CornerRadius" Value="8.5"></Setter>
+        <Setter Property="BorderBrush" Value="#252525"></Setter>
+        <Setter Property="BorderThickness" Value="1.5"></Setter>
+    </Style>
+    
+    <Style Selector="Border.task-check.checked">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"></Setter>
+    </Style>
+    
+    <!-- Area dot -->
+    <Style Selector="Ellipse.area-dot">
+        <Setter Property="Width" Value="7"></Setter>
+        <Setter Property="Height" Value="7"></Setter>
+    </Style>
+    
+    <!-- Task item (clickable card) -->
+    <Style Selector="Border.task-item">
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.task-item:pointer-over">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+    </Style>
+    <Style Selector="Border.task-item.selected">
+        <Setter Property="Background" Value="{DynamicResource AccentBackgroundLight}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+    </Style>
+    
+    <!-- Location pin dot -->
+    <Style Selector="Ellipse.pin-dot">
+        <Setter Property="Width" Value="11"></Setter>
+        <Setter Property="Height" Value="11"></Setter>
+        <Setter Property="Stroke" Value="{DynamicResource AppBackground}"></Setter>
+        <Setter Property="StrokeThickness" Value="2"></Setter>
+    </Style>
+    
+    <Style Selector="Ellipse.pin-dot.active">
+        <Setter Property="Width" Value="15"></Setter>
+        <Setter Property="Height" Value="15"></Setter>
+    </Style>
+    
+    <!-- Map frame -->
+    <Style Selector="Border.map-frame">
+        <Setter Property="CornerRadius" Value="10"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="ClipToBounds" Value="True"></Setter>
+    </Style>
+    
+    <!-- Location item -->
+    <Style Selector="Border.loc-item">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+        <Setter Property="Padding" Value="10 12"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.loc-item:pointer-over">
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}"></Setter>
+    </Style>
+    <Style Selector="Border.loc-item.active">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+    
+    <!-- Location action icon buttons -->
+    <Style Selector="Button.loc-action">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Padding" Value="6"></Setter>
+        <Setter Property="Width" Value="32"></Setter>
+        <Setter Property="Height" Value="32"></Setter>
+        <Setter Property="CornerRadius" Value="5"></Setter>
+    </Style>
+    <Style Selector="Button.loc-action:pointer-over /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+    
+    <!-- Add location button -->
+    <Style Selector="Border.add-loc-btn">
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDashed}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="8"></Setter>
+        <Setter Property="Padding" Value="8 12"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    <Style Selector="Border.add-loc-btn:pointer-over">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+    
+    <!-- Map zoom button -->
+    <Style Selector="Button.map-zoom">
+        <Setter Property="Width" Value="32"></Setter>
+        <Setter Property="Height" Value="32"></Setter>
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="6"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
+    
+    <!-- Color option circle -->
+    <Style Selector="Border.color-opt">
+        <Setter Property="Width" Value="26"></Setter>
+        <Setter Property="Height" Value="26"></Setter>
+        <Setter Property="CornerRadius" Value="13"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    
+    <!-- Transport pill -->
+    <Style Selector="Border.transport-pill">
+        <Setter Property="CornerRadius" Value="5"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="Background" Value="{DynamicResource PillBackground}"></Setter>
+        <Setter Property="Padding" Value="8 4"></Setter>
+        <Setter Property="Cursor" Value="Hand"></Setter>
+    </Style>
+    
+    <!-- Calendar task block -->
+    <Style Selector="Border.cal-block">
+        <Setter Property="CornerRadius" Value="4"></Setter>
+        <Setter Property="Padding" Value="4 3"></Setter>
+        <Setter Property="Margin" Value="1 0"></Setter>
+    </Style>
+    
+    <!-- Calendar hour line -->
+    <Style Selector="Border.cal-hour-line">
+        <Setter Property="Background" Value="{DynamicResource CalendarHourLine}"></Setter>
+        <Setter Property="Height" Value="1"></Setter>
+    </Style>
+    
+    <!-- Calendar time label -->
+    <Style Selector="TextBlock.cal-time">
+        <Setter Property="FontSize" Value="10"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"></Setter>
+    </Style>
+    
+    <!-- Calendar day header -->
+    <Style Selector="Border.cal-day-header">
+        <Setter Property="Background" Value="{DynamicResource CalendarDayHeader}"></Setter>
+        <Setter Property="Padding" Value="5 4"></Setter>
+    </Style>
+    
+    <!-- Modal overlay -->
+    <Style Selector="Border.modal-overlay">
+        <Setter Property="Background" Value="{DynamicResource ModalOverlay}"></Setter>
+    </Style>
+    
+    <!-- Modal panel -->
+    <Style Selector="Border.modal-panel">
+        <Setter Property="Background" Value="{DynamicResource ModalBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource ModalBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="12"></Setter>
+        <Setter Property="Padding" Value="22"></Setter>
+    </Style>
+    
+    <!-- Inputs -->
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource InputBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+        <Setter Property="Padding" Value="8 10"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="FontSize" Value="13"></Setter>
+    </Style>
+    
+    <Style Selector="TextBox:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocus}"></Setter>
+    </Style>
+    
+    <!-- Add-task inline input -->
+    <Style Selector="TextBox.add-task">
+        <Setter Property="Background" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderSubtle}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="8"></Setter>
+        <Setter Property="Padding" Value="14 12"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="FontSize" Value="13"></Setter>
+        <Setter Property="Watermark" Value="Añadir tarea..."></Setter>
+    </Style>
+    
+    <Style Selector="TextBox.add-task:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentBorder}"></Setter>
+    </Style>
+    
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource InputBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"></Setter>
+        <Setter Property="BorderThickness" Value="1"></Setter>
+        <Setter Property="CornerRadius" Value="7"></Setter>
+        <Setter Property="Padding" Value="8 10"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"></Setter>
+        <Setter Property="FontSize" Value="13"></Setter>
+    </Style>
+    
+</Styles>

@@ -1,0 +1,250 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.AreaInteresView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             xmlns:models="clr-namespace:PlanificApp.Models"
+             x:DataType="vm:AreaInteresViewModel">
+
+    <Border x:Name="RootBorder" Padding="28 26" Background="{DynamicResource AppBackground}" PointerPressed="RootPointerPressed">
+        <Grid ColumnDefinitions="2*,1*" ColumnSpacing="20">
+
+            <!-- Left: Task list -->
+            <ScrollViewer Grid.Column="0">
+                <StackPanel Spacing="16">
+
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="3">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Ellipse Width="10" Height="10" Fill="{Binding AreaSeleccionada.ColorHex, Converter={StaticResource HexToBrushConverter}}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding TituloVista}" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding SubtituloVista}" FontSize="12" Foreground="{DynamicResource TextMuted}"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Classes="accent" VerticalAlignment="Center" Click="NewTaskButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Label Classes="icon-btn" Content="&#xE4A0;" FontSize="14"/>
+                                <TextBlock Text="Nueva tarea" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
+                    <!-- Stats -->
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Border Classes="card" Padding="16 12">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding TareasPendientes}" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="Activas" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Classes="card" Padding="16 12">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding TareasCompletadasCount}" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource AreaEstudioText}"/>
+                                <TextBlock Text="Completadas" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Classes="card" Padding="16 12">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding TareasVencidasCount}" FontSize="22" FontWeight="Medium" Foreground="{DynamicResource DangerForeground}"/>
+                                <TextBlock Text="Vencidas" FontSize="10" Foreground="{DynamicResource TextDisabled}"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Add task input -->
+                    <TextBox x:Name="AddTaskInput" Classes="add-task" Text="{Binding QuickAddNombre}"/>
+
+                    <ItemsControl ItemsSource="{Binding TareasPendientesFiltradas}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:Tarea">
+                                <Border Classes="card task-item" Margin="0 0 0 6" Tapped="TaskItem_Tapped" Tag="{Binding}" Background="{Binding Converter={StaticResource TareaAtrasadaBackgroundConverter}}" BorderBrush="{Binding Converter={StaticResource TareaAtrasadaBorderConverter}}" BorderThickness="1">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                        <Button Grid.Column="0" Classes="transparent" Padding="0" VerticalAlignment="Center" Margin="0 0 10 0" Click="TaskCheck_Click" Tag="{Binding}">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="16" Content="&#xE45E;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                        </Button>
+                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="{Binding Converter={StaticResource TareaAtrasadaForegroundConverter}}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding HoraInicio}" FontSize="11" Foreground="{Binding Converter={StaticResource TareaAtrasadaForegroundConverter}}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                        <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="TaskDelete_Click" Tag="{Binding}">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Completadas section -->
+                    <Border Classes="card" Padding="10 8" Tapped="ToggleCompletadas_Tapped" Cursor="Hand" IsVisible="{Binding HayCompletadas}">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="{Binding CompletadasVisibles, Converter={StaticResource BoolToChevronConverter}}" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="COMPLETADAS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                            <TextBlock Grid.Column="2" Text="{Binding TareasCompletadasCount, StringFormat='{}{0}'}" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <ItemsControl ItemsSource="{Binding TareasCompletadasFiltradas}" IsVisible="{Binding CompletadasVisibles}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:Tarea">
+                                <Border Classes="card task-item" Margin="0 0 0 6" Tapped="TaskItem_Tapped" Tag="{Binding}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                        <Button Grid.Column="0" Classes="transparent" Padding="0" VerticalAlignment="Center" Margin="0 0 10 0" Click="TaskCheck_Click" Tag="{Binding}">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="16" Content="&#xE186;" Foreground="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                                        </Button>
+                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="#6b6b6b" VerticalAlignment="Center" TextDecorations="Strikethrough"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding HoraInicio}" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                        <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="TaskDelete_Click" Tag="{Binding}">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Right: Detail panel -->
+            <Border x:Name="DetailPanelBorder" Grid.Column="1" Classes="card" Padding="16" VerticalAlignment="Stretch">
+                <ScrollViewer>
+                    <StackPanel Spacing="12">
+
+                        <!-- Placeholder when no task selected -->
+                        <StackPanel x:Name="DetailPlaceholder" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 40 0 0">
+                            <Label Content="&#xE4C4;" FontFamily="{DynamicResource Phosphor}" FontSize="32" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Selecciona una tarea" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Detail content when task selected -->
+                        <StackPanel x:Name="DetailContent" IsVisible="False" Spacing="12">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="Detalle" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                <Button Grid.Column="1" Classes="danger" Padding="6 4" Click="DeleteTask_Click" Cursor="Hand">
+                                    <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource DangerForeground}" VerticalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
+                                <TextBlock x:Name="DetailEstado" Text="Activa" FontSize="12" Foreground="{DynamicResource TextDisabled}"/>
+                            </Border>
+
+                            <!-- Nombre -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <TextBox x:Name="DetailNombre" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                            </StackPanel>
+
+                            <!-- Fecha inicio -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="FECHA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                                    <CalendarDatePicker x:Name="DetailFecInicio" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha" HorizontalAlignment="Stretch"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="ClearFecInicio_Click" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Fecha limite -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="FECHA LIMITE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                                    <CalendarDatePicker x:Name="DetailFecLimite" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha" HorizontalAlignment="Stretch"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="ClearFecLimite_Click" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Hora inicio / Hora fin -->
+                            <Grid ColumnDefinitions="*,12,*">
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <TextBlock Text="HORA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TimePicker x:Name="DetailHoraInicio" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
+                                        <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraInicio_Click" Cursor="Hand">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="4">
+                                    <TextBlock Text="HORA FIN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TimePicker x:Name="DetailHoraFin" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
+                                        <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraFin_Click" Cursor="Hand">
+                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Ubicacion -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="UBICACION" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailUbicacion" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="— Sin ubicación —"/>
+                                    <ComboBoxItem Content="Casa"/>
+                                    <ComboBoxItem Content="Trabajo"/>
+                                    <ComboBoxItem Content="Universidad"/>
+                                    <ComboBoxItem Content="Gimnasio"/>
+                                    <ComboBoxItem Content="Supermercado"/>
+                                    <ComboBoxItem Content="Otro"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Prioridad -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="PRIORIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailPrioridad" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="1 - Baja"/>
+                                    <ComboBoxItem Content="2 - Media"/>
+                                    <ComboBoxItem Content="3 - Alta"/>
+                                    <ComboBoxItem Content="4 - Urgente"/>
+                                    <ComboBoxItem Content="5 - Fija"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Area interes -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailAreaInteres" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+
+                            <!-- Tiempo estimado -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="TIEMPO ESTIMADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailTiempoEstimado" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="— Sin definir —"/>
+                                    <ComboBoxItem Content="5 minutos"/>
+                                    <ComboBoxItem Content="10 minutos"/>
+                                    <ComboBoxItem Content="15 minutos"/>
+                                    <ComboBoxItem Content="30 minutos"/>
+                                    <ComboBoxItem Content="45 minutos"/>
+                                    <ComboBoxItem Content="1 hora"/>
+                                    <ComboBoxItem Content="1.5 horas"/>
+                                    <ComboBoxItem Content="2 horas"/>
+                                    <ComboBoxItem Content="3 horas"/>
+                                    <ComboBoxItem Content="4 horas"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Save button -->
+                            <Button Classes="accent" HorizontalAlignment="Stretch" Click="SaveDetail_Click">
+                                <TextBlock Text="Guardar cambios" HorizontalAlignment="Center" FontSize="13"/>
+                            </Button>
+
+                            <!-- Save message below button -->
+                            <TextBlock x:Name="DetailMensaje" FontSize="12" Foreground="{DynamicResource AreaEstudioText}" HorizontalAlignment="Center" IsVisible="False"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+        </Grid>
+    </Border>
+</UserControl>

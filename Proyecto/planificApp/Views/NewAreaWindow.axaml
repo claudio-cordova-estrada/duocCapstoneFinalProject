@@ -1,0 +1,95 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="520"
+        x:Class="planificApp.Views.NewAreaWindow"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
+        x:DataType="vm:NewAreaViewModel"
+        Title="Nueva área de interés"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
+        Width="480"
+        CanResize="False"
+        Background="{DynamicResource ModalBackground}">
+
+    <Border Classes="modal-panel" Margin="0" Padding="24">
+        <StackPanel Spacing="14">
+
+            <TextBlock Text="Nueva área de interés" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+
+            <!-- Nombre -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <TextBox Text="{Binding Nombre}" FontSize="14" PlaceholderText="Nombre del área" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+            </StackPanel>
+
+            <!-- Color y prioridad -->
+            <Grid ColumnDefinitions="*, *">
+                <!-- Color -->
+                <StackPanel Spacing="4">
+                    <TextBlock Text="COLOR" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Border x:Name="ColorPreview" Width="28" Height="28" CornerRadius="14" Background="{Binding ColorHex}" VerticalAlignment="Center" Cursor="Hand"/>
+                        <TextBox Text="{Binding ColorHex}" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Width="140" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- Prioridad -->
+                <StackPanel Grid.Column="1" Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="PRIORIDAD DEL ÁREA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <ComboBox x:Name="CmbPrioridadArea" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="1 - Baja"/>
+                        <ComboBoxItem Content="2 - Media"/>
+                        <ComboBoxItem Content="3 - Alta"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <!-- Ubicacion predeterminada -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="UBICACIÓN PREDETERMINADA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbUbicacionPred" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="— Sin ubicación —"/>
+                    <ComboBoxItem Content="Casa"/>
+                    <ComboBoxItem Content="Trabajo"/>
+                    <ComboBoxItem Content="Universidad"/>
+                    <ComboBoxItem Content="Gimnasio"/>
+                    <ComboBoxItem Content="Supermercado"/>
+                    <ComboBoxItem Content="Otro"/>
+                </ComboBox>
+            </StackPanel>
+
+            <Grid ColumnDefinitions="*, *">
+                <!-- Horas semanales -->
+                <StackPanel Spacing="4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="HORAS SEMANALES" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <TextBox x:Name="TxtHorasSemanales" Text="{Binding HorasSemanales}" FontSize="14" PlaceholderText="0" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                </StackPanel>
+                
+                <!-- Metodo transporte predeterminado -->
+                <StackPanel Grid.Column="1" Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="TRANSPORTE PREDETERMINADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <ComboBox x:Name="CmbTransporte" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="— Sin transporte —"/>
+                        <ComboBoxItem Content="A pie"/>
+                        <ComboBoxItem Content="Bicicleta"/>
+                        <ComboBoxItem Content="Automóvil"/>
+                        <ComboBoxItem Content="Transporte público"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <!-- Error message -->
+            <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+
+            <!-- Buttons -->
+            <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 6 0 0">
+                <Border Width="0" Grid.Column="0"/>
+                <Button Grid.Column="1" Classes="transparent" Margin="0 0 8 0" Click="CancelButton_Click" Content="Cancelar"/>
+                <Button Grid.Column="2" Classes="accent" Click="SaveButton_Click" Content="Guardar"/>
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</Window>

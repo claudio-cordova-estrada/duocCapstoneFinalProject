@@ -1,0 +1,154 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="planificApp.Views.UsuarioDetalleView"
+             xmlns:vm="clr-namespace:planificApp.ViewModels"
+             x:DataType="vm:UsuarioDetalleViewModel">
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="18" Margin="28 26">
+
+                <!-- Back button -->
+                <Button Classes="transparent" Click="Back_Click" HorizontalAlignment="Left" Padding="5 9">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="14" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Volver a usuarios" FontSize="14" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Name + ID + badge -->
+                <StackPanel Spacing="4">
+                    <TextBlock x:Name="UserName" Text="Carlos López" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock x:Name="UserId" Text="USR001" FontSize="12" Foreground="{DynamicResource TextDisabled}" FontFamily="Consolas"/>
+                        <Border x:Name="StatusBadge" CornerRadius="4" Padding="8 3">
+                            <TextBlock x:Name="StatusText" FontSize="11"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Detail grid 2x4 -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    
+                    <!-- Nombre -->
+                    <Border Grid.Column="0" Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="NOMBRE" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBox x:Name="FieldName" Grid.Column="0" IsReadOnly="True" Text="Carlos López" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BtnName" Grid.Column="1" Classes="transparent" Click="BtnName_Click" VerticalAlignment="Center">
+                                    <Label x:Name="IconName" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Correo -->
+                    <Border Grid.Column="1" Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="CORREO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBox x:Name="FieldCorreo" Grid.Column="0" IsReadOnly="True" Text="carlos.lopez@ejemplo.com" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BtnCorreo" Grid.Column="1" Classes="transparent" Click="BtnCorreo_Click" VerticalAlignment="Center">
+                                    <Label x:Name="IconCorreo" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Fecha de nacimiento -->
+                    <Border Grid.Column="0" Grid.Row="1" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="FECHA DE NACIMIENTO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBox x:Name="FieldFechaNac" Grid.Column="0" IsReadOnly="True" Text="15 mar 1998" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                <Button x:Name="BtnFechaNac" Grid.Column="1" Classes="transparent" Click="BtnFechaNac_Click" VerticalAlignment="Center">
+                                    <Label x:Name="IconFechaNac" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Edad (read-only) -->
+                    <Border Grid.Column="1" Grid.Row="1" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="EDAD" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <TextBlock x:Name="FieldEdad" Text="28" FontSize="14" Foreground="{DynamicResource TextSecondary}"  Padding="0 9 0 0 "/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Región -->
+                    <Border Grid.Column="0" Grid.Row="2" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="REGIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <ComboBox x:Name="FieldRegion" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Comuna -->
+                    <Border Grid.Column="1" Grid.Row="2" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <ComboBox x:Name="FieldComuna" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4" IsEnabled="False" SelectedIndex="0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Meses activo (read-only) -->
+                    <Border Grid.Column="0" Grid.Row="3" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="MESES ACTIVO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <TextBlock x:Name="FieldMeses" Text="14 meses" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Fecha registro (read-only) -->
+                    <Border Grid.Column="1" Grid.Row="3" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="FECHA DE REGISTRO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                            <TextBlock x:Name="FieldRegistro" Text="12 mar 2025" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Metrics section -->
+                <TextBlock Text="MÉTRICAS" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+
+                <!-- Year/Month navigation -->
+                <Border Classes="card" Padding="16" CornerRadius="10">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
+                        <Button x:Name="DetailYearLeft" Grid.Column="0" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="DetailYearLeft_Click">
+                            <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="#999999"/>
+                        </Button>
+                        <TextBlock x:Name="DetailYearLabel" Grid.Column="1" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="10 0" MinWidth="72" TextAlignment="Center"/>
+                        <Button x:Name="DetailYearRight" Grid.Column="2" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="DetailYearRight_Click">
+                            <Label Content="&#xE52C;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="#999999"/>
+                        </Button>
+                        <Border Grid.Column="3" Width="1" Background="{DynamicResource BorderSubtle}" Margin="14 0"/>
+                        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" x:Name="DetailMonthPills"/>
+                    </Grid>
+                </Border>
+
+                <!-- Metrics grid -->
+                <Grid x:Name="DetailMetricsGrid" ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10"/>
+
+                <!-- Action buttons -->
+                <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 4 0 0">
+                    <Border Grid.Column="0"/>
+                    <Button Grid.Column="1" Classes="danger" Padding="14 7" CornerRadius="7" FontSize="13" Click="Desactivar_Click">
+                        <TextBlock Text="Desactivar usuario" HorizontalAlignment="Center"/>
+                    </Button>
+                    <Button Grid.Column="2" Classes="accent-admin" Padding="14 7" Margin="8 0 0 0" FontSize="13" Click="Guardar_Click">
+                        <TextBlock Text="Guardar cambios" HorizontalAlignment="Center"/>
+                    </Button>
+                </Grid>
+
+                <!-- Success message -->
+                <TextBlock x:Name="SuccessMessage" Text="Cambios realizados con éxito" FontSize="14" FontWeight="Medium" Foreground="#4ade80" IsVisible="False" HorizontalAlignment="Right" Opacity="1"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>
