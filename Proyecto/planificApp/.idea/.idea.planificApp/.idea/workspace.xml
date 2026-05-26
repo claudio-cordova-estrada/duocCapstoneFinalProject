@@ -15,18 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,7 +264,7 @@
       <workItem from="1779546969265" duration="8203000" />
       <workItem from="1779633257800" duration="15790000" />
       <workItem from="1779722060491" duration="6272000" />
-      <workItem from="1779808950369" duration="2952000" />
+      <workItem from="1779808950369" duration="4014000" />
     </task>
     <servers />
   </component>
