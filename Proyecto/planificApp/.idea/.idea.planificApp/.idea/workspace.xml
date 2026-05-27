@@ -15,34 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/App.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/Core/ObservableObject.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/Core/RelayComand.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/MainWindow.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/PlanificApp.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/Theme/MenuButtonTheme.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/App.g.i.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/MainWindow.g.i.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp.AssemblyInfoInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp.GlobalUsings.g.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp.assets.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp.designer.runtimeconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Debug/net9.0-windows/PlanificApp_MarkupCompile.i.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/PlanificApp.csproj.nuget.dgspec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/PlanificApp.csproj.nuget.g.props" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/.NETCoreApp,Version=v9.0.AssemblyAttributes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/App.g.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/MainWindow.g.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp.AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp.AssemblyInfoInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp.GlobalUsings.g.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp_MarkupCompile.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/PlanificApp_MarkupCompile.lref" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/Release/net9.0-windows/Theme/MenuButtonTheme.baml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/project.assets.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlanificApp/obj/project.nuget.cache" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
@@ -64,7 +36,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="6" />
+    <option name="cachedIndexableFilesCount" value="4" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="ExportToHTMLSettings">
@@ -304,6 +276,9 @@
       <workItem from="1779633257800" duration="15790000" />
       <workItem from="1779722060491" duration="6272000" />
       <workItem from="1779808950369" duration="2952000" />
+      <workItem from="1779819655515" duration="360000" />
+      <workItem from="1779830106648" duration="2700000" />
+      <workItem from="1779891576654" duration="7155000" />
     </task>
     <servers />
   </component>
