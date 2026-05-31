@@ -29,7 +29,46 @@ public partial class NewTaskWindow : Window
     {
         if (DataContext is not NewTaskViewModel vm) return;
 
+        // Transferir valores de controles al ViewModel
+        vm.FecInicio = PickerFecInicio.SelectedDate;
+        vm.FecLimite = PickerFecLimite.SelectedDate;
+        vm.HoraInicio = PickerHoraInicio.SelectedTime;
+        vm.HoraFin = PickerHoraFin.SelectedTime;
         vm.IdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(CmbAreaInteres);
+    
+        // Ubicacion - mapear el índice del ComboBox
+        vm.Ubicacion = CmbUbicacion.SelectedIndex switch
+        {
+            1 => "Casa",
+            2 => "Trabajo",
+            3 => "Universidad",
+            4 => "Gimnasio",
+            5 => "Supermercado",
+            6 => "Otro",
+            _ => null
+        };
+    
+        // Prioridad - mapear índice (0-based) a valor
+        vm.Prioridad = CmbPrioridad.SelectedIndex + 1;
+    
+        // Tiempo estimado - mapear índice a minutos
+        vm.TiempoEstimado = CmbTiempoEstimado.SelectedIndex switch
+        {
+            1 => 5,
+            2 => 10,
+            3 => 15,
+            4 => 30,
+            5 => 45,
+            6 => 60,
+            7 => 90,
+            8 => 120,
+            9 => 180,
+            10 => 240,
+            _ => 0
+        };
+
+        // Recordatorio
+        vm.Recordatorio = PickerRecordatorio.SelectedDate;
 
         await vm.GuardarCommand.ExecuteAsync(null);
 

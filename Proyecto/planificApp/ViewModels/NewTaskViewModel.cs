@@ -15,7 +15,7 @@ public partial class NewTaskViewModel : ViewModelBase
     private readonly Task _initTask;
 
     [ObservableProperty] private string _nombre = string.Empty;
-    [ObservableProperty] private DateTime? _fecInicio = DateTime.Now;
+    [ObservableProperty] private DateTime? _fecInicio = null;
     [ObservableProperty] private DateTime? _fecLimite;
     [ObservableProperty] private TimeSpan? _horaInicio;
     [ObservableProperty] private TimeSpan? _horaFin;
