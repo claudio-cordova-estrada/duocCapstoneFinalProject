@@ -32,6 +32,34 @@ public static class DetalleTareaHelper
         6 => 60, 7 => 90, 8 => 120, 9 => 180, 10 => 240,
         _ => 0
     };
+    
+    public static string? TipoActividadFisicaFromIndex(int index) => index switch
+    {
+        1 => "Activa", 
+        2 => "Pasiva",
+        _ => null
+    };
+    
+    public static string? TipoActividadMentalFromIndex(int index) => index switch
+    {
+        1 => "Obligacion", 
+        2 => "Recreacion",
+        _ => null
+    };
+    
+    public static int TipoActividadFisicaToIndex(string? tipo) => tipo switch
+    {
+        "Activa" => 1, 
+        "Pasiva" => 2,
+        _ => 0
+    };
+    
+    public static int TipoActividadMentalToIndex(string? tipo) => tipo switch
+    {
+        "Obligacion" => 1, 
+        "Recreacion" => 2,
+        _ => 0
+    };
 
     public static string CalcularEstado(Tarea tarea) =>
         tarea.FecCompletado != null ? "Completada" :

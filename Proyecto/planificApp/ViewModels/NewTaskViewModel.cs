@@ -26,6 +26,8 @@ public partial class NewTaskViewModel : ViewModelBase
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
     [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
+    [ObservableProperty] private string? _tipoActividadFisica;
+    [ObservableProperty] private string? _tipoActividadMental;
 
     public string? IdAreaInteres { get; set; }
 
@@ -74,6 +76,8 @@ public partial class NewTaskViewModel : ViewModelBase
                 IdAreaInteres = IdAreaInteres,
                 IdUsuario = _sesion.UsuarioActual?.IdUsuario,
                 FecCreacion = DateTime.Now,
+                TipoActividadFisica = TipoActividadFisica,
+                TipoActividadMental = TipoActividadMental,
             };
 
             await _mongo.CrearTarea(tarea);

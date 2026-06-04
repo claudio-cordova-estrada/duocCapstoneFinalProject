@@ -35,6 +35,8 @@ public partial class NewTaskWindow : Window
         vm.HoraInicio = PickerHoraInicio.SelectedTime;
         vm.HoraFin = PickerHoraFin.SelectedTime;
         vm.IdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(CmbAreaInteres);
+        vm.TipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(CmbTipoActividadFisica.SelectedIndex);
+        vm.TipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(CmbTipoActividadMental.SelectedIndex);
     
         // Ubicacion - mapear el índice del ComboBox
         vm.Ubicacion = CmbUbicacion.SelectedIndex switch

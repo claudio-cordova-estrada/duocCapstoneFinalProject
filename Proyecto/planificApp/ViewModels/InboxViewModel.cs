@@ -47,6 +47,8 @@ public partial class InboxViewModel : PageViewModel
     public int DetallePrioridad { get; set; } = 1;
     public int DetalleTiempoEstimado { get; set; }
     public string? DetalleIdAreaInteres { get; set; }
+    public string? DetalleTipoActividadFisica { get; set; }
+    public string? DetalleTipoActividadMental { get; set; }
 
     [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
 
@@ -176,6 +178,8 @@ public partial class InboxViewModel : PageViewModel
         DetallePrioridad = tarea.Prioridad;
         DetalleTiempoEstimado = tarea.TiempoEstimado;
         DetalleIdAreaInteres = tarea.IdAreaInteres;
+        DetalleTipoActividadFisica = tarea.TipoActividadFisica;
+        DetalleTipoActividadMental = tarea.TipoActividadMental;
 
         if (tarea.FecCompletado != null)
             DetalleEstado = "Completada";
@@ -212,6 +216,8 @@ public partial class InboxViewModel : PageViewModel
             TareaSeleccionada.Ubicacion = string.IsNullOrWhiteSpace(DetalleUbicacion) ? null : DetalleUbicacion;
             TareaSeleccionada.TiempoEstimado = DetalleTiempoEstimado;
             TareaSeleccionada.IdAreaInteres = DetalleIdAreaInteres;
+            TareaSeleccionada.TipoActividadFisica = DetalleTipoActividadFisica;
+            TareaSeleccionada.TipoActividadMental = DetalleTipoActividadMental;
 
             await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
             DetalleMensaje = "Guardado";

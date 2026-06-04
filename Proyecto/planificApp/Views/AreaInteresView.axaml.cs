@@ -159,6 +159,8 @@ public partial class AreaInteresView : UserControl
         DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
         DetailMensaje.IsVisible = false;
+        DetailTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(vm.DetalleTipoActividadFisica);
+        DetailTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(vm.DetalleTipoActividadMental);
     }
 
     private void HideDetail()
@@ -180,6 +182,8 @@ public partial class AreaInteresView : UserControl
         vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
         vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : DetalleTareaHelper.UbicacionFromIndex(DetailUbicacion.SelectedIndex);
         vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
+        vm.DetalleTipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(DetailTipoActividadFisica.SelectedIndex);
+        vm.DetalleTipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(DetailTipoActividadMental.SelectedIndex);
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
 

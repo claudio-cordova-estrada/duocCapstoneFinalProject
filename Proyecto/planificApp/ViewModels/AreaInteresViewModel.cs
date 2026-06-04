@@ -38,7 +38,6 @@ public partial class AreaInteresViewModel : PageViewModel
     [ObservableProperty] private string _detalleNombre = string.Empty;
     [ObservableProperty] private string _detalleEstado = string.Empty;
     [ObservableProperty] private string _detalleMensaje = string.Empty;
-
     
     private bool esModoEdicion;
     private string? IdAreaEditando;
@@ -51,6 +50,8 @@ public partial class AreaInteresViewModel : PageViewModel
     public int DetallePrioridad { get; set; } = 1;
     public int DetalleTiempoEstimado { get; set; }
     public string? DetalleIdAreaInteres { get; set; }
+    public string? DetalleTipoActividadFisica { get; set; }
+    public string? DetalleTipoActividadMental { get; set; }
 
     [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
 
@@ -108,6 +109,8 @@ public partial class AreaInteresViewModel : PageViewModel
         DetallePrioridad = tarea.Prioridad;
         DetalleTiempoEstimado = tarea.TiempoEstimado;
         DetalleIdAreaInteres = tarea.IdAreaInteres;
+        DetalleTipoActividadFisica = tarea.TipoActividadFisica;
+        DetalleTipoActividadMental = tarea.TipoActividadMental;
 
         DetalleEstado = Helpers.DetalleTareaHelper.CalcularEstado(tarea);
         DetalleMensaje = string.Empty;
@@ -170,6 +173,8 @@ public partial class AreaInteresViewModel : PageViewModel
             TareaSeleccionada.Ubicacion = string.IsNullOrWhiteSpace(DetalleUbicacion) ? null : DetalleUbicacion;
             TareaSeleccionada.TiempoEstimado = DetalleTiempoEstimado;
             TareaSeleccionada.IdAreaInteres = DetalleIdAreaInteres;
+            TareaSeleccionada.TipoActividadFisica = DetalleTipoActividadFisica;
+            TareaSeleccionada.TipoActividadMental = DetalleTipoActividadMental;
 
             await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
             DetalleMensaje = "Guardado";
