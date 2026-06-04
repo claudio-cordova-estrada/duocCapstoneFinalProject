@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using PlanificApp.Models;
 using PlanificApp.Models.Services;
 using planificApp.ViewModels;
 using planificApp.Views;
@@ -35,6 +36,31 @@ public static class DialogHelper
         var dialog = new NewAreaWindow { DataContext = viewModel };
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
+    }
+
+    public static async Task<bool> ShowEditAreaDialog(Control parent, AreaInteres area)
+    {
+        var window = TopLevel.GetTopLevel(parent) as Window;
+        if (window == null) return false;
+
+        var mongo = App.Services.GetRequiredService<MongoService>();
+        var sesion = App.Services.GetRequiredService<SesionService>();
+
+        var viewModel = new NewAreaViewModel(mongo, sesion);
+        var dialog = new NewAreaWindow { DataContext = viewModel };
+        dialog.SetEditMode(area);
+        await dialog.ShowDialog<bool>(window);
+        return dialog.Result;
+    }
+
+    public static async Task<bool> ShowConfirmDeleteAreaDialog(Control parent, AreaInteres area)
+    {
+        var window = TopLevel.GetTopLevel(parent) as Window;
+        if (window == null) return false;
+
+        var dialog = new ConfirmDeleteAreaWindow();
+        dialog.SetAreaName(area.Nombre ?? "esta área");
+        return await dialog.ShowDialog<bool>(window);
     }
 
     public static async void ShowGenerarSemanaDialog(Control parent)

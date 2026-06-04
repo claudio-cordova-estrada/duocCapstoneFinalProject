@@ -21,13 +21,29 @@ public partial class NewAreaViewModel : ViewModelBase
     [ObservableProperty] private int _horasSemanales;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
+    [ObservableProperty] private string _titulo = "Nueva área de interés";
 
+    public bool EsModoEdicion { get; private set; }
+    public string? IdAreaEditando { get; private set; }
     public bool GuardadoExitoso { get; private set; }
 
     public NewAreaViewModel(MongoService mongo, SesionService sesion)
     {
         _mongo = mongo;
         _sesion = sesion;
+    }
+
+    public void CargarParaEdicion(AreaInteres area)
+    {
+        EsModoEdicion = true;
+        IdAreaEditando = area.IdAreaInteres;
+        Titulo = "Editar área de interés";
+        Nombre = area.Nombre;
+        ColorHex = area.ColorHex;
+        UbicacionPred = area.UbicacionPred;
+        MetodoTransportePred = area.MetodoTransportePred;
+        Prioridad = (int)area.Prioridad;
+        HorasSemanales = area.HorasSemanales;
     }
 
     [RelayCommand]
@@ -63,12 +79,23 @@ public partial class NewAreaViewModel : ViewModelBase
                 IdUsuario = _sesion.UsuarioActual.IdUsuario
             };
 
-            await _mongo.CrearAreaInteres(area);
+            if (EsModoEdicion && IdAreaEditando != null)
+            {
+                area.IdAreaInteres = IdAreaEditando;
+                await _mongo.ActualizarAreaInteres(IdAreaEditando, area);
+            }
+            else
+            {
+                await _mongo.CrearAreaInteres(area);
+            }
+
             GuardadoExitoso = true;
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Error al crear el área: {ex.Message}";
+            ErrorMessage = EsModoEdicion
+                ? $"Error al actualizar el área: {ex.Message}"
+                : $"Error al crear el área: {ex.Message}";
             HasError = true;
         }
     }

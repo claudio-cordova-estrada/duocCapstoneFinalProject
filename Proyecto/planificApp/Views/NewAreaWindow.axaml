@@ -6,7 +6,7 @@
         x:Class="planificApp.Views.NewAreaWindow"
         xmlns:vm="clr-namespace:planificApp.ViewModels"
         x:DataType="vm:NewAreaViewModel"
-        Title="Nueva área de interés"
+        Title="{Binding Titulo}"
         WindowStartupLocation="CenterOwner"
         SizeToContent="Height"
         Width="480"

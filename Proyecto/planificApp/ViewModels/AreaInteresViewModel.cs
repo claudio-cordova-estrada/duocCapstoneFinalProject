@@ -39,6 +39,10 @@ public partial class AreaInteresViewModel : PageViewModel
     [ObservableProperty] private string _detalleEstado = string.Empty;
     [ObservableProperty] private string _detalleMensaje = string.Empty;
 
+    
+    private bool esModoEdicion;
+    private string? IdAreaEditando;
+
     public DateTime? DetalleFecInicio { get; set; }
     public DateTime? DetalleFecLimite { get; set; }
     public TimeSpan? DetalleHoraInicio { get; set; }

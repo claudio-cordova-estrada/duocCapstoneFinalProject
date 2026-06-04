@@ -61,6 +61,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfigView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteAreaWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteLocationWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

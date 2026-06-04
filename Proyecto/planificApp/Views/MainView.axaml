@@ -112,11 +112,17 @@
                             <ItemsControl ItemsSource="{Binding AreasInteres}" x:CompileBindings="False">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Button Classes="sb2-item" Command="{Binding DataContext.GoToAreaEspecificaCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
+<Button Classes="sb2-item" Command="{Binding DataContext.GoToAreaEspecificaCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}">
                                             <StackPanel Orientation="Horizontal" Spacing="9">
                                                 <Ellipse Width="7" Height="7" Fill="{Binding ColorHex, Converter={StaticResource HexToBrushConverter}}" VerticalAlignment="Center"/>
                                                 <TextBlock Text="{Binding Nombre}" FontSize="13" VerticalAlignment="Center"/>
                                             </StackPanel>
+                                            <Button.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Editar área" Click="EditarAreaMenuItem_Click"/>
+                                                    <MenuItem Header="Eliminar área" Click="EliminarAreaMenuItem_Click"/>
+                                                </ContextMenu>
+                                            </Button.ContextMenu>
                                         </Button>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

@@ -25,6 +25,12 @@
                 <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <TextBox Text="{Binding Nombre}" FontSize="14" PlaceholderText="Nombre de la tarea" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
             </StackPanel>
+            
+            <!-- Area de interes -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbAreaInteres" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+            </StackPanel>
 
             <!-- Fecha de inicio -->
             <StackPanel Spacing="4">
@@ -82,12 +88,6 @@
                     <ComboBoxItem Content="Supermercado"/>
                     <ComboBoxItem Content="Otro"/>
                 </ComboBox>
-            </StackPanel>
-
-            <!-- Area de interes -->
-            <StackPanel Spacing="4">
-                <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbAreaInteres" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
             </StackPanel>
 
             <!-- Prioridad -->
