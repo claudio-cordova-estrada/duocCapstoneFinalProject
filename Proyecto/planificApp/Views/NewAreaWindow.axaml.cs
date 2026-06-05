@@ -2,6 +2,7 @@
 using Avalonia.Interactivity;
 using PlanificApp.Models;
 using PlanificApp.Models.Enums;
+using planificApp.Helpers;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -48,6 +49,9 @@ public partial class NewAreaWindow : Window
             MetodoTransporte.TransportePublico => 4,
             _ => 0
         };
+
+        CmbTipoActividadFisicaPred.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(area.TipoActividadFisicaPred);
+        CmbTipoActividadMentalPred.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(area.TipoActividadMentalPred);
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)
@@ -74,6 +78,8 @@ public partial class NewAreaWindow : Window
             _ => null
         };
 
+        vm.TipoActividadFisicaPred = DetalleTareaHelper.TipoActividadFisicaFromIndex(CmbTipoActividadFisicaPred.SelectedIndex);
+        vm.TipoActividadMentalPred = DetalleTareaHelper.TipoActividadMentalFromIndex(CmbTipoActividadMentalPred.SelectedIndex);
         vm.Prioridad = CmbPrioridadArea.SelectedIndex + 1;
 
         await vm.GuardarCommand.ExecuteAsync(null);

@@ -80,6 +80,26 @@
                 </StackPanel>
             </Grid>
 
+            <!-- Actividad física predeterminada -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ACTIVIDAD FÍSICA PREDETERMINADA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbTipoActividadFisicaPred" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="— Ninguna —"/>
+                    <ComboBoxItem Content="Activa"/>
+                    <ComboBoxItem Content="Pasiva"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Actividad mental predeterminada -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ACTIVIDAD MENTAL PREDETERMINADA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbTipoActividadMentalPred" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="— Ninguna —"/>
+                    <ComboBoxItem Content="Obligación"/>
+                    <ComboBoxItem Content="Recreación"/>
+                </ComboBox>
+            </StackPanel>
+
             <!-- Error message -->
             <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 

@@ -61,6 +61,18 @@ public static class DetalleTareaHelper
         _ => 0
     };
 
+    public static void AplicarDefaultsArea(Tarea tarea, AreaInteres area)
+    {
+        if (area.UbicacionPred != null)
+            tarea.Ubicacion = area.UbicacionPred;
+        if (area.TipoActividadFisicaPred != null)
+            tarea.TipoActividadFisica = area.TipoActividadFisicaPred;
+        if (area.TipoActividadMentalPred != null)
+            tarea.TipoActividadMental = area.TipoActividadMentalPred;
+        if (area.MetodoTransportePred != null)
+            tarea.MetodoTransporte = area.MetodoTransportePred;
+    }
+
     public static string CalcularEstado(Tarea tarea) =>
         tarea.FecCompletado != null ? "Completada" :
         TareaAtrasada.EsAtrasada(tarea) ? "Vencida" : "Activa";

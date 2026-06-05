@@ -164,6 +164,8 @@ public partial class AreaInteresViewModel : PageViewModel
 
         try
         {
+            var oldAreaId = TareaSeleccionada.IdAreaInteres;
+
             TareaSeleccionada.Nombre = DetalleNombre;
             TareaSeleccionada.FecInicio = DetalleFecInicio;
             TareaSeleccionada.FecLimite = DetalleFecLimite;
@@ -176,8 +178,26 @@ public partial class AreaInteresViewModel : PageViewModel
             TareaSeleccionada.TipoActividadFisica = DetalleTipoActividadFisica;
             TareaSeleccionada.TipoActividadMental = DetalleTipoActividadMental;
 
+            if (DetalleIdAreaInteres != oldAreaId)
+            {
+                var nuevaArea = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == DetalleIdAreaInteres);
+                if (nuevaArea != null)
+                {
+                    Helpers.DetalleTareaHelper.AplicarDefaultsArea(TareaSeleccionada, nuevaArea);
+                    DetalleUbicacion = TareaSeleccionada.Ubicacion;
+                    DetalleTipoActividadFisica = TareaSeleccionada.TipoActividadFisica;
+                    DetalleTipoActividadMental = TareaSeleccionada.TipoActividadMental;
+                }
+            }
+
             await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
             DetalleMensaje = "Guardado";
+
+            if (TareaSeleccionada.IdAreaInteres != AreaSeleccionada?.IdAreaInteres)
+            {
+                TareaSeleccionada = null;
+            }
+
             await CargarTareasAsync();
         }
         catch (Exception ex)
@@ -201,6 +221,8 @@ public partial class AreaInteresViewModel : PageViewModel
             Prioridad = 1,
             FecCreacion = DateTime.Now
         };
+
+        Helpers.DetalleTareaHelper.AplicarDefaultsArea(tarea, AreaSeleccionada);
 
         await _mongo.CrearTarea(tarea);
         QuickAddNombre = string.Empty;

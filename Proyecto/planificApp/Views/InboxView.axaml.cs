@@ -186,6 +186,13 @@ public partial class InboxView : UserControl
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
 
+        if (vm.TareaSeleccionada == null)
+        {
+            HideDetail();
+            ClearSelection();
+            return;
+        }
+
         if (vm.DetalleMensaje == "El nombre no puede estar vacío.")
         {
             DetailNombre.Text = vm.DetalleNombre;

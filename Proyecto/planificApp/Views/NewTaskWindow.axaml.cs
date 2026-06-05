@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using planificApp.Helpers;
 using planificApp.ViewModels;
+using PlanificApp.Models;
 
 namespace planificApp.Views;
 
@@ -23,6 +25,25 @@ public partial class NewTaskWindow : Window
 
         await vm.WaitForAreasAsync();
         DetalleTareaHelper.PopulateAreaComboBox(CmbAreaInteres, vm.AreasInteres, PreSelectedAreaId);
+
+        if (PreSelectedAreaId != null)
+        {
+            var area = vm.AreasInteres.FirstOrDefault(a => a.IdAreaInteres == PreSelectedAreaId);
+            if (area != null)
+            {
+                ApplyAreaDefaults(area);
+            }
+        }
+    }
+
+    private void ApplyAreaDefaults(AreaInteres area)
+    {
+        if (area.UbicacionPred != null)
+            CmbUbicacion.SelectedIndex = DetalleTareaHelper.UbicacionToIndex(area.UbicacionPred);
+        if (area.TipoActividadFisicaPred != null)
+            CmbTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(area.TipoActividadFisicaPred);
+        if (area.TipoActividadMentalPred != null)
+            CmbTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(area.TipoActividadMentalPred);
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)

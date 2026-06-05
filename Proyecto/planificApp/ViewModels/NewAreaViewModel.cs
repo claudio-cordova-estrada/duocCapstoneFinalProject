@@ -17,6 +17,8 @@ public partial class NewAreaViewModel : ViewModelBase
     [ObservableProperty] private string _colorHex = "#a78bfa";
     [ObservableProperty] private string? _ubicacionPred;
     [ObservableProperty] private MetodoTransporte? _metodoTransportePred;
+    [ObservableProperty] private string? _tipoActividadFisicaPred;
+    [ObservableProperty] private string? _tipoActividadMentalPred;
     [ObservableProperty] private int _prioridad = 1;
     [ObservableProperty] private int _horasSemanales;
     [ObservableProperty] private string _errorMessage = string.Empty;
@@ -42,6 +44,8 @@ public partial class NewAreaViewModel : ViewModelBase
         ColorHex = area.ColorHex;
         UbicacionPred = area.UbicacionPred;
         MetodoTransportePred = area.MetodoTransportePred;
+        TipoActividadFisicaPred = area.TipoActividadFisicaPred;
+        TipoActividadMentalPred = area.TipoActividadMentalPred;
         Prioridad = (int)area.Prioridad;
         HorasSemanales = area.HorasSemanales;
     }
@@ -74,6 +78,8 @@ public partial class NewAreaViewModel : ViewModelBase
                 ColorHex = ColorHex,
                 UbicacionPred = UbicacionPred,
                 MetodoTransportePred = MetodoTransportePred,
+                TipoActividadFisicaPred = TipoActividadFisicaPred,
+                TipoActividadMentalPred = TipoActividadMentalPred,
                 Prioridad = (PrioridadAreaInteres)Prioridad,
                 HorasSemanales = HorasSemanales,
                 IdUsuario = _sesion.UsuarioActual.IdUsuario

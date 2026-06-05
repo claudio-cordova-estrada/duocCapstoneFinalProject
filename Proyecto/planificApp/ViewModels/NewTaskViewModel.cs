@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -79,6 +80,13 @@ public partial class NewTaskViewModel : ViewModelBase
                 TipoActividadFisica = TipoActividadFisica,
                 TipoActividadMental = TipoActividadMental,
             };
+
+            if (IdAreaInteres != null)
+            {
+                var area = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == IdAreaInteres);
+                if (area != null)
+                    Helpers.DetalleTareaHelper.AplicarDefaultsArea(tarea, area);
+            }
 
             await _mongo.CrearTarea(tarea);
             GuardadoExitoso = true;

@@ -105,7 +105,7 @@ public partial class InboxViewModel : PageViewModel
             ModoVista.Hoy => await _mongo.ObtenerTareasPorRango(idUsuario, DateTime.Today, DateTime.Today.AddDays(1)),
             ModoVista.Semana => await ObtenerTareasSemana(idUsuario),
             ModoVista.Mes => await ObtenerTareasMes(idUsuario),
-            _ => await _mongo.ObtenerTareasPorUsuario(idUsuario)
+            _ => (await _mongo.ObtenerTareasPorUsuario(idUsuario)).Where(t => t.IdAreaInteres == null).ToList()
         };
 
         Tareas = new ObservableCollection<Tarea>(tareas);
@@ -207,6 +207,8 @@ public partial class InboxViewModel : PageViewModel
 
         try
         {
+            var oldAreaId = TareaSeleccionada.IdAreaInteres;
+
             TareaSeleccionada.Nombre = DetalleNombre;
             TareaSeleccionada.FecInicio = DetalleFecInicio;
             TareaSeleccionada.FecLimite = DetalleFecLimite;
@@ -219,8 +221,26 @@ public partial class InboxViewModel : PageViewModel
             TareaSeleccionada.TipoActividadFisica = DetalleTipoActividadFisica;
             TareaSeleccionada.TipoActividadMental = DetalleTipoActividadMental;
 
+            if (DetalleIdAreaInteres != oldAreaId)
+            {
+                var nuevaArea = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == DetalleIdAreaInteres);
+                if (nuevaArea != null)
+                {
+                    Helpers.DetalleTareaHelper.AplicarDefaultsArea(TareaSeleccionada, nuevaArea);
+                    DetalleUbicacion = TareaSeleccionada.Ubicacion;
+                    DetalleTipoActividadFisica = TareaSeleccionada.TipoActividadFisica;
+                    DetalleTipoActividadMental = TareaSeleccionada.TipoActividadMental;
+                }
+            }
+
             await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
             DetalleMensaje = "Guardado";
+
+            if (ModoActual == ModoVista.Inbox && TareaSeleccionada.IdAreaInteres != null)
+            {
+                TareaSeleccionada = null;
+            }
+
             await CargarTareasAsync();
         }
         catch (Exception ex)
