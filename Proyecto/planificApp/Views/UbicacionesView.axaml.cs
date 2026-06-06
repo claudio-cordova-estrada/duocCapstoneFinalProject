@@ -1,168 +1,102 @@
-﻿using Avalonia;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Media;
-using planificApp.Helpers;
+using Mapsui;
+using Mapsui.Layers;
+using Mapsui.Projections;
+using Mapsui.Styles;
+using Mapsui.Tiling;
+using planificApp.ViewModels;
 
-namespace planificApp.Views;
-
-public partial class UbicacionesView : UserControl
+namespace planificApp.Views
 {
-    private record LocData(string Name, string Type, string Color, string Transport, string LastVisit, double PinX, double PinY);
-
-    private readonly LocData[] _locations = new[]
+    public partial class UbicacionesView : UserControl
     {
-        new LocData("Casa", "Hogar", "#34d399", "Metro", "12 abr 2026", 0.38, 0.52),
-        new LocData("Trabajo", "Trabajo", "#a78bfa", "Metro", "06 may 2026", 0.55, 0.34),
-        new LocData("Iglesia", "Social", "#f472b6", "A pie", "28 abr 2026", 0.30, 0.38),
-        new LocData("M\u00e9dico 1", "Salud", "#60a5fa", "Auto", "01 mar 2026", 0.62, 0.58),
-        new LocData("M\u00e9dico 2", "Salud", "#60a5fa", "Bus", "15 feb 2026", 0.72, 0.42),
-    };
+        private MemoryLayer? _capaPuntos;
 
-    private readonly Border[] _locItems;
-    private readonly StackPanel?[] _actionPanels;
-    private readonly Border[] _pins;
-    private int _activeIndex = 0;
-
-    public UbicacionesView()
-    {
-        InitializeComponent();
-
-        _locItems = new[] { LocCasa, LocTrabajo, LocIglesia, LocMedico1, LocMedico2 };
-        _actionPanels = new StackPanel?[] { ActionsCasa, ActionsTrabajo, ActionsIglesia, ActionsMedico1, ActionsMedico2 };
-
-        // Create map pins
-        _pins = new Border[_locations.Length];
-        for (int i = 0; i < _locations.Length; i++)
+        public UbicacionesView()
         {
-            var pin = new Border
+            InitializeComponent();
+            InicializarMapa();
+        }
+
+        private void InicializarMapa()
+        {
+            // 1. Cargamos la capa base gratuita
+            MiMapa.Map?.Layers.Add(OpenStreetMap.CreateTileLayer());
+
+            // 2. Limpiamos los textos molestos (FPS, INFO) de las esquinas del mapa
+            MiMapa.Map?.Widgets.Clear();
+
+            // 3. Centramos el mapa
+            var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
+            var posicionInicial = new MPoint(x, y);
+            MiMapa.Map?.Navigator?.CenterOnAndZoomTo(posicionInicial, 13);
+
+            // 4. Creamos una capa transparente para colocar los puntos encima
+            _capaPuntos = new MemoryLayer
             {
-                Width = i == 0 ? 15 : 11,
-                Height = i == 0 ? 15 : 11,
-                CornerRadius = new CornerRadius(i == 0 ? 8 : 6),
-                Background = new SolidColorBrush(Color.Parse(_locations[i].Color)),
-                BorderBrush = new SolidColorBrush(Color.Parse("#0f0f0f")),
-                BorderThickness = new Thickness(i == 0 ? 2 : 2),
-                Cursor = new Cursor(StandardCursorType.Hand),
-                Tag = i
+                Name = "Capa de Ubicaciones",
+                Style = null // Anulamos el estilo general para pintar cada punto de su propio color
             };
+            MiMapa.Map?.Layers.Add(_capaPuntos);
+        }
 
-            if (i == 0)
+        // Este evento se dispara cuando la vista se conecta con el ViewModel
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            base.OnDataContextChanged(e);
+
+            if (DataContext is UbicacionesViewModel viewModel)
             {
-                pin.BoxShadow = new BoxShadows(new BoxShadow
+                // Nos suscribimos al "aviso". Cuando Google convierta las direcciones en coordenadas, se llamará a DibujarPines
+                viewModel.MapaDebeActualizarse = () => DibujarPines(viewModel.ListaUbicaciones);
+            }
+        }
+
+        private void DibujarPines(IEnumerable<UbicacionVisual> ubicaciones)
+        {
+            var features = new List<IFeature>();
+
+            foreach (var ubi in ubicaciones)
+            {
+                // Transformamos la Latitud y Longitud exacta al formato que exige el mapa
+                var (x, y) = SphericalMercator.FromLonLat(ubi.Longitud, ubi.Latitud);
+                var punto = new PointFeature(new MPoint(x, y));
+
+                // Convertimos tu color Hexadecimal al color que entiende la librería
+                var colorMap = Mapsui.Styles.Color.FromString(ubi.ColorHex ?? "#000000");
+
+                // Dibujamos el círculo del punto
+                punto.Styles.Add(new SymbolStyle
                 {
-                    Color = Color.Parse(_locations[i].Color),
-                    OffsetX = 0, OffsetY = 0, Blur = 6, Spread = 2
+                    SymbolType = SymbolType.Ellipse,
+                    SymbolScale = 0.6,
+                    Fill = new Brush(colorMap),
+                    Outline = new Pen(Mapsui.Styles.Color.White, 3)
                 });
-            }
 
-            pin.PointerPressed += (s, e) =>
-            {
-                if (s is Border b && b.Tag is int idx)
-                    SelectLocation(idx);
-            };
-
-            _pins[i] = pin;
-            PinCanvas.Children.Add(pin);
-        }
-
-        MapContainer.SizeChanged += (_, _) => UpdatePinPositions();
-        UpdateDetailPanel(0);
-    }
-
-    private void UpdatePinPositions()
-    {
-        var w = MapContainer.Bounds.Width;
-        var h = MapContainer.Bounds.Height;
-        if (w <= 0 || h <= 0) return;
-
-        for (int i = 0; i < _locations.Length; i++)
-        {
-            var pin = _pins[i];
-            var x = w * _locations[i].PinX - pin.Width / 2;
-            var y = h * _locations[i].PinY - pin.Height;
-            Canvas.SetLeft(pin, x);
-            Canvas.SetTop(pin, y);
-        }
-    }
-
-    private void SelectLocation(int index)
-    {
-        if (index < 0 || index >= _locations.Length) return;
-
-        // Remove active from all items
-        for (int i = 0; i < _locItems.Length; i++)
-        {
-            _locItems[i].Classes.Remove("active");
-        }
-
-        // Add active to selected
-        _locItems[index].Classes.Add("active");
-
-        // Update action panels visibility
-        for (int i = 0; i < _actionPanels.Length; i++)
-        {
-            if (_actionPanels[i] != null)
-                _actionPanels[i]!.IsVisible = i == index;
-        }
-
-        // Update pins
-        for (int i = 0; i < _pins.Length; i++)
-        {
-            if (i == index)
-            {
-                _pins[i].Width = 15;
-                _pins[i].Height = 15;
-                _pins[i].CornerRadius = new CornerRadius(8);
-                _pins[i].BoxShadow = new BoxShadows(new BoxShadow
+                // Dibujamos el texto flotante con el nombre (Casa, Trabajo, Iglesia)
+                punto.Styles.Add(new LabelStyle
                 {
-                    Color = Color.Parse(_locations[i].Color),
-                    OffsetX = 0, OffsetY = 0, Blur = 6, Spread = 2
+                    Text = ubi.Nombre,
+                    BackColor = new Brush(Mapsui.Styles.Color.Transparent),
+                    ForeColor = Mapsui.Styles.Color.Black,
+                    Halo = new Pen(Mapsui.Styles.Color.White, 2),
+                    Offset = new Offset(0, -16)
                 });
+
+                features.Add(punto);
             }
-            else
+
+            // Subimos los puntos a nuestra capa
+            if (_capaPuntos != null)
             {
-                _pins[i].Width = 11;
-                _pins[i].Height = 11;
-                _pins[i].CornerRadius = new CornerRadius(6);
-                _pins[i].BoxShadow = default;
+                _capaPuntos.Features = features;
             }
+
+            // Forzamos al mapa a repintarse para que los puntos aparezcan de inmediato
+            MiMapa.RefreshGraphics();
         }
-
-        UpdatePinPositions();
-        UpdateDetailPanel(index);
-        _activeIndex = index;
     }
-
-    private void UpdateDetailPanel(int index)
-    {
-        var loc = _locations[index];
-        DetailName.Text = loc.Name;
-        DetailName.Foreground = new SolidColorBrush(Color.Parse(loc.Color));
-        DetailType.Text = loc.Type;
-        DetailVisit.Text = loc.LastVisit;
-        DetailTransport.Text = loc.Transport;
-    }
-
-    // Location item tap handlers
-    private void LocCasa_Tapped(object? sender, TappedEventArgs e) => SelectLocation(0);
-    private void LocTrabajo_Tapped(object? sender, TappedEventArgs e) => SelectLocation(1);
-    private void LocIglesia_Tapped(object? sender, TappedEventArgs e) => SelectLocation(2);
-    private void LocMedico1_Tapped(object? sender, TappedEventArgs e) => SelectLocation(3);
-    private void LocMedico2_Tapped(object? sender, TappedEventArgs e) => SelectLocation(4);
-
-    // Edit/Delete handlers
-    private void EditCasa_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteCasa_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditTrabajo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteTrabajo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditIglesia_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteIglesia_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditMedico1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteMedico1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditMedico2_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteMedico2_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-
-    // Add location
-    private void AddLocation_Tapped(object? sender, TappedEventArgs e) => DialogHelper.ShowAddLocationDialog(this);
 }
