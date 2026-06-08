@@ -1,21 +1,24 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlanificApp.Models;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories.Interfaces;
 
 namespace planificApp.ViewModels;
 
 public partial class NewTaskViewModel : ViewModelBase
 {
-    private readonly MongoService _mongo;
-    private readonly SesionService _sesion;
+    private readonly ITareaRepository _tareaRepo;
+    private readonly IAreaInteresRepository _areaRepo;
+    private readonly ISesionService _sesion;
     private readonly Task _initTask;
 
     [ObservableProperty] private string _nombre = string.Empty;
-    [ObservableProperty] private DateTime? _fecInicio = DateTime.Now;
+    [ObservableProperty] private DateTime? _fecInicio = null;
     [ObservableProperty] private DateTime? _fecLimite;
     [ObservableProperty] private TimeSpan? _horaInicio;
     [ObservableProperty] private TimeSpan? _horaFin;
@@ -26,14 +29,17 @@ public partial class NewTaskViewModel : ViewModelBase
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
     [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
+    [ObservableProperty] private string? _tipoActividadFisica;
+    [ObservableProperty] private string? _tipoActividadMental;
 
     public string? IdAreaInteres { get; set; }
 
     public bool GuardadoExitoso { get; private set; }
 
-    public NewTaskViewModel(MongoService mongo, SesionService sesion)
+    public NewTaskViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion)
     {
-        _mongo = mongo;
+        _tareaRepo = tareaRepo;
+        _areaRepo = areaRepo;
         _sesion = sesion;
         _initTask = LoadAreasAsync();
     }
@@ -41,7 +47,7 @@ public partial class NewTaskViewModel : ViewModelBase
     private async Task LoadAreasAsync()
     {
         if (_sesion.UsuarioActual?.IdUsuario == null) return;
-        var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario);
+        var areas = await _areaRepo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario);
         AreasInteres = new ObservableCollection<AreaInteres>(areas);
     }
 
@@ -74,9 +80,18 @@ public partial class NewTaskViewModel : ViewModelBase
                 IdAreaInteres = IdAreaInteres,
                 IdUsuario = _sesion.UsuarioActual?.IdUsuario,
                 FecCreacion = DateTime.Now,
+                TipoActividadFisica = TipoActividadFisica,
+                TipoActividadMental = TipoActividadMental,
             };
 
-            await _mongo.CrearTarea(tarea);
+            if (IdAreaInteres != null)
+            {
+                var area = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == IdAreaInteres);
+                if (area != null)
+                    Helpers.DetalleTareaHelper.AplicarDefaultsArea(tarea, area);
+            }
+
+            await _tareaRepo.CrearTarea(tarea);
             GuardadoExitoso = true;
         }
         catch (Exception ex)

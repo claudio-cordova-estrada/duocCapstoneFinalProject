@@ -51,7 +51,7 @@
                     <!-- Link to login -->
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">
                         <TextBlock Text="¿Recordaste tu contraseña?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <Button Classes="transparent" Command="{Binding Main.GoToLoginCommand}" Padding="4 2">
+                        <Button Classes="transparent" Command="{Binding GoToLoginCommand}" Padding="4 2">
                             <TextBlock Text="Iniciar sesión" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
                         </Button>
                     </StackPanel>

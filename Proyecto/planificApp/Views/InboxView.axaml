@@ -205,6 +205,32 @@
                                     <ComboBoxItem Content="4 horas"/>
                                 </ComboBox>
                             </StackPanel>
+                            
+                            <!-- Actividad física -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="ACTIVIDAD FÍSICA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailTipoActividadFisica" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="— Ninguna —"/>
+                                    <ComboBoxItem Content="Activa"/>
+                                    <ComboBoxItem Content="Pasiva"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Actividad mental -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="ACTIVIDAD MENTAL" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox x:Name="DetailTipoActividadMental" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                                    <ComboBoxItem Content="— Ninguna —"/>
+                                    <ComboBoxItem Content="Obligación"/>
+                                    <ComboBoxItem Content="Recreación"/>
+                                </ComboBox>
+                            </StackPanel>
+                            
+                            <!-- Recordatorio -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="RECORDATORIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <CalendarDatePicker x:Name="PickerRecordatorio" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Fecha del recordatorio" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
 
                             <!-- Save button -->
                             <Button Classes="accent" HorizontalAlignment="Stretch" Click="SaveDetail_Click">

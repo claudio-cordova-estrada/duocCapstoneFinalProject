@@ -15,17 +15,126 @@
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/App.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/DialogHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/GeoService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Services/GeoService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/MongoService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/SesionService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Services/SesionService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AdminMainViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AdminMainViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/DatosViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/DatosViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/MainViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/NewAreaViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/NewAreaViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/NewTaskViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/NewTaskViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/RecuperarContraViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/RecuperarContraViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/RegistroViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/RegistroViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/UbicacionesViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/UbicacionesViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/AddLocationWindow.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AddLocationWindow.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/CalcularRutaWindow.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalcularRutaWindow.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/InboxView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/InboxView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/LoginView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/LoginView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/MainView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/MainView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/RecuperarContraView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/RecuperarContraView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/RegistroView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/RegistroView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/RegistroView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/RegistroView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Example.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Example.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.deps.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Base.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Base.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Controls.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Controls.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.DesignerSupport.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.DesignerSupport.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Desktop.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Desktop.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Dialogs.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Dialogs.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Fonts.Inter.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Fonts.Inter.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.FreeDesktop.AtSpi.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.FreeDesktop.AtSpi.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.FreeDesktop.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.FreeDesktop.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.HarfBuzz.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.HarfBuzz.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Markup.Xaml.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Markup.Xaml.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Markup.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Markup.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Metal.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Metal.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.MicroCom.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.MicroCom.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Native.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Native.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.OpenGL.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.OpenGL.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Remote.Protocol.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Remote.Protocol.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Skia.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Skia.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Themes.Fluent.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Themes.Fluent.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Vulkan.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Vulkan.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Win32.Automation.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Win32.Automation.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Win32.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.Win32.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.X11.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.X11.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/Avalonia.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/SharpCompress.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/SharpCompress.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/SkiaSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/SkiaSharp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.deps.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.deps.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-arm/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-arm/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-arm64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-arm64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-loongarch64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-loongarch64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-arm/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-arm/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-arm64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-arm64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-loongarch64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-loongarch64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-riscv64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-riscv64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-x64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-musl-x64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-riscv64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-riscv64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-x64/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-x64/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-x86/native/libSkiaSharp.so" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/linux-x86/native/libSkiaSharp.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/osx/native/libSkiaSharp.dylib" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/osx/native/libSkiaSharp.dylib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-arm64/native/libSkiaSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-arm64/native/libSkiaSharp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-arm64/native/libSkiaSharp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-arm64/native/libSkiaSharp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x64/native/libSkiaSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x64/native/libSkiaSharp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x64/native/libSkiaSharp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x64/native/libSkiaSharp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x86/native/libSkiaSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x86/native/libSkiaSharp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x86/native/libSkiaSharp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/runtimes/win-x86/native/libSkiaSharp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/references" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/references" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.FileListAbsolute.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/Resources.Inputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/Resources.Inputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/references" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/references" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/resources" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/resources" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.AssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.FileListAbsolute.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/planificApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/planificApp.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +145,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="4" />
+    <option name="cachedIndexableFilesCount" value="1" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="ExportToHTMLSettings">
@@ -113,9 +222,7 @@
     <setting file="file://$PROJECT_DIR$/Views/SettingsView.axaml.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/SoporteView.axaml" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Views/SoporteView.axaml.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/F31C2A8F3656068997F925D5/Avalonia.Generators/Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator/planificApp.Views.AreaInteresView.g.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/F31C2A8F3656068997F925D5/Avalonia.Generators/Avalonia.Generators.NameGenerator.AvaloniaNameIncrementalGenerator/planificApp.Views.InboxView.g.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Local/Temp/SourceGeneratedDocuments/F31C2A8F3656068997F925D5/CommunityToolkit.Mvvm.SourceGenerators/CommunityToolkit.Mvvm.SourceGenerators.ObservablePropertyGenerator/planificApp.ViewModels.AreaInteresViewModel.g.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -279,6 +386,21 @@
       <workItem from="1779819655515" duration="360000" />
       <workItem from="1779830106648" duration="2700000" />
       <workItem from="1779891576654" duration="7155000" />
+      <workItem from="1779998756833" duration="4373000" />
+      <workItem from="1780243147547" duration="4330000" />
+      <workItem from="1780267018276" duration="2431000" />
+      <workItem from="1780358755593" duration="6693000" />
+      <workItem from="1780453002762" duration="629000" />
+      <workItem from="1780508906523" duration="8712000" />
+      <workItem from="1780547969364" duration="911000" />
+      <workItem from="1780593313371" duration="7030000" />
+      <workItem from="1780621507790" duration="3673000" />
+      <workItem from="1780689906451" duration="7712000" />
+      <workItem from="1780700536193" duration="686000" />
+      <workItem from="1780759125037" duration="240000" />
+      <workItem from="1780772477180" duration="1820000" />
+      <workItem from="1780935902741" duration="13193000" />
+      <workItem from="1780951056640" duration="2074000" />
     </task>
     <servers />
   </component>

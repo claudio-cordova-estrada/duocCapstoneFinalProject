@@ -25,6 +25,12 @@
                 <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <TextBox Text="{Binding Nombre}" FontSize="14" PlaceholderText="Nombre de la tarea" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
             </StackPanel>
+            
+            <!-- Area de interes -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbAreaInteres" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+            </StackPanel>
 
             <!-- Fecha de inicio -->
             <StackPanel Spacing="4">
@@ -84,12 +90,6 @@
                 </ComboBox>
             </StackPanel>
 
-            <!-- Area de interes -->
-            <StackPanel Spacing="4">
-                <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbAreaInteres" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
-            </StackPanel>
-
             <!-- Prioridad -->
             <StackPanel Spacing="4">
                 <TextBlock Text="PRIORIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
@@ -117,6 +117,26 @@
                     <ComboBoxItem Content="2 horas"/>
                     <ComboBoxItem Content="3 horas"/>
                     <ComboBoxItem Content="4 horas"/>
+                </ComboBox>
+            </StackPanel>
+            
+            <!-- Actividad física -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ACTIVIDAD FÍSICA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbTipoActividadFisica" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="— Ninguna —"/>
+                    <ComboBoxItem Content="Activa"/>
+                    <ComboBoxItem Content="Pasiva"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Actividad mental -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="ACTIVIDAD MENTAL" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox x:Name="CmbTipoActividadMental" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="— Ninguna —"/>
+                    <ComboBoxItem Content="Obligación"/>
+                    <ComboBoxItem Content="Recreación"/>
                 </ComboBox>
             </StackPanel>
 

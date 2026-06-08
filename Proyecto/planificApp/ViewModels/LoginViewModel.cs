@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
 using planificApp.Data;
+using planificApp.Services;
 
 namespace planificApp.ViewModels;
 
 public partial class LoginViewModel : PageViewModel
 {
-    private readonly MongoService _mongo;
-    private readonly SesionService _sesion;
-
-    public MainViewModel Main { get; set; }
+    private readonly IAuthenticationService _authService;
+    private readonly ISesionService _sesion;
+    private readonly INavigationService _navigation;
 
     [ObservableProperty] private string _correo = string.Empty;
     [ObservableProperty] private string _password = string.Empty;
@@ -19,12 +19,22 @@ public partial class LoginViewModel : PageViewModel
     [ObservableProperty] private bool _hasError = false;
     [ObservableProperty] private bool _isLoading = false;
 
-    public LoginViewModel(MongoService mongo, SesionService sesion)
+    public bool IsAdminToggle
     {
-        _mongo = mongo;
+        get => _navigation.IsAdminToggle;
+        set => _navigation.IsAdminToggle = value;
+    }
+
+    public LoginViewModel(IAuthenticationService authService, ISesionService sesion, INavigationService navigation)
+    {
+        _authService = authService;
         _sesion = sesion;
+        _navigation = navigation;
         PageName = ApplicationPageNames.Login;
     }
+
+    [RelayCommand] private void GoToRegistro() => _navigation.GoToRegistro();
+    [RelayCommand] private void GoToRecuperarContra() => _navigation.GoToRecuperarContra();
 
     [RelayCommand]
     private async Task LoginAsync()
@@ -43,11 +53,11 @@ public partial class LoginViewModel : PageViewModel
 
         try
         {
-            var usuario = await _mongo.Login(Correo, Password);
+            var usuario = await _authService.Login(Correo, Password);
             if (usuario != null)
             {
                 _sesion.IniciarSesion(usuario);
-                Main.LoginCommand.Execute(null);
+                _navigation.OnLoginSuccess();
             }
             else
             {

@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         x:Class="planificApp.Views.ConfirmDeleteAreaWindow"
+         Title="Eliminar área"
+         Width="320" SizeToContent="Height"
+         WindowStartupLocation="CenterOwner"
+         CanResize="False"
+         Background="{DynamicResource ModalBackground}"
+         ExtendClientAreaToDecorationsHint="True">
+
+    <Border Background="{DynamicResource DangerBackground}" BorderBrush="{DynamicResource DangerBorder}" BorderThickness="1" CornerRadius="12" Padding="22" Margin="-22">
+        <StackPanel HorizontalAlignment="Center" Spacing="8">
+            <TextBlock Text="&#x1F5D1;" FontSize="26" HorizontalAlignment="Center" Margin="0 0 0 4"/>
+            <TextBlock x:Name="DeleteTitle" Text="¿Eliminar área de interés?" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+            <TextBlock Text="Se eliminarán todas las tareas asociadas. Esta acción no se puede deshacer." FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Margin="0 10 0 0">
+                <Button Classes="transparent" Click="CancelButton_Click" Padding="12 6" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="7">
+                    <TextBlock Text="Cancelar" FontSize="12" Foreground="{DynamicResource TextDisabled}"/>
+                </Button>
+                <Button Classes="danger" Click="DeleteButton_Click" Padding="12 6" CornerRadius="7">
+                    <TextBlock Text="Eliminar" FontSize="12" Foreground="{DynamicResource DangerForeground}"/>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

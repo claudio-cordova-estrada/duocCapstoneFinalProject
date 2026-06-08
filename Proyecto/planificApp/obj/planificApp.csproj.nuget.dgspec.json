@@ -52,19 +52,19 @@
           "dependencies": {
             "Avalonia": {
               "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[12.0.2, )"
             },
             "Avalonia.Desktop": {
               "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[12.0.2, )"
             },
             "Avalonia.Fonts.Inter": {
               "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[12.0.2, )"
             },
             "Avalonia.Themes.Fluent": {
               "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[12.0.2, )"
             },
             "AvaloniaUI.DiagnosticsSupport": {
               "include": "None",
@@ -75,6 +75,18 @@
             "CommunityToolkit.Mvvm": {
               "target": "Package",
               "version": "[8.4.2, )"
+            },
+            "Mapsui": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "Mapsui.Avalonia12": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "Microsoft.Extensions.Configuration.EnvironmentVariables": {
+              "target": "Package",
+              "version": "[10.0.8, )"
             },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
@@ -87,6 +99,10 @@
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[3.8.1, )"
+            },
+            "SharpCompress": {
+              "target": "Package",
+              "version": "[0.48.0, )"
             }
           },
           "imports": [

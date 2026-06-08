@@ -12,12 +12,6 @@ public partial class AdminMainViewModel : ViewModelBase
     [ObservableProperty] private AdminSection _activeAdminSection = AdminSection.Estadisticas;
     [ObservableProperty] private PageViewModel _currentPage;
 
-    public AdminMainViewModel()
-    {
-        ActiveAdminSection = AdminSection.Estadisticas;
-        CurrentPage = new EstadisticasViewModel();
-    }
-
     public AdminMainViewModel(PageFactory pageFactory)
     {
         _pageFactory = pageFactory;

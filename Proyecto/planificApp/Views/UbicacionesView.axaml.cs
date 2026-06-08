@@ -1,168 +1,280 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Mapsui;
+using Mapsui.Layers;
 using Avalonia.Input;
-using Avalonia.Media;
-using planificApp.Helpers;
+using Mapsui.Projections;
+using Mapsui.Styles;
+using Mapsui.Tiling;
+using planificApp.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace planificApp.Views;
-
-public partial class UbicacionesView : UserControl
+namespace planificApp.Views
 {
-    private record LocData(string Name, string Type, string Color, string Transport, string LastVisit, double PinX, double PinY);
-
-    private readonly LocData[] _locations = new[]
+    public partial class UbicacionesView : UserControl
     {
-        new LocData("Casa", "Hogar", "#34d399", "Metro", "12 abr 2026", 0.38, 0.52),
-        new LocData("Trabajo", "Trabajo", "#a78bfa", "Metro", "06 may 2026", 0.55, 0.34),
-        new LocData("Iglesia", "Social", "#f472b6", "A pie", "28 abr 2026", 0.30, 0.38),
-        new LocData("M\u00e9dico 1", "Salud", "#60a5fa", "Auto", "01 mar 2026", 0.62, 0.58),
-        new LocData("M\u00e9dico 2", "Salud", "#60a5fa", "Bus", "15 feb 2026", 0.72, 0.42),
-    };
+        private MemoryLayer? _capaPuntos;
 
-    private readonly Border[] _locItems;
-    private readonly StackPanel?[] _actionPanels;
-    private readonly Border[] _pins;
-    private int _activeIndex = 0;
-
-    public UbicacionesView()
-    {
-        InitializeComponent();
-
-        _locItems = new[] { LocCasa, LocTrabajo, LocIglesia, LocMedico1, LocMedico2 };
-        _actionPanels = new StackPanel?[] { ActionsCasa, ActionsTrabajo, ActionsIglesia, ActionsMedico1, ActionsMedico2 };
-
-        // Create map pins
-        _pins = new Border[_locations.Length];
-        for (int i = 0; i < _locations.Length; i++)
+        public UbicacionesView()
         {
-            var pin = new Border
+            InitializeComponent();
+            InicializarMapa();
+
+            if (MiMapa != null)
             {
-                Width = i == 0 ? 15 : 11,
-                Height = i == 0 ? 15 : 11,
-                CornerRadius = new CornerRadius(i == 0 ? 8 : 6),
-                Background = new SolidColorBrush(Color.Parse(_locations[i].Color)),
-                BorderBrush = new SolidColorBrush(Color.Parse("#0f0f0f")),
-                BorderThickness = new Thickness(i == 0 ? 2 : 2),
-                Cursor = new Cursor(StandardCursorType.Hand),
-                Tag = i
+                MiMapa.PointerWheelChanged += (sender, e) =>
+                {
+                    e.Handled = true;
+                };
+            }
+        }
+
+        private void InicializarMapa()
+        {
+            // 1. Cargamos la capa base gratuita
+            MiMapa.Map?.Layers.Add(OpenStreetMap.CreateTileLayer());
+
+            // 2. Limpiamos los textos molestos (FPS, INFO) de las esquinas del mapa
+            MiMapa.Map?.Widgets.Clear();
+
+            // 3. Centramos el mapa
+            var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
+            var posicionInicial = new MPoint(x, y);
+            MiMapa.Map?.Navigator?.CenterOnAndZoomTo(posicionInicial, 13);
+
+            // 4. Creamos una capa transparente para colocar los puntos encima
+            _capaPuntos = new MemoryLayer
+            {
+                Name = "Capa de Ubicaciones",
+                Style = null // Anulamos el estilo general para pintar cada punto de su propio color
+            };
+            MiMapa.Map?.Layers.Add(_capaPuntos);
+        }
+
+        // Este evento se dispara cuando la vista se conecta con el ViewModel
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            base.OnDataContextChanged(e);
+
+            if (DataContext is UbicacionesViewModel vm)
+            {
+                vm.MapaDebeActualizarse = () => DibujarPines(vm.ListaUbicaciones);
+
+                vm.EnfocarEnUbicacion = (latitud, longitud) =>
+                {
+                    var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
+                    MiMapa.Map?.Navigator?.CenterOn(new MPoint(x, y));
+                };
+
+                // NUEVO: Suscribirse a la ruta
+                vm.TrazarRutaEnMapa = DibujarRuta;
+
+                // NUEVO: Activar evento de clics en el mapa
+                if (MiMapa.Map != null)
+                {
+                    MiMapa.Map.Info += MiMapa_Info;
+                }
+
+                DibujarPines(vm.ListaUbicaciones);
+
+                vm.BorrarPinTemporalDelMapa = () =>
+                {
+                    if (MiMapa.Map == null) return;
+
+                    // Buscamos la capa temporal y la destruimos
+                    var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
+                    if (capaTemporal != null)
+                    {
+                        MiMapa.Map.Layers.Remove(capaTemporal);
+                        MiMapa.Refresh();
+                    }
+                };
+            }
+        }
+
+        // NUEVO MÉTODO: Dibuja la línea azul en el mapa
+        private void DibujarRuta(List<(double Latitud, double Longitud)> puntosRuta)
+        {
+            if (MiMapa.Map == null || puntosRuta.Count == 0) return;
+
+            // Borrar ruta anterior
+            var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaRuta");
+            if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
+
+            // Mapsui v4 usa puntos individuales para dibujar líneas si no tienes NTS
+            var features = new List<IFeature>();
+            var lineFeature = new MemoryLayer { Name = "CapaRuta" };
+
+            // Crear la línea uniendo los puntos
+            var rutaGeometrica = new Mapsui.Nts.GeometryFeature
+            {
+                Geometry = new NetTopologySuite.Geometries.LineString(
+                    puntosRuta.Select(p => {
+                        var (x, y) = SphericalMercator.FromLonLat(p.Longitud, p.Latitud);
+                        return new NetTopologySuite.Geometries.Coordinate(x, y);
+                    }).ToArray())
             };
 
-            if (i == 0)
+            // Estilo: Línea Azul Semitransparente, grosor 5
+            rutaGeometrica.Styles.Add(new VectorStyle
             {
-                pin.BoxShadow = new BoxShadows(new BoxShadow
+                Line = new Pen(Mapsui.Styles.Color.FromArgb(180, 0, 100, 255), 5)
+            });
+
+            features.Add(rutaGeometrica);
+            lineFeature.Features = features;
+
+            MiMapa.Map.Layers.Add(lineFeature);
+            MiMapa.Refresh();
+        }
+
+        // Detecta clics en el mapa
+        private async void MiMapa_Info(object? sender, MapInfoEventArgs e)
+        {
+            if (DataContext is UbicacionesViewModel vm && vm.ModoSeleccionActivo)
+            {
+                if (e.WorldPosition != null)
                 {
-                    Color = Color.Parse(_locations[i].Color),
-                    OffsetX = 0, OffsetY = 0, Blur = 6, Spread = 2
-                });
+                    vm.ModoSeleccionActivo = false; // El botón se desactiva solo
+
+                    var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
+
+                    // 1. Dibujamos pin morado de carga
+                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#6366f1");
+
+                    // 2. Centramos el mapa
+                    MiMapa.Map?.Navigator?.CenterOn(e.WorldPosition);
+
+                    // 3. Mostramos menú flotante si está configurado
+                    Avalonia.Controls.Primitives.FlyoutBase.ShowAttachedFlyout(MiMapa);
+
+                    // 4. Efecto de "Cargando..."
+                    vm.UbicacionSeleccionada = new UbicacionVisual
+                    {
+                        Nombre = "Buscando dirección...",
+                        AreaInteres = "Buscando...",
+                        ColorHex = "#6366f1",
+                        Latitud = lonLat.lat,
+                        Longitud = lonLat.lon
+                    };
+
+                    // 5. Obtener la dirección real desde Google
+                    string direccion = await vm.ServicioGeo.ObtenerDireccionDesdeCoordenadasAsync(lonLat.lat, lonLat.lon);
+
+                    // 6. Cambiamos pin a verde de éxito
+                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#10b981");
+
+                    // 7. ACTUALIZACIÓN FINAL: ¡Aquí encendemos el botón!
+                    vm.UbicacionSeleccionada = new UbicacionVisual
+                    {
+                        Nombre = "Punto seleccionado",
+                        AreaInteres = direccion,
+
+                        // ESTAS DOS LÍNEAS SON LA CLAVE QUE FALTABA:
+                        DireccionExacta = direccion,   // Guarda la calle para el formulario
+                        EsTemporal = true,             // ¡Esto hace aparecer el botón verde!
+
+                        ColorHex = "#10b981",
+                        UltimaVisitaFormateada = "Ubicación temporal",
+                        TransportePreferido = "-",
+                        Latitud = lonLat.lat,
+                        Longitud = lonLat.lon
+                    };
+                }
+            }
+        }
+
+        private void DibujarPines(IEnumerable<UbicacionVisual> ubicaciones)
+        {
+            if (MiMapa.Map == null) return;
+
+            // Paso A: Buscamos y borramos la capa de pines anterior (Sin usar LINQ)
+            Mapsui.Layers.ILayer? capaVieja = null;
+            foreach (var layer in MiMapa.Map.Layers)
+            {
+                if (layer.Name == "CapaPines")
+                {
+                    capaVieja = layer;
+                    break; // Encontramos la capa, dejamos de buscar
+                }
             }
 
-            pin.PointerPressed += (s, e) =>
+            // Si la encontramos, la borramos del mapa
+            if (capaVieja != null)
             {
-                if (s is Border b && b.Tag is int idx)
-                    SelectLocation(idx);
+                MiMapa.Map.Layers.Remove(capaVieja);
+            }
+
+            var features = new List<IFeature>();
+
+            // Paso B: Creamos un punto por cada ubicación guardada
+            foreach (var ubi in ubicaciones)
+            {
+                var (x, y) = SphericalMercator.FromLonLat(ubi.Longitud, ubi.Latitud);
+                var punto = new PointFeature(new MPoint(x, y));
+
+                var colorAvalonia = Avalonia.Media.Color.Parse(ubi.ColorHex ?? "#a78bfa");
+                var colorMapsui = Mapsui.Styles.Color.FromArgb(colorAvalonia.A, colorAvalonia.R, colorAvalonia.G, colorAvalonia.B);
+
+                punto.Styles.Add(new SymbolStyle
+                {
+                    Fill = new Brush(colorMapsui),
+                    SymbolScale = 0.6,
+                    Outline = new Pen(Mapsui.Styles.Color.White, 2)
+                });
+
+                features.Add(punto);
+            }
+
+            // Paso C: Metemos todos los puntos en una nueva capa
+            var capaPines = new MemoryLayer
+            {
+                Name = "CapaPines",
+                Features = features,
+                Style = null
             };
 
-            _pins[i] = pin;
-            PinCanvas.Children.Add(pin);
+            MiMapa.Map.Layers.Add(capaPines);
+            MiMapa.Refresh();
         }
-
-        MapContainer.SizeChanged += (_, _) => UpdatePinPositions();
-        UpdateDetailPanel(0);
-    }
-
-    private void UpdatePinPositions()
-    {
-        var w = MapContainer.Bounds.Width;
-        var h = MapContainer.Bounds.Height;
-        if (w <= 0 || h <= 0) return;
-
-        for (int i = 0; i < _locations.Length; i++)
+        private void DibujarPinTemporal(double latitud, double longitud, string colorHex)
         {
-            var pin = _pins[i];
-            var x = w * _locations[i].PinX - pin.Width / 2;
-            var y = h * _locations[i].PinY - pin.Height;
-            Canvas.SetLeft(pin, x);
-            Canvas.SetTop(pin, y);
-        }
-    }
+            if (MiMapa.Map == null) return;
 
-    private void SelectLocation(int index)
-    {
-        if (index < 0 || index >= _locations.Length) return;
-
-        // Remove active from all items
-        for (int i = 0; i < _locItems.Length; i++)
-        {
-            _locItems[i].Classes.Remove("active");
-        }
-
-        // Add active to selected
-        _locItems[index].Classes.Add("active");
-
-        // Update action panels visibility
-        for (int i = 0; i < _actionPanels.Length; i++)
-        {
-            if (_actionPanels[i] != null)
-                _actionPanels[i]!.IsVisible = i == index;
-        }
-
-        // Update pins
-        for (int i = 0; i < _pins.Length; i++)
-        {
-            if (i == index)
+            // Borramos el pin temporal anterior si existe para no duplicarlo
+            var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
+            if (capaVieja != null)
             {
-                _pins[i].Width = 15;
-                _pins[i].Height = 15;
-                _pins[i].CornerRadius = new CornerRadius(8);
-                _pins[i].BoxShadow = new BoxShadows(new BoxShadow
-                {
-                    Color = Color.Parse(_locations[i].Color),
-                    OffsetX = 0, OffsetY = 0, Blur = 6, Spread = 2
-                });
+                MiMapa.Map.Layers.Remove(capaVieja);
             }
-            else
+
+            var features = new List<IFeature>();
+            var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
+            var punto = new PointFeature(new MPoint(x, y));
+
+            // Convertimos el color hexadecimal a color de Mapsui
+            var colorAvalonia = Avalonia.Media.Color.Parse(colorHex);
+            var colorMapsui = Mapsui.Styles.Color.FromArgb(colorAvalonia.A, colorAvalonia.R, colorAvalonia.G, colorAvalonia.B);
+
+            punto.Styles.Add(new SymbolStyle
             {
-                _pins[i].Width = 11;
-                _pins[i].Height = 11;
-                _pins[i].CornerRadius = new CornerRadius(6);
-                _pins[i].BoxShadow = default;
-            }
+                Fill = new Brush(colorMapsui),
+                SymbolScale = 0.8, // Un poco más grande para destacar que es una selección
+                Outline = new Pen(Mapsui.Styles.Color.White, 2)
+            });
+
+            features.Add(punto);
+
+            var capaTemporal = new MemoryLayer
+            {
+                Name = "CapaPinTemporal",
+                Features = features,
+                Style = null
+            };
+
+            MiMapa.Map.Layers.Add(capaTemporal);
+            MiMapa.Refresh();
         }
-
-        UpdatePinPositions();
-        UpdateDetailPanel(index);
-        _activeIndex = index;
     }
-
-    private void UpdateDetailPanel(int index)
-    {
-        var loc = _locations[index];
-        DetailName.Text = loc.Name;
-        DetailName.Foreground = new SolidColorBrush(Color.Parse(loc.Color));
-        DetailType.Text = loc.Type;
-        DetailVisit.Text = loc.LastVisit;
-        DetailTransport.Text = loc.Transport;
-    }
-
-    // Location item tap handlers
-    private void LocCasa_Tapped(object? sender, TappedEventArgs e) => SelectLocation(0);
-    private void LocTrabajo_Tapped(object? sender, TappedEventArgs e) => SelectLocation(1);
-    private void LocIglesia_Tapped(object? sender, TappedEventArgs e) => SelectLocation(2);
-    private void LocMedico1_Tapped(object? sender, TappedEventArgs e) => SelectLocation(3);
-    private void LocMedico2_Tapped(object? sender, TappedEventArgs e) => SelectLocation(4);
-
-    // Edit/Delete handlers
-    private void EditCasa_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteCasa_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditTrabajo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteTrabajo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditIglesia_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteIglesia_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditMedico1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteMedico1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-    private void EditMedico2_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowEditLocationDialog(this);
-    private void DeleteMedico2_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => DialogHelper.ShowConfirmDeleteLocationDialog(this);
-
-    // Add location
-    private void AddLocation_Tapped(object? sender, TappedEventArgs e) => DialogHelper.ShowAddLocationDialog(this);
 }

@@ -4,8 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using PlanificApp.Models;
 using planificApp.Helpers;
+using planificApp.Services;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -41,7 +43,8 @@ public partial class AreaInteresView : UserControl
     private async void NewTaskButton_Click(object? sender, RoutedEventArgs e)
     {
         var areaID = DataContext is AreaInteresViewModel vmArea ? vmArea.AreaSeleccionada?.IdAreaInteres : null;
-        var result = await DialogHelper.ShowNewTaskDialog(this, areaID);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        var result = await dialogService.ShowNewTaskDialog(areaID);
         if (result && DataContext is AreaInteresViewModel vm)
             await vm.CargarTareasAsync();
     }
@@ -159,6 +162,8 @@ public partial class AreaInteresView : UserControl
         DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
         DetailMensaje.IsVisible = false;
+        DetailTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(vm.DetalleTipoActividadFisica);
+        DetailTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(vm.DetalleTipoActividadMental);
     }
 
     private void HideDetail()
@@ -180,8 +185,17 @@ public partial class AreaInteresView : UserControl
         vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
         vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : DetalleTareaHelper.UbicacionFromIndex(DetailUbicacion.SelectedIndex);
         vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
+        vm.DetalleTipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(DetailTipoActividadFisica.SelectedIndex);
+        vm.DetalleTipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(DetailTipoActividadMental.SelectedIndex);
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
+
+        if (vm.TareaSeleccionada == null)
+        {
+            HideDetail();
+            ClearSelection();
+            return;
+        }
 
         if (vm.DetalleMensaje == "El nombre no puede estar vacío.")
         {

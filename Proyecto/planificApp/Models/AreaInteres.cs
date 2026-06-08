@@ -35,6 +35,8 @@ namespace PlanificApp.Models
         // Herencia lógica de preferencias para las tareas que pertenezcan a esta área
         public string? UbicacionPred { get; set; }
         public MetodoTransporte? MetodoTransportePred { get; set; }
+        public string? TipoActividadFisicaPred { get; set; }
+        public string? TipoActividadMentalPred { get; set; }
         
         public string? IdUsuario { get; set; }
         

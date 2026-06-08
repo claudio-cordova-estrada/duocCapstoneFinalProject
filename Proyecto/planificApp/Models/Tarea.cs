@@ -51,5 +51,9 @@ namespace PlanificApp.Models
         public DateTime? FecCompletado { get; set; }
 
         public string? IdUsuario { get; set; }
+        
+        public string? TipoActividadFisica { get; set; }
+        public string? TipoActividadMental { get; set; }
+        
     }
 }

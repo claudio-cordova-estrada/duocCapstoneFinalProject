@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
+        x:Class="planificApp.Views.CalcularRutaWindow"
+        Title="Calcular Ruta" Width="400" SizeToContent="Height"
+        CanResize="False" WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource AppBackground}">
+
+    <StackPanel Margin="24" Spacing="16">
+        <TextBlock Text="Calculadora de rutas" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,10"/>
+
+        <!-- Selector Punto A -->
+        <TextBlock Text="Punto A (Origen):" FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+        <ComboBox x:Name="ComboOrigen" HorizontalAlignment="Stretch" CornerRadius="6">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:UbicacionVisual">
+                    <TextBlock Text="{Binding Nombre}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!-- Selector Punto B -->
+        <TextBlock Text="Punto B (Destino):" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0,5,0,0"/>
+        <ComboBox x:Name="ComboDestino" HorizontalAlignment="Stretch" CornerRadius="6">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="vm:UbicacionVisual">
+                    <TextBlock Text="{Binding Nombre}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!-- Selector Transporte -->
+        <TextBlock Text="Medio de Transporte:" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0,5,0,0"/>
+        <ComboBox x:Name="ComboTransporte" HorizontalAlignment="Stretch" SelectedIndex="0" CornerRadius="6">
+            <ComboBoxItem Content="Auto"/>
+            <ComboBoxItem Content="A pie"/>
+            <ComboBoxItem Content="Bicicleta"/>
+            <ComboBoxItem Content="Tren / Metro"/>
+            <ComboBoxItem Content="Bus"/>
+        </ComboBox>
+
+        <!-- Botón Calcular -->
+        <Button x:Name="BtnCalcular" Click="BtnCalcular_Click" Content="Calcular tiempo" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#5b21b6" Foreground="White" CornerRadius="6" Margin="0,15,0,0" Padding="10"/>
+
+        <!-- Resultado -->
+        <Border Background="#1e1e2e" BorderBrush="{DynamicResource BorderDivider}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,10,0,0">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Tiempo estimado:" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="TxtResultado" Text="-" FontSize="24" FontWeight="Bold" Foreground="#10b981" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</Window>

@@ -1,13 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
 using planificApp.Factories;
-using planificApp.Helpers;
 using PlanificApp.Models;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories.Interfaces;
+using planificApp.Services;
 
 namespace planificApp.ViewModels;
 
@@ -15,12 +15,11 @@ public enum UserSection { Tareas, Calendario, Ubicaciones, Cuenta, Config }
 public enum AdminSection { Estadisticas, Usuarios }
 public enum AuthPage { Login, Registro, RecuperarContra }
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ViewModelBase, INavigationService
 {
-    private readonly MongoService _mongo;
-    
+    private readonly IAreaInteresRepository _areaRepo;
+    private readonly ISesionService _sesion;
     private readonly PageFactory _pageFactory;
-    private readonly SesionService _sesion;
     
     [ObservableProperty] private bool _sideMenuExpanded = true;
     
@@ -70,27 +69,32 @@ public partial class MainViewModel : ViewModelBase
 
     public bool ShowAppLayout => IsLoggedIn;
 
-    public MainViewModel(PageFactory pageFactory, SesionService sesion, MongoService mongo)
+    public MainViewModel(PageFactory pageFactory, ISesionService sesion, IAreaInteresRepository areaRepo)
     {
         _pageFactory = pageFactory;
         _sesion = sesion;
-        _mongo = mongo;
+        _areaRepo = areaRepo;
+    }
+
+    public void Initialize()
+    {
         NavigateToAuth(ApplicationPageNames.Login);
     }
 
     private void NavigateToAuth(ApplicationPageNames page)
     {
         var vm = _pageFactory.GetPageViewModel(page);
-        if (vm is LoginViewModel login) login.Main = this;
-        else if (vm is RegistroViewModel registro) registro.Main = this;
-        else if (vm is RecuperarContraViewModel recuperar) recuperar.Main = this;
         CurrentPage = vm;
     }
 
-    // Auth navigation
-    [RelayCommand] private void GoToLogin() { CurrentAuthPage = AuthPage.Login; NavigateToAuth(ApplicationPageNames.Login); }
-    [RelayCommand] private void GoToRegistro() { CurrentAuthPage = AuthPage.Registro; NavigateToAuth(ApplicationPageNames.Registro); }
-    [RelayCommand] private void GoToRecuperarContra() { CurrentAuthPage = AuthPage.RecuperarContra; NavigateToAuth(ApplicationPageNames.RecuperarContra); }
+    public void OnLoginSuccess() => LoginCommand.Execute(null);
+
+    public void NavigateToPage(ApplicationPageNames page) => CurrentPage = _pageFactory.GetPageViewModel(page);
+
+    // Auth navigation (also implements INavigationService)
+    [RelayCommand] public void GoToLogin() { CurrentAuthPage = AuthPage.Login; NavigateToAuth(ApplicationPageNames.Login); }
+    [RelayCommand] public void GoToRegistro() { CurrentAuthPage = AuthPage.Registro; NavigateToAuth(ApplicationPageNames.Registro); }
+    [RelayCommand] public void GoToRecuperarContra() { CurrentAuthPage = AuthPage.RecuperarContra; NavigateToAuth(ApplicationPageNames.RecuperarContra); }
 
     [RelayCommand] private async Task LoginAsync()
     {
@@ -102,7 +106,7 @@ public partial class MainViewModel : ViewModelBase
         }
         else
         {
-            var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual!.IdUsuario!);
+            var areas = await _areaRepo.ObtenerAreasPorUsuario(_sesion.UsuarioActual!.IdUsuario!);
             AreasInteres = new ObservableCollection<AreaInteres>(areas);
             
             ActiveUserSection = UserSection.Tareas;
@@ -131,7 +135,7 @@ public partial class MainViewModel : ViewModelBase
     public async Task ReloadAreasAsync()
     {
         if (_sesion.UsuarioActual == null) return;
-        var areas = await _mongo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario!);
+        var areas = await _areaRepo.ObtenerAreasPorUsuario(_sesion.UsuarioActual.IdUsuario!);
         AreasInteres = new ObservableCollection<AreaInteres>(areas);
     }
 

@@ -4,8 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using PlanificApp.Models;
 using planificApp.Helpers;
+using planificApp.Services;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -40,7 +42,8 @@ public partial class InboxView : UserControl
 
     private async void NewTaskButton_Click(object? sender, RoutedEventArgs e)
     {
-        var result = await DialogHelper.ShowNewTaskDialog(this);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        var result = await dialogService.ShowNewTaskDialog();
         if (result && DataContext is InboxViewModel vm)
             await vm.CargarTareasAsync();
     }
@@ -158,6 +161,8 @@ public partial class InboxView : UserControl
         DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
         DetailMensaje.IsVisible = false;
+        DetailTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(vm.DetalleTipoActividadFisica);
+        DetailTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(vm.DetalleTipoActividadMental);
     }
 
     private void HideDetail()
@@ -179,8 +184,17 @@ public partial class InboxView : UserControl
         vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
         vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : DetalleTareaHelper.UbicacionFromIndex(DetailUbicacion.SelectedIndex);
         vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
+        vm.DetalleTipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(DetailTipoActividadFisica.SelectedIndex);
+        vm.DetalleTipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(DetailTipoActividadMental.SelectedIndex);
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
+
+        if (vm.TareaSeleccionada == null)
+        {
+            HideDetail();
+            ClearSelection();
+            return;
+        }
 
         if (vm.DetalleMensaje == "El nombre no puede estar vacío.")
         {
@@ -224,32 +238,4 @@ public partial class InboxView : UserControl
         DetailMensaje.IsVisible = false;
         DetailMensaje.Opacity = 1;
     }
-
-    private static int UbicacionToIndex(string? ubicacion) => ubicacion switch
-    {
-        "Casa" => 1, "Trabajo" => 2, "Universidad" => 3,
-        "Gimnasio" => 4, "Supermercado" => 5, "Otro" => 6,
-        _ => 0
-    };
-
-    private static string? UbicacionFromIndex(int index) => index switch
-    {
-        1 => "Casa", 2 => "Trabajo", 3 => "Universidad",
-        4 => "Gimnasio", 5 => "Supermercado", 6 => "Otro",
-        _ => null
-    };
-
-    private static int TiempoEstimadoToIndex(int minutos) => minutos switch
-    {
-        5 => 1, 10 => 2, 15 => 3, 30 => 4, 45 => 5,
-        60 => 6, 90 => 7, 120 => 8, 180 => 9, 240 => 10,
-        _ => 0
-    };
-
-    private static int TiempoEstimadoFromIndex(int index) => index switch
-    {
-        1 => 5, 2 => 10, 3 => 15, 4 => 30, 5 => 45,
-        6 => 60, 7 => 90, 8 => 120, 9 => 180, 10 => 240,
-        _ => 0
-    };
 }
