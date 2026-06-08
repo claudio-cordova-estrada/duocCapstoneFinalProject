@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Microsoft.Extensions.DependencyInjection;
+using planificApp.Services;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -72,7 +74,8 @@ public partial class RegistroView : UserControl
         btn.Click += (_, _) =>
         {
             dialog.Close();
-            vm.Main.GoToLoginCommand.Execute(null);
+            var navigation = App.Services.GetRequiredService<INavigationService>();
+            navigation.NavigateToPage(Data.ApplicationPageNames.Login);
         };
 
         var owner = TopLevel.GetTopLevel(this) as Window;

@@ -43,7 +43,7 @@
                     <!-- Admin toggle (temporary) -->
                     <Grid ColumnDefinitions="*,Auto" Margin="0 4 0 0">
                         <TextBlock Grid.Column="0" Text="Modo administrador" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding Main.IsAdminToggle}" OnContent="" OffContent="" Margin="0 0 -8 0"/>
+                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding IsAdminToggle}" OnContent="" OffContent="" Margin="0 0 -8 0"/>
                     </Grid>
 
                     <!-- Login button -->
@@ -54,7 +54,7 @@
                     <!-- Links -->
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">
                         <TextBlock Text="¿Olvidaste tu contraseña?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <Button Classes="transparent" Command="{Binding Main.GoToRecuperarContraCommand}" Padding="4 2">
+                        <Button Classes="transparent" Command="{Binding GoToRecuperarContraCommand}" Padding="4 2">
                             <TextBlock Text="Recuperar" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
                         </Button>
                     </StackPanel>
@@ -63,7 +63,7 @@
 
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4">
                         <TextBlock Text="¿No tienes cuenta?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <Button Classes="transparent" Command="{Binding Main.GoToRegistroCommand}" Padding="4 2">
+                        <Button Classes="transparent" Command="{Binding GoToRegistroCommand}" Padding="4 2">
                             <TextBlock Text="Crear cuenta" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
                         </Button>
                     </StackPanel>

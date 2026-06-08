@@ -4,8 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using PlanificApp.Models;
 using planificApp.Helpers;
+using planificApp.Services;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -41,7 +43,8 @@ public partial class AreaInteresView : UserControl
     private async void NewTaskButton_Click(object? sender, RoutedEventArgs e)
     {
         var areaID = DataContext is AreaInteresViewModel vmArea ? vmArea.AreaSeleccionada?.IdAreaInteres : null;
-        var result = await DialogHelper.ShowNewTaskDialog(this, areaID);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        var result = await dialogService.ShowNewTaskDialog(areaID);
         if (result && DataContext is AreaInteresViewModel vm)
             await vm.CargarTareasAsync();
     }

@@ -23,6 +23,7 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Mapsui" Version="5.1.0" />
         <PackageReference Include="Mapsui.Avalonia12" Version="5.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.8" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
         <PackageReference Include="MongoDB.Driver" Version="3.8.1" />

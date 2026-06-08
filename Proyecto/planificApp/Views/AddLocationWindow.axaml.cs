@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using PlanificApp.Services;
+using PlanificApp.Models.Services.Interfaces;
 
 namespace planificApp.Views;
 
@@ -21,7 +21,7 @@ public class LocationFormData
 
 public partial class AddLocationWindow : Window
 {
-    private readonly GeoService _geoService;
+    private readonly IGeoService _geoService;
     public ObservableCollection<string> Sugerencias { get; set; } = new();
     private string _selectedColor = "#a78bfa";
     private string _selectedTransport = "Metro";
@@ -32,7 +32,7 @@ public partial class AddLocationWindow : Window
     }
 
     // Constructor real
-    public AddLocationWindow(GeoService geoService) : this()
+    public AddLocationWindow(IGeoService geoService) : this()
     {
         _geoService = geoService;
         LocationInput.ItemsSource = Sugerencias;

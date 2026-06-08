@@ -6,8 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using planificApp.Factories;
+using planificApp.Services;
 using planificApp.ViewModels;
 using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories;
+using PlanificApp.Models.Repositories.Interfaces;
 using System;
 using System.Reflection;
 
@@ -61,19 +65,29 @@ public partial class App : Application
         collection.AddTransient<UsuariosViewModel>();
         collection.AddTransient<UsuarioDetalleViewModel>();
 
-        // Services
-        collection.AddSingleton<MongoService>();
-        collection.AddSingleton<SesionService>();
-
-        // 1. Configuramos la lectura de tu API Key desde el appsettings.json
+        // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
             .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
             .Build();
         collection.AddSingleton<Microsoft.Extensions.Configuration.IConfiguration>(config);
 
-        // 2. Registramos el servicio de Google para que pueda ser inyectado
-        collection.AddSingleton<PlanificApp.Services.GeoService>();
+        // Infrastructure
+        collection.AddSingleton<MongoContext>();
+        
+        // Repositories
+        collection.AddSingleton<IUsuarioRepository, UsuarioRepository>();
+        collection.AddSingleton<ITareaRepository, TareaRepository>();
+        collection.AddSingleton<IAreaInteresRepository, AreaInteresRepository>();
+        collection.AddSingleton<IUbicacionRepository, UbicacionRepository>();
+
+        // Services
+        collection.AddSingleton<IAuthenticationService, AuthenticationService>();
+        collection.AddSingleton<ISesionService, SesionService>();
+        collection.AddSingleton<IGeoService, GeoService>();
+        collection.AddSingleton<IDialogService, DialogService>();
+        collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
 
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {
@@ -112,9 +126,11 @@ public partial class App : Application
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var mainVm = services.GetRequiredService<MainViewModel>();
+            mainVm.Initialize();
             desktop.MainWindow = new MainView
             {
-                DataContext = services.GetRequiredService<MainViewModel>()
+                DataContext = mainVm
             };
         }
 

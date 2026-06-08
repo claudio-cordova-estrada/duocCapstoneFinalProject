@@ -1,17 +1,18 @@
-ï»¿using System;
+using System;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlanificApp.Models;
 using PlanificApp.Models.Enums;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories.Interfaces;
 
 namespace planificApp.ViewModels;
 
 public partial class NewAreaViewModel : ViewModelBase
 {
-    private readonly MongoService _mongo;
-    private readonly SesionService _sesion;
+    private readonly IAreaInteresRepository _areaRepo;
+    private readonly ISesionService _sesion;
 
     [ObservableProperty] private string _nombre = string.Empty;
     [ObservableProperty] private string _colorHex = "#a78bfa";
@@ -23,15 +24,15 @@ public partial class NewAreaViewModel : ViewModelBase
     [ObservableProperty] private int _horasSemanales;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
-    [ObservableProperty] private string _titulo = "Nueva Ã¡rea de interÃ©s";
+    [ObservableProperty] private string _titulo = "Nueva área de interés";
 
     public bool EsModoEdicion { get; private set; }
     public string? IdAreaEditando { get; private set; }
     public bool GuardadoExitoso { get; private set; }
 
-    public NewAreaViewModel(MongoService mongo, SesionService sesion)
+    public NewAreaViewModel(IAreaInteresRepository areaRepo, ISesionService sesion)
     {
-        _mongo = mongo;
+        _areaRepo = areaRepo;
         _sesion = sesion;
     }
 
@@ -39,7 +40,7 @@ public partial class NewAreaViewModel : ViewModelBase
     {
         EsModoEdicion = true;
         IdAreaEditando = area.IdAreaInteres;
-        Titulo = "Editar Ã¡rea de interÃ©s";
+        Titulo = "Editar área de interés";
         Nombre = area.Nombre;
         ColorHex = area.ColorHex;
         UbicacionPred = area.UbicacionPred;
@@ -58,14 +59,14 @@ public partial class NewAreaViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(Nombre))
         {
-            ErrorMessage = "Ingresa un nombre para el Ã¡rea.";
+            ErrorMessage = "Ingresa un nombre para el área.";
             HasError = true;
             return;
         }
 
         if (_sesion.UsuarioActual == null)
         {
-            ErrorMessage = "SesiÃ³n no encontrada.";
+            ErrorMessage = "Sesión no encontrada.";
             HasError = true;
             return;
         }
@@ -88,11 +89,11 @@ public partial class NewAreaViewModel : ViewModelBase
             if (EsModoEdicion && IdAreaEditando != null)
             {
                 area.IdAreaInteres = IdAreaEditando;
-                await _mongo.ActualizarAreaInteres(IdAreaEditando, area);
+                await _areaRepo.ActualizarAreaInteres(IdAreaEditando, area);
             }
             else
             {
-                await _mongo.CrearAreaInteres(area);
+                await _areaRepo.CrearAreaInteres(area);
             }
 
             GuardadoExitoso = true;
@@ -100,8 +101,8 @@ public partial class NewAreaViewModel : ViewModelBase
         catch (Exception ex)
         {
             ErrorMessage = EsModoEdicion
-                ? $"Error al actualizar el Ã¡rea: {ex.Message}"
-                : $"Error al crear el Ã¡rea: {ex.Message}";
+                ? $"Error al actualizar el área: {ex.Message}"
+                : $"Error al crear el área: {ex.Message}";
             HasError = true;
         }
     }

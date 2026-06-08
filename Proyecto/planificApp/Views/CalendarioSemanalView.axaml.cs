@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using planificApp.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using planificApp.Services;
 
 namespace planificApp.Views;
 
@@ -13,6 +14,7 @@ public partial class CalendarioSemanalView : UserControl
 
     private void GenerarSemana_Click(object? sender, RoutedEventArgs e)
     {
-        DialogHelper.ShowGenerarSemanaDialog(this);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        dialogService.ShowGenerarSemanaDialog();
     }
 }

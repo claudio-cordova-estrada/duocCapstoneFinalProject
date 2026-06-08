@@ -1,14 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlanificApp.Models;
+using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace PlanificApp.Services
+namespace PlanificApp.Models.Services
 {
-    public class GeoService
+    public class GeoService : IGeoService
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;

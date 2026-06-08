@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,22 +6,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
 using PlanificApp.Models;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories.Interfaces;
+using planificApp.Helpers;
 
 namespace planificApp.ViewModels;
 
-public partial class AreaInteresViewModel : PageViewModel
+public partial class AreaInteresViewModel : TareaDetailViewModelBase
 {
-    private readonly MongoService _mongo;
-    private readonly SesionService _sesion;
-
-    public AreaInteresViewModel(MongoService mongo, SesionService sesion)
-    {
-        _mongo = mongo;
-        _sesion = sesion;
-        PageName = ApplicationPageNames.UserAreaInteres;
-    }
-
     [ObservableProperty] private AreaInteres? _areaSeleccionada;
     [ObservableProperty] private string _tituloVista = string.Empty;
     [ObservableProperty] private string _subtituloVista = string.Empty;
@@ -33,51 +25,35 @@ public partial class AreaInteresViewModel : PageViewModel
     [ObservableProperty] private bool _hayCompletadas;
     [ObservableProperty] private bool _completadasVisibles = true;
     [ObservableProperty] private string _quickAddNombre = string.Empty;
-    [ObservableProperty] private Tarea? _tareaSeleccionada;
 
-    [ObservableProperty] private string _detalleNombre = string.Empty;
-    [ObservableProperty] private string _detalleEstado = string.Empty;
-    [ObservableProperty] private string _detalleMensaje = string.Empty;
-    
     private bool esModoEdicion;
     private string? IdAreaEditando;
 
-    public DateTime? DetalleFecInicio { get; set; }
-    public DateTime? DetalleFecLimite { get; set; }
-    public TimeSpan? DetalleHoraInicio { get; set; }
-    public TimeSpan? DetalleHoraFin { get; set; }
-    public string? DetalleUbicacion { get; set; }
-    public int DetallePrioridad { get; set; } = 1;
-    public int DetalleTiempoEstimado { get; set; }
-    public string? DetalleIdAreaInteres { get; set; }
-    public string? DetalleTipoActividadFisica { get; set; }
-    public string? DetalleTipoActividadMental { get; set; }
-
-    [ObservableProperty] private ObservableCollection<AreaInteres> _areasInteres = new();
-
-    public async Task CargarTareasAsync()
+    public AreaInteresViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion)
+        : base(tareaRepo, areaRepo, sesion)
     {
-        if (_sesion.UsuarioActual == null || AreaSeleccionada?.IdAreaInteres == null) return;
-        
-        var idUsuario = _sesion.UsuarioActual.IdUsuario!;
+        PageName = ApplicationPageNames.UserAreaInteres;
+    }
+
+    public override async Task CargarTareasAsync()
+    {
+        if (Sesion.UsuarioActual == null || AreaSeleccionada?.IdAreaInteres == null) return;
+
+        var idUsuario = Sesion.UsuarioActual.IdUsuario!;
 
         AreasInteres = new ObservableCollection<AreaInteres>(
-            await _mongo.ObtenerAreasPorUsuario(idUsuario));
+            await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
 
-        var tareas = await _mongo.ObtenerTareasPorArea(AreaSeleccionada.IdAreaInteres);
+        var tareas = await TareaRepo.ObtenerTareasPorArea(AreaSeleccionada.IdAreaInteres);
 
         var pendientes = tareas.Where(t => t.FecCompletado == null).ToList();
         var completadas = tareas.Where(t => t.FecCompletado != null).ToList();
-        // me di cuenta de que no se estaba tomando en cuenta el caso donde no existiera fecha limite
-        // por tanto lo agregue como segunda condición
-        var vencidas = pendientes.Count(t => (t.FecLimite != null && t.FecLimite < DateTime.Now) || 
+        var vencidas = pendientes.Count(t => (t.FecLimite != null && t.FecLimite < DateTime.Now) ||
                                              (t.FecLimite == null && t.FecInicio != null && t.FecInicio < DateTime.Now));
 
         TareasPendientesFiltradas = new ObservableCollection<Tarea>(pendientes);
         TareasCompletadasFiltradas = new ObservableCollection<Tarea>(completadas);
-        
-        // Invertí la lógica de la variable de vencidas para tener solamente las tareas activas o pendientes
-        // y no vencidas. Soy un genio
+
         TareasPendientes = pendientes.Count(t => !((t.FecLimite != null && t.FecLimite < DateTime.Now) ||
                                                   (t.FecLimite == null && t.FecInicio != null &&
                                                    t.FecInicio < DateTime.Now)));
@@ -91,29 +67,9 @@ public partial class AreaInteresViewModel : PageViewModel
     public void SetArea(AreaInteres area)
     {
         AreaSeleccionada = area;
-        TituloVista = area.Nombre ?? "Área";
+        TituloVista = area.Nombre ?? "\u00C1rea";
         SubtituloVista = "Cargando...";
         _ = CargarTareasAsync();
-    }
-
-    [RelayCommand]
-    private void SeleccionarTarea(Tarea tarea)
-    {
-        TareaSeleccionada = tarea;
-        DetalleNombre = tarea.Nombre;
-        DetalleFecInicio = tarea.FecInicio;
-        DetalleFecLimite = tarea.FecLimite;
-        DetalleHoraInicio = tarea.HoraInicio;
-        DetalleHoraFin = tarea.HoraFin;
-        DetalleUbicacion = tarea.Ubicacion;
-        DetallePrioridad = tarea.Prioridad;
-        DetalleTiempoEstimado = tarea.TiempoEstimado;
-        DetalleIdAreaInteres = tarea.IdAreaInteres;
-        DetalleTipoActividadFisica = tarea.TipoActividadFisica;
-        DetalleTipoActividadMental = tarea.TipoActividadMental;
-
-        DetalleEstado = Helpers.DetalleTareaHelper.CalcularEstado(tarea);
-        DetalleMensaje = string.Empty;
     }
 
     [RelayCommand]
@@ -123,109 +79,30 @@ public partial class AreaInteresViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private async Task ToggleTareaAsync(Tarea tarea)
-    {
-        if (tarea.IdTarea == null) return;
-
-        if (tarea.FecCompletado == null)
-            await _mongo.CompletarTarea(tarea.IdTarea);
-        else
-            await _mongo.DescompletarTarea(tarea.IdTarea);
-
-        if (TareaSeleccionada?.IdTarea == tarea.IdTarea)
-            TareaSeleccionada = null;
-        await CargarTareasAsync();
-    }
-
-    [RelayCommand]
-    private async Task EliminarTareaAsync(Tarea tarea)
-    {
-        if (tarea.IdTarea == null) return;
-
-        await _mongo.EliminarTarea(tarea.IdTarea);
-        if (TareaSeleccionada?.IdTarea == tarea.IdTarea)
-            TareaSeleccionada = null;
-        await CargarTareasAsync();
-    }
-
-    [RelayCommand]
-    private async Task GuardarDetalleAsync()
-    {
-        if (TareaSeleccionada == null || TareaSeleccionada.IdTarea == null) return;
-
-        if (string.IsNullOrWhiteSpace(DetalleNombre))
-        {
-            DetalleNombre = TareaSeleccionada.Nombre;
-            DetalleMensaje = "El nombre no puede estar vacío.";
-            return;
-        }
-
-        DetalleMensaje = string.Empty;
-
-        try
-        {
-            var oldAreaId = TareaSeleccionada.IdAreaInteres;
-
-            TareaSeleccionada.Nombre = DetalleNombre;
-            TareaSeleccionada.FecInicio = DetalleFecInicio;
-            TareaSeleccionada.FecLimite = DetalleFecLimite;
-            TareaSeleccionada.HoraInicio = DetalleHoraInicio;
-            TareaSeleccionada.HoraFin = DetalleHoraFin;
-            TareaSeleccionada.Prioridad = DetallePrioridad;
-            TareaSeleccionada.Ubicacion = string.IsNullOrWhiteSpace(DetalleUbicacion) ? null : DetalleUbicacion;
-            TareaSeleccionada.TiempoEstimado = DetalleTiempoEstimado;
-            TareaSeleccionada.IdAreaInteres = DetalleIdAreaInteres;
-            TareaSeleccionada.TipoActividadFisica = DetalleTipoActividadFisica;
-            TareaSeleccionada.TipoActividadMental = DetalleTipoActividadMental;
-
-            if (DetalleIdAreaInteres != oldAreaId)
-            {
-                var nuevaArea = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == DetalleIdAreaInteres);
-                if (nuevaArea != null)
-                {
-                    Helpers.DetalleTareaHelper.AplicarDefaultsArea(TareaSeleccionada, nuevaArea);
-                    DetalleUbicacion = TareaSeleccionada.Ubicacion;
-                    DetalleTipoActividadFisica = TareaSeleccionada.TipoActividadFisica;
-                    DetalleTipoActividadMental = TareaSeleccionada.TipoActividadMental;
-                }
-            }
-
-            await _mongo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
-            DetalleMensaje = "Guardado";
-
-            if (TareaSeleccionada.IdAreaInteres != AreaSeleccionada?.IdAreaInteres)
-            {
-                TareaSeleccionada = null;
-            }
-
-            await CargarTareasAsync();
-        }
-        catch (Exception ex)
-        {
-            DetalleMensaje = $"Error: {ex.Message}";
-        }
-    }
-
-    [RelayCommand]
     private async Task QuickAddAsync()
     {
         if (string.IsNullOrWhiteSpace(QuickAddNombre)) return;
-        if (_sesion.UsuarioActual == null) return;
+        if (Sesion.UsuarioActual == null) return;
         if (AreaSeleccionada?.IdAreaInteres == null) return;
 
         var tarea = new Tarea
         {
             Nombre = QuickAddNombre.Trim(),
-            IdUsuario = _sesion.UsuarioActual.IdUsuario,
+            IdUsuario = Sesion.UsuarioActual.IdUsuario,
             IdAreaInteres = AreaSeleccionada.IdAreaInteres,
             Prioridad = 1,
             FecCreacion = DateTime.Now
         };
 
-        Helpers.DetalleTareaHelper.AplicarDefaultsArea(tarea, AreaSeleccionada);
+        DetalleTareaHelper.AplicarDefaultsArea(tarea, AreaSeleccionada);
 
-        await _mongo.CrearTarea(tarea);
+        await TareaRepo.CrearTarea(tarea);
         QuickAddNombre = string.Empty;
         await CargarTareasAsync();
+    }
+
+    protected override bool ShouldDeselectAfterSave(Tarea tarea)
+    {
+        return tarea.IdAreaInteres != AreaSeleccionada?.IdAreaInteres;
     }
 }

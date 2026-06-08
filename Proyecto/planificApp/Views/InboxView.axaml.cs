@@ -4,8 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using PlanificApp.Models;
 using planificApp.Helpers;
+using planificApp.Services;
 using planificApp.ViewModels;
 
 namespace planificApp.Views;
@@ -40,7 +42,8 @@ public partial class InboxView : UserControl
 
     private async void NewTaskButton_Click(object? sender, RoutedEventArgs e)
     {
-        var result = await DialogHelper.ShowNewTaskDialog(this);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        var result = await dialogService.ShowNewTaskDialog();
         if (result && DataContext is InboxViewModel vm)
             await vm.CargarTareasAsync();
     }

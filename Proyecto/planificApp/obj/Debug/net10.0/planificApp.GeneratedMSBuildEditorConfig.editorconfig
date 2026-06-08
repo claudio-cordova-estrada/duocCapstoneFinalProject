@@ -52,6 +52,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/BusquedaUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalcularRutaWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioMensualView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 

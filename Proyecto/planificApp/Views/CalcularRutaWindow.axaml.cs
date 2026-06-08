@@ -2,13 +2,13 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using planificApp.ViewModels;
-using PlanificApp.Services;
+using PlanificApp.Models.Services.Interfaces;
 
 namespace planificApp.Views
 {
     public partial class CalcularRutaWindow : Window
     {
-        private readonly GeoService _geoService;
+        private readonly IGeoService _geoService;
 
         // Constructor para el diseñador visual
         public CalcularRutaWindow()
@@ -18,7 +18,7 @@ namespace planificApp.Views
         }
 
         // Constructor real que recibe tus servicios y tu lista de ubicaciones
-        public CalcularRutaWindow(GeoService geoService, ObservableCollection<UbicacionVisual> ubicaciones)
+        public CalcularRutaWindow(IGeoService geoService, ObservableCollection<UbicacionVisual> ubicaciones)
         {
             InitializeComponent();
             _geoService = geoService;

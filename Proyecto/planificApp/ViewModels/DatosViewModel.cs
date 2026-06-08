@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using planificApp.Data;
 using planificApp.Helpers;
-using PlanificApp.Models.Services;
+using PlanificApp.Models.Services.Interfaces;
+using PlanificApp.Models.Repositories.Interfaces;
 using Avalonia.Media.Imaging;
 
 namespace planificApp.ViewModels;
@@ -20,13 +21,13 @@ public partial class DatosViewModel : PageViewModel
     [ObservableProperty] private Bitmap? _fotoPerfil;
     [ObservableProperty] private bool _tieneFoto = false;
 
-    private readonly SesionService _sesion;
-    private readonly MongoService _mongo;
+    private readonly ISesionService _sesion;
+    private readonly IUsuarioRepository _usuarioRepo;
 
-    public DatosViewModel(SesionService sesion, MongoService mongo)
+    public DatosViewModel(ISesionService sesion, IUsuarioRepository usuarioRepo)
     {
         _sesion = sesion;
-        _mongo = mongo;
+        _usuarioRepo = usuarioRepo;
         PageName = ApplicationPageNames.UserDatos;
         CargarDatos();
     }
@@ -70,7 +71,7 @@ public partial class DatosViewModel : PageViewModel
 
         var base64 = Convert.ToBase64String(imageBytes);
 
-        await _mongo.ActualizarFotoPerfil(_sesion.UsuarioActual.IdUsuario!, base64);
+        await _usuarioRepo.ActualizarFotoPerfil(_sesion.UsuarioActual.IdUsuario!, base64);
 
         _sesion.UsuarioActual.FotoPerfil = base64;
         FotoPerfil = new Bitmap(new MemoryStream(imageBytes));
