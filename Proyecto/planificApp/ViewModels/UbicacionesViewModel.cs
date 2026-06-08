@@ -1,13 +1,14 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using planificApp.Views;
 using PlanificApp.Models;
 using PlanificApp.Models.Services;
 using PlanificApp.Services;
-using planificApp.Views;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace planificApp.ViewModels
 {
@@ -28,20 +29,50 @@ namespace planificApp.ViewModels
                 if (_ubicacionSeleccionada != value)
                 {
                     _ubicacionSeleccionada = value;
-                    // Esto le grita a la interfaz gráfica: "¡Oye, cambié! ¡Actualiza los textos!"
                     OnPropertyChanged(nameof(UbicacionSeleccionada));
+
+                    if (_ubicacionSeleccionada != null)
+                    {
+                        EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
+                    }
                 }
             }
         }
+
         public ObservableCollection<string> MisAreasDeInteres { get; set; } = new();
 
         public ICommand AgregarUbicacionCommand { get; set; }
         public ICommand EditarUbicacionCommand { get; set; }
         public ICommand EliminarUbicacionCommand { get; set; }
+        public ICommand AbrirCalculadoraRutaCommand { get; set; }
+        public ICommand GuardarUbicacionTemporalCommand { get; set; }
 
+        // NUEVO COMANDO PARA DESCARTAR
+        public ICommand DescartarUbicacionTemporalCommand { get; set; }
+
+        public GeoService ServicioGeo => _geoService;
         public Action? MapaDebeActualizarse { get; set; }
+        public Action<double, double>? EnfocarEnUbicacion { get; set; }
 
-        // Inyectamos los 3 servicios necesarios
+        // NUEVA ACCIÓN PARA ELIMINAR EL PIN
+        public Action? BorrarPinTemporalDelMapa { get; set; }
+
+        private bool _modoSeleccionActivo;
+        public bool ModoSeleccionActivo
+        {
+            get => _modoSeleccionActivo;
+            set
+            {
+                if (_modoSeleccionActivo != value)
+                {
+                    _modoSeleccionActivo = value;
+                    OnPropertyChanged(nameof(ModoSeleccionActivo));
+                }
+            }
+        }
+
+        public Action<List<(double Latitud, double Longitud)>>? TrazarRutaEnMapa { get; set; }
+
         public UbicacionesViewModel(GeoService geoService, MongoService mongoService, SesionService sesionService)
         {
             _geoService = geoService;
@@ -56,6 +87,11 @@ namespace planificApp.ViewModels
             EliminarUbicacionCommand = new RelayCommand<UbicacionVisual>(EliminarUbicacion);
             EditarUbicacionCommand = new RelayCommand<UbicacionVisual>(EditarUbicacion);
             AgregarUbicacionCommand = new RelayCommand<object>(AgregarUbicacion);
+            AbrirCalculadoraRutaCommand = new RelayCommand<object>(AbrirCalculadoraRuta);
+            GuardarUbicacionTemporalCommand = new RelayCommand<object>(GuardarUbicacionTemporal);
+
+            // INICIALIZAMOS EL COMANDO DESCARTAR
+            DescartarUbicacionTemporalCommand = new RelayCommand<object>(DescartarUbicacionTemporal);
 
             _ = CargarUbicacionesRealesAsync();
         }
@@ -63,16 +99,13 @@ namespace planificApp.ViewModels
         private async Task CargarUbicacionesRealesAsync()
         {
             if (_sesionService.UsuarioActual == null) return;
-
-            // Descargamos de MongoDB
             var ubicacionesDb = await _mongoService.ObtenerUbicacionesPorUsuario(_sesionService.UsuarioActual.IdUsuario);
-
             ListaUbicaciones.Clear();
             foreach (var ubi in ubicacionesDb)
             {
                 ListaUbicaciones.Add(new UbicacionVisual
                 {
-                    IdUbicacion = ubi.IdUbicacion, // Llave fundamental para poder eliminar
+                    IdUbicacion = ubi.IdUbicacion,
                     Nombre = ubi.Nombre,
                     AreaInteres = ubi.AreaInteres,
                     DireccionExacta = ubi.DireccionExacta,
@@ -91,15 +124,12 @@ namespace planificApp.ViewModels
             {
                 var ventana = new AddLocationWindow(_geoService);
                 ventana.SetAreasDeInteres(MisAreasDeInteres);
-
                 var resultado = await ventana.ShowDialog<LocationFormData>(desktop.MainWindow!);
-
                 if (resultado != null && !string.IsNullOrWhiteSpace(resultado.Direccion))
                 {
                     var geo = await _geoService.ValidarDireccionAsync(resultado.Nombre, resultado.Direccion);
                     if (geo != null && _sesionService.UsuarioActual != null)
                     {
-                        // 1. Armamos el objeto para MongoDB
                         var nuevaUbicacionDb = new UbicacionGuardada
                         {
                             IdUsuario = _sesionService.UsuarioActual.IdUsuario,
@@ -111,11 +141,7 @@ namespace planificApp.ViewModels
                             Latitud = geo.Latitud,
                             Longitud = geo.Longitud
                         };
-
-                        // 2. Guardamos en la base de datos
                         await _mongoService.CrearUbicacion(nuevaUbicacionDb);
-
-                        // 3. Lo mostramos en la lista de la interfaz
                         ListaUbicaciones.Add(new UbicacionVisual
                         {
                             IdUbicacion = nuevaUbicacionDb.IdUbicacion,
@@ -127,7 +153,6 @@ namespace planificApp.ViewModels
                             Latitud = nuevaUbicacionDb.Latitud,
                             Longitud = nuevaUbicacionDb.Longitud
                         });
-
                         MapaDebeActualizarse?.Invoke();
                     }
                 }
@@ -142,17 +167,13 @@ namespace planificApp.ViewModels
                 var ventana = new AddLocationWindow(_geoService);
                 ventana.SetAreasDeInteres(MisAreasDeInteres);
                 ventana.SetEditMode(ubicacionAEditar.Nombre!, ubicacionAEditar.DireccionExacta!, ubicacionAEditar.AreaInteres!, ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
-
                 var resultado = await ventana.ShowDialog<LocationFormData>(desktop.MainWindow!);
-
                 if (resultado != null && _sesionService.UsuarioActual != null)
                 {
                     ubicacionAEditar.Nombre = resultado.Nombre;
                     ubicacionAEditar.AreaInteres = resultado.AreaInteres;
                     ubicacionAEditar.ColorHex = resultado.ColorHex;
                     ubicacionAEditar.TransportePreferido = resultado.Transporte;
-
-                    // Actualizamos en BD
                     var ubicacionDb = new UbicacionGuardada
                     {
                         IdUbicacion = ubicacionAEditar.IdUbicacion!,
@@ -166,7 +187,6 @@ namespace planificApp.ViewModels
                         Longitud = ubicacionAEditar.Longitud
                     };
                     await _mongoService.ActualizarUbicacion(ubicacionAEditar.IdUbicacion!, ubicacionDb);
-
                     MapaDebeActualizarse?.Invoke();
                 }
             }
@@ -175,28 +195,99 @@ namespace planificApp.ViewModels
         private async void EliminarUbicacion(UbicacionVisual ubicacionAEliminar)
         {
             if (ubicacionAEliminar == null || ubicacionAEliminar.IdUbicacion == null) return;
-
-            // Eliminamos de BD
             await _mongoService.EliminarUbicacion(ubicacionAEliminar.IdUbicacion);
-
-            // Eliminamos de UI
             ListaUbicaciones.Remove(ubicacionAEliminar);
             MapaDebeActualizarse?.Invoke();
         }
-    }
+
+        private async void AbrirCalculadoraRuta(object parametro)
+        {
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var ventana = new CalcularRutaWindow(_geoService, ListaUbicaciones);
+                await ventana.ShowDialog(desktop.MainWindow!);
+            }
+        }
+
+        private async void GuardarUbicacionTemporal(object parametro)
+        {
+            if (UbicacionSeleccionada == null || !UbicacionSeleccionada.EsTemporal) return;
+
+            if (Avalonia.Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var ventana = new AddLocationWindow(_geoService);
+                ventana.SetAreasDeInteres(MisAreasDeInteres);
+
+                ventana.SetEditMode(
+                    "",
+                    UbicacionSeleccionada.AreaInteres ?? "",
+                    "General",
+                    "#10b981",
+                    "Auto"
+                );
+
+                var resultado = await ventana.ShowDialog<LocationFormData>(desktop.MainWindow!);
+
+                if (resultado != null && !string.IsNullOrWhiteSpace(resultado.Direccion))
+                {
+                    if (_sesionService.UsuarioActual != null)
+                    {
+                        var nuevaUbicacionDb = new UbicacionGuardada
+                        {
+                            IdUsuario = _sesionService.UsuarioActual.IdUsuario,
+                            Nombre = resultado.Nombre,
+                            AreaInteres = resultado.AreaInteres,
+                            DireccionExacta = resultado.Direccion,
+                            ColorHex = resultado.ColorHex,
+                            TransportePreferido = resultado.Transporte,
+                            Latitud = UbicacionSeleccionada.Latitud,
+                            Longitud = UbicacionSeleccionada.Longitud
+                        };
+
+                        await _mongoService.CrearUbicacion(nuevaUbicacionDb);
+
+                        var nuevaVisual = new UbicacionVisual
+                        {
+                            IdUbicacion = nuevaUbicacionDb.IdUbicacion,
+                            Nombre = nuevaUbicacionDb.Nombre,
+                            AreaInteres = nuevaUbicacionDb.AreaInteres,
+                            DireccionExacta = nuevaUbicacionDb.DireccionExacta,
+                            ColorHex = nuevaUbicacionDb.ColorHex,
+                            TransportePreferido = nuevaUbicacionDb.TransportePreferido,
+                            Latitud = nuevaUbicacionDb.Latitud,
+                            Longitud = nuevaUbicacionDb.Longitud
+                        };
+
+                        ListaUbicaciones.Add(nuevaVisual);
+                        UbicacionSeleccionada = nuevaVisual;
+                        MapaDebeActualizarse?.Invoke();
+                    }
+                }
+            }
+        }
+
+        // NUEVO MÉTODO PARA DESCARTAR
+        private void DescartarUbicacionTemporal(object parametro)
+        {
+            UbicacionSeleccionada = null;
+            BorrarPinTemporalDelMapa?.Invoke();
+        }
+
+    } // <--- LLAVE CRÍTICA QUE CIERRA LA CLASE UbicacionesViewModel
 
     public class UbicacionVisual
     {
-        public string? IdUbicacion { get; set; } // Agregado para identificar en DB
+        public string? IdUbicacion { get; set; }
         public string? Nombre { get; set; }
-        public string? Categoria { get; set; }
         public string? AreaInteres { get; set; }
         public string? DireccionExacta { get; set; }
+        public bool EsTemporal { get; set; } = false;
         public string? ColorHex { get; set; }
-        public string? UltimaVisitaFormateada { get; set; }
         public string? TransportePreferido { get; set; }
+        public string? UltimaVisitaFormateada { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }
+        public string? Categoria { get; set; }
     }
 
 #pragma warning disable CS0067
@@ -209,4 +300,5 @@ namespace planificApp.ViewModels
         public event EventHandler? CanExecuteChanged;
     }
 #pragma warning restore CS0067
+
 }

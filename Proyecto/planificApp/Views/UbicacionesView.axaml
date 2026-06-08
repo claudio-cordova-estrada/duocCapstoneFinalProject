@@ -12,12 +12,57 @@
         <ScrollViewer>
             <StackPanel Spacing="16" Margin="28 26">
 
-                <TextBlock Text="Mis ubicaciones" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                <!-- Título -->
+                <TextBlock Text="Mis ubicaciones" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" Margin="0 0 0 5"/>
 
-                <!-- Map Interactivo con Mapsui -->
-                <Border x:Name="MapContainer" Classes="map-frame" Height="420">
+                <!-- Mapa Interactivo con Mapsui y Botón Flotante -->
+                <Border x:Name="MapContainer" Classes="map-frame" Height="420" ClipToBounds="True">
                     <Grid>
+                        
+                        <!-- El Mapa con su menú flotante inteligente -->
                         <mapsui:MapControl x:Name="MiMapa" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                        
+                        <!-- Contenedor del botón para darle la sombra exterior -->
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Top" 
+                                Margin="16" CornerRadius="24"
+                                BoxShadow="0 4 12 0 #60000000">
+                            
+                            <ToggleButton IsChecked="{Binding ModoSeleccionActivo}" 
+                                          Classes="map-toggle"
+                                          Padding="14 10" Cursor="Hand"
+                                          BorderThickness="1" CornerRadius="24">
+                                          
+                                <ToggleButton.Styles>
+                                    <!-- 1. Estado Normal (Apagado) -->
+                                    <Style Selector="ToggleButton.map-toggle">
+                                        <Setter Property="Background" Value="#1e1e2e"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+                                    </Style>
+                                    
+                                    <!-- 2. Estado Hover (Mouse encima) -->
+                                    <Style Selector="ToggleButton.map-toggle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="#2a2a3b"/> 
+                                        <Setter Property="BorderBrush" Value="#10b981"/> 
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                    
+                                    <!-- 3. Estado Activo (Clickeado / Modo Selección Encendido) -->
+                                    <Style Selector="ToggleButton.map-toggle:checked /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="#064e3b"/> 
+                                        <Setter Property="BorderBrush" Value="#10b981"/> 
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                </ToggleButton.Styles>
+                                
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Label Content="&#xE131;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="#10b981" VerticalAlignment="Center"/>
+                                    <Label Content="&#xE3E0;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Elegir en mapa" VerticalAlignment="Center" FontWeight="Medium"/>
+                                </StackPanel>
+                            </ToggleButton>
+                        </Border>
+                        
                     </Grid>
                 </Border>
 
@@ -25,7 +70,6 @@
                 <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12">
 
                     <!-- LISTA DINÁMICA DE UBICACIONES -->
-                    <!-- CORRECCIÓN: Se eliminó el ">" extra que rompía el tag ListBox -->
                     <ListBox Grid.Column="0" 
                              ItemsSource="{Binding ListaUbicaciones}" 
                              SelectedItem="{Binding UbicacionSeleccionada}"
@@ -48,7 +92,6 @@
                                         
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                             <TextBlock Text="{Binding Nombre}" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                            <!-- CORRECCIÓN: Cambiado de Categoria a AreaInteres -->
                                             <TextBlock Text="{Binding AreaInteres}" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
                                         </StackPanel>
 
@@ -70,10 +113,10 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!-- PANEL DE DETALLES (Recuadro inferior derecho) -->
+                   <!-- PANEL DE DETALLES (Recuadro inferior derecho) -->
                     <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Stretch">
                         <StackPanel>
-                            <!-- Título: Usa TargetNullValue para mostrar "Seleccione..." cuando no hay clics -->
+                            <!-- Título -->
                             <TextBlock Text="{Binding UbicacionSeleccionada.Nombre, TargetNullValue='Seleccione una ubicación...', FallbackValue='Seleccione...'}" 
                                        FontSize="16" FontWeight="Medium" 
                                        Foreground="{Binding UbicacionSeleccionada.ColorHex, TargetNullValue='#10b981', FallbackValue='#34d399'}" 
@@ -83,7 +126,7 @@
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
                                 <StackPanel Orientation="Horizontal" Spacing="0">
                                     <TextBlock Text="Tipo · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
-                                    <TextBlock Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='-', FallbackValue='Hogar'}" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                    <TextBlock Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='-', FallbackValue='Hogar'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
                             
@@ -95,25 +138,56 @@
                                 </StackPanel>
                             </Border>
                             
-                            <!-- Transporte -->
-                            <Border Padding="0 8 0 0" Margin="0 8 0 0">
-                                <StackPanel Orientation="Horizontal" Spacing="0">
+                            <!-- Transporte y Botones dinámicos -->
+                            <Grid ColumnDefinitions="*, Auto, Auto" Margin="0 8 0 0">
+                                
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
                                     <TextBlock Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
                                     <TextBlock Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-', FallbackValue='Metro'}" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
                                 </StackPanel>
-                            </Border>
+
+                                <!-- NUEVO: Botón para Descartar/Eliminar la selección -->
+                                <Button Grid.Column="1" 
+                                        Content="Descartar" 
+                                        Command="{Binding DescartarUbicacionTemporalCommand}"
+                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                        Background="Transparent" Foreground="#ef4444" 
+                                        FontWeight="Medium" CornerRadius="6" 
+                                        Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
+
+                                <!-- BOTÓN GUARDAR (El que ya tienes) -->
+                                <Button Grid.Column="2" 
+                                        Content="Guardar" 
+                                        Command="{Binding GuardarUbicacionTemporalCommand}"
+                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                        Background="#10b981" Foreground="White" 
+                                        FontWeight="Medium" CornerRadius="6" 
+                                        Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
+                            </Grid>
                         </StackPanel>
                     </Border>
-
                 </Grid>
 
-                <!-- Botón de agregar ubicación -->
-                <Button Classes="add-loc-btn" Command="{Binding AgregarUbicacionCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                        <Label Content="&#xE3D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Agregar ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
+                <!-- Botones de acción general inferiores -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="12" Margin="0 10 0 0">
+                    
+                    <!-- Botón de Agregar Ubicación -->
+                    <Button Grid.Column="0" Classes="add-loc-btn" Command="{Binding AgregarUbicacionCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Label Content="&#xE3D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Agregar ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Botón de Calcular Ruta -->
+                    <Button Grid.Column="1" Classes="add-loc-btn" Command="{Binding AbrirCalculadoraRutaCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Label Content="&#xE34A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Calcular ruta" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
 
             </StackPanel>
         </ScrollViewer>
