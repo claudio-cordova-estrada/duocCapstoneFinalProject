@@ -99,7 +99,11 @@ public static class DialogHelper
         if (window == null) return;
 
         var dialog = new AddLocationWindow();
-        dialog.SetEditMode("Casa", "Hogar", "#34d399", "Metro");
+
+        // Ahora enviamos los 5 parámetros requeridos:
+        // (Nombre, Dirección, Área, Color, Transporte)
+        dialog.SetEditMode("Casa", "Hualpén, Chile", "Hogar", "#34d399", "Metro");
+
         await dialog.ShowDialog(window);
     }
 

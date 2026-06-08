@@ -1,14 +1,15 @@
-using System;
-using System.Reflection;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Metadata;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using planificApp.Factories;
 using planificApp.ViewModels;
 using PlanificApp.Models.Services;
+using System;
+using System.Reflection;
 
 [assembly: XmlnsDefinition("https://github.com/avaloniaui", "planificApp.StyleControl")]
 namespace planificApp;
@@ -63,6 +64,16 @@ public partial class App : Application
         // Services
         collection.AddSingleton<MongoService>();
         collection.AddSingleton<SesionService>();
+
+        // 1. Configuramos la lectura de tu API Key desde el appsettings.json
+        var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
+            .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .Build();
+        collection.AddSingleton<Microsoft.Extensions.Configuration.IConfiguration>(config);
+
+        // 2. Registramos el servicio de Google para que pueda ser inyectado
+        collection.AddSingleton<PlanificApp.Services.GeoService>();
 
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {

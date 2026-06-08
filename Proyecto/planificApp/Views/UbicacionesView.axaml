@@ -1,4 +1,5 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:mapsui="using:Mapsui.UI.Avalonia"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,158 +12,182 @@
         <ScrollViewer>
             <StackPanel Spacing="16" Margin="28 26">
 
-                <TextBlock Text="Mis ubicaciones" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                <!-- Título -->
+                <TextBlock Text="Mis ubicaciones" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" Margin="0 0 0 5"/>
 
-                <!-- Map -->
-                <Border x:Name="MapContainer" Classes="map-frame" Height="420">
+                <!-- Mapa Interactivo con Mapsui y Botón Flotante -->
+                <Border x:Name="MapContainer" Classes="map-frame" Height="420" ClipToBounds="True">
                     <Grid>
-                        <Image Source="avares://planificApp/Assets/Images/GoogleMapsimagenfondostock.png" Stretch="UniformToFill"/>
-                        <Canvas x:Name="PinCanvas"/>
-                        <!-- Zoom buttons -->
-                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="8" Spacing="4">
-<Button Classes="map-zoom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                        <Label Content="&#xE3D4;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Button>
-                                    <Button Classes="map-zoom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                                        <Label Content="&#xE32A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Button>
-                        </StackPanel>
+                        
+                        <!-- El Mapa con su menú flotante inteligente -->
+                        <mapsui:MapControl x:Name="MiMapa" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                        
+                        <!-- Contenedor del botón para darle la sombra exterior -->
+                        <Border HorizontalAlignment="Right" VerticalAlignment="Top" 
+                                Margin="16" CornerRadius="24"
+                                BoxShadow="0 4 12 0 #60000000">
+                            
+                            <ToggleButton IsChecked="{Binding ModoSeleccionActivo}" 
+                                          Classes="map-toggle"
+                                          Padding="14 10" Cursor="Hand"
+                                          BorderThickness="1" CornerRadius="24">
+                                          
+                                <ToggleButton.Styles>
+                                    <!-- 1. Estado Normal (Apagado) -->
+                                    <Style Selector="ToggleButton.map-toggle">
+                                        <Setter Property="Background" Value="#1e1e2e"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+                                    </Style>
+                                    
+                                    <!-- 2. Estado Hover (Mouse encima) -->
+                                    <Style Selector="ToggleButton.map-toggle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="#2a2a3b"/> 
+                                        <Setter Property="BorderBrush" Value="#10b981"/> 
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                    
+                                    <!-- 3. Estado Activo (Clickeado / Modo Selección Encendido) -->
+                                    <Style Selector="ToggleButton.map-toggle:checked /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="#064e3b"/> 
+                                        <Setter Property="BorderBrush" Value="#10b981"/> 
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </Style>
+                                </ToggleButton.Styles>
+                                
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Label Content="&#xE131;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="#10b981" VerticalAlignment="Center"/>
+                                    <Label Content="&#xE3E0;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Elegir en mapa" VerticalAlignment="Center" FontWeight="Medium"/>
+                                </StackPanel>
+                            </ToggleButton>
+                        </Border>
+                        
                     </Grid>
                 </Border>
 
-                <!-- Bottom section: Locations (2 cols) + Detail (1 col) -->
-                <Grid ColumnDefinitions="1*,1*,1*" ColumnSpacing="12" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                <!-- Sección inferior: Lista Dinámica (2 columnas) + Detalles (1 columna) -->
+                <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12">
 
-                    <!-- Casa -->
-                    <Border Grid.Column="0" Grid.Row="0" x:Name="LocCasa" Classes="loc-item active" Tapped="LocCasa_Tapped">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#34d399" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Casa" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="Hogar" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
-                            </StackPanel>
-                            <StackPanel x:Name="ActionsCasa" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="True">
-                                <Button Classes="loc-action" Click="EditCasa_Click">
-                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Classes="loc-action" Click="DeleteCasa_Click">
-                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    <!-- LISTA DINÁMICA DE UBICACIONES -->
+                    <ListBox Grid.Column="0" 
+                             ItemsSource="{Binding ListaUbicaciones}" 
+                             SelectedItem="{Binding UbicacionSeleccionada}"
+                             Background="Transparent" 
+                             BorderThickness="0"
+                             Padding="0">
+                        
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
 
-                    <!-- Trabajo -->
-                    <Border Grid.Column="1" Grid.Row="0" x:Name="LocTrabajo" Classes="loc-item" Tapped="LocTrabajo_Tapped">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#a78bfa" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Trabajo" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="Trabajo" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
-                            </StackPanel>
-                            <StackPanel x:Name="ActionsTrabajo" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
-                                <Button Classes="loc-action" Click="EditTrabajo_Click">
-                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Classes="loc-action" Click="DeleteTrabajo_Click">
-                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                        <!-- Diseño (Plantilla) de cada ítem en la lista -->
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="loc-item">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{Binding ColorHex}" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Nombre}" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
+                                            <TextBlock Text="{Binding AreaInteres}" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                                        </StackPanel>
 
-                    <!-- Detail panel -->
-                    <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" Classes="card" Padding="14" VerticalAlignment="Stretch">
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                                            <Button Classes="loc-action" 
+                                                    Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EditarUbicacionCommand}" 
+                                                    CommandParameter="{Binding}">
+                                                <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Button>
+                                            <Button Classes="loc-action" 
+                                                    Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EliminarUbicacionCommand}" 
+                                                    CommandParameter="{Binding}">
+                                                <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                   <!-- PANEL DE DETALLES (Recuadro inferior derecho) -->
+                    <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Stretch">
                         <StackPanel>
-                            <TextBlock x:Name="DetailName" Text="Casa" FontSize="16" FontWeight="Medium" Foreground="#34d399" Margin="0 0 0 12"/>
+                            <!-- Título -->
+                            <TextBlock Text="{Binding UbicacionSeleccionada.Nombre, TargetNullValue='Seleccione una ubicación...', FallbackValue='Seleccione...'}" 
+                                       FontSize="16" FontWeight="Medium" 
+                                       Foreground="{Binding UbicacionSeleccionada.ColorHex, TargetNullValue='#10b981', FallbackValue='#34d399'}" 
+                                       Margin="0 0 0 12"/>
+                            
+                            <!-- Tipo (Área de Interés) -->
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
                                 <StackPanel Orientation="Horizontal" Spacing="0">
-                                    <TextBlock Text="Tipo &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
-                                    <TextBlock x:Name="DetailType" Text="Hogar" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                    <TextBlock Text="Tipo · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='-', FallbackValue='Hogar'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
+                            
+                            <!-- Última Visita -->
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8" Margin="0 8 0 0">
                                 <StackPanel Orientation="Horizontal" Spacing="0">
-                                    <TextBlock FontSize="14" Foreground="{DynamicResource TextDisabled}"><Run Text="&#xDA;ltima visita"/></TextBlock>
-                                    <TextBlock Text=" &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
-                                    <TextBlock x:Name="DetailVisit" Text="12 abr 2026" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                                    <TextBlock Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock Text="{Binding UbicacionSeleccionada.UltimaVisitaFormateada, TargetNullValue='-', FallbackValue='12 abr 2026'}" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
                                 </StackPanel>
                             </Border>
-                            <Border Padding="0 8 0 0" Margin="0 0 0 0">
-                                <StackPanel Orientation="Horizontal" Spacing="0">
-                                    <TextBlock Text="Transporte &#xB7; " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
-                                    <TextBlock x:Name="DetailTransport" Text="Metro" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
+                            
+                            <!-- Transporte y Botones dinámicos -->
+                            <Grid ColumnDefinitions="*, Auto, Auto" Margin="0 8 0 0">
+                                
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
+                                    <TextBlock Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+                                    <TextBlock Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-', FallbackValue='Metro'}" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
                                 </StackPanel>
-                            </Border>
+
+                                <!-- NUEVO: Botón para Descartar/Eliminar la selección -->
+                                <Button Grid.Column="1" 
+                                        Content="Descartar" 
+                                        Command="{Binding DescartarUbicacionTemporalCommand}"
+                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                        Background="Transparent" Foreground="#ef4444" 
+                                        FontWeight="Medium" CornerRadius="6" 
+                                        Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
+
+                                <!-- BOTÓN GUARDAR (El que ya tienes) -->
+                                <Button Grid.Column="2" 
+                                        Content="Guardar" 
+                                        Command="{Binding GuardarUbicacionTemporalCommand}"
+                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                        Background="#10b981" Foreground="White" 
+                                        FontWeight="Medium" CornerRadius="6" 
+                                        Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
+                            </Grid>
                         </StackPanel>
                     </Border>
-
-                    <!-- Iglesia -->
-                    <Border Grid.Column="0" Grid.Row="1" x:Name="LocIglesia" Classes="loc-item" Tapped="LocIglesia_Tapped">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#f472b6" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="Iglesia" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="Social" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
-                            </StackPanel>
-                            <StackPanel x:Name="ActionsIglesia" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
-                                <Button Classes="loc-action" Click="EditIglesia_Click">
-                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Classes="loc-action" Click="DeleteIglesia_Click">
-                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- M&#xE9;dico 1 -->
-                    <Border Grid.Column="1" Grid.Row="1" x:Name="LocMedico1" Classes="loc-item" Tapped="LocMedico1_Tapped">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#60a5fa" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="M&#xE9;dico 1" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="Salud" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
-                            </StackPanel>
-                            <StackPanel x:Name="ActionsMedico1" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
-                                <Button Classes="loc-action" Click="EditMedico1_Click">
-                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Classes="loc-action" Click="DeleteMedico1_Click">
-                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- M&#xE9;dico 2 -->
-                    <Border Grid.Column="0" Grid.Row="2" x:Name="LocMedico2" Classes="loc-item" Tapped="LocMedico2_Tapped">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <Ellipse Grid.Column="0" Width="12" Height="12" Fill="#60a5fa" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                <TextBlock Text="M&#xE9;dico 2" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                <TextBlock Text="Salud" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
-                            </StackPanel>
-                            <StackPanel x:Name="ActionsMedico2" Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center" IsVisible="False">
-                                <Button Classes="loc-action" Click="EditMedico2_Click">
-                                    <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                                <Button Classes="loc-action" Click="DeleteMedico2_Click">
-                                    <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
                 </Grid>
 
-                <!-- Add location button (below detail panel) -->
-                <Border Classes="add-loc-btn" Tapped="AddLocation_Tapped">
-                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                        <Label Content="&#xE3D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Agregar ubicaci&#xF3;n" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                <!-- Botones de acción general inferiores -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="12" Margin="0 10 0 0">
+                    
+                    <!-- Botón de Agregar Ubicación -->
+                    <Button Grid.Column="0" Classes="add-loc-btn" Command="{Binding AgregarUbicacionCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Label Content="&#xE3D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Agregar ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Botón de Calcular Ruta -->
+                    <Button Grid.Column="1" Classes="add-loc-btn" Command="{Binding AbrirCalculadoraRutaCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Label Content="&#xE34A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            <TextBlock Text="Calcular ruta" FontSize="15" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
 
             </StackPanel>
         </ScrollViewer>

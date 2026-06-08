@@ -39,6 +39,8 @@ namespace PlanificApp.Models.Services
             _database.GetCollection<Tarea>("Tareas");
         public IMongoCollection<AreaInteres> AreasInteres =>
             _database.GetCollection<AreaInteres>("AreasInteres");
+        public IMongoCollection<UbicacionGuardada> Ubicaciones =>
+            _database.GetCollection<UbicacionGuardada>("Ubicaciones");
 
         // modulo cuentas
         public async Task RegistrarUsuario(Usuario nuevoUsuario)
@@ -163,5 +165,20 @@ namespace PlanificApp.Models.Services
 
         public async Task EliminarAreaInteres(string id) =>
             await AreasInteres.DeleteOneAsync(a => a.IdAreaInteres == id);
+
+        // --- modulo ubicaciones ---
+        public async Task CrearUbicacion(UbicacionGuardada nuevaUbicacion) =>
+            await Ubicaciones.InsertOneAsync(nuevaUbicacion);
+
+        public async Task<List<UbicacionGuardada>> ObtenerUbicacionesPorUsuario(string idUsuario) =>
+            await Ubicaciones.Find(u => u.IdUsuario == idUsuario).ToListAsync();
+
+        public async Task ActualizarUbicacion(string id, UbicacionGuardada ubicacionActualizada) =>
+            await Ubicaciones.ReplaceOneAsync(u => u.IdUbicacion == id, ubicacionActualizada);
+
+        public async Task EliminarUbicacion(string id) =>
+            await Ubicaciones.DeleteOneAsync(u => u.IdUbicacion == id);
     }
+
+
 }

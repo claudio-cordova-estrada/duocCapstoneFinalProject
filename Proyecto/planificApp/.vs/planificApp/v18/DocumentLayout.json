@@ -1,0 +1,392 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\viewmodels\\ubicacionesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\ubicacionesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\ubicacionesview.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\ubicacionesview.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\ubicacionesview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\ubicacionesview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\loginview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\loginview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\calcularrutawindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\calcularrutawindow.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\services\\geoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\services\\geoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\calcularrutawindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\calcularrutawindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\services\\mongoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\services\\mongoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\ubicacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\ubicacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\services\\sesionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\services\\sesionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\addlocationwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\addlocationwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\settingsview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\settingsview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\locationview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\locationview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\newareawindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\newareawindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\newtaskwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\newtaskwindow.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\helpers\\dialoghelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:helpers\\dialoghelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\planificapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:planificapp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\tarea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\tarea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\viewmodels\\todaytaskviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\todaytaskviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\appsettings.example.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:appsettings.example.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\LoginView.axaml",
+              "RelativeDocumentMoniker": "Views\\LoginView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\LoginView.axaml",
+              "RelativeToolTip": "Views\\LoginView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-08T02:03:07.833Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CalcularRutaWindow.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\CalcularRutaWindow.axaml",
+              "RelativeDocumentMoniker": "Views\\CalcularRutaWindow.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\CalcularRutaWindow.axaml",
+              "RelativeToolTip": "Views\\CalcularRutaWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T15:39:05.362Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UbicacionesView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UbicacionesView.axaml",
+              "RelativeDocumentMoniker": "Views\\UbicacionesView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UbicacionesView.axaml",
+              "RelativeToolTip": "Views\\UbicacionesView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-04T23:38:30.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UbicacionesView.axaml.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UbicacionesView.axaml.cs",
+              "RelativeDocumentMoniker": "Views\\UbicacionesView.axaml.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UbicacionesView.axaml.cs",
+              "RelativeToolTip": "Views\\UbicacionesView.axaml.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAkwDsAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T01:13:33.845Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UbicacionesViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UbicacionesViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\UbicacionesViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UbicacionesViewModel.cs",
+              "RelativeToolTip": "ViewModels\\UbicacionesViewModel.cs",
+              "ViewState": "AgIAABUBAAAAAAAAAAAywCEBAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:01:28.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GeoService.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\GeoService.cs",
+              "RelativeDocumentMoniker": "Models\\Services\\GeoService.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\GeoService.cs",
+              "RelativeToolTip": "Models\\Services\\GeoService.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAqwOwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:56:18.549Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CalcularRutaWindow.axaml.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\CalcularRutaWindow.axaml.cs",
+              "RelativeDocumentMoniker": "Views\\CalcularRutaWindow.axaml.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\CalcularRutaWindow.axaml.cs",
+              "RelativeToolTip": "Views\\CalcularRutaWindow.axaml.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAYwCwAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T15:39:52.124Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Ubicacion.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Ubicacion.cs",
+              "RelativeDocumentMoniker": "Models\\Ubicacion.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Ubicacion.cs",
+              "RelativeToolTip": "Models\\Ubicacion.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:02:31.5Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AddLocationWindow.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\AddLocationWindow.axaml",
+              "RelativeDocumentMoniker": "Views\\AddLocationWindow.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\AddLocationWindow.axaml",
+              "RelativeToolTip": "Views\\AddLocationWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T03:27:43.821Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MongoService.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\MongoService.cs",
+              "RelativeDocumentMoniker": "Models\\Services\\MongoService.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\MongoService.cs",
+              "RelativeToolTip": "Models\\Services\\MongoService.cs",
+              "ViewState": "AgIAAJkAAAAAAAAAAAAgwLMAAABHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T04:58:46.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SesionService.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\SesionService.cs",
+              "RelativeDocumentMoniker": "Models\\Services\\SesionService.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\SesionService.cs",
+              "RelativeToolTip": "Models\\Services\\SesionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T04:59:00.191Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "NewAreaWindow.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\NewAreaWindow.axaml",
+              "RelativeDocumentMoniker": "Views\\NewAreaWindow.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\NewAreaWindow.axaml",
+              "RelativeToolTip": "Views\\NewAreaWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T04:55:21.004Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "App.axaml.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
+              "RelativeDocumentMoniker": "App.axaml.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
+              "RelativeToolTip": "App.axaml.cs",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAcwHQAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T01:18:28.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "planificApp.csproj",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
+              "RelativeDocumentMoniker": "planificApp.csproj",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
+              "RelativeToolTip": "planificApp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-06-06T01:41:24.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "NewTaskWindow.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\NewTaskWindow.axaml",
+              "RelativeDocumentMoniker": "Views\\NewTaskWindow.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\NewTaskWindow.axaml",
+              "RelativeToolTip": "Views\\NewTaskWindow.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T04:54:36.322Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "LocationView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\LocationView.axaml",
+              "RelativeDocumentMoniker": "Views\\LocationView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\LocationView.axaml",
+              "RelativeToolTip": "Views\\LocationView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T04:55:40.174Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SettingsView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\SettingsView.axaml",
+              "RelativeDocumentMoniker": "Views\\SettingsView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\SettingsView.axaml",
+              "RelativeToolTip": "Views\\SettingsView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-06T04:55:56.431Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-27T17:21:05.951Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "DialogHelper.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Helpers\\DialogHelper.cs",
+              "RelativeDocumentMoniker": "Helpers\\DialogHelper.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Helpers\\DialogHelper.cs",
+              "RelativeToolTip": "Helpers\\DialogHelper.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAwwFEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T03:33:15.792Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "Models\\Usuario.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
+              "RelativeToolTip": "Models\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:03:01.299Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "TodayTaskViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\TodayTaskViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\TodayTaskViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\TodayTaskViewModel.cs",
+              "RelativeToolTip": "ViewModels\\TodayTaskViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:02:52.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Tarea.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Tarea.cs",
+              "RelativeDocumentMoniker": "Models\\Tarea.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Tarea.cs",
+              "RelativeToolTip": "Models\\Tarea.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAmwDcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T00:02:39.899Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "appsettings.Example.json",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\appsettings.Example.json",
+              "RelativeDocumentMoniker": "appsettings.Example.json",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\appsettings.Example.json",
+              "RelativeToolTip": "appsettings.Example.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-27T17:20:00.989Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
