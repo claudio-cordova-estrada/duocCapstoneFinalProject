@@ -1,85 +1,35 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Microsoft.Extensions.DependencyInjection;
-using planificApp.Services;
 using planificApp.ViewModels;
+using System;
 
-namespace planificApp.Views;
-
-public partial class RegistroView : UserControl
+namespace planificApp.Views
 {
-    public RegistroView()
+    public partial class RegistroView : UserControl
     {
-        InitializeComponent();
-        DatePickerNacimiento.SelectedDateChanged += DatePickerNacimiento_SelectedDateChanged;
-    }
-
-    private void DatePickerNacimiento_SelectedDateChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (DataContext is RegistroViewModel vm && DatePickerNacimiento.SelectedDate.HasValue)
+        public RegistroView()
         {
-            vm.FecNacimiento = DatePickerNacimiento.SelectedDate.Value;
+            InitializeComponent();
         }
-    }
 
-    private async void CrearCuenta_Click(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not RegistroViewModel vm) return;
-        await vm.RegistroCommand.ExecuteAsync(null);
-
-        if (!vm.RegistroExitoso) return;
-
-        var dialog = new Window
+        private async void CrearCuenta_Click(object? sender, RoutedEventArgs e)
         {
-            Title = "Cuenta creada",
-            Width = 400,
-            Height = 200,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            CanResize = false,
-            Background = Avalonia.Media.Brush.Parse("#141414"),
-        };
+            // Verificamos que el DataContext sea nuestro ViewModel
+            if (DataContext is RegistroViewModel viewModel)
+            {
+                // Le pasamos la fecha seleccionada del control visual al ViewModel
+                viewModel.FecNacimiento = DatePickerNacimiento.SelectedDate;
 
-        var stack = new StackPanel { Margin = new Avalonia.Thickness(24), Spacing = 16, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+                // Ejecutamos el comando de registro original
+                await viewModel.RegistroCommand.ExecuteAsync(null);
 
-        stack.Children.Add(new TextBlock
-        {
-            Text = "¡Cuenta creada exitosamente!",
-            FontSize = 16,
-            FontWeight = Avalonia.Media.FontWeight.Medium,
-            Foreground = Avalonia.Media.Brush.Parse("#e2e8f0"),
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-        });
-
-        stack.Children.Add(new TextBlock
-        {
-            Text = "Ya puedes iniciar sesión con tu cuenta.",
-            FontSize = 13,
-            Foreground = Avalonia.Media.Brush.Parse("#aaaaaa"),
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-            TextAlignment = Avalonia.Media.TextAlignment.Center,
-        });
-
-        var btn = new Button
-        {
-            Content = "Volver al login",
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-            Classes = { "accent" },
-            Padding = new Avalonia.Thickness(16, 8),
-        };
-        stack.Children.Add(btn);
-
-        dialog.Content = stack;
-
-        btn.Click += (_, _) =>
-        {
-            dialog.Close();
-            var navigation = App.Services.GetRequiredService<INavigationService>();
-            navigation.NavigateToPage(Data.ApplicationPageNames.Login);
-        };
-
-        var owner = TopLevel.GetTopLevel(this) as Window;
-        if (owner == null) return;
-        await dialog.ShowDialog(owner);
+                // Si tu lógica original navegaba tras el registro exitoso:
+                if (viewModel.RegistroExitoso)
+                {
+                    // Asumo que aquí tenías alguna lógica para volver al Login o avanzar
+                    viewModel.GoToLoginCommand?.Execute(null);
+                }
+            }
+        }
     }
 }
