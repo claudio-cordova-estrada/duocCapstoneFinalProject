@@ -7,5 +7,6 @@
     <Import Project="$(NuGetPackageRoot)avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets" Condition="Exists('$(NuGetPackageRoot)avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets')" />
     <Import Project="$(NuGetPackageRoot)avalonia\12.0.2\buildTransitive\Avalonia.targets" Condition="Exists('$(NuGetPackageRoot)avalonia\12.0.2\buildTransitive\Avalonia.targets')" />
     <Import Project="$(NuGetPackageRoot)communitytoolkit.mvvm\8.4.2\buildTransitive\CommunityToolkit.Mvvm.targets" Condition="Exists('$(NuGetPackageRoot)communitytoolkit.mvvm\8.4.2\buildTransitive\CommunityToolkit.Mvvm.targets')" />
+    <Import Project="$(NuGetPackageRoot)avaloniaui.diagnosticssupport\2.2.1\buildTransitive\AvaloniaUI.DiagnosticsSupport.targets" Condition="Exists('$(NuGetPackageRoot)avaloniaui.diagnosticssupport\2.2.1\buildTransitive\AvaloniaUI.DiagnosticsSupport.targets')" />
   </ImportGroup>
 </Project>
