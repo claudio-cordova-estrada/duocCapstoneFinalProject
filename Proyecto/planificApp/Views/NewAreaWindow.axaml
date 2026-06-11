@@ -49,15 +49,12 @@
             <!-- Ubicacion predeterminada -->
             <StackPanel Spacing="4">
                 <TextBlock Text="UBICACIÓN PREDETERMINADA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbUbicacionPred" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="— Sin ubicación —"/>
-                    <ComboBoxItem Content="Casa"/>
-                    <ComboBoxItem Content="Trabajo"/>
-                    <ComboBoxItem Content="Universidad"/>
-                    <ComboBoxItem Content="Gimnasio"/>
-                    <ComboBoxItem Content="Supermercado"/>
-                    <ComboBoxItem Content="Otro"/>
-                </ComboBox>
+                <ComboBox ItemsSource="{Binding UbicacionesGuardadasLista}"
+          SelectedItem="{Binding UbicacionSeleccionada}"
+          DisplayMemberBinding="{Binding Nombre}" 
+          PlaceholderText="— Sin ubicación —"
+          HorizontalAlignment="Stretch">
+</ComboBox>
             </StackPanel>
 
             <Grid ColumnDefinitions="*, *">

@@ -44,7 +44,11 @@ public class DialogService : IDialogService
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
 
-        var viewModel = new NewAreaViewModel(areaRepo, sesion);
+        // ¡LA PIEZA FALTANTE!: Traemos el repositorio de ubicaciones
+        var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
+
+        // Le entregamos los 3 ingredientes al ViewModel
+        var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
@@ -58,7 +62,11 @@ public class DialogService : IDialogService
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
 
-        var viewModel = new NewAreaViewModel(areaRepo, sesion);
+        // ¡LA PIEZA FALTANTE!: Traemos el repositorio de ubicaciones
+        var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
+
+        // Le entregamos los 3 ingredientes al ViewModel
+        var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
         dialog.SetEditMode(area);
         await dialog.ShowDialog<bool>(window);

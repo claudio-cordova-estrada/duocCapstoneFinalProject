@@ -1,94 +1,68 @@
-using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using PlanificApp.Models;
 using PlanificApp.Models.Services.Interfaces;
-using PlanificApp.Models.Repositories.Interfaces;
-using planificApp.Data;
-using planificApp.Services;
 
 namespace planificApp.ViewModels;
 
-public partial class RegistroViewModel : PageViewModel
+public partial class RegisterViewModel : ViewModelBase
 {
-    private readonly IUsuarioRepository _usuarioRepo;
-    private readonly IAuthenticationService _authService;
-    private readonly INavigationService _navigation;
+    private readonly IRegionesService _regionesService;
 
-    [ObservableProperty] private string _nombreCompleto = string.Empty;
-    [ObservableProperty] private string _correo = string.Empty;
-    [ObservableProperty] private string _password = string.Empty;
-    [ObservableProperty] private string _repetirPassword = string.Empty;
-    [ObservableProperty] private DateTime? _fecNacimiento = null;
-    [ObservableProperty] private string _errorMessage = string.Empty;
-    [ObservableProperty] private bool _hasError = false;
-    [ObservableProperty] private bool _registroExitoso = false;
+    public ObservableCollection<string> Regiones { get; } = new();
+    public ObservableCollection<string> ComunasDisponibles { get; } = new();
 
-    public RegistroViewModel(IUsuarioRepository usuarioRepo, IAuthenticationService authService, INavigationService navigation)
+    private string? _regionSeleccionada;
+    public string? RegionSeleccionada
     {
-        _usuarioRepo = usuarioRepo;
-        _authService = authService;
-        _navigation = navigation;
-        PageName = ApplicationPageNames.Registro;
+        get => _regionSeleccionada;
+        set
+        {
+            if (SetProperty(ref _regionSeleccionada, value))
+            {
+                // Ahora es asíncrono, lo llamamos sin "await" en la propiedad
+                _ = ActualizarComunasAsync();
+            }
+        }
     }
 
-    [RelayCommand] private void GoToLogin() => _navigation.GoToLogin();
+    [ObservableProperty] private string? _comunaSeleccionada;
+    [ObservableProperty] private bool _comunasHabilitadas;
 
-    [RelayCommand]
-    private async Task RegistroAsync()
+    public RegisterViewModel(IRegionesService regionesService)
     {
-        HasError = false;
-        ErrorMessage = string.Empty;
+        _regionesService = regionesService;
 
-        if (string.IsNullOrWhiteSpace(NombreCompleto))
-        {
-            ErrorMessage = "Ingresa tu nombre completo.";
-            HasError = true; return;
-        }
-        if (string.IsNullOrWhiteSpace(Correo))
-        {
-            ErrorMessage = "Ingresa tu correo.";
-            HasError = true; return;
-        }
-        if (FecNacimiento == null)
-        {
-            ErrorMessage = "Ingresa tu fecha de nacimiento.";
-            HasError = true; return;
-        }
-        if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
-        {
-            ErrorMessage = "La contrase�a debe tener al menos 6 caracteres.";
-            HasError = true; return;
-        }
-        if (Password != RepetirPassword)
-        {
-            ErrorMessage = "Las contrase�as no coinciden.";
-            HasError = true; return;
-        }
+        // Disparamos la descarga en segundo plano
+        _ = CargarRegionesAsync();
+    }
 
-        try
+    private async Task CargarRegionesAsync()
+    {
+        var regiones = await _regionesService.ObtenerRegionesAsync();
+        foreach (var region in regiones)
         {
-            var nuevoUsuario = new Usuario
+            Regiones.Add(region);
+        }
+    }
+
+    private async Task ActualizarComunasAsync()
+    {
+        ComunasDisponibles.Clear();
+        ComunaSeleccionada = null;
+
+        if (!string.IsNullOrEmpty(RegionSeleccionada))
+        {
+            var comunas = await _regionesService.ObtenerComunasPorRegionAsync(RegionSeleccionada);
+            foreach (var comuna in comunas)
             {
-                NombreCompleto = NombreCompleto,
-                Correo = Correo,
-                PasswordHash = _authService.HashPassword(Password),
-                CuentaConfirmada = true,
-                HoraInicioJornada = TimeSpan.FromHours(9),
-                HoraFinJornada = TimeSpan.FromHours(18),
-                FecCreacion = DateTime.Now,
-                FecNacimiento = FecNacimiento!.Value,
-                Ubicacion = "Concepci�n",
-            };
-
-            await _usuarioRepo.RegistrarUsuario(nuevoUsuario);
-            RegistroExitoso = true;
+                ComunasDisponibles.Add(comuna);
+            }
+            ComunasHabilitadas = true;
         }
-        catch (Exception ex)
+        else
         {
-            ErrorMessage = ex.Message.Contains("ya est� registrado") ? ex.Message : "Error al crear la cuenta.";
-            HasError = true;
+            ComunasHabilitadas = false;
         }
     }
 }
