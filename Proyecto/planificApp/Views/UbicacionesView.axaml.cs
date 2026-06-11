@@ -47,12 +47,11 @@ namespace planificApp.Views
             _capaPuntos = new MemoryLayer
             {
                 Name = "Capa de Ubicaciones",
-                Style = null // Anulamos el estilo general para pintar cada punto de su propio color
+                Style = null
             };
             MiMapa.Map?.Layers.Add(_capaPuntos);
         }
 
-        // Este evento se dispara cuando la vista se conecta con el ViewModel
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -67,12 +66,12 @@ namespace planificApp.Views
                     MiMapa.Map?.Navigator?.CenterOn(new MPoint(x, y));
                 };
 
-                // NUEVO: Suscribirse a la ruta
                 vm.TrazarRutaEnMapa = DibujarRuta;
 
-                // NUEVO: Activar evento de clics en el mapa
                 if (MiMapa.Map != null)
                 {
+                    // FIX PUNTO 3: Desuscribimos antes de suscribir para evitar disparos dobles (el bug del primer clic)
+                    MiMapa.Map.Info -= MiMapa_Info;
                     MiMapa.Map.Info += MiMapa_Info;
                 }
 
@@ -81,8 +80,6 @@ namespace planificApp.Views
                 vm.BorrarPinTemporalDelMapa = () =>
                 {
                     if (MiMapa.Map == null) return;
-
-                    // Buscamos la capa temporal y la destruimos
                     var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
                     if (capaTemporal != null)
                     {
@@ -93,20 +90,16 @@ namespace planificApp.Views
             }
         }
 
-        // NUEVO MÉTODO: Dibuja la línea azul en el mapa
         private void DibujarRuta(List<(double Latitud, double Longitud)> puntosRuta)
         {
             if (MiMapa.Map == null || puntosRuta.Count == 0) return;
 
-            // Borrar ruta anterior
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaRuta");
             if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
 
-            // Mapsui v4 usa puntos individuales para dibujar líneas si no tienes NTS
             var features = new List<IFeature>();
             var lineFeature = new MemoryLayer { Name = "CapaRuta" };
 
-            // Crear la línea uniendo los puntos
             var rutaGeometrica = new Mapsui.Nts.GeometryFeature
             {
                 Geometry = new NetTopologySuite.Geometries.LineString(
@@ -116,7 +109,6 @@ namespace planificApp.Views
                     }).ToArray())
             };
 
-            // Estilo: Línea Azul Semitransparente, grosor 5
             rutaGeometrica.Styles.Add(new VectorStyle
             {
                 Line = new Pen(Mapsui.Styles.Color.FromArgb(180, 0, 100, 255), 5)
@@ -132,83 +124,77 @@ namespace planificApp.Views
         // Detecta clics en el mapa
         private async void MiMapa_Info(object? sender, MapInfoEventArgs e)
         {
-            if (DataContext is UbicacionesViewModel vm && vm.ModoSeleccionActivo)
+            if (DataContext is UbicacionesViewModel vm)
             {
-                if (e.WorldPosition != null)
+                // ====================================================================
+                // CASO 1: Modo "Elegir en mapa" activado (Creando nueva ubicación)
+                // ====================================================================
+                if (vm.ModoSeleccionActivo)
                 {
-                    vm.ModoSeleccionActivo = false; // El botón se desactiva solo
-
-                    var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
-
-                    // 1. Dibujamos pin morado de carga
-                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#6366f1");
-
-                    // 2. Centramos el mapa
-                    MiMapa.Map?.Navigator?.CenterOn(e.WorldPosition);
-
-                    // 3. Mostramos menú flotante si está configurado
-                    Avalonia.Controls.Primitives.FlyoutBase.ShowAttachedFlyout(MiMapa);
-
-                    // 4. Efecto de "Cargando..."
-                    vm.UbicacionSeleccionada = new UbicacionVisual
+                    if (e.WorldPosition != null)
                     {
-                        Nombre = "Buscando dirección...",
-                        AreaInteres = "Buscando...",
-                        ColorHex = "#6366f1",
-                        Latitud = lonLat.lat,
-                        Longitud = lonLat.lon
-                    };
+                        e.Handled = true; 
+                        vm.ModoSeleccionActivo = false; 
 
-                    // 5. Obtener la dirección real desde Google
-                    string direccion = await vm.ServicioGeo.ObtenerDireccionDesdeCoordenadasAsync(lonLat.lat, lonLat.lon);
+                        var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
 
-                    // 6. Cambiamos pin a verde de éxito
-                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#10b981");
+                        DibujarPinTemporal(lonLat.lat, lonLat.lon, "#6366f1");
+                        MiMapa.Map?.Navigator?.CenterOn(e.WorldPosition);
+                        Avalonia.Controls.Primitives.FlyoutBase.ShowAttachedFlyout(MiMapa);
 
-                    // 7. ACTUALIZACIÓN FINAL: ¡Aquí encendemos el botón!
-                    vm.UbicacionSeleccionada = new UbicacionVisual
-                    {
-                        Nombre = "Punto seleccionado",
-                        AreaInteres = direccion,
+                        vm.UbicacionSeleccionada = new UbicacionVisual
+                        {
+                            Nombre = "Buscando dirección...",
+                            AreaInteres = "Buscando...",
+                            ColorHex = "#6366f1",
+                            Latitud = lonLat.lat,
+                            Longitud = lonLat.lon
+                        };
 
-                        // ESTAS DOS LÍNEAS SON LA CLAVE QUE FALTABA:
-                        DireccionExacta = direccion,   // Guarda la calle para el formulario
-                        EsTemporal = true,             // ¡Esto hace aparecer el botón verde!
+                        string direccion = await vm.ServicioGeo.ObtenerDireccionDesdeCoordenadasAsync(lonLat.lat, lonLat.lon);
 
-                        ColorHex = "#10b981",
-                        UltimaVisitaFormateada = "Ubicación temporal",
-                        TransportePreferido = "-",
-                        Latitud = lonLat.lat,
-                        Longitud = lonLat.lon
-                    };
+                        DibujarPinTemporal(lonLat.lat, lonLat.lon, "#10b981");
+
+                        vm.UbicacionSeleccionada = new UbicacionVisual
+                        {
+                            Nombre = "Punto seleccionado",
+                            AreaInteres = direccion,
+                            DireccionExacta = direccion,
+                            EsTemporal = true,
+                            ColorHex = "#10b981",
+                            UltimaVisitaFormateada = "Ubicación temporal",
+                            TransportePreferido = "-",
+                            Latitud = lonLat.lat,
+                            Longitud = lonLat.lon
+                        };
+                    }
+                }
+                // ====================================================================
+                // CASO 2: Modo navegación normal (Clic para desfocusear)
+                // ====================================================================
+                else if (vm.UbicacionSeleccionada != null)
+                {
+                    // Cualquier clic en el mapa mientras no estemos en modo selección, cerrará el recuadro
+                    vm.UnfocusCommand.Execute(null);
                 }
             }
         }
+        
 
         private void DibujarPines(IEnumerable<UbicacionVisual> ubicaciones)
         {
             if (MiMapa.Map == null) return;
 
-            // Paso A: Buscamos y borramos la capa de pines anterior (Sin usar LINQ)
-            Mapsui.Layers.ILayer? capaVieja = null;
-            foreach (var layer in MiMapa.Map.Layers)
-            {
-                if (layer.Name == "CapaPines")
-                {
-                    capaVieja = layer;
-                    break; // Encontramos la capa, dejamos de buscar
-                }
-            }
+            // 1. Borramos la capa de pines viejos
+            var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPines");
+            if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
 
-            // Si la encontramos, la borramos del mapa
-            if (capaVieja != null)
-            {
-                MiMapa.Map.Layers.Remove(capaVieja);
-            }
+            // FIX PUNTO 4 Y DOBLE CÍRCULO: ¡Obligamos al mapa a borrar la capa temporal al momento de dibujar los pines guardados!
+            var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
+            if (capaTemporal != null) MiMapa.Map.Layers.Remove(capaTemporal);
 
             var features = new List<IFeature>();
 
-            // Paso B: Creamos un punto por cada ubicación guardada
             foreach (var ubi in ubicaciones)
             {
                 var (x, y) = SphericalMercator.FromLonLat(ubi.Longitud, ubi.Latitud);
@@ -227,7 +213,6 @@ namespace planificApp.Views
                 features.Add(punto);
             }
 
-            // Paso C: Metemos todos los puntos en una nueva capa
             var capaPines = new MemoryLayer
             {
                 Name = "CapaPines",
@@ -238,11 +223,11 @@ namespace planificApp.Views
             MiMapa.Map.Layers.Add(capaPines);
             MiMapa.Refresh();
         }
+
         private void DibujarPinTemporal(double latitud, double longitud, string colorHex)
         {
             if (MiMapa.Map == null) return;
 
-            // Borramos el pin temporal anterior si existe para no duplicarlo
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
             if (capaVieja != null)
             {
@@ -253,14 +238,13 @@ namespace planificApp.Views
             var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
             var punto = new PointFeature(new MPoint(x, y));
 
-            // Convertimos el color hexadecimal a color de Mapsui
             var colorAvalonia = Avalonia.Media.Color.Parse(colorHex);
             var colorMapsui = Mapsui.Styles.Color.FromArgb(colorAvalonia.A, colorAvalonia.R, colorAvalonia.G, colorAvalonia.B);
 
             punto.Styles.Add(new SymbolStyle
             {
                 Fill = new Brush(colorMapsui),
-                SymbolScale = 0.8, // Un poco más grande para destacar que es una selección
+                SymbolScale = 0.8,
                 Outline = new Pen(Mapsui.Styles.Color.White, 2)
             });
 

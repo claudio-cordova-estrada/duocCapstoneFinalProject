@@ -47,6 +47,8 @@ namespace planificApp.ViewModels
         public ICommand AbrirCalculadoraRutaCommand { get; set; }
         public ICommand GuardarUbicacionTemporalCommand { get; set; }
         public ICommand DescartarUbicacionTemporalCommand { get; set; }
+        public ICommand UnfocusCommand { get; set; }
+
 
         public IGeoService ServicioGeo => _geoService;
         public Action? MapaDebeActualizarse { get; set; }
@@ -87,6 +89,7 @@ namespace planificApp.ViewModels
             AbrirCalculadoraRutaCommand = new RelayCommand<object>(AbrirCalculadoraRuta);
             GuardarUbicacionTemporalCommand = new RelayCommand<object>(GuardarUbicacionTemporal);
             DescartarUbicacionTemporalCommand = new RelayCommand<object>(DescartarUbicacionTemporal);
+            UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             _ = CargarUbicacionesRealesAsync();
         }
@@ -242,25 +245,14 @@ namespace planificApp.ViewModels
             UbicacionSeleccionada = null;
             BorrarPinTemporalDelMapa?.Invoke();
         }
+        private void UnfocusLocation(object? parameter)
+        {
+            UbicacionSeleccionada = null;
+            BorrarPinTemporalDelMapa?.Invoke();
+        }
+
 
     }
-
-    public class UbicacionVisual
-    {
-        public string? IdUbicacion { get; set; }
-        public string? Nombre { get; set; }
-        public string? AreaInteres { get; set; }
-        public string? DireccionExacta { get; set; }
-        public bool EsTemporal { get; set; } = false;
-        public string? ColorHex { get; set; }
-        public string? TransportePreferido { get; set; }
-        public string? UltimaVisitaFormateada { get; set; }
-        public double Latitud { get; set; }
-        public double Longitud { get; set; }
-        public string? Categoria { get; set; }
-    }
-
-#pragma warning disable CS0067
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
@@ -269,6 +261,24 @@ namespace planificApp.ViewModels
         public void Execute(object? parameter) => _execute((T)parameter!);
         public event EventHandler? CanExecuteChanged;
     }
-#pragma warning restore CS0067
+
+
+
+    public class UbicacionVisual
+    {
+        public string? IdUbicacion { get; set; }
+        public string? Nombre { get; set; }
+        public string? AreaInteres { get; set; }
+        public string? DireccionExacta { get; set; }
+        public bool EsTemporal { get; set; }
+        public string? ColorHex { get; set; }
+        public string? UltimaVisitaFormateada { get; set; }
+        public string? TransportePreferido { get; set; }
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+    }
+
+#pragma warning disable CS0067
 
 }
+#pragma warning restore CS0067

@@ -114,15 +114,24 @@
                     </ListBox>
 
                    <!-- PANEL DE DETALLES (Recuadro inferior derecho) -->
-                    <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Stretch">
+                    <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Top">
                         <StackPanel>
-                            <!-- Título -->
-                            <TextBlock Text="{Binding UbicacionSeleccionada.Nombre, TargetNullValue='Seleccione una ubicación...', FallbackValue='Seleccione...'}" 
-                                       FontSize="16" FontWeight="Medium" 
-                                       Foreground="{Binding UbicacionSeleccionada.ColorHex, TargetNullValue='#10b981', FallbackValue='#34d399'}" 
-                                       Margin="0 0 0 12"/>
                             
-                            <!-- Tipo (Área de Interés) -->
+                            <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 12">
+                                <TextBlock Grid.Column="0" 
+                                           Text="{Binding UbicacionSeleccionada.Nombre, TargetNullValue='Seleccione una ubicación...', FallbackValue='Seleccione...'}" 
+                                           FontSize="16" FontWeight="Medium" 
+                                           Foreground="{Binding UbicacionSeleccionada.ColorHex, TargetNullValue='#10b981', FallbackValue='#34d399'}" 
+                                           VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                           
+                                <Button Grid.Column="1" Content="&#x2715;"
+                                        Command="{Binding UnfocusCommand}"
+                                        IsVisible="{Binding UbicacionSeleccionada, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                        Background="Transparent" Foreground="#6b7280"
+                                        FontSize="14" Padding="6" Margin="0 -8 -8 0"
+                                        Cursor="Hand"/>
+                            </Grid>
+                            
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
                                 <StackPanel Orientation="Horizontal" Spacing="0">
                                     <TextBlock Text="Tipo · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
@@ -130,7 +139,6 @@
                                 </StackPanel>
                             </Border>
                             
-                            <!-- Última Visita -->
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8" Margin="0 8 0 0">
                                 <StackPanel Orientation="Horizontal" Spacing="0">
                                     <TextBlock Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
@@ -138,7 +146,6 @@
                                 </StackPanel>
                             </Border>
                             
-                            <!-- Transporte y Botones dinámicos -->
                             <Grid ColumnDefinitions="*, Auto, Auto" Margin="0 8 0 0">
                                 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="0" VerticalAlignment="Center">
@@ -146,7 +153,6 @@
                                     <TextBlock Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-', FallbackValue='Metro'}" FontSize="14" Foreground="{DynamicResource TextTertiary}"/>
                                 </StackPanel>
 
-                                <!-- NUEVO: Botón para Descartar/Eliminar la selección -->
                                 <Button Grid.Column="1" 
                                         Content="Descartar" 
                                         Command="{Binding DescartarUbicacionTemporalCommand}"
@@ -155,7 +161,6 @@
                                         FontWeight="Medium" CornerRadius="6" 
                                         Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
 
-                                <!-- BOTÓN GUARDAR (El que ya tienes) -->
                                 <Button Grid.Column="2" 
                                         Content="Guardar" 
                                         Command="{Binding GuardarUbicacionTemporalCommand}"
