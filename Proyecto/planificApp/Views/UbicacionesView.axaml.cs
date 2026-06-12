@@ -9,6 +9,7 @@ using planificApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Interactivity; // Añadido para los eventos de botones
 
 namespace planificApp.Views
 {
@@ -38,7 +39,7 @@ namespace planificApp.Views
             // 2. Limpiamos los textos molestos (FPS, INFO) de las esquinas del mapa
             MiMapa.Map?.Widgets.Clear();
 
-            // 3. Centramos el mapa
+            // 3. Centramos el mapa inicialmente en Concepción/Hualpén
             var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
             var posicionInicial = new MPoint(x, y);
             MiMapa.Map?.Navigator?.CenterOnAndZoomTo(posicionInicial, 13);
@@ -63,14 +64,14 @@ namespace planificApp.Views
                 vm.EnfocarEnUbicacion = (latitud, longitud) =>
                 {
                     var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
-                    MiMapa.Map?.Navigator?.CenterOn(new MPoint(x, y));
+                    MiMapa.Map?.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), MiMapa.Map.Navigator.Resolutions[15]);
                 };
 
                 vm.TrazarRutaEnMapa = DibujarRuta;
 
                 if (MiMapa.Map != null)
                 {
-                    // FIX PUNTO 3: Desuscribimos antes de suscribir para evitar disparos dobles (el bug del primer clic)
+                    // Desuscribimos antes de suscribir para evitar disparos dobles
                     MiMapa.Map.Info -= MiMapa_Info;
                     MiMapa.Map.Info += MiMapa_Info;
                 }
@@ -121,20 +122,16 @@ namespace planificApp.Views
             MiMapa.Refresh();
         }
 
-        // Detecta clics en el mapa
         private async void MiMapa_Info(object? sender, MapInfoEventArgs e)
         {
             if (DataContext is UbicacionesViewModel vm)
             {
-                // ====================================================================
-                // CASO 1: Modo "Elegir en mapa" activado (Creando nueva ubicación)
-                // ====================================================================
                 if (vm.ModoSeleccionActivo)
                 {
                     if (e.WorldPosition != null)
                     {
-                        e.Handled = true; 
-                        vm.ModoSeleccionActivo = false; 
+                        e.Handled = true;
+                        vm.ModoSeleccionActivo = false;
 
                         var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
 
@@ -145,7 +142,7 @@ namespace planificApp.Views
                         vm.UbicacionSeleccionada = new UbicacionVisual
                         {
                             Nombre = "Buscando dirección...",
-                            AreaInteres = "Buscando...",
+                            AreaInteres = "No aplica", // <--- Asignado "No aplica" durante la búsqueda
                             ColorHex = "#6366f1",
                             Latitud = lonLat.lat,
                             Longitud = lonLat.lon
@@ -158,7 +155,7 @@ namespace planificApp.Views
                         vm.UbicacionSeleccionada = new UbicacionVisual
                         {
                             Nombre = "Punto seleccionado",
-                            AreaInteres = direccion,
+                            AreaInteres = "No aplica", // <--- Asignado "No aplica" para el pin final
                             DireccionExacta = direccion,
                             EsTemporal = true,
                             ColorHex = "#10b981",
@@ -169,27 +166,20 @@ namespace planificApp.Views
                         };
                     }
                 }
-                // ====================================================================
-                // CASO 2: Modo navegación normal (Clic para desfocusear)
-                // ====================================================================
                 else if (vm.UbicacionSeleccionada != null)
                 {
-                    // Cualquier clic en el mapa mientras no estemos en modo selección, cerrará el recuadro
                     vm.UnfocusCommand.Execute(null);
                 }
             }
         }
-        
 
         private void DibujarPines(IEnumerable<UbicacionVisual> ubicaciones)
         {
             if (MiMapa.Map == null) return;
 
-            // 1. Borramos la capa de pines viejos
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPines");
             if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
 
-            // FIX PUNTO 4 Y DOBLE CÍRCULO: ¡Obligamos al mapa a borrar la capa temporal al momento de dibujar los pines guardados!
             var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
             if (capaTemporal != null) MiMapa.Map.Layers.Remove(capaTemporal);
 
@@ -259,6 +249,41 @@ namespace planificApp.Views
 
             MiMapa.Map.Layers.Add(capaTemporal);
             MiMapa.Refresh();
+        }
+
+        // ==========================================
+        // NUEVA FUNCIÓN: Centrar y Zoom Automático
+        // ==========================================
+        private void BtnCentrarMapa_Click(object? sender, RoutedEventArgs e)
+        {
+            if (MiMapa.Map == null) return;
+
+            if (DataContext is UbicacionesViewModel vm && vm.ListaUbicaciones.Any())
+            {
+                // Si el usuario tiene ubicaciones guardadas, calculamos el cuadro que las encierra a todas
+                var capaPines = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPines");
+
+                if (capaPines?.Extent != null)
+                {
+                    // Si solo hay 1 pin (el Extent width y height es 0), hacemos zoom estándar
+                    if (capaPines.Extent.Width == 0 && capaPines.Extent.Height == 0)
+                    {
+                        MiMapa.Map.Navigator?.CenterOnAndZoomTo(capaPines.Extent.Centroid, MiMapa.Map.Navigator.Resolutions[14]);
+                    }
+                    else
+                    {
+                        // Si hay varios, usamos la magia de Mapsui para encuadrar todo expandiendo un 15% los bordes para que no queden cortados
+                        var mRect = capaPines.Extent.Grow(capaPines.Extent.Width * 0.15);
+                        MiMapa.Map.Navigator?.ZoomToBox(mRect);
+                    }
+                }
+            }
+            else
+            {
+                // Si no hay pines, centramos en la ubicación por defecto (Concepción/Hualpén) con un zoom general
+                var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
+                MiMapa.Map.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), MiMapa.Map.Navigator.Resolutions[11]);
+            }
         }
     }
 }

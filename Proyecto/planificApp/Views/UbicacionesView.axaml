@@ -19,45 +19,74 @@
                         
                         <mapsui:MapControl x:Name="MiMapa" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                         
-                        <Border HorizontalAlignment="Right" VerticalAlignment="Top" 
-                                Margin="16" CornerRadius="24"
-                                BoxShadow="0 4 12 0 #60000000">
-                            
-                            <ToggleButton IsChecked="{Binding ModoSeleccionActivo}" 
-                                          Classes="map-toggle"
-                                          Padding="14 10" Cursor="Hand"
-                                          BorderThickness="1" CornerRadius="24">
-                                          
-                                <ToggleButton.Styles>
-                                    <Style Selector="ToggleButton.map-toggle">
-                                        <Setter Property="Background" Value="#1e1e2e"/>
-                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
-                                        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
-                                    </Style>
-                                    <Style Selector="ToggleButton.map-toggle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                                        <Setter Property="Background" Value="#2a2a3b"/> 
-                                        <Setter Property="BorderBrush" Value="#10b981"/> 
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Style>
-                                    <Style Selector="ToggleButton.map-toggle:checked /template/ ContentPresenter#PART_ContentPresenter">
-                                        <Setter Property="Background" Value="#064e3b"/> 
-                                        <Setter Property="BorderBrush" Value="#10b981"/> 
-                                        <Setter Property="Foreground" Value="White"/>
-                                    </Style>
-                                </ToggleButton.Styles>
-                                
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Label Content="&#xE131;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="#10b981" VerticalAlignment="Center"/>
-                                    <Label Content="&#xE3E0;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Elegir en mapa" VerticalAlignment="Center" FontWeight="Medium"/>
-                                </StackPanel>
-                            </ToggleButton>
-                        </Border>
+                        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16" Spacing="12">
+    
+    <Border CornerRadius="24" BoxShadow="0 4 12 0 #60000000" HorizontalAlignment="Right">
+        <ToggleButton IsChecked="{Binding ModoSeleccionActivo}" 
+                      Classes="map-toggle"
+                      Padding="14 10" Cursor="Hand"
+                      BorderThickness="1" CornerRadius="24">
+                      
+            <ToggleButton.Styles>
+                <Style Selector="ToggleButton.map-toggle">
+                    <Setter Property="Background" Value="#1e1e2e"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+                </Style>
+                <Style Selector="ToggleButton.map-toggle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#2a2a3b"/> 
+                    <Setter Property="BorderBrush" Value="#10b981"/> 
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style Selector="ToggleButton.map-toggle:checked /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#064e3b"/> 
+                    <Setter Property="BorderBrush" Value="#10b981"/> 
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </ToggleButton.Styles>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Label Content="&#xE1B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{Binding $parent[ToggleButton].Foreground}" VerticalAlignment="Center"/>
+                <TextBlock Text="Elegir en mapa" VerticalAlignment="Center" FontWeight="Medium"/>
+            </StackPanel>
+        </ToggleButton>
+    </Border>
+
+    <Border CornerRadius="24" BoxShadow="0 4 12 0 #60000000" HorizontalAlignment="Right">
+        <Button Click="BtnCentrarMapa_Click"
+                Classes="map-action"
+                Padding="14 10" Cursor="Hand"
+                BorderThickness="1" CornerRadius="24">
+                
+            <Button.Styles>
+                <Style Selector="Button.map-action">
+                    <Setter Property="Background" Value="#1e1e2e"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+                </Style>
+                <Style Selector="Button.map-action:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#2a2a3b"/> 
+                    <Setter Property="BorderBrush" Value="#6366f1"/> 
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+                <Style Selector="Button.map-action:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#1e1e2e"/> 
+                    <Setter Property="BorderBrush" Value="#6366f1"/> 
+                </Style>
+            </Button.Styles>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Label Content="&#xE492;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{Binding $parent[Button].Foreground}" VerticalAlignment="Center"/>
+                <TextBlock Text="Centrar mapa" VerticalAlignment="Center" FontWeight="Medium"/>
+            </StackPanel>
+        </Button>
+    </Border>
+    
+</StackPanel>
                     </Grid>
                 </Border>
 
                 <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12">
-
                     <ListBox Grid.Column="0" 
                              ItemsSource="{Binding ListaUbicaciones}" 
                              SelectedItem="{Binding UbicacionSeleccionada}"
@@ -127,59 +156,66 @@
                             </StackPanel>
 
                             <StackPanel IsVisible="{Binding UbicacionSeleccionada, Converter={x:Static ObjectConverters.IsNotNull}}">
-                                
-                                <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 12">
-                                    <TextBlock Grid.Column="0" 
-                                               Text="{Binding UbicacionSeleccionada.Nombre}" 
-                                               FontSize="16" FontWeight="Medium" 
-                                               Foreground="{Binding UbicacionSeleccionada.ColorHex, FallbackValue='#10b981'}" 
-                                               VerticalAlignment="Top" TextWrapping="Wrap"/>
-                                               
-                                    <Button Grid.Column="1" Content="&#x2715;"
-                                            Command="{Binding UnfocusCommand}"
-                                            Background="Transparent" Foreground="#6b7280"
-                                            FontSize="14" Padding="6" Margin="0 -8 -8 0"
-                                            Cursor="Hand" VerticalAlignment="Top"/>
-                                </Grid>
-                                
-                                <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
-                                    <Grid ColumnDefinitions="Auto, *">
-                                        <TextBlock Grid.Column="0" Text="Dirección · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.DireccionExacta, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                    </Grid>
-                                </Border>
-                                
-                                <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
-                                    <Grid ColumnDefinitions="Auto, *">
-                                        <TextBlock Grid.Column="0" Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.UltimaVisitaFormateada, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                    </Grid>
-                                </Border>
-                                
-                                <Grid ColumnDefinitions="*, Auto, Auto" Margin="8 8 0 0">
-                                    
-                                    <Grid Grid.Column="0" ColumnDefinitions="Auto, *" VerticalAlignment="Center">
-                                        <TextBlock Grid.Column="0" Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                    </Grid>
+    
+    <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 12">
+        <TextBlock Grid.Column="0" 
+                   Text="{Binding UbicacionSeleccionada.Nombre}" 
+                   FontSize="16" FontWeight="Medium" 
+                   Foreground="{Binding UbicacionSeleccionada.ColorHex, FallbackValue='#10b981'}" 
+                   VerticalAlignment="Top" TextWrapping="Wrap"/>
+                   
+        <Button Grid.Column="1" Content="&#x2715;"
+                Command="{Binding UnfocusCommand}"
+                Background="Transparent" Foreground="#6b7280"
+                FontSize="14" Padding="6" Margin="0 -8 -8 0"
+                Cursor="Hand" VerticalAlignment="Top"/>
+    </Grid>
+    
+    <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
+        <Grid ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Column="0" Text="Área de interés · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        </Grid>
+    </Border>
 
-                                    <Button Grid.Column="1" 
-                                            Content="Descartar" 
-                                            Command="{Binding DescartarUbicacionTemporalCommand}"
-                                            IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
-                                            Background="Transparent" Foreground="#ef4444" 
-                                            FontWeight="Medium" CornerRadius="6" 
-                                            Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
+    <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
+        <Grid ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Column="0" Text="Dirección · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.DireccionExacta, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        </Grid>
+    </Border>
+    
+    <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
+        <Grid ColumnDefinitions="Auto, *">
+            <TextBlock Grid.Column="0" Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.UltimaVisitaFormateada, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        </Grid>
+    </Border>
+    
+    <Grid ColumnDefinitions="*, Auto, Auto" Margin="8 8 0 0">
+        
+        <Grid Grid.Column="0" ColumnDefinitions="Auto, *" VerticalAlignment="Center">
+            <TextBlock Grid.Column="0" Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        </Grid>
 
-                                    <Button Grid.Column="2" 
-                                            Content="Guardar" 
-                                            Command="{Binding GuardarUbicacionTemporalCommand}"
-                                            IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
-                                            Background="#10b981" Foreground="White" 
-                                            FontWeight="Medium" CornerRadius="6" 
-                                            Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
-                                </Grid>
-                            </StackPanel>
+        <Button Grid.Column="1" 
+                Content="Descartar" 
+                Command="{Binding DescartarUbicacionTemporalCommand}"
+                IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                Background="Transparent" Foreground="#ef4444" 
+                FontWeight="Medium" CornerRadius="6" 
+                Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
+
+        <Button Grid.Column="2" 
+                Content="Guardar" 
+                Command="{Binding GuardarUbicacionTemporalCommand}"
+                IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                Background="#10b981" Foreground="White" 
+                FontWeight="Medium" CornerRadius="6" 
+                Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
+    </Grid>
+</StackPanel>
                             
                         </Grid>
                     </Border>

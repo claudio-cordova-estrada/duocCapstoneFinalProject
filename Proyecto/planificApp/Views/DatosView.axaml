@@ -13,10 +13,8 @@
 
                 <TextBlock Text="Mis datos" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
 
-                <!-- Profile card -->
                 <Border Classes="card" Padding="28">
                     <StackPanel Spacing="20">
-                        <!-- Avatar + Name row -->
                         <Grid ColumnDefinitions="Auto,*" Margin="0 0 0 8">
                             <Button Grid.Column="0" x:Name="BtnCambiarFoto" Click="BtnCambiarFoto_Click" Padding="0" Width="72" Height="72" Margin="0 0 20 0" Cursor="Hand" Classes="avatar-btn">
                                 <Border CornerRadius="36" ClipToBounds="True">
@@ -41,40 +39,47 @@
 
                         <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1"/>
 
-                        <!-- Nombre completo -->
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <TextBlock Grid.Column="0" Text="Nombre completo" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FieldNombre" Grid.Column="1" IsReadOnly="True" Text="{Binding NombreCompleto}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
-                            <Button x:Name="BtnNombre" Grid.Column="2" Classes="transparent" Click="BtnNombre_Click" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Nombre completo" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldNombre" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding NombreCompleto}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnNombre" Grid.Row="0" Grid.Column="2" Classes="transparent" Click="BtnNombre_Click" VerticalAlignment="Center">
                                 <Label x:Name="IconNombre" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
+                            <TextBlock x:Name="ErrorNombre" Grid.Row="1" Grid.Column="1" Foreground="#ef4444" FontSize="12" Margin="0 4 0 0" IsVisible="False"/>
                         </Grid>
 
-                        <!-- Correo electrónico -->
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <TextBlock Grid.Column="0" Text="Correo electrónico" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FieldCorreo" Grid.Column="1" IsReadOnly="True" Text="{Binding Correo}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
-                            <Button x:Name="BtnCorreo" Grid.Column="2" Classes="transparent" Click="BtnCorreo_Click" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Correo electrónico" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldCorreo" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding Correo}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnCorreo" Grid.Row="0" Grid.Column="2" Classes="transparent" Click="BtnCorreo_Click" VerticalAlignment="Center">
                                 <Label x:Name="IconCorreo" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
+                            <TextBlock x:Name="ErrorCorreo" Grid.Row="1" Grid.Column="1" Foreground="#ef4444" FontSize="12" Margin="0 4 0 0" IsVisible="False"/>
                         </Grid>
 
-                        <!-- Fecha de nacimiento -->
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <TextBlock Grid.Column="0" Text="Fecha de nacimiento" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FieldFecha" Grid.Column="1" IsReadOnly="True" Text="{Binding FecNacimiento}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
-                            <Button x:Name="BtnFecha" Grid.Column="2" Classes="transparent" Click="BtnFecha_Click" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Fecha de nacimiento" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            <TextBox x:Name="FieldFecha" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding FecNacimiento}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <Button x:Name="BtnFecha" Grid.Row="0" Grid.Column="2" Classes="transparent" Click="BtnFecha_Click" VerticalAlignment="Center">
                                 <Label x:Name="IconFecha" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
+                            <TextBlock x:Name="ErrorFecha" Grid.Row="1" Grid.Column="1" Foreground="#ef4444" FontSize="12" Margin="0 4 0 0" IsVisible="False"/>
                         </Grid>
 
-                        <!-- Ubicación -->
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                            <TextBlock Grid.Column="0" Text="Ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FieldUbicacion" Grid.Column="1" IsReadOnly="True" Text="{Binding Ubicacion}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
-                            <Button x:Name="BtnUbicacion" Grid.Column="2" Classes="transparent" Click="BtnUbicacion_Click" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
+                            
+                            <TextBox x:Name="FieldUbicacion" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding Ubicacion}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            
+                            <Grid x:Name="EditUbicacionPanel" Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*" ColumnSpacing="10" IsVisible="False" VerticalAlignment="Center">
+                                <ComboBox x:Name="CmbRegion" Grid.Column="0" HorizontalAlignment="Stretch" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona Región"/>
+                                <ComboBox x:Name="CmbComuna" Grid.Column="1" HorizontalAlignment="Stretch" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" IsEnabled="False" PlaceholderText="Selecciona Comuna"/>
+                            </Grid>
+
+                            <Button x:Name="BtnUbicacion" Grid.Row="0" Grid.Column="2" Classes="transparent" Click="BtnUbicacion_Click" VerticalAlignment="Center">
                                 <Label x:Name="IconUbicacion" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
+                            <TextBlock x:Name="ErrorUbicacion" Grid.Row="1" Grid.Column="1" Foreground="#ef4444" FontSize="12" Margin="0 4 0 0" IsVisible="False"/>
                         </Grid>
                     </StackPanel>
                 </Border>
