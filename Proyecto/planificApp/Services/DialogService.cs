@@ -29,8 +29,9 @@ public class DialogService : IDialogService
         var tareaRepo = App.Services.GetRequiredService<ITareaRepository>();
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
+        var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
 
-        var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion);
+        var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion, ubicacionRepo);
         var dialog = new NewTaskWindow { DataContext = viewModel, PreSelectedAreaId = preSelectedArea };
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
@@ -43,11 +44,8 @@ public class DialogService : IDialogService
 
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
-
-        // ¡LA PIEZA FALTANTE!: Traemos el repositorio de ubicaciones
         var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
 
-        // Le entregamos los 3 ingredientes al ViewModel
         var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
         await dialog.ShowDialog<bool>(window);
@@ -61,11 +59,8 @@ public class DialogService : IDialogService
 
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
-
-        // ¡LA PIEZA FALTANTE!: Traemos el repositorio de ubicaciones
         var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
 
-        // Le entregamos los 3 ingredientes al ViewModel
         var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
         dialog.SetEditMode(area);
@@ -83,6 +78,7 @@ public class DialogService : IDialogService
         return await dialog.ShowDialog<bool>(window);
     }
 
+    // Devuelto a 'async void' para respetar tu IDialogService
     public async void ShowGenerarSemanaDialog()
     {
         var window = GetMainWindow();
@@ -91,8 +87,9 @@ public class DialogService : IDialogService
         var tareaRepo = App.Services.GetRequiredService<ITareaRepository>();
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
         var sesion = App.Services.GetRequiredService<ISesionService>();
+        var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
 
-        var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion);
+        var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion, ubicacionRepo);
         var dialog = new NewTaskWindow { DataContext = viewModel, Title = "Generar semana" };
         var result = await dialog.ShowDialog<bool>(window);
 
@@ -133,6 +130,7 @@ public class DialogService : IDialogService
         await dialog.ShowDialog(window);
     }
 
+    // Devuelto a 'async void' para respetar tu IDialogService
     public async void ShowConfirmDeleteLocationDialog(string nombre)
     {
         var window = GetMainWindow();
