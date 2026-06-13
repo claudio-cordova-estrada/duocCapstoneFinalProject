@@ -40,11 +40,7 @@ public partial class App : Application
         collection.AddTransient<LoginViewModel>();
         collection.AddTransient<RegistroViewModel>();
         collection.AddTransient<RecuperarContraViewModel>();
-
-        // User - Registro ViewModels
-        collection.AddSingleton<IAuthenticationService, AuthenticationService>();
-        collection.AddSingleton<ISesionService, SesionService>();
-
+        
         // User - Tareas ViewModels
         collection.AddTransient<InboxViewModel>();
         collection.AddTransient<NewTaskViewModel>();
@@ -85,15 +81,15 @@ public partial class App : Application
         collection.AddSingleton<ITareaRepository, TareaRepository>();
         collection.AddSingleton<IAreaInteresRepository, AreaInteresRepository>();
         collection.AddSingleton<IUbicacionRepository, UbicacionRepository>();
+        collection.AddSingleton<IBloqueAreaInteresScheduleRepository, BloqueAreaInteresScheduleRepository>();
 
         // Services
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();
-        collection.AddSingleton<ISesionService, SesionService>();
+        collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
-        collection.AddSingleton<IRegionesService, RegionesService>();
+        collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
-
 
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {
@@ -126,7 +122,6 @@ public partial class App : Application
         });
         
         collection.AddSingleton<PageFactory>();
-
 
         var services = collection.BuildServiceProvider();
         Services = services;

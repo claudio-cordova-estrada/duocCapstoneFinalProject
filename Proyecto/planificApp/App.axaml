@@ -33,6 +33,11 @@
         <helpers:TareaAtrasadaBackgroundConverter x:Key="TareaAtrasadaBackgroundConverter"/>
         <helpers:TareaAtrasadaBorderConverter x:Key="TareaAtrasadaBorderConverter"/>
         <helpers:HexToBrushConverter x:Key="HexToBrushConverter"/>
+        <helpers:TimeToTopConverter x:Key="TimeToTopConverter"/>
+        <helpers:DurationToHeightConverter x:Key="DurationToHeightConverter"/>
+        <helpers:BoolToAccentBackgroundConverter x:Key="BoolToAccentBackgroundConverter"/>
+        <helpers:MetodoTransporteToIconConverter x:Key="MetodoTransporteToIconConverter"/>
+        <helpers:MetodoTransporteToTextConverter x:Key="MetodoTransporteToTextConverter"/>
         
         <!-- App Backgrounds -->
         <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>

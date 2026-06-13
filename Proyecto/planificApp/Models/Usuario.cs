@@ -47,7 +47,9 @@ namespace PlanificApp.Models
         public DateTime FecNacimiento { get; set; }
 
         public string Ubicacion { get; set; } = string.Empty;
-        
+
+        public string? UbicacionActual { get; set; }
+
         public string? FotoPerfil { get; set; }
     }
 }

@@ -40,4 +40,11 @@ public class UsuarioRepository : IUsuarioRepository
         var update = Builders<Usuario>.Update.Set(u => u.FotoPerfil, fotoBase64);
         await _usuarios.UpdateOneAsync(filter, update);
     }
+
+    public async Task ActualizarUbicacionActual(string idUsuario, string ubicacionActual)
+    {
+        var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
+        var update = Builders<Usuario>.Update.Set(u => u.UbicacionActual, ubicacionActual);
+        await _usuarios.UpdateOneAsync(filter, update);
+    }
 }
