@@ -59,6 +59,9 @@ public class TareaRepository : ITareaRepository
     public async Task<List<Tarea>> ObtenerTareasPorArea(string areaId) =>
         await _tareas.Find(t => t.IdAreaInteres == areaId).ToListAsync();
 
+    public async Task<Tarea?> ObtenerTareaPorId(string idTarea) =>
+        await _tareas.Find(t => t.IdTarea == idTarea).FirstOrDefaultAsync();
+
     public async Task CompletarTarea(string idTarea)
     {
         var filter = Builders<Tarea>.Filter.Eq(t => t.IdTarea, idTarea);

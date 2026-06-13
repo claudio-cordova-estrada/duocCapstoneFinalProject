@@ -19,6 +19,7 @@
         <entry key="Views/CalendarioSemanalView.axaml" value="planificApp.csproj" />
         <entry key="Views/CalendarioView.axaml" value="planificApp.csproj" />
         <entry key="Views/ConfigView.axaml" value="planificApp.csproj" />
+        <entry key="Views/Controls/PanelTareas.axaml" value="planificApp.csproj" />
         <entry key="Views/CuentaView.axaml" value="planificApp.csproj" />
         <entry key="Views/DatosView.axaml" value="planificApp.csproj" />
         <entry key="Views/DetalleUsuarioView.axaml" value="planificApp.csproj" />

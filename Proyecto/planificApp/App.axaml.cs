@@ -81,11 +81,13 @@ public partial class App : Application
         collection.AddSingleton<ITareaRepository, TareaRepository>();
         collection.AddSingleton<IAreaInteresRepository, AreaInteresRepository>();
         collection.AddSingleton<IUbicacionRepository, UbicacionRepository>();
+        collection.AddSingleton<IBloqueAreaInteresScheduleRepository, BloqueAreaInteresScheduleRepository>();
 
         // Services
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();
-        collection.AddSingleton<ISesionService, SesionService>();
+        collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
+        collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
 

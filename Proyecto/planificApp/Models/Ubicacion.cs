@@ -3,12 +3,11 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace PlanificApp.Models
 {
-    // --- TUS RECORDS ORIGINALES (Intactos) ---
     public record Ubicacion(string Nombre, double Latitud, double Longitud);
     public record Region(int IdRegion, string Nombre);
     public record Comuna(int IdComuna, string Nombre, int IdRegionPadre);
 
-    // --- NUEVO MODELO PARA MONGODB ---
+    // --- nuevo modelo mongoDB ---
     public class UbicacionGuardada
     {
         [BsonId]
