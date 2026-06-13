@@ -16,6 +16,8 @@ public enum ModoVista { Inbox, Hoy, Semana, Mes }
 
 public partial class InboxViewModel : TareaDetailViewModelBase
 {
+    private readonly IUbicacionRepository _ubicacionRepo;
+
     [ObservableProperty] private ModoVista _modoActual = ModoVista.Inbox;
     [ObservableProperty] private string _tituloVista = "Inbox";
     [ObservableProperty] private string _subtituloVista = string.Empty;
@@ -29,17 +31,94 @@ public partial class InboxViewModel : TareaDetailViewModelBase
     [ObservableProperty] private bool _completadasVisibles = true;
     [ObservableProperty] private string _quickAddNombre = string.Empty;
 
+    // --- PROPIEDADES PARA EL PANEL DE DETALLES ---
+    [ObservableProperty] private string _prioridadDisplay = "1 - Baja";
+    [ObservableProperty] private string _tiempoDisplay = "— Sin definir —";
+    [ObservableProperty] private string _actividadFisicaDisplay = "— Ninguna —";
+    [ObservableProperty] private string _actividadMentalDisplay = "— Ninguna —";
+    [ObservableProperty] private string _ubicacionDisplay = "— Sin ubicación —"; // NUEVO
+
+    // LISTAS
+    public ObservableCollection<string> Prioridades { get; } = new() { "1 - Baja", "2 - Media", "3 - Alta", "4 - Urgente", "5 - Fija" };
+    public ObservableCollection<string> Tiempos { get; } = new() { "— Sin definir —", "5 minutos", "10 minutos", "15 minutos", "30 minutos", "45 minutos", "1 hora", "1.5 horas", "2 horas", "3 horas", "4 horas" };
+    public ObservableCollection<string> NivelesActividadFisica { get; } = new() { "— Ninguna —", "Activa", "Pasiva" };
+    public ObservableCollection<string> NivelesActividadMental { get; } = new() { "— Ninguna —", "Obligación", "Recreación" };
+    public ObservableCollection<string> MisUbicaciones { get; } = new() { "— Sin ubicación —" }; // NUEVA LISTA DINÁMICA
+
     private DispatcherTimer? _refreshTimer;
 
-    public InboxViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion)
+    // AÑADIMOS IUbicacionRepository al constructor
+    public InboxViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion, IUbicacionRepository ubicacionRepo)
         : base(tareaRepo, areaRepo, sesion)
     {
+        _ubicacionRepo = ubicacionRepo;
         PageName = Data.ApplicationPageNames.UserInbox;
 
         _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
         _refreshTimer.Tick += async (_, _) => await RefreshTareasAsync();
         _refreshTimer.Start();
     }
+
+    // --- LÓGICA DE SINCRONIZACIÓN AUTOMÁTICA ---
+    protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(TareaSeleccionada) && TareaSeleccionada != null)
+        {
+            PrioridadDisplay = Prioridades.FirstOrDefault(p => p.StartsWith(TareaSeleccionada.Prioridad.ToString())) ?? "1 - Baja";
+
+            TiempoDisplay = TareaSeleccionada.TiempoEstimado switch
+            {
+                0 => "— Sin definir —",
+                5 => "5 minutos",
+                10 => "10 minutos",
+                15 => "15 minutos",
+                30 => "30 minutos",
+                45 => "45 minutos",
+                60 => "1 hora",
+                90 => "1.5 horas",
+                120 => "2 horas",
+                180 => "3 horas",
+                240 => "4 horas",
+                _ => "— Sin definir —"
+            };
+
+            ActividadFisicaDisplay = string.IsNullOrEmpty(TareaSeleccionada.TipoActividadFisica) ? "— Ninguna —" : TareaSeleccionada.TipoActividadFisica;
+            ActividadMentalDisplay = string.IsNullOrEmpty(TareaSeleccionada.TipoActividadMental) ? "— Ninguna —" : TareaSeleccionada.TipoActividadMental;
+
+            // Si la ubicación existe en la base de datos, la mostramos; si no, ponemos "Sin ubicación"
+            UbicacionDisplay = string.IsNullOrEmpty(TareaSeleccionada.Ubicacion) || !MisUbicaciones.Contains(TareaSeleccionada.Ubicacion)
+                               ? "— Sin ubicación —"
+                               : TareaSeleccionada.Ubicacion;
+        }
+    }
+
+    partial void OnPrioridadDisplayChanged(string value)
+    {
+        if (!string.IsNullOrEmpty(value)) DetallePrioridad = int.Parse(value.Split(' ')[0]);
+    }
+
+    partial void OnTiempoDisplayChanged(string value)
+    {
+        DetalleTiempoEstimado = value switch
+        {
+            "5 minutos" => 5,
+            "10 minutos" => 10,
+            "15 minutos" => 15,
+            "30 minutos" => 30,
+            "45 minutos" => 45,
+            "1 hora" => 60,
+            "1.5 horas" => 90,
+            "2 horas" => 120,
+            "3 horas" => 180,
+            "4 horas" => 240,
+            _ => 0
+        };
+    }
+
+    partial void OnActividadFisicaDisplayChanged(string value) => DetalleTipoActividadFisica = (value == "— Ninguna —") ? null : value;
+    partial void OnActividadMentalDisplayChanged(string value) => DetalleTipoActividadMental = (value == "— Ninguna —") ? null : value;
+    partial void OnUbicacionDisplayChanged(string value) => DetalleUbicacion = (value == "— Sin ubicación —") ? null : value;
 
     public void SetModo(ModoVista modo)
     {
@@ -75,9 +154,20 @@ public partial class InboxViewModel : TareaDetailViewModelBase
 
         var idUsuario = Sesion.UsuarioActual.IdUsuario!;
 
-        AreasInteres = new ObservableCollection<AreaInteres>(
-            await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
+        // 1. CARGAMOS ÁREAS DE INTERÉS
+        AreasInteres = new ObservableCollection<AreaInteres>(await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
 
+        // 2. CARGAMOS UBICACIONES REALES DESDE MONGODB
+        var ubicacionesDb = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario);
+        MisUbicaciones.Clear();
+        MisUbicaciones.Add("— Sin ubicación —");
+        foreach (var ubi in ubicacionesDb)
+        {
+            if (!string.IsNullOrWhiteSpace(ubi.Nombre))
+                MisUbicaciones.Add(ubi.Nombre);
+        }
+
+        // 3. CARGAMOS TAREAS
         var tareas = ModoActual switch
         {
             ModoVista.Hoy => await TareaRepo.ObtenerTareasPorRango(idUsuario, DateTime.Today, DateTime.Today.AddDays(1)),

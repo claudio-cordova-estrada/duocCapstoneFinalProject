@@ -9,6 +9,7 @@ using planificApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Interactivity; // Añadido para los eventos de botones
 
 namespace planificApp.Views
 {
@@ -38,7 +39,7 @@ namespace planificApp.Views
             // 2. Limpiamos los textos molestos (FPS, INFO) de las esquinas del mapa
             MiMapa.Map?.Widgets.Clear();
 
-            // 3. Centramos el mapa
+            // 3. Centramos el mapa inicialmente en Concepción/Hualpén
             var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
             var posicionInicial = new MPoint(x, y);
             MiMapa.Map?.Navigator?.CenterOnAndZoomTo(posicionInicial, 13);
@@ -47,12 +48,11 @@ namespace planificApp.Views
             _capaPuntos = new MemoryLayer
             {
                 Name = "Capa de Ubicaciones",
-                Style = null // Anulamos el estilo general para pintar cada punto de su propio color
+                Style = null
             };
             MiMapa.Map?.Layers.Add(_capaPuntos);
         }
 
-        // Este evento se dispara cuando la vista se conecta con el ViewModel
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
@@ -64,15 +64,15 @@ namespace planificApp.Views
                 vm.EnfocarEnUbicacion = (latitud, longitud) =>
                 {
                     var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
-                    MiMapa.Map?.Navigator?.CenterOn(new MPoint(x, y));
+                    MiMapa.Map?.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), MiMapa.Map.Navigator.Resolutions[15]);
                 };
 
-                // NUEVO: Suscribirse a la ruta
                 vm.TrazarRutaEnMapa = DibujarRuta;
 
-                // NUEVO: Activar evento de clics en el mapa
                 if (MiMapa.Map != null)
                 {
+                    // Desuscribimos antes de suscribir para evitar disparos dobles
+                    MiMapa.Map.Info -= MiMapa_Info;
                     MiMapa.Map.Info += MiMapa_Info;
                 }
 
@@ -81,8 +81,6 @@ namespace planificApp.Views
                 vm.BorrarPinTemporalDelMapa = () =>
                 {
                     if (MiMapa.Map == null) return;
-
-                    // Buscamos la capa temporal y la destruimos
                     var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
                     if (capaTemporal != null)
                     {
@@ -93,20 +91,16 @@ namespace planificApp.Views
             }
         }
 
-        // NUEVO MÉTODO: Dibuja la línea azul en el mapa
         private void DibujarRuta(List<(double Latitud, double Longitud)> puntosRuta)
         {
             if (MiMapa.Map == null || puntosRuta.Count == 0) return;
 
-            // Borrar ruta anterior
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaRuta");
             if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
 
-            // Mapsui v4 usa puntos individuales para dibujar líneas si no tienes NTS
             var features = new List<IFeature>();
             var lineFeature = new MemoryLayer { Name = "CapaRuta" };
 
-            // Crear la línea uniendo los puntos
             var rutaGeometrica = new Mapsui.Nts.GeometryFeature
             {
                 Geometry = new NetTopologySuite.Geometries.LineString(
@@ -116,7 +110,6 @@ namespace planificApp.Views
                     }).ToArray())
             };
 
-            // Estilo: Línea Azul Semitransparente, grosor 5
             rutaGeometrica.Styles.Add(new VectorStyle
             {
                 Line = new Pen(Mapsui.Styles.Color.FromArgb(180, 0, 100, 255), 5)
@@ -129,58 +122,53 @@ namespace planificApp.Views
             MiMapa.Refresh();
         }
 
-        // Detecta clics en el mapa
         private async void MiMapa_Info(object? sender, MapInfoEventArgs e)
         {
-            if (DataContext is UbicacionesViewModel vm && vm.ModoSeleccionActivo)
+            if (DataContext is UbicacionesViewModel vm)
             {
-                if (e.WorldPosition != null)
+                if (vm.ModoSeleccionActivo)
                 {
-                    vm.ModoSeleccionActivo = false; // El botón se desactiva solo
-
-                    var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
-
-                    // 1. Dibujamos pin morado de carga
-                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#6366f1");
-
-                    // 2. Centramos el mapa
-                    MiMapa.Map?.Navigator?.CenterOn(e.WorldPosition);
-
-                    // 3. Mostramos menú flotante si está configurado
-                    Avalonia.Controls.Primitives.FlyoutBase.ShowAttachedFlyout(MiMapa);
-
-                    // 4. Efecto de "Cargando..."
-                    vm.UbicacionSeleccionada = new UbicacionVisual
+                    if (e.WorldPosition != null)
                     {
-                        Nombre = "Buscando dirección...",
-                        AreaInteres = "Buscando...",
-                        ColorHex = "#6366f1",
-                        Latitud = lonLat.lat,
-                        Longitud = lonLat.lon
-                    };
+                        e.Handled = true;
+                        vm.ModoSeleccionActivo = false;
 
-                    // 5. Obtener la dirección real desde Google
-                    string direccion = await vm.ServicioGeo.ObtenerDireccionDesdeCoordenadasAsync(lonLat.lat, lonLat.lon);
+                        var lonLat = SphericalMercator.ToLonLat(e.WorldPosition.X, e.WorldPosition.Y);
 
-                    // 6. Cambiamos pin a verde de éxito
-                    DibujarPinTemporal(lonLat.lat, lonLat.lon, "#10b981");
+                        DibujarPinTemporal(lonLat.lat, lonLat.lon, "#6366f1");
+                        MiMapa.Map?.Navigator?.CenterOn(e.WorldPosition);
+                        Avalonia.Controls.Primitives.FlyoutBase.ShowAttachedFlyout(MiMapa);
 
-                    // 7. ACTUALIZACIÓN FINAL: ¡Aquí encendemos el botón!
-                    vm.UbicacionSeleccionada = new UbicacionVisual
-                    {
-                        Nombre = "Punto seleccionado",
-                        AreaInteres = direccion,
+                        vm.UbicacionSeleccionada = new UbicacionVisual
+                        {
+                            Nombre = "Buscando dirección...",
+                            AreaInteres = "No aplica", // <--- Asignado "No aplica" durante la búsqueda
+                            ColorHex = "#6366f1",
+                            Latitud = lonLat.lat,
+                            Longitud = lonLat.lon
+                        };
 
-                        // ESTAS DOS LÍNEAS SON LA CLAVE QUE FALTABA:
-                        DireccionExacta = direccion,   // Guarda la calle para el formulario
-                        EsTemporal = true,             // ¡Esto hace aparecer el botón verde!
+                        string direccion = await vm.ServicioGeo.ObtenerDireccionDesdeCoordenadasAsync(lonLat.lat, lonLat.lon);
 
-                        ColorHex = "#10b981",
-                        UltimaVisitaFormateada = "Ubicación temporal",
-                        TransportePreferido = "-",
-                        Latitud = lonLat.lat,
-                        Longitud = lonLat.lon
-                    };
+                        DibujarPinTemporal(lonLat.lat, lonLat.lon, "#10b981");
+
+                        vm.UbicacionSeleccionada = new UbicacionVisual
+                        {
+                            Nombre = "Punto seleccionado",
+                            AreaInteres = "No aplica", // <--- Asignado "No aplica" para el pin final
+                            DireccionExacta = direccion,
+                            EsTemporal = true,
+                            ColorHex = "#10b981",
+                            UltimaVisitaFormateada = "Ubicación temporal",
+                            TransportePreferido = "-",
+                            Latitud = lonLat.lat,
+                            Longitud = lonLat.lon
+                        };
+                    }
+                }
+                else if (vm.UbicacionSeleccionada != null)
+                {
+                    vm.UnfocusCommand.Execute(null);
                 }
             }
         }
@@ -189,26 +177,14 @@ namespace planificApp.Views
         {
             if (MiMapa.Map == null) return;
 
-            // Paso A: Buscamos y borramos la capa de pines anterior (Sin usar LINQ)
-            Mapsui.Layers.ILayer? capaVieja = null;
-            foreach (var layer in MiMapa.Map.Layers)
-            {
-                if (layer.Name == "CapaPines")
-                {
-                    capaVieja = layer;
-                    break; // Encontramos la capa, dejamos de buscar
-                }
-            }
+            var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPines");
+            if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
 
-            // Si la encontramos, la borramos del mapa
-            if (capaVieja != null)
-            {
-                MiMapa.Map.Layers.Remove(capaVieja);
-            }
+            var capaTemporal = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
+            if (capaTemporal != null) MiMapa.Map.Layers.Remove(capaTemporal);
 
             var features = new List<IFeature>();
 
-            // Paso B: Creamos un punto por cada ubicación guardada
             foreach (var ubi in ubicaciones)
             {
                 var (x, y) = SphericalMercator.FromLonLat(ubi.Longitud, ubi.Latitud);
@@ -227,7 +203,6 @@ namespace planificApp.Views
                 features.Add(punto);
             }
 
-            // Paso C: Metemos todos los puntos en una nueva capa
             var capaPines = new MemoryLayer
             {
                 Name = "CapaPines",
@@ -238,11 +213,11 @@ namespace planificApp.Views
             MiMapa.Map.Layers.Add(capaPines);
             MiMapa.Refresh();
         }
+
         private void DibujarPinTemporal(double latitud, double longitud, string colorHex)
         {
             if (MiMapa.Map == null) return;
 
-            // Borramos el pin temporal anterior si existe para no duplicarlo
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPinTemporal");
             if (capaVieja != null)
             {
@@ -253,14 +228,13 @@ namespace planificApp.Views
             var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
             var punto = new PointFeature(new MPoint(x, y));
 
-            // Convertimos el color hexadecimal a color de Mapsui
             var colorAvalonia = Avalonia.Media.Color.Parse(colorHex);
             var colorMapsui = Mapsui.Styles.Color.FromArgb(colorAvalonia.A, colorAvalonia.R, colorAvalonia.G, colorAvalonia.B);
 
             punto.Styles.Add(new SymbolStyle
             {
                 Fill = new Brush(colorMapsui),
-                SymbolScale = 0.8, // Un poco más grande para destacar que es una selección
+                SymbolScale = 0.8,
                 Outline = new Pen(Mapsui.Styles.Color.White, 2)
             });
 
@@ -275,6 +249,41 @@ namespace planificApp.Views
 
             MiMapa.Map.Layers.Add(capaTemporal);
             MiMapa.Refresh();
+        }
+
+        // ==========================================
+        // NUEVA FUNCIÓN: Centrar y Zoom Automático
+        // ==========================================
+        private void BtnCentrarMapa_Click(object? sender, RoutedEventArgs e)
+        {
+            if (MiMapa.Map == null) return;
+
+            if (DataContext is UbicacionesViewModel vm && vm.ListaUbicaciones.Any())
+            {
+                // Si el usuario tiene ubicaciones guardadas, calculamos el cuadro que las encierra a todas
+                var capaPines = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaPines");
+
+                if (capaPines?.Extent != null)
+                {
+                    // Si solo hay 1 pin (el Extent width y height es 0), hacemos zoom estándar
+                    if (capaPines.Extent.Width == 0 && capaPines.Extent.Height == 0)
+                    {
+                        MiMapa.Map.Navigator?.CenterOnAndZoomTo(capaPines.Extent.Centroid, MiMapa.Map.Navigator.Resolutions[14]);
+                    }
+                    else
+                    {
+                        // Si hay varios, usamos la magia de Mapsui para encuadrar todo expandiendo un 15% los bordes para que no queden cortados
+                        var mRect = capaPines.Extent.Grow(capaPines.Extent.Width * 0.15);
+                        MiMapa.Map.Navigator?.ZoomToBox(mRect);
+                    }
+                }
+            }
+            else
+            {
+                // Si no hay pines, centramos en la ubicación por defecto (Concepción/Hualpén) con un zoom general
+                var (x, y) = SphericalMercator.FromLonLat(-73.0497, -36.8261);
+                MiMapa.Map.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), MiMapa.Map.Navigator.Resolutions[11]);
+            }
         }
     }
 }

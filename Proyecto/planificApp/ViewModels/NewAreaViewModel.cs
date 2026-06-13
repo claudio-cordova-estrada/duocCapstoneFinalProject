@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,6 +15,7 @@ public partial class NewAreaViewModel : ViewModelBase
 {
     private readonly IAreaInteresRepository _areaRepo;
     private readonly ISesionService _sesion;
+    private readonly IUbicacionRepository _ubicacionRepo;
 
     [ObservableProperty] private string _nombre = string.Empty;
     [ObservableProperty] private string _colorHex = "#a78bfa";
@@ -26,14 +29,50 @@ public partial class NewAreaViewModel : ViewModelBase
     [ObservableProperty] private bool _hasError;
     [ObservableProperty] private string _titulo = "Nueva área de interés";
 
+    // SOLUCIÓN CS1503: Usamos el modelo correcto 'UbicacionGuardada'
+    public ObservableCollection<UbicacionGuardada> UbicacionesGuardadasLista { get; } = new();
+    [ObservableProperty] private UbicacionGuardada? _ubicacionSeleccionada;
+
     public bool EsModoEdicion { get; private set; }
     public string? IdAreaEditando { get; private set; }
     public bool GuardadoExitoso { get; private set; }
 
-    public NewAreaViewModel(IAreaInteresRepository areaRepo, ISesionService sesion)
+    public NewAreaViewModel(IAreaInteresRepository areaRepo, ISesionService sesion, IUbicacionRepository ubicacionRepo)
     {
         _areaRepo = areaRepo;
         _sesion = sesion;
+        _ubicacionRepo = ubicacionRepo;
+    }
+
+    public async Task CargarUbicacionesAsync()
+    {
+        // SOLUCIÓN CS8604: Blindaje para asegurar que el ID no sea nulo antes de buscar
+        if (_sesion.UsuarioActual == null || string.IsNullOrEmpty(_sesion.UsuarioActual.IdUsuario))
+            return;
+
+        try
+        {
+            var ubicaciones = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(_sesion.UsuarioActual.IdUsuario);
+
+            UbicacionesGuardadasLista.Clear();
+            foreach (var ubi in ubicaciones)
+            {
+                UbicacionesGuardadasLista.Add(ubi);
+
+                // Preseleccionar si estamos editando
+                if (EsModoEdicion && !string.IsNullOrEmpty(UbicacionPred))
+                {
+                    if (ubi.Nombre == UbicacionPred)
+                    {
+                        UbicacionSeleccionada = ubi;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error al cargar ubicaciones: {ex.Message}");
+        }
     }
 
     public void CargarParaEdicion(AreaInteres area)
@@ -64,7 +103,8 @@ public partial class NewAreaViewModel : ViewModelBase
             return;
         }
 
-        if (_sesion.UsuarioActual == null)
+        // Blindaje extra al guardar
+        if (_sesion.UsuarioActual == null || string.IsNullOrEmpty(_sesion.UsuarioActual.IdUsuario))
         {
             ErrorMessage = "Sesión no encontrada.";
             HasError = true;
@@ -73,11 +113,13 @@ public partial class NewAreaViewModel : ViewModelBase
 
         try
         {
+            string? ubicacionParaGuardar = UbicacionSeleccionada?.Nombre;
+
             var area = new AreaInteres
             {
                 Nombre = Nombre,
                 ColorHex = ColorHex,
-                UbicacionPred = UbicacionPred,
+                UbicacionPred = ubicacionParaGuardar,
                 MetodoTransportePred = MetodoTransportePred,
                 TipoActividadFisicaPred = TipoActividadFisicaPred,
                 TipoActividadMentalPred = TipoActividadMentalPred,

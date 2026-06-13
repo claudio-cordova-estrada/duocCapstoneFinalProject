@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "Avalonia/12.0.2": {
@@ -318,16 +318,17 @@
           "Microsoft.IO.RecyclableMemoryStream": "3.0.1"
         },
         "compile": {
-          "lib/net10.0/_._": {}
+          "lib/net10.0/AvaloniaUI.DiagnosticsSupport.Avalonia.dll": {}
         },
         "runtime": {
-          "lib/net10.0/_._": {}
+          "lib/net10.0/AvaloniaUI.DiagnosticsSupport.Avalonia.dll": {}
         },
         "build": {
-          "buildTransitive/_._": {}
+          "buildTransitive/AvaloniaUI.DiagnosticsSupport.props": {},
+          "buildTransitive/AvaloniaUI.DiagnosticsSupport.targets": {}
         },
         "buildMultiTargeting": {
-          "buildMultiTargeting/_._": {}
+          "buildMultiTargeting/AvaloniaUI.DiagnosticsSupport.props": {}
         }
       },
       "BruTile/6.0.0": {
@@ -860,12 +861,12 @@
       "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/_._": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
             "related": ".xml"
           }
         }
@@ -2877,23 +2878,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Claudio C E\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\ian20\\.nuget\\packages\\": {},
+    "D:\\VisualStudioComponents\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
+      "projectUniqueName": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
       "projectName": "planificApp",
-      "projectPath": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
-      "packagesPath": "C:\\Users\\Claudio C E\\.nuget\\packages\\",
-      "outputPath": "C:\\Documentos\\GitHub\\duocCapstoneFinalProject\\Proyecto\\planificApp\\obj\\",
+      "projectPath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\planificApp.csproj",
+      "packagesPath": "C:\\Users\\ian20\\.nuget\\packages\\",
+      "outputPath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "D:\\VisualStudioComponents\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Claudio C E\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ian20\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2902,10 +2903,12 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -2920,10 +2923,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Avalonia": {
@@ -2943,8 +2947,6 @@
             "version": "[12.0.2, )"
           },
           "AvaloniaUI.DiagnosticsSupport": {
-            "include": "None",
-            "suppressParent": "All",
             "target": "Package",
             "version": "[2.2.1, )"
           },
@@ -2997,7 +2999,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.202/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

@@ -14,6 +14,14 @@ public partial class NewAreaWindow : Window
     public NewAreaWindow()
     {
         InitializeComponent();
+
+        this.DataContextChanged += async (sender, e) =>
+        {
+            if (DataContext is NewAreaViewModel vm)
+            {
+                await vm.CargarUbicacionesAsync();
+            }
+        };
     }
 
     public void SetEditMode(AreaInteres? area)
@@ -30,16 +38,6 @@ public partial class NewAreaWindow : Window
             _ => 0
         };
 
-        CmbUbicacionPred.SelectedIndex = area.UbicacionPred switch
-        {
-            "Casa" => 1,
-            "Trabajo" => 2,
-            "Universidad" => 3,
-            "Gimnasio" => 4,
-            "Supermercado" => 5,
-            "Otro" => 6,
-            _ => 0
-        };
 
         CmbTransporte.SelectedIndex = area.MetodoTransportePred switch
         {
@@ -57,16 +55,6 @@ public partial class NewAreaWindow : Window
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not NewAreaViewModel vm) return;
-
-        if (CmbUbicacionPred.SelectedIndex <= 0)
-            vm.UbicacionPred = null;
-        else
-            vm.UbicacionPred = CmbUbicacionPred.SelectedIndex switch
-            {
-                1 => "Casa", 2 => "Trabajo", 3 => "Universidad",
-                4 => "Gimnasio", 5 => "Supermercado", 6 => "Otro",
-                _ => null
-            };
 
         vm.MetodoTransportePred = CmbTransporte.SelectedIndex switch
         {

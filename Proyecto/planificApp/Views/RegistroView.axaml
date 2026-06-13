@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="800"
              x:Class="planificApp.Views.RegistroView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:RegistroViewModel">
@@ -12,11 +12,9 @@
             
             <Border Grid.Row="0"/>
             
-            <!-- Registro card -->
-            <Border Grid.Row="1" Classes="card" Padding="40" Width="420" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <StackPanel Spacing="20">
+            <Border Grid.Row="1" Classes="card" Padding="40" Width="480" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Spacing="16">
                     
-                    <!-- Logo + title -->
                     <StackPanel HorizontalAlignment="Center" Spacing="8" Margin="0 0 0 4">
                         <Border Width="48" Height="48" CornerRadius="12" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center">
                             <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AccentColor}" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -25,51 +23,66 @@
                         <TextBlock Text="Regístrate para empezar a planificar" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Nombre -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="NOMBRE COMPLETO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                         <TextBox Text="{Binding NombreCompleto}" FontSize="14" PlaceholderText="Tu nombre" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
-                    <!-- Correo -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="CORREO ELECTRÓNICO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                         <TextBox Text="{Binding Correo}" FontSize="14" PlaceholderText="correo@ejemplo.com" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
                     </StackPanel>
 
-                    <!-- Contraseña -->
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox Text="{Binding Password}" FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
-                    </StackPanel>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox Text="{Binding Password}" FontSize="14" PasswordChar="*" PlaceholderText="Contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
 
-                    <!-- Repetir contraseña -->
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="REPETIR CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox Text="{Binding RepetirPassword}" FontSize="14" PasswordChar="*" PlaceholderText="Repetir contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
-                    </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="6">
+                            <TextBlock Text="REPETIR CONTRASEÑA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBox Text="{Binding RepetirPassword}" FontSize="14" PasswordChar="*" PlaceholderText="Repetir contraseña" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
+                    </Grid>
 
-                    <!-- Fecha de nacimiento -->
                     <StackPanel Spacing="6">
                         <TextBlock Text="FECHA DE NACIMIENTO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                         <CalendarDatePicker x:Name="DatePickerNacimiento" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona tu fecha de nacimiento" HorizontalAlignment="Stretch"/>
                     </StackPanel>
 
-                    <!-- Ubicación -->
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                        <TextBox Text="Concepción" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" IsReadOnly="True"/>
-                    </StackPanel>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                        
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="REGIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <ComboBox ItemsSource="{Binding Regiones}"
+                                      SelectedItem="{Binding RegionSeleccionada}"
+                                      PlaceholderText="Selecciona región"
+                                      HorizontalAlignment="Stretch"
+                                      Foreground="{DynamicResource TextSecondary}" 
+                                      Background="{DynamicResource InputBackground}" 
+                                      BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
 
-                    <!-- Error message -->
+                        <StackPanel Grid.Column="1" Spacing="6">
+                            <TextBlock Text="COMUNA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <ComboBox ItemsSource="{Binding ComunasDisponibles}"
+                                      SelectedItem="{Binding ComunaSeleccionada}"
+                                      IsEnabled="{Binding ComunasHabilitadas}"
+                                      PlaceholderText="Selecciona comuna"
+                                      HorizontalAlignment="Stretch"
+                                      Foreground="{DynamicResource TextSecondary}" 
+                                      Background="{DynamicResource InputBackground}" 
+                                      BorderBrush="{DynamicResource InputBorder}"/>
+                        </StackPanel>
+                        
+                    </Grid>
+
                     <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
-                    <!-- Crear cuenta button -->
                     <Button Classes="accent" HorizontalAlignment="Stretch" Click="CrearCuenta_Click" Margin="0 4 0 0">
                         <TextBlock Text="Crear cuenta" FontSize="14" HorizontalAlignment="Center"/>
                     </Button>
 
-                    <!-- Link to login -->
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="4" Margin="0 4 0 0">
                         <TextBlock Text="¿Ya tienes cuenta?" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                         <Button Classes="transparent" Command="{Binding GoToLoginCommand}" Padding="4 2">

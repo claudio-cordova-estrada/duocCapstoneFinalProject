@@ -31,68 +31,32 @@ public partial class NewTaskWindow : Window
             var area = vm.AreasInteres.FirstOrDefault(a => a.IdAreaInteres == PreSelectedAreaId);
             if (area != null)
             {
-                ApplyAreaDefaults(area);
+                ApplyAreaDefaults(area, vm);
             }
         }
     }
 
-    private void ApplyAreaDefaults(AreaInteres area)
+    private void ApplyAreaDefaults(AreaInteres area, NewTaskViewModel vm)
     {
-        if (area.UbicacionPred != null)
-            CmbUbicacion.SelectedIndex = DetalleTareaHelper.UbicacionToIndex(area.UbicacionPred);
+        // Aplicamos los valores default directo al ViewModel (para que se reflejen en los ComboBox)
+        if (area.UbicacionPred != null && vm.MisUbicaciones.Contains(area.UbicacionPred))
+            vm.UbicacionDisplay = area.UbicacionPred;
+
         if (area.TipoActividadFisicaPred != null)
-            CmbTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(area.TipoActividadFisicaPred);
+            vm.ActividadFisicaDisplay = area.TipoActividadFisicaPred;
+
         if (area.TipoActividadMentalPred != null)
-            CmbTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(area.TipoActividadMentalPred);
+            vm.ActividadMentalDisplay = area.TipoActividadMentalPred;
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not NewTaskViewModel vm) return;
 
-        // Transferir valores de controles al ViewModel
-        vm.FecInicio = PickerFecInicio.SelectedDate;
-        vm.FecLimite = PickerFecLimite.SelectedDate;
-        vm.HoraInicio = PickerHoraInicio.SelectedTime;
-        vm.HoraFin = PickerHoraFin.SelectedTime;
+        // Lo único que seguimos seteando manualmente es el Área de Interés, porque usa un ComboBox de objetos
         vm.IdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(CmbAreaInteres);
-        vm.TipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(CmbTipoActividadFisica.SelectedIndex);
-        vm.TipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(CmbTipoActividadMental.SelectedIndex);
-    
-        // Ubicacion - mapear el índice del ComboBox
-        vm.Ubicacion = CmbUbicacion.SelectedIndex switch
-        {
-            1 => "Casa",
-            2 => "Trabajo",
-            3 => "Universidad",
-            4 => "Gimnasio",
-            5 => "Supermercado",
-            6 => "Otro",
-            _ => null
-        };
-    
-        // Prioridad - mapear índice (0-based) a valor
-        vm.Prioridad = CmbPrioridad.SelectedIndex + 1;
-    
-        // Tiempo estimado - mapear índice a minutos
-        vm.TiempoEstimado = CmbTiempoEstimado.SelectedIndex switch
-        {
-            1 => 5,
-            2 => 10,
-            3 => 15,
-            4 => 30,
-            5 => 45,
-            6 => 60,
-            7 => 90,
-            8 => 120,
-            9 => 180,
-            10 => 240,
-            _ => 0
-        };
 
-        // Recordatorio
-        vm.Recordatorio = PickerRecordatorio.SelectedDate;
-
+        // Disparamos el comando del ViewModel (todo lo demás ya está enlazado por Binding)
         await vm.GuardarCommand.ExecuteAsync(null);
 
         if (vm.GuardadoExitoso)
@@ -110,29 +74,21 @@ public partial class NewTaskWindow : Window
 
     private void ClearFecInicio_Click(object? sender, RoutedEventArgs e)
     {
-        PickerFecInicio.SelectedDate = null;
-        if (DataContext is NewTaskViewModel vm)
-            vm.FecInicio = null;
+        if (DataContext is NewTaskViewModel vm) vm.FecInicio = null;
     }
 
     private void ClearFecLimite_Click(object? sender, RoutedEventArgs e)
     {
-        PickerFecLimite.SelectedDate = null;
-        if (DataContext is NewTaskViewModel vm)
-            vm.FecLimite = null;
+        if (DataContext is NewTaskViewModel vm) vm.FecLimite = null;
     }
 
     private void ClearHoraInicio_Click(object? sender, RoutedEventArgs e)
     {
-        PickerHoraInicio.SelectedTime = null;
-        if (DataContext is NewTaskViewModel vm)
-            vm.HoraInicio = null;
+        if (DataContext is NewTaskViewModel vm) vm.HoraInicio = null;
     }
 
     private void ClearHoraFin_Click(object? sender, RoutedEventArgs e)
     {
-        PickerHoraFin.SelectedTime = null;
-        if (DataContext is NewTaskViewModel vm)
-            vm.HoraFin = null;
+        if (DataContext is NewTaskViewModel vm) vm.HoraFin = null;
     }
 }

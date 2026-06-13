@@ -17,6 +17,8 @@ namespace planificApp.ViewModels
         private readonly IUbicacionRepository _ubicacionRepo;
         private readonly ISesionService _sesionService;
         private readonly IDialogService _dialogService;
+        // NUEVO: Agregamos el repositorio de Áreas de Interés
+        private readonly IAreaInteresRepository _areaRepo;
 
         public ObservableCollection<UbicacionVisual> ListaUbicaciones { get; set; } = new();
 
@@ -47,6 +49,7 @@ namespace planificApp.ViewModels
         public ICommand AbrirCalculadoraRutaCommand { get; set; }
         public ICommand GuardarUbicacionTemporalCommand { get; set; }
         public ICommand DescartarUbicacionTemporalCommand { get; set; }
+        public ICommand UnfocusCommand { get; set; }
 
         public IGeoService ServicioGeo => _geoService;
         public Action? MapaDebeActualizarse { get; set; }
@@ -69,17 +72,14 @@ namespace planificApp.ViewModels
 
         public Action<List<(double Latitud, double Longitud)>>? TrazarRutaEnMapa { get; set; }
 
-        public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService)
+        // ACTUALIZADO: Añadimos IAreaInteresRepository al constructor
+        public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService, IAreaInteresRepository areaRepo)
         {
             _geoService = geoService;
             _ubicacionRepo = ubicacionRepo;
             _sesionService = sesionService;
             _dialogService = dialogService;
-
-            MisAreasDeInteres.Add("General");
-            MisAreasDeInteres.Add("Work Work Work Work");
-            MisAreasDeInteres.Add("Hogar y Familia");
-            MisAreasDeInteres.Add("Salud y Deporte");
+            _areaRepo = areaRepo; // Asignamos la nueva herramienta
 
             EliminarUbicacionCommand = new RelayCommand<UbicacionVisual>(EliminarUbicacion);
             EditarUbicacionCommand = new RelayCommand<UbicacionVisual>(EditarUbicacion);
@@ -87,8 +87,36 @@ namespace planificApp.ViewModels
             AbrirCalculadoraRutaCommand = new RelayCommand<object>(AbrirCalculadoraRuta);
             GuardarUbicacionTemporalCommand = new RelayCommand<object>(GuardarUbicacionTemporal);
             DescartarUbicacionTemporalCommand = new RelayCommand<object>(DescartarUbicacionTemporal);
+            UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             _ = CargarUbicacionesRealesAsync();
+            _ = CargarAreasDeInteresRealesAsync(); // NUEVO: Llamamos a la carga de áreas
+        }
+
+        // NUEVO MÉTODO: Descarga las áreas de interés del usuario y llena la lista
+        private async Task CargarAreasDeInteresRealesAsync()
+        {
+            if (_sesionService.UsuarioActual == null || string.IsNullOrEmpty(_sesionService.UsuarioActual.IdUsuario)) return;
+
+            try
+            {
+                var areasDb = await _areaRepo.ObtenerAreasPorUsuario(_sesionService.UsuarioActual.IdUsuario);
+
+                MisAreasDeInteres.Clear();
+                MisAreasDeInteres.Add("General"); // Mantenemos "General" como opción base por defecto
+
+                foreach (var area in areasDb)
+                {
+                    if (!string.IsNullOrWhiteSpace(area.Nombre) && area.Nombre != "General")
+                    {
+                        MisAreasDeInteres.Add(area.Nombre);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al cargar áreas de interés: {ex.Message}");
+            }
         }
 
         private async Task CargarUbicacionesRealesAsync()
@@ -243,24 +271,13 @@ namespace planificApp.ViewModels
             BorrarPinTemporalDelMapa?.Invoke();
         }
 
+        private void UnfocusLocation(object? parameter)
+        {
+            UbicacionSeleccionada = null;
+            BorrarPinTemporalDelMapa?.Invoke();
+        }
     }
 
-    public class UbicacionVisual
-    {
-        public string? IdUbicacion { get; set; }
-        public string? Nombre { get; set; }
-        public string? AreaInteres { get; set; }
-        public string? DireccionExacta { get; set; }
-        public bool EsTemporal { get; set; } = false;
-        public string? ColorHex { get; set; }
-        public string? TransportePreferido { get; set; }
-        public string? UltimaVisitaFormateada { get; set; }
-        public double Latitud { get; set; }
-        public double Longitud { get; set; }
-        public string? Categoria { get; set; }
-    }
-
-#pragma warning disable CS0067
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
@@ -269,6 +286,22 @@ namespace planificApp.ViewModels
         public void Execute(object? parameter) => _execute((T)parameter!);
         public event EventHandler? CanExecuteChanged;
     }
-#pragma warning restore CS0067
+
+    public class UbicacionVisual
+    {
+        public string? IdUbicacion { get; set; }
+        public string? Nombre { get; set; }
+        public string? AreaInteres { get; set; }
+        public string? DireccionExacta { get; set; }
+        public bool EsTemporal { get; set; }
+        public string? ColorHex { get; set; }
+        public string? UltimaVisitaFormateada { get; set; }
+        public string? TransportePreferido { get; set; }
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+    }
+
+#pragma warning disable CS0067
 
 }
+#pragma warning restore CS0067
