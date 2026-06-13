@@ -54,7 +54,7 @@ public partial class InboxViewModel : TareaDetailViewModelBase
         _ubicacionRepo = ubicacionRepo;
         PageName = Data.ApplicationPageNames.UserInbox;
 
-        _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
         _refreshTimer.Tick += async (_, _) => await RefreshTareasAsync();
         _refreshTimer.Start();
     }
@@ -63,6 +63,17 @@ public partial class InboxViewModel : TareaDetailViewModelBase
     protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
+
+        // Pausamos el refresco automático mientras se edita una tarea para evitar
+        // que el ComboBox de ubicación pierda su selección al limpiar la lista.
+        if (e.PropertyName == nameof(TareaSeleccionada))
+        {
+            if (TareaSeleccionada != null)
+                _refreshTimer?.Stop();
+            else
+                _refreshTimer?.Start();
+        }
+
         if (e.PropertyName == nameof(TareaSeleccionada) && TareaSeleccionada != null)
         {
             PrioridadDisplay = Prioridades.FirstOrDefault(p => p.StartsWith(TareaSeleccionada.Prioridad.ToString())) ?? "1 - Baja";
@@ -154,18 +165,11 @@ public partial class InboxViewModel : TareaDetailViewModelBase
 
         var idUsuario = Sesion.UsuarioActual.IdUsuario!;
 
-        // 1. CARGAMOS ÁREAS DE INTERÉS
-        AreasInteres = new ObservableCollection<AreaInteres>(await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
+        // 1. SINCRONIZAMOS ÁREAS DE INTERÉS (sin reemplazar la colección entera)
+        SincronizarAreasInteres(await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
 
-        // 2. CARGAMOS UBICACIONES REALES DESDE MONGODB
-        var ubicacionesDb = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario);
-        MisUbicaciones.Clear();
-        MisUbicaciones.Add("— Sin ubicación —");
-        foreach (var ubi in ubicacionesDb)
-        {
-            if (!string.IsNullOrWhiteSpace(ubi.Nombre))
-                MisUbicaciones.Add(ubi.Nombre);
-        }
+        // 2. SINCRONIZAMOS UBICACIONES REALES DESDE MONGODB (sin Clear())
+        SincronizarUbicaciones(await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario));
 
         // 3. CARGAMOS TAREAS
         var tareas = ModoActual switch
@@ -176,7 +180,7 @@ public partial class InboxViewModel : TareaDetailViewModelBase
             _ => (await TareaRepo.ObtenerTareasPorUsuario(idUsuario)).Where(t => t.IdAreaInteres == null).ToList()
         };
 
-        Tareas = new ObservableCollection<Tarea>(tareas);
+        SincronizarTareas(tareas);
 
         SubtituloVista = ModoActual switch
         {
@@ -261,6 +265,91 @@ public partial class InboxViewModel : TareaDetailViewModelBase
         await TareaRepo.CrearTarea(tarea);
         QuickAddNombre = string.Empty;
         await CargarTareasAsync();
+    }
+
+    // --- SINCRONIZACIÓN DIFERENCIAL DE COLECCIONES ---
+    // Evitamos Clear()/recrear colecciones para que los ComboBoxes no pierdan
+    // su SelectedItem mientras el usuario está interactuando con ellos.
+
+    private void SincronizarAreasInteres(List<AreaInteres> areasNuevas)
+    {
+        var idsNuevos = new HashSet<string?>(areasNuevas.Select(a => a.IdAreaInteres));
+
+        for (int i = AreasInteres.Count - 1; i >= 0; i--)
+        {
+            if (!idsNuevos.Contains(AreasInteres[i].IdAreaInteres))
+                AreasInteres.RemoveAt(i);
+        }
+
+        foreach (var nueva in areasNuevas)
+        {
+            var existente = AreasInteres.FirstOrDefault(a => a.IdAreaInteres == nueva.IdAreaInteres);
+            if (existente == null)
+            {
+                AreasInteres.Add(nueva);
+            }
+            else
+            {
+                int idx = AreasInteres.IndexOf(existente);
+                AreasInteres[idx] = nueva;
+            }
+        }
+    }
+
+    private void SincronizarUbicaciones(IEnumerable<UbicacionGuardada> ubicacionesDb)
+    {
+        var nombresNuevos = ubicacionesDb
+            .Select(u => u.Nombre)
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Distinct()
+            .ToList();
+
+        var listaFinal = new List<string> { "— Sin ubicación —" };
+        listaFinal.AddRange(nombresNuevos);
+
+        for (int i = MisUbicaciones.Count - 1; i >= 0; i--)
+        {
+            if (!listaFinal.Contains(MisUbicaciones[i]))
+                MisUbicaciones.RemoveAt(i);
+        }
+
+        for (int i = 0; i < listaFinal.Count; i++)
+        {
+            var item = listaFinal[i];
+            int idx = MisUbicaciones.IndexOf(item);
+            if (idx == -1)
+                MisUbicaciones.Insert(i, item);
+            else if (idx != i)
+                MisUbicaciones.Move(idx, i);
+        }
+    }
+
+    private void SincronizarTareas(List<Tarea> tareasNuevas)
+    {
+        var idsNuevos = new HashSet<string?>(tareasNuevas.Select(t => t.IdTarea));
+
+        // Eliminamos las que ya no existen en la base de datos.
+        for (int i = Tareas.Count - 1; i >= 0; i--)
+        {
+            if (!idsNuevos.Contains(Tareas[i].IdTarea))
+                Tareas.RemoveAt(i);
+        }
+
+        // Agregamos las nuevas o reemplazamos las existentes, pero preservamos
+        // la instancia de la tarea seleccionada para no desincronizar el detalle.
+        foreach (var nueva in tareasNuevas)
+        {
+            var existente = Tareas.FirstOrDefault(t => t.IdTarea == nueva.IdTarea);
+            if (existente == null)
+            {
+                Tareas.Add(nueva);
+            }
+            else if (existente != TareaSeleccionada)
+            {
+                int idx = Tareas.IndexOf(existente);
+                Tareas[idx] = nueva;
+            }
+        }
     }
 
     protected override bool ShouldDeselectAfterSave(Tarea tarea)
