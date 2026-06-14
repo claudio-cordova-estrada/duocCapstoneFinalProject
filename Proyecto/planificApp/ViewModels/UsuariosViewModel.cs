@@ -95,8 +95,26 @@ public partial class UsuariosViewModel : PageViewModel
 
     private async Task CargarUsuariosAsync()
     {
-        var usuariosDb = await _usuarioRepo.ObtenerTodosLosUsuarios();
-        _todosLosUsuarios = usuariosDb.ToList();
+        try
+        {
+            var usuariosDb = await _usuarioRepo.ObtenerTodosLosUsuarios();
+            _todosLosUsuarios = usuariosDb.ToList();
+        }
+        catch (Exception ex)
+        {
+            // SI MONGODB FALLA, DIBUJARÁ ESTE USUARIO FALSO EN TU TABLA PARA AVISARTE
+            _todosLosUsuarios = new List<Usuario>
+        {
+            new Usuario
+            {
+                IdUsuario = "ERROR",
+                NombreCompleto = "Error de Base de Datos",
+                Correo = ex.Message, // Aquí veremos el error exacto
+                Ubicacion = "Revisa la consola",
+                EstaActivo = false
+            }
+        };
+        }
         AplicarFiltros();
     }
 
@@ -104,11 +122,16 @@ public partial class UsuariosViewModel : PageViewModel
     {
         var filtrados = _todosLosUsuarios.AsEnumerable();
 
-        if (RegionSeleccionada != "Todas")
+        // Agregamos !string.IsNullOrEmpty para evitar el crash con nulos
+        if (!string.IsNullOrEmpty(RegionSeleccionada) && RegionSeleccionada != "Todas")
+        {
             filtrados = filtrados.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(RegionSeleccionada));
+        }
 
-        if (ComunaSeleccionada != "Todas")
+        if (!string.IsNullOrEmpty(ComunaSeleccionada) && ComunaSeleccionada != "Todas")
+        {
             filtrados = filtrados.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(ComunaSeleccionada));
+        }
 
         if (!string.IsNullOrWhiteSpace(TextoBusqueda))
         {
@@ -119,7 +142,10 @@ public partial class UsuariosViewModel : PageViewModel
         }
 
         UsuariosVisibles.Clear();
-        foreach (var u in filtrados) UsuariosVisibles.Add(u);
+        foreach (var u in filtrados)
+        {
+            UsuariosVisibles.Add(u);
+        }
     }
 
     // --- NUEVO COMANDO DE NAVEGACIÓN ---

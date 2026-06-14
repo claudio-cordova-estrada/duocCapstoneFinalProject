@@ -2,7 +2,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace planificApp.Converters; // ¡Asegúrate que sea planificApp.Converters!
+namespace planificApp.Converters;
 
 public class BoolToTextConverter : IValueConverter
 {

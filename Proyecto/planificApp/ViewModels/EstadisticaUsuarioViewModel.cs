@@ -7,7 +7,6 @@ using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace planificApp.ViewModels;
@@ -17,8 +16,14 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IRegionesService _regionesService;
     private readonly INavigationService _navigation;
+    private readonly IMetricasService _metricasService;
 
     [ObservableProperty] private Usuario? _usuarioActual;
+
+    // Métricas del usuario
+    [ObservableProperty] private int _tareasCreadas;
+    [ObservableProperty] private int _tareasCompletadas;
+    [ObservableProperty] private int _generacionesRealizadas;
 
     // Propiedades editables
     [ObservableProperty] private string _nombre = string.Empty;
@@ -38,6 +43,7 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
         {
             if (SetProperty(ref _regionSeleccionada, value))
             {
+                // Disparo normal cuando el usuario cambia la región manualmente desde la UI
                 _ = CargarComunasAsync(value);
             }
         }
@@ -45,32 +51,55 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
 
     [ObservableProperty] private string _comunaSeleccionada = "Selecciona una comuna";
 
-    public EstadisticaUsuarioViewModel(IUsuarioRepository usuarioRepo, IRegionesService regionesService, INavigationService navigation)
+    public EstadisticaUsuarioViewModel(
+        IUsuarioRepository usuarioRepo,
+        IRegionesService regionesService,
+        INavigationService navigation,
+        IMetricasService metricasService)
     {
         _usuarioRepo = usuarioRepo;
         _regionesService = regionesService;
         _navigation = navigation;
+        _metricasService = metricasService;
         PageName = ApplicationPageNames.AdminUsuarioDetalle;
 
         _ = CargarRegionesAsync();
     }
 
-    // Método para recibir al usuario desde la tabla
-    public void SetUsuario(Usuario usuario)
+    // SOLUCIÓN: Cambiado a async para controlar la secuencia de inicialización geográfica de forma segura
+    public async void SetUsuario(Usuario usuario)
     {
-        UsuarioActual = usuario;
-        EstaActivo = usuario.EstaActivo;
-        Nombre = usuario.NombreCompleto ?? "";
-        Correo = usuario.Correo ?? "";
-        FechaNacimiento = usuario.FecCreacion.ToString("dd MMM yyyy");
+        if (usuario == null) return;
 
-        // Intentar separar ubicación actual para pre-cargar combos
+        UsuarioActual = usuario;
+        Nombre = usuario.NombreCompleto ?? string.Empty;
+        Correo = usuario.Correo ?? string.Empty;
+        EstaActivo = usuario.EstaActivo;
+
+        // Formateamos la fecha de registro de manera profesional
+        FechaNacimiento = usuario.FecCreacion.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-CL"));
+
         if (!string.IsNullOrEmpty(usuario.Ubicacion) && usuario.Ubicacion.Contains(","))
         {
             var partes = usuario.Ubicacion.Split(',');
-            RegionSeleccionada = partes[1].Trim();
-            ComunaSeleccionada = partes[0].Trim();
+            var comuna = partes[0].Trim();
+            var region = partes[1].Trim();
+
+            // 1. Asignamos el campo privado de la región para evitar el disparo automático descontrolado
+            _regionSeleccionada = region;
+            OnPropertyChanged(nameof(RegionSeleccionada));
+
+            // 2. Esperamos de forma síncrona a que carguen las comunas y pasamos la comuna destino para seleccionarla al final
+            await CargarComunasAsync(region, comuna);
         }
+        else
+        {
+            RegionSeleccionada = "Selecciona una región";
+            ComunaSeleccionada = "Selecciona una comuna";
+        }
+
+        // Ejecutamos el servicio central de métricas
+        _ = CargarMetricasAsync(usuario);
     }
 
     private async Task CargarRegionesAsync()
@@ -79,11 +108,18 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
         Regiones = new ObservableCollection<string>(regs);
     }
 
-    private async Task CargarComunasAsync(string region)
+    // REFACTORIZACIÓN SOLID: Permite coordinar la carga antes de forzar la selección de la comuna
+    private async Task CargarComunasAsync(string region, string? comunaParaSeleccionar = null)
     {
         if (string.IsNullOrEmpty(region) || region.Contains("Selecciona")) return;
         var coms = await _regionesService.ObtenerComunasPorRegionAsync(region);
         Comunas = new ObservableCollection<string>(coms);
+
+        // Si venimos del método SetUsuario, asignamos la comuna de forma segura tras poblar la lista
+        if (!string.IsNullOrEmpty(comunaParaSeleccionar))
+        {
+            ComunaSeleccionada = comunaParaSeleccionar;
+        }
     }
 
     [RelayCommand]
@@ -94,11 +130,9 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
     {
         if (UsuarioActual == null) return;
 
-        // Invertimos el estado actual
         EstaActivo = !EstaActivo;
         UsuarioActual.EstaActivo = EstaActivo;
 
-        // Guardamos en MongoDB
         await _usuarioRepo.ActualizarUsuario(UsuarioActual.IdUsuario!, UsuarioActual);
     }
 
@@ -107,11 +141,24 @@ public partial class EstadisticaUsuarioViewModel : PageViewModel
     {
         if (UsuarioActual == null) return;
 
+        // Mapeamos los datos limpios de la UI de vuelta al modelo original de MongoDB
         UsuarioActual.NombreCompleto = Nombre;
         UsuarioActual.Correo = Correo;
         UsuarioActual.Ubicacion = $"{ComunaSeleccionada}, {RegionSeleccionada}";
 
+        // Persistimos los cambios en la base de datos de manera atómica
         await _usuarioRepo.ActualizarUsuario(UsuarioActual.IdUsuario!, UsuarioActual);
+
+        // Redireccionamos al administrador para confirmar visualmente el flujo exitoso
         Volver();
+    }
+
+    private async Task CargarMetricasAsync(Usuario usuario)
+    {
+        var metricas = await _metricasService.ObtenerMetricasUsuarioAsync(usuario, DateTime.Now.Year);
+
+        TareasCreadas = metricas.TareasCreadas;
+        TareasCompletadas = metricas.TareasCompletadas;
+        GeneracionesRealizadas = metricas.GeneracionesRealizadas;
     }
 }

@@ -3,20 +3,12 @@
   "WorkspaceRootPath": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\app.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:app.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\estadisticasview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\estadisticasview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltobgconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltobgconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltocolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltocolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltotextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltotextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\viewmodels\\estadisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\estadisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\estadisticausuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
@@ -27,20 +19,96 @@
       "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\estadisticausuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\usuariosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\usuariosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\app.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:app.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltoactivarcolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltoactivarcolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltoactivartextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltoactivartextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\estadisticausuarioview.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\estadisticausuarioview.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:app.axaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\services\\metricasservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:services\\metricasservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\services\\interfaces\\imetricasservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\services\\interfaces\\imetricasservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\metricasdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\metricasdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\usuariosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\usuariosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\busquedausuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\busquedausuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\adminmainview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\adminmainview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\datosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\datosview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\modificacionusuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\modificacionusuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\views\\detalleusuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:views\\detalleusuarioview.axaml||{6D5344A2-2FCD-49DE-A09D-6A14FD1B1224}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\viewmodels\\detalleusuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\detalleusuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltoactioncolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltoactioncolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltoactiontextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltoactiontextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\viewmodels\\usuariosviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:viewmodels\\usuariosviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltoestadoconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltoestadoconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltotextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltotextconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltocolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltocolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\converters\\booltobgconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|solutionrelative:converters\\booltobgconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3B96B72A-0442-44DB-B0C6-AF5E81FAB3E5}|planificApp.csproj|d:\\capstoneproject\\duoccapstonefinalproject\\proyecto\\planificapp\\models\\repositories\\usuariorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -58,8 +126,103 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml",
+              "RelativeDocumentMoniker": "App.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml",
+              "RelativeToolTip": "App.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T03:23:59.924Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
+              "RelativeDocumentMoniker": "Models\\Usuario.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
+              "RelativeToolTip": "Models\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T03:17:43.256Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "UsuariosViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UsuariosViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\UsuariosViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UsuariosViewModel.cs",
+              "RelativeToolTip": "ViewModels\\UsuariosViewModel.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAgwJQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T03:07:46.543Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EstadisticaUsuarioView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml",
+              "RelativeDocumentMoniker": "Views\\EstadisticaUsuarioView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml",
+              "RelativeToolTip": "Views\\EstadisticaUsuarioView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T03:19:09.495Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "EstadisticaUsuarioViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticaUsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\EstadisticaUsuarioViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticaUsuarioViewModel.cs",
+              "RelativeToolTip": "ViewModels\\EstadisticaUsuarioViewModel.cs",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAAKMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T03:04:49.283Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EstadisticasViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticasViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\EstadisticasViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticasViewModel.cs",
+              "RelativeToolTip": "ViewModels\\EstadisticasViewModel.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAmwJwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T17:14:04.48Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EstadisticasView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticasView.axaml",
+              "RelativeDocumentMoniker": "Views\\EstadisticasView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticasView.axaml",
+              "RelativeToolTip": "Views\\EstadisticasView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T17:14:25.447Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
@@ -70,45 +233,209 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BoolToBgConverter.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToBgConverter.cs",
-              "RelativeDocumentMoniker": "Converters\\BoolToBgConverter.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToBgConverter.cs",
-              "RelativeToolTip": "Converters\\BoolToBgConverter.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "EstadisticaUsuarioView.axaml.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml.cs",
+              "RelativeDocumentMoniker": "Views\\EstadisticaUsuarioView.axaml.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml.cs",
+              "RelativeToolTip": "Views\\EstadisticaUsuarioView.axaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:29:28.837Z",
+              "WhenOpened": "2026-06-14T18:59:41.452Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "BoolToColorConverter.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToColorConverter.cs",
-              "RelativeDocumentMoniker": "Converters\\BoolToColorConverter.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToColorConverter.cs",
-              "RelativeToolTip": "Converters\\BoolToColorConverter.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "BoolToActivarTextConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActivarTextConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToActivarTextConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActivarTextConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToActivarTextConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:29:14.592Z",
+              "WhenOpened": "2026-06-14T19:23:51.153Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "App.axaml",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml",
-              "RelativeDocumentMoniker": "App.axaml",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml",
-              "RelativeToolTip": "App.axaml",
+              "DocumentIndex": 5,
+              "Title": "BoolToActivarColorConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActivarColorConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToActivarColorConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActivarColorConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToActivarColorConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T19:24:05.485Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MetricasService.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Services\\MetricasService.cs",
+              "RelativeDocumentMoniker": "Services\\MetricasService.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Services\\MetricasService.cs",
+              "RelativeToolTip": "Services\\MetricasService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAowDQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:58:38.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IMetricasService.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\Interfaces\\IMetricasService.cs",
+              "RelativeDocumentMoniker": "Models\\Services\\Interfaces\\IMetricasService.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Services\\Interfaces\\IMetricasService.cs",
+              "RelativeToolTip": "Models\\Services\\Interfaces\\IMetricasService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:52:14.708Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "MetricasDto.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\MetricasDto.cs",
+              "RelativeDocumentMoniker": "Models\\MetricasDto.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\MetricasDto.cs",
+              "RelativeToolTip": "Models\\MetricasDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:50:59.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AdminMainView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\AdminMainView.axaml",
+              "RelativeDocumentMoniker": "Views\\AdminMainView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\AdminMainView.axaml",
+              "RelativeToolTip": "Views\\AdminMainView.axaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-14T03:23:59.924Z",
+              "WhenOpened": "2026-06-14T18:18:48.268Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
+              "Title": "App.axaml.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
+              "RelativeDocumentMoniker": "App.axaml.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
+              "RelativeToolTip": "App.axaml.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAD4v14AAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T03:09:45.138Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "BusquedaUsuarioView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\BusquedaUsuarioView.axaml",
+              "RelativeDocumentMoniker": "Views\\BusquedaUsuarioView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\BusquedaUsuarioView.axaml",
+              "RelativeToolTip": "Views\\BusquedaUsuarioView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T18:18:57.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "UsuariosView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UsuariosView.axaml",
+              "RelativeDocumentMoniker": "Views\\UsuariosView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UsuariosView.axaml",
+              "RelativeToolTip": "Views\\UsuariosView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T03:07:53.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DatosView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\DatosView.axaml",
+              "RelativeDocumentMoniker": "Views\\DatosView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\DatosView.axaml",
+              "RelativeToolTip": "Views\\DatosView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T18:18:40.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ModificacionUsuarioView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\ModificacionUsuarioView.axaml",
+              "RelativeDocumentMoniker": "Views\\ModificacionUsuarioView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\ModificacionUsuarioView.axaml",
+              "RelativeToolTip": "Views\\ModificacionUsuarioView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T18:18:23.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "DetalleUsuarioView.axaml",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\DetalleUsuarioView.axaml",
+              "RelativeDocumentMoniker": "Views\\DetalleUsuarioView.axaml",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\DetalleUsuarioView.axaml",
+              "RelativeToolTip": "Views\\DetalleUsuarioView.axaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-14T18:18:15.434Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "DetalleUsuarioViewModel.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\DetalleUsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModels\\DetalleUsuarioViewModel.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\DetalleUsuarioViewModel.cs",
+              "RelativeToolTip": "ViewModels\\DetalleUsuarioViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:18:10.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "BoolToActionColorConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActionColorConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToActionColorConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActionColorConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToActionColorConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:17:21.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "BoolToActionTextConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActionTextConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToActionTextConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToActionTextConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToActionTextConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-14T18:17:06.724Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
               "Title": "BoolToTextConverter.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToTextConverter.cs",
               "RelativeDocumentMoniker": "Converters\\BoolToTextConverter.cs",
@@ -121,83 +448,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EstadisticaUsuarioView.axaml",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml",
-              "RelativeDocumentMoniker": "Views\\EstadisticaUsuarioView.axaml",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\EstadisticaUsuarioView.axaml",
-              "RelativeToolTip": "Views\\EstadisticaUsuarioView.axaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-14T03:19:09.495Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
-              "RelativeDocumentMoniker": "Models\\Usuario.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Usuario.cs",
-              "RelativeToolTip": "Models\\Usuario.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAywDYAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 25,
+              "Title": "BoolToColorConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToColorConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToColorConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToColorConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToColorConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:17:43.256Z",
+              "WhenOpened": "2026-06-14T03:29:14.592Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "App.axaml.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
-              "RelativeDocumentMoniker": "App.axaml.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\App.axaml.cs",
-              "RelativeToolTip": "App.axaml.cs",
-              "ViewState": "AgIAAHAAAAAAAAAAAAD4v3YAAABkAAAAAAAAAA==",
+              "DocumentIndex": 26,
+              "Title": "BoolToBgConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToBgConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToBgConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToBgConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToBgConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:09:45.138Z",
+              "WhenOpened": "2026-06-14T03:29:28.837Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "UsuariosView.axaml",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UsuariosView.axaml",
-              "RelativeDocumentMoniker": "Views\\UsuariosView.axaml",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UsuariosView.axaml",
-              "RelativeToolTip": "Views\\UsuariosView.axaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-14T03:07:53.796Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "UsuariosViewModel.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UsuariosViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\UsuariosViewModel.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\UsuariosViewModel.cs",
-              "RelativeToolTip": "ViewModels\\UsuariosViewModel.cs",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAIwIMAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 23,
+              "Title": "BoolToEstadoConverter.cs",
+              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToEstadoConverter.cs",
+              "RelativeDocumentMoniker": "Converters\\BoolToEstadoConverter.cs",
+              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Converters\\BoolToEstadoConverter.cs",
+              "RelativeToolTip": "Converters\\BoolToEstadoConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:07:46.543Z",
+              "WhenOpened": "2026-06-14T17:19:40.868Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "EstadisticaUsuarioViewModel.cs",
-              "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticaUsuarioViewModel.cs",
-              "RelativeDocumentMoniker": "ViewModels\\EstadisticaUsuarioViewModel.cs",
-              "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\ViewModels\\EstadisticaUsuarioViewModel.cs",
-              "RelativeToolTip": "ViewModels\\EstadisticaUsuarioViewModel.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAxwD0AAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:04:49.283Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 27,
               "Title": "UsuarioRepository.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Repositories\\UsuarioRepository.cs",
               "RelativeDocumentMoniker": "Models\\Repositories\\UsuarioRepository.cs",
@@ -205,12 +495,11 @@
               "RelativeToolTip": "Models\\Repositories\\UsuarioRepository.cs",
               "ViewState": "AgIAAC4AAAAAAAAAAAAIwEAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:04:09.375Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-14T03:04:09.375Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 28,
               "Title": "IUsuarioRepository.cs",
               "DocumentMoniker": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Models\\Repositories\\Interfaces\\IUsuarioRepository.cs",
               "RelativeDocumentMoniker": "Models\\Repositories\\Interfaces\\IUsuarioRepository.cs",
@@ -218,8 +507,7 @@
               "RelativeToolTip": "Models\\Repositories\\Interfaces\\IUsuarioRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-14T03:04:08.234Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-14T03:04:08.234Z"
             }
           ]
         }

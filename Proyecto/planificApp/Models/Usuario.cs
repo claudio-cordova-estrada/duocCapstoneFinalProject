@@ -3,8 +3,10 @@ using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+
 namespace PlanificApp.Models
 {
+    [BsonIgnoreExtraElements]
     public class Usuario
     {
         [BsonId]

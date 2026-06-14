@@ -92,6 +92,7 @@ public partial class App : Application
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
         collection.AddSingleton<IRegionesService, RegionesService>();
+        collection.AddSingleton<IMetricasService, MetricasService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {
             // Auth
