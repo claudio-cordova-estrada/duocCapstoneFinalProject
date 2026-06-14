@@ -62,8 +62,9 @@ public partial class App : Application
         
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
-        collection.AddTransient<UsuariosViewModel>();
-        collection.AddTransient<UsuarioDetalleViewModel>();
+        collection.AddTransient<EstadisticaUsuarioViewModel>();
+        collection.AddSingleton<UsuariosViewModel>();
+        collection.AddSingleton<EstadisticaUsuarioViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -90,7 +91,7 @@ public partial class App : Application
         collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
-
+        collection.AddSingleton<IRegionesService, RegionesService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
         {
             // Auth
@@ -117,7 +118,7 @@ public partial class App : Application
             // Admin
             ApplicationPageNames.AdminEstadisticas => x.GetRequiredService<EstadisticasViewModel>(),
             ApplicationPageNames.AdminUsuarios => x.GetRequiredService<UsuariosViewModel>(),
-            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<UsuarioDetalleViewModel>(),
+            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<EstadisticaUsuarioViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
         });
         

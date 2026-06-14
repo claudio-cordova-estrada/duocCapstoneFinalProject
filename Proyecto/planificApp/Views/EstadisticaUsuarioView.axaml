@@ -2,11 +2,120 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
              x:Class="planificApp.Views.EstadisticaUsuarioView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:EstadisticaUsuarioViewModel">
-    
-    <Design.DataContext><vm:EstadisticaUsuarioViewModel/></Design.DataContext>
-    <Label Content="{Binding Test}"></Label>
+
+    <UserControl.Styles>
+        <Style Selector="ListBox.month-list ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="12 4"/>
+            <Setter Property="Margin" Value="0 0 4 0"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter Content="{TemplateBinding Content}" 
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Background="{TemplateBinding Background}"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalAlignment="Center"
+                                      CornerRadius="4"/>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBox.month-list ListBoxItem:selected">
+            <Setter Property="Background" Value="#ea580c"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="{DynamicResource AppBackground}">
+        <ScrollViewer>
+            <StackPanel Spacing="24" Margin="30">
+                
+                <StackPanel Spacing="10">
+                    <Button Command="{Binding VolverCommand}" Classes="transparent" Padding="0" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="18" VerticalAlignment="Center"/>
+                            <TextBlock Text="Volver a usuarios" FontSize="14" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="{Binding Nombre}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource TextPrimary}"/>
+                </StackPanel>
+
+                <Border Classes="card" Padding="24" CornerRadius="12">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="30" RowSpacing="20">
+                        
+                        <StackPanel Grid.Row="0" Grid.Column="0" Spacing="8">
+                            <TextBlock Text="NOMBRE" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                            <TextBox Text="{Binding Nombre}" Watermark="Nombre completo" Background="#121212" BorderBrush="#222222"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="1" Spacing="8">
+                            <TextBlock Text="CORREO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                            <TextBox Text="{Binding Correo}" Watermark="correo@ejemplo.com" Background="#121212" BorderBrush="#222222"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Spacing="8">
+                            <TextBlock Text="REGIÓN" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                            <ComboBox ItemsSource="{Binding Regiones}" SelectedItem="{Binding RegionSeleccionada}" HorizontalAlignment="Stretch" Background="#121212" BorderBrush="#222222"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" Spacing="8">
+                            <TextBlock Text="COMUNA" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                            <ComboBox ItemsSource="{Binding Comunas}" SelectedItem="{Binding ComunaSeleccionada}" HorizontalAlignment="Stretch" Background="#121212" BorderBrush="#222222"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Spacing="40">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="NIVEL ACTIVO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                                <TextBlock Text="14 meses" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                            </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="FECHA REGISTRO" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                                <TextBlock Text="{Binding FechaNacimiento}" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="MÉTRICAS" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource TextDisabled}" LetterSpacing="1"/>
+                
+                <Border Classes="card" Padding="16" CornerRadius="10">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
+                        <Button Classes="transparent" Padding="8"><Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="20"/></Button>
+                        <TextBlock Text="2026" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10 0"/>
+                        <Button Classes="transparent" Padding="8"><Label Content="&#xE52C;" FontFamily="{DynamicResource Phosphor}" FontSize="20"/></Button>
+                        <Border Grid.Column="3" Width="1" Background="#222222" Margin="15 5"/>
+                        <ListBox Grid.Column="4" Classes="month-list" SelectedIndex="4" VerticalAlignment="Center" Background="Transparent">
+                            <ListBox.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate></ListBox.ItemsPanel>
+                            <ListBoxItem>Ene</ListBoxItem><ListBoxItem>Feb</ListBoxItem><ListBoxItem>Mar</ListBoxItem><ListBoxItem>Abr</ListBoxItem>
+                            <ListBoxItem>May</ListBoxItem><ListBoxItem>Jun</ListBoxItem><ListBoxItem>Jul</ListBoxItem><ListBoxItem>Ago</ListBoxItem>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+                    <Border Grid.Row="0" Grid.Column="0" Classes="card" Padding="20">
+                        <StackPanel><TextBlock Text="Tareas creadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/><TextBlock Text="270" FontSize="24" FontWeight="Bold" Foreground="#ea580c"/></StackPanel>
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="1" Classes="card" Padding="20">
+                        <StackPanel><TextBlock Text="Tareas completadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/><TextBlock Text="248" FontSize="24" FontWeight="Bold"/></StackPanel>
+                    </Border>
+                    <Border Grid.Row="0" Grid.Column="2" Classes="card" Padding="20">
+                        <StackPanel><TextBlock Text="Generaciones" FontSize="11" Foreground="{DynamicResource TextDisabled}"/><TextBlock Text="19" FontSize="24" FontWeight="Bold"/></StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="0 10 0 0">
+                    <Button Grid.Column="0" 
+        Command="{Binding AlternarEstadoUsuarioCommand}"
+        Content="{Binding EstaActivo, Converter={StaticResource BoolToTextConverter}}" 
+        Foreground="#ef4444" 
+        Classes="transparent"/>
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
 </UserControl>

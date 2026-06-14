@@ -137,53 +137,6 @@ public partial class DatosView : UserControl
             EnterEditMode(tb);
     }
 
-    // --- MANEJO EXCLUSIVO DE EDICIÓN DE UBICACIÓN (REGIONES/COMUNAS) ---
-    private async Task EnterUbicacionEditModeAsync()
-    {
-        _isEditingUbicacion = true;
-        FieldUbicacion.IsVisible = false;
-        EditUbicacionPanel.IsVisible = true;
-
-        IconUbicacion.Content = "\xEBA6"; // Check
-        IconUbicacion.Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
-
-        // Cargar regiones desde el servicio si no están cargadas
-        if (CmbRegion.ItemsSource == null)
-        {
-            var regionesService = App.Services.GetRequiredService<IRegionesService>();
-            var regiones = await regionesService.ObtenerRegionesAsync();
-            CmbRegion.ItemsSource = regiones.ToList();
-        }
-
-        // Pre-seleccionar automáticamente Región y Comuna basándonos en el texto actual "Comuna, Región"
-        string actual = FieldUbicacion.Text;
-        if (!string.IsNullOrEmpty(actual) && actual.Contains(","))
-        {
-            var partes = actual.Split(',');
-            string comunaAct = partes[0].Trim();
-            string regionAct = partes[1].Trim();
-
-            if (CmbRegion.ItemsSource is List<string> listaRegiones)
-            {
-                int rIndex = listaRegiones.FindIndex(r => r.Equals(regionAct, StringComparison.OrdinalIgnoreCase));
-                if (rIndex >= 0)
-                {
-                    CmbRegion.SelectedIndex = rIndex;
-
-                    var regionesService = App.Services.GetRequiredService<IRegionesService>();
-                    var comunas = await regionesService.ObtenerComunasPorRegionAsync(regionAct);
-                    var listaComunas = comunas.ToList();
-
-                    CmbComuna.ItemsSource = listaComunas;
-                    CmbComuna.IsEnabled = true;
-
-                    int cIndex = listaComunas.FindIndex(c => c.Equals(comunaAct, StringComparison.OrdinalIgnoreCase));
-                    if (cIndex >= 0) CmbComuna.SelectedIndex = cIndex;
-                }
-            }
-        }
-    }
-
     private void ExitUbicacionEditMode()
     {
         _isEditingUbicacion = false;
@@ -194,16 +147,66 @@ public partial class DatosView : UserControl
         IconUbicacion.Foreground = new SolidColorBrush(Color.Parse("#888888"));
     }
 
+    // --- MANEJO EXCLUSIVO DE EDICIÓN DE UBICACIÓN (REGIONES/COMUNAS) ---
+    private async Task EnterUbicacionEditModeAsync()
+    {
+        _isEditingUbicacion = true;
+        FieldUbicacion.IsVisible = false;
+        EditUbicacionPanel.IsVisible = true;
+
+        IconUbicacion.Content = "\xEBA6"; // Check
+        IconUbicacion.Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
+
+        // Verificamos que el DataContext sea nuestro ViewModel para acceder a su servicio
+        if (DataContext is DatosViewModel vm)
+        {
+            if (CmbRegion.ItemsSource == null)
+            {
+                // USAMOS EL SERVICIO DESDE EL VIEWMODEL
+                var regiones = await vm.ServicioRegiones.ObtenerRegionesAsync();
+                CmbRegion.ItemsSource = regiones.ToList();
+            }
+
+            // Pre-seleccionar automáticamente Región y Comuna basándonos en el texto actual "Comuna, Región"
+            string actual = FieldUbicacion.Text;
+            if (!string.IsNullOrEmpty(actual) && actual.Contains(","))
+            {
+                var partes = actual.Split(',');
+                string comunaAct = partes[0].Trim();
+                string regionAct = partes[1].Trim();
+
+                if (CmbRegion.ItemsSource is List<string> listaRegiones)
+                {
+                    int rIndex = listaRegiones.FindIndex(r => r.Equals(regionAct, StringComparison.OrdinalIgnoreCase));
+                    if (rIndex >= 0)
+                    {
+                        CmbRegion.SelectedIndex = rIndex;
+
+                        // USAMOS EL SERVICIO DESDE EL VIEWMODEL
+                        var comunas = await vm.ServicioRegiones.ObtenerComunasPorRegionAsync(regionAct);
+                        var listaComunas = comunas.ToList();
+
+                        CmbComuna.ItemsSource = listaComunas;
+                        CmbComuna.IsEnabled = true;
+
+                        int cIndex = listaComunas.FindIndex(c => c.Equals(comunaAct, StringComparison.OrdinalIgnoreCase));
+                        if (cIndex >= 0) CmbComuna.SelectedIndex = cIndex;
+                    }
+                }
+            }
+        }
+    }
+
     private async void CmbRegion_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (CmbRegion.SelectedItem is string regionSeleccionada)
+        if (CmbRegion.SelectedItem is string regionSeleccionada && DataContext is DatosViewModel vm)
         {
             CmbComuna.ItemsSource = null;
             CmbComuna.IsEnabled = false;
             ErrorUbicacion.IsVisible = false;
 
-            var regionesService = App.Services.GetRequiredService<IRegionesService>();
-            var comunas = await regionesService.ObtenerComunasPorRegionAsync(regionSeleccionada);
+            // USAMOS EL SERVICIO DESDE EL VIEWMODEL
+            var comunas = await vm.ServicioRegiones.ObtenerComunasPorRegionAsync(regionSeleccionada);
             CmbComuna.ItemsSource = comunas.ToList();
             CmbComuna.IsEnabled = true;
         }

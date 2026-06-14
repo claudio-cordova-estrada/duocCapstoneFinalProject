@@ -51,5 +51,7 @@ namespace PlanificApp.Models
         public string? UbicacionActual { get; set; }
 
         public string? FotoPerfil { get; set; }
+
+        public bool EstaActivo { get; set; } = true;
     }
 }

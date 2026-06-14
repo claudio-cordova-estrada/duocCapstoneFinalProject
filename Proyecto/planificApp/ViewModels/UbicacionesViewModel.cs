@@ -6,6 +6,7 @@ using planificApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq; // Añadido para poder usar LINQ
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -17,7 +18,6 @@ namespace planificApp.ViewModels
         private readonly IUbicacionRepository _ubicacionRepo;
         private readonly ISesionService _sesionService;
         private readonly IDialogService _dialogService;
-        // NUEVO: Agregamos el repositorio de Áreas de Interés
         private readonly IAreaInteresRepository _areaRepo;
 
         public ObservableCollection<UbicacionVisual> ListaUbicaciones { get; set; } = new();
@@ -72,14 +72,13 @@ namespace planificApp.ViewModels
 
         public Action<List<(double Latitud, double Longitud)>>? TrazarRutaEnMapa { get; set; }
 
-        // ACTUALIZADO: Añadimos IAreaInteresRepository al constructor
         public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService, IAreaInteresRepository areaRepo)
         {
             _geoService = geoService;
             _ubicacionRepo = ubicacionRepo;
             _sesionService = sesionService;
             _dialogService = dialogService;
-            _areaRepo = areaRepo; // Asignamos la nueva herramienta
+            _areaRepo = areaRepo;
 
             EliminarUbicacionCommand = new RelayCommand<UbicacionVisual>(EliminarUbicacion);
             EditarUbicacionCommand = new RelayCommand<UbicacionVisual>(EditarUbicacion);
@@ -90,10 +89,9 @@ namespace planificApp.ViewModels
             UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             _ = CargarUbicacionesRealesAsync();
-            _ = CargarAreasDeInteresRealesAsync(); // NUEVO: Llamamos a la carga de áreas
+            _ = CargarAreasDeInteresRealesAsync();
         }
 
-        // NUEVO MÉTODO: Descarga las áreas de interés del usuario y llena la lista
         private async Task CargarAreasDeInteresRealesAsync()
         {
             if (_sesionService.UsuarioActual == null || string.IsNullOrEmpty(_sesionService.UsuarioActual.IdUsuario)) return;
@@ -103,7 +101,7 @@ namespace planificApp.ViewModels
                 var areasDb = await _areaRepo.ObtenerAreasPorUsuario(_sesionService.UsuarioActual.IdUsuario);
 
                 MisAreasDeInteres.Clear();
-                MisAreasDeInteres.Add("General"); // Mantenemos "General" como opción base por defecto
+                MisAreasDeInteres.Add("General");
 
                 foreach (var area in areasDb)
                 {
@@ -183,26 +181,48 @@ namespace planificApp.ViewModels
             var resultado = await _dialogService.ShowEditLocationDialog(
                 _geoService, MisAreasDeInteres,
                 ubicacionAEditar.Nombre!, ubicacionAEditar.DireccionExacta!,
-                ubicacionAEditar.AreaInteres!, ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
+                ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
+
             if (resultado != null && _sesionService.UsuarioActual != null)
             {
-                ubicacionAEditar.Nombre = resultado.Nombre;
-                ubicacionAEditar.AreaInteres = resultado.AreaInteres;
-                ubicacionAEditar.ColorHex = resultado.ColorHex;
-                ubicacionAEditar.TransportePreferido = resultado.Transporte;
                 var ubicacionDb = new UbicacionGuardada
                 {
                     IdUbicacion = ubicacionAEditar.IdUbicacion!,
                     IdUsuario = _sesionService.UsuarioActual.IdUsuario,
                     Nombre = resultado.Nombre,
                     AreaInteres = resultado.AreaInteres,
-                    DireccionExacta = ubicacionAEditar.DireccionExacta!,
+                    DireccionExacta = resultado.Direccion, // Corregido para tomar lo nuevo
                     ColorHex = resultado.ColorHex,
                     TransportePreferido = resultado.Transporte,
                     Latitud = ubicacionAEditar.Latitud,
                     Longitud = ubicacionAEditar.Longitud
                 };
+
                 await _ubicacionRepo.ActualizarUbicacion(ubicacionAEditar.IdUbicacion!, ubicacionDb);
+
+                // NUEVO: Reemplazamos la ubicación en la lista para que la interfaz se entere del cambio de color al instante
+                int index = ListaUbicaciones.IndexOf(ubicacionAEditar);
+                if (index >= 0)
+                {
+                    var actualizada = new UbicacionVisual
+                    {
+                        IdUbicacion = ubicacionDb.IdUbicacion,
+                        Nombre = ubicacionDb.Nombre,
+                        AreaInteres = ubicacionDb.AreaInteres,
+                        DireccionExacta = ubicacionDb.DireccionExacta,
+                        ColorHex = ubicacionDb.ColorHex,
+                        TransportePreferido = ubicacionDb.TransportePreferido,
+                        Latitud = ubicacionDb.Latitud,
+                        Longitud = ubicacionDb.Longitud,
+                        EsTemporal = false
+                    };
+
+                    ListaUbicaciones[index] = actualizada;
+
+                    if (UbicacionSeleccionada == ubicacionAEditar)
+                        UbicacionSeleccionada = actualizada;
+                }
+
                 MapaDebeActualizarse?.Invoke();
             }
         }
@@ -224,9 +244,10 @@ namespace planificApp.ViewModels
         {
             if (UbicacionSeleccionada == null || !UbicacionSeleccionada.EsTemporal) return;
 
+            // FIX: En lugar de mandar UbicacionSeleccionada.AreaInteres (que dice "No aplica"), mandamos UbicacionSeleccionada.DireccionExacta
             var resultado = await _dialogService.ShowEditLocationDialog(
                 _geoService, MisAreasDeInteres,
-                "", UbicacionSeleccionada.AreaInteres ?? "", "General", "#10b981", "Auto");
+                "", UbicacionSeleccionada.DireccionExacta ?? "", "General", "#10b981", "Auto");
 
             if (resultado != null && !string.IsNullOrWhiteSpace(resultado.Direccion))
             {
@@ -255,11 +276,18 @@ namespace planificApp.ViewModels
                         ColorHex = nuevaUbicacionDb.ColorHex,
                         TransportePreferido = nuevaUbicacionDb.TransportePreferido,
                         Latitud = nuevaUbicacionDb.Latitud,
-                        Longitud = nuevaUbicacionDb.Longitud
+                        Longitud = nuevaUbicacionDb.Longitud,
+                        EsTemporal = false
                     };
+
+                    // Limpiamos el pin temporal de la lista para que Avalonia lo borre
+                    var temporal = ListaUbicaciones.FirstOrDefault(u => u.EsTemporal);
+                    if (temporal != null) ListaUbicaciones.Remove(temporal);
 
                     ListaUbicaciones.Add(nuevaVisual);
                     UbicacionSeleccionada = nuevaVisual;
+
+                    BorrarPinTemporalDelMapa?.Invoke();
                     MapaDebeActualizarse?.Invoke();
                 }
             }

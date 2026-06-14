@@ -3,6 +3,7 @@
              x:Class="planificApp.App"
              xmlns:local="clr-namespace:planificApp"
              xmlns:helpers="clr-namespace:planificApp.Helpers"
+             xmlns:converters="clr-namespace:planificApp.Converters"
               RequestedThemeVariant="Dark">
 
 <Application.DataTemplates>
@@ -21,6 +22,11 @@
         <ResourceDictionary.MergedDictionaries>
             <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
         </ResourceDictionary.MergedDictionaries>
+
+        <converters:BoolToTextConverter x:Key="BoolToTextConverter"/>        
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>        
+        <converters:BoolToBgConverter x:Key="BoolToBgConverter"/>
+
     </ResourceDictionary>
     
     <helpers:TareaCheckIconConverter x:Key="TareaCheckIconConverter"/>
