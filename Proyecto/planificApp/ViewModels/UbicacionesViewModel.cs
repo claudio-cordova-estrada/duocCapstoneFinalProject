@@ -1,11 +1,12 @@
+using planificApp.Services;
 using PlanificApp.Models;
-using PlanificApp.Models.Services.Interfaces;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services;
-using planificApp.Services;
+using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace planificApp.ViewModels
         private readonly IAreaInteresRepository _areaRepo;
 
         public ObservableCollection<UbicacionVisual> ListaUbicaciones { get; set; } = new();
+        public ObservableCollection<GrupoUbicacion> UbicacionesAgrupadas { get; set; } = new();
 
         private UbicacionVisual? _ubicacionSeleccionada;
         public UbicacionVisual? UbicacionSeleccionada
@@ -28,22 +30,23 @@ namespace planificApp.ViewModels
             get => _ubicacionSeleccionada;
             set
             {
-                if (_ubicacionSeleccionada != value)
-                {
-                    _ubicacionSeleccionada = value;
-                    OnPropertyChanged(nameof(UbicacionSeleccionada));
+                // Apagar selección del anterior
+                if (_ubicacionSeleccionada != null) _ubicacionSeleccionada.IsSelected = false;
 
-                    if (_ubicacionSeleccionada != null)
-                    {
-                        EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
-                    }
+                _ubicacionSeleccionada = value;
+                OnPropertyChanged(nameof(UbicacionSeleccionada));
+
+                if (_ubicacionSeleccionada != null)
+                {
+                    // Encender selección del nuevo
+                    _ubicacionSeleccionada.IsSelected = true;
+                    EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
                 }
             }
         }
 
-        // ==========================================
-        // PROPIEDADES PARA EL MÉTODO DE TRANSPORTE
-        // ==========================================
+        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
+        public ObservableCollection<string> ModosDeTransporteRuta { get; } = new() { "Auto", "Transporte Público", "Bicicleta", "Caminando" };
 
         private string _modoTransporteSeleccionado = "Auto";
         public string ModoTransporteSeleccionado
@@ -51,10 +54,10 @@ namespace planificApp.ViewModels
             get => _modoTransporteSeleccionado;
             set { _modoTransporteSeleccionado = value; OnPropertyChanged(nameof(ModoTransporteSeleccionado)); }
         }
-        // ==========================================
 
         public ObservableCollection<string> MisAreasDeInteres { get; set; } = new();
 
+        public ICommand SeleccionarUbicacionCommand { get; set; }
         public ICommand AgregarUbicacionCommand { get; set; }
         public ICommand EditarUbicacionCommand { get; set; }
         public ICommand EliminarUbicacionCommand { get; set; }
@@ -100,7 +103,23 @@ namespace planificApp.ViewModels
         public UbicacionVisual? OrigenRutaSeleccionado
         {
             get => _origenRutaSeleccionado;
-            set { _origenRutaSeleccionado = value; OnPropertyChanged(nameof(OrigenRutaSeleccionado)); }
+            set
+            {
+                if (_origenRutaSeleccionado != value)
+                {
+                    _origenRutaSeleccionado = value;
+                    OnPropertyChanged(nameof(OrigenRutaSeleccionado));
+
+                    // --- MAGIA: AUTO-SELECCIONAR TRANSPORTE ---
+                    if (_origenRutaSeleccionado != null && !string.IsNullOrEmpty(_origenRutaSeleccionado.TransportePreferido))
+                    {
+                        if (ModosDeTransporteRuta.Contains(_origenRutaSeleccionado.TransportePreferido))
+                        {
+                            ModoTransporteSeleccionado = _origenRutaSeleccionado.TransportePreferido;
+                        }
+                    }
+                }
+            }
         }
 
         private UbicacionVisual? _destinoRutaSeleccionado;
@@ -117,10 +136,9 @@ namespace planificApp.ViewModels
             set { _infoRutaCalculada = value; OnPropertyChanged(nameof(InfoRutaCalculada)); }
         }
 
-        public ObservableCollection<string> ModosDeTransporteRuta { get; } = new() { "Auto", "Transporte Público", "Bicicleta", "Caminando" };
         public ICommand TogglePanelRutaCommand { get; set; }
         public ICommand CalcularRutaIntegradaCommand { get; set; }
-        // ==========================================
+        public ICommand LimpiarRutaCommand { get; set; }
 
         public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService, IAreaInteresRepository areaRepo)
         {
@@ -136,11 +154,13 @@ namespace planificApp.ViewModels
             AbrirCalculadoraRutaCommand = new RelayCommand<object>(AbrirCalculadoraRuta);
             GuardarUbicacionTemporalCommand = new RelayCommand<object>(GuardarUbicacionTemporal);
             DescartarUbicacionTemporalCommand = new RelayCommand<object>(DescartarUbicacionTemporal);
+            SeleccionarUbicacionCommand = new RelayCommand<UbicacionVisual>(u => UbicacionSeleccionada = u);
             UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             // Comandos del panel de rutas
             TogglePanelRutaCommand = new RelayCommand<object>(_ => PanelRutaVisible = !PanelRutaVisible);
             CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
+            LimpiarRutaCommand = new RelayCommand<object>(LimpiarRuta);
 
             _ = CargarUbicacionesRealesAsync();
             _ = CargarAreasDeInteresRealesAsync();
@@ -156,31 +176,28 @@ namespace planificApp.ViewModels
 
             InfoRutaCalculada = "Calculando ruta...";
 
-            // 1. Traducir el modo de transporte de tu variable al inglés de Google
-            string modoGoogle = "DRIVE"; // Valor por defecto (Auto)
+            // 1. Traducir el modo de transporte al inglés de Google
+            string modoGoogle = "DRIVE";
 
             if (ModoTransporteSeleccionado != null)
             {
-                string seleccionStr = ModoTransporteSeleccionado.ToString() ?? "";
-
-                if (seleccionStr.Contains("Caminando")) modoGoogle = "WALK";
-                else if (seleccionStr.Contains("Bicicleta")) modoGoogle = "BICYCLE";
-                else if (seleccionStr.Contains("Público") || seleccionStr.Contains("Publico")) modoGoogle = "TRANSIT";
-                else if (seleccionStr.Contains("Auto")) modoGoogle = "DRIVE";
+                if (ModoTransporteSeleccionado == "Caminando") modoGoogle = "WALK";
+                else if (ModoTransporteSeleccionado == "Bicicleta") modoGoogle = "BICYCLE";
+                else if (ModoTransporteSeleccionado == "Transporte Público") modoGoogle = "TRANSIT";
+                else modoGoogle = "DRIVE";
             }
 
             try
             {
-                // 2. AHORA SÍ PASAMOS LOS 5 PARÁMETROS (incluyendo modoGoogle al final)
+                // 2. Llamar al servicio enviando el modoGoogle como 5to parámetro
                 var respuesta = await _geoService.CalcularRutaGoogleAsync(
                     OrigenRutaSeleccionado.Latitud, OrigenRutaSeleccionado.Longitud,
                     DestinoRutaSeleccionado.Latitud, DestinoRutaSeleccionado.Longitud,
-                    modoGoogle); // <--- ¡Aquí está el 5to parámetro que pedía el error!
+                    modoGoogle);
 
                 if (respuesta != null)
                 {
                     InfoRutaCalculada = $"Tiempo: {respuesta.Value.Tiempo}  |  Distancia: {respuesta.Value.Distancia}";
-
                     var puntosRuta = DecodificarPolyline(respuesta.Value.Polyline);
                     TrazarRutaEnMapa?.Invoke(puntosRuta);
                 }
@@ -195,7 +212,14 @@ namespace planificApp.ViewModels
             }
         }
 
-        // Utilidad para convertir el texto de Google en puntos dibujables
+        private void LimpiarRuta(object parametro)
+        {
+            InfoRutaCalculada = string.Empty;
+            TrazarRutaEnMapa?.Invoke(new List<(double Latitud, double Longitud)>());
+            OrigenRutaSeleccionado = null;
+            DestinoRutaSeleccionado = null;
+        }
+
         public static List<(double Latitud, double Longitud)> DecodificarPolyline(string polylineEnconded)
         {
             if (string.IsNullOrEmpty(polylineEnconded))
@@ -257,6 +281,22 @@ namespace planificApp.ViewModels
             }
         }
 
+        public void ActualizarGrupos()
+        {
+            UbicacionesAgrupadas.Clear();
+
+            var agrupadas = ListaUbicaciones.GroupBy(u => string.IsNullOrWhiteSpace(u.AreaInteres) ? "General" : u.AreaInteres);
+
+            foreach (var grupo in agrupadas.OrderBy(g => g.Key))
+            {
+                UbicacionesAgrupadas.Add(new GrupoUbicacion
+                {
+                    NombreArea = grupo.Key,
+                    Ubicaciones = new ObservableCollection<UbicacionVisual>(grupo)
+                });
+            }
+        }
+
         private async Task CargarUbicacionesRealesAsync()
         {
             if (_sesionService.UsuarioActual == null) return;
@@ -277,6 +317,7 @@ namespace planificApp.ViewModels
                 });
             }
 
+            ActualizarGrupos(); // Agrupar para la vista
             MapaDebeActualizarse?.Invoke();
 
             if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
@@ -321,6 +362,8 @@ namespace planificApp.ViewModels
                         Latitud = nuevaUbicacionDb.Latitud,
                         Longitud = nuevaUbicacionDb.Longitud
                     });
+
+                    ActualizarGrupos();
                     MapaDebeActualizarse?.Invoke();
                 }
             }
@@ -373,6 +416,7 @@ namespace planificApp.ViewModels
                         UbicacionSeleccionada = actualizada;
                 }
 
+                ActualizarGrupos();
                 MapaDebeActualizarse?.Invoke();
             }
         }
@@ -382,6 +426,8 @@ namespace planificApp.ViewModels
             if (ubicacionAEliminar == null || ubicacionAEliminar.IdUbicacion == null) return;
             await _ubicacionRepo.EliminarUbicacion(ubicacionAEliminar.IdUbicacion);
             ListaUbicaciones.Remove(ubicacionAEliminar);
+
+            ActualizarGrupos();
             MapaDebeActualizarse?.Invoke();
         }
 
@@ -435,6 +481,7 @@ namespace planificApp.ViewModels
                     ListaUbicaciones.Add(nuevaVisual);
                     UbicacionSeleccionada = nuevaVisual;
 
+                    ActualizarGrupos();
                     BorrarPinTemporalDelMapa?.Invoke();
                     MapaDebeActualizarse?.Invoke();
                 }
@@ -463,7 +510,13 @@ namespace planificApp.ViewModels
         public event EventHandler? CanExecuteChanged;
     }
 
-    public class UbicacionVisual
+    public class GrupoUbicacion
+    {
+        public string NombreArea { get; set; } = string.Empty;
+        public ObservableCollection<UbicacionVisual> Ubicaciones { get; set; } = new();
+    }
+
+    public class UbicacionVisual : INotifyPropertyChanged
     {
         public string? IdUbicacion { get; set; }
         public string? Nombre { get; set; }
@@ -475,7 +528,15 @@ namespace planificApp.ViewModels
         public string? TransportePreferido { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }
-    }
 
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
-#pragma warning restore CS0067
