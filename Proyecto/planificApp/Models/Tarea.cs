@@ -54,6 +54,8 @@ namespace PlanificApp.Models
         
         public string? TipoActividadFisica { get; set; }
         public string? TipoActividadMental { get; set; }
-        
+
+        public string? IdUbicacion { get; set; }
+
     }
 }

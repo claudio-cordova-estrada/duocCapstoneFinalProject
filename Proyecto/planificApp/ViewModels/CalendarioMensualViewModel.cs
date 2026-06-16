@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using planificApp.Models;
+using planificApp.Data;
+using PlanificApp.Models;
+using PlanificApp.Models.Repositories.Interfaces;
+using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,17 +12,47 @@ using System.Threading.Tasks;
 
 namespace planificApp.ViewModels;
 
+// ========================================================
+// CLASES AUXILIARES PARA EL PANEL LATERAL
+// ========================================================
+public class TareaDetalleSidebar
+{
+    public string Titulo { get; set; } = string.Empty;
+    public DateTime Fecha { get; set; }
+}
+
+public class AreaSidebarGroup
+{
+    public string NombreArea { get; set; } = string.Empty;
+    public string ColorHex { get; set; } = "#ffffff";
+    public ObservableCollection<TareaDetalleSidebar> Tareas { get; set; } = new();
+}
+
+// ========================================================
+// VIEWMODEL PRINCIPAL
+// ========================================================
 public partial class CalendarioMensualViewModel : PageViewModel
 {
-    // Aquí inyectarías tu repositorio o servicio para obtener las áreas por fecha
-    // private readonly IPlanificacionRepository _planificacionRepo;
+    private readonly ISesionService _sesionService;
+    private readonly ITareaRepository _tareaRepo;
+    private readonly IAreaInteresRepository _areaRepo;
 
     [ObservableProperty] private DateTime _fechaReferencia = DateTime.Today;
     [ObservableProperty] private string _nombreMesAnio = string.Empty;
     [ObservableProperty] private ObservableCollection<CalendarioDiaViewModel> _dias = new();
 
-    public CalendarioMensualViewModel()
+    [ObservableProperty] private ObservableCollection<AreaSidebarGroup> _areasSidebar = new();
+
+    public CalendarioMensualViewModel(
+        ISesionService sesionService,
+        ITareaRepository tareaRepo,
+        IAreaInteresRepository areaRepo)
     {
+        _sesionService = sesionService;
+        _tareaRepo = tareaRepo;
+        _areaRepo = areaRepo;
+
+        PageName = ApplicationPageNames.UserCalendarioMensual;
         ActualizarCalendario();
     }
 
@@ -40,8 +73,6 @@ public partial class CalendarioMensualViewModel : PageViewModel
     private void ActualizarCalendario()
     {
         NombreMesAnio = FechaReferencia.ToString("MMMM yyyy", new System.Globalization.CultureInfo("es-CL")).ToUpper();
-
-        // Generamos la cuadrícula en segundo plano para no congelar la UI
         _ = GenerarDiasGridAsync();
     }
 
@@ -49,58 +80,101 @@ public partial class CalendarioMensualViewModel : PageViewModel
     {
         var listaDias = new List<CalendarioDiaViewModel>();
 
-        // Primer día del mes
         DateTime primerDiaMes = new DateTime(FechaReferencia.Year, FechaReferencia.Month, 1);
-
-        // Calculamos cuántos días del mes anterior debemos mostrar para rellenar la primera semana
-        // En C#, DayOfWeek (Sunday = 0, Monday = 1... Saturday = 6). Ajustamos para que Lunes sea 0.
         int diasDesfase = ((int)primerDiaMes.DayOfWeek - 1 + 7) % 7;
         DateTime fechaInicioGrid = primerDiaMes.AddDays(-diasDesfase);
+        DateTime fechaFinGrid = fechaInicioGrid.AddDays(41);
 
-        // Una cuadrícula estándar de calendario mensual suele usar 42 celdas (6 semanas de 7 días)
         for (int i = 0; i < 42; i++)
         {
             DateTime fechaCelda = fechaInicioGrid.AddDays(i);
-
-            var diaVm = new CalendarioDiaViewModel
+            listaDias.Add(new CalendarioDiaViewModel
             {
                 Fecha = fechaCelda,
                 NumeroDia = fechaCelda.Day,
                 EsMesActual = fechaCelda.Month == FechaReferencia.Month,
-                EsHoy = fechaCelda == DateTime.Today
-            };
-
-            listaDias.Add(diaVm);
+                EsHoy = fechaCelda.Date == DateTime.Today.Date
+            });
         }
 
-        // --- SIMULACIÓN DE DATOS (SOLID: Aquí conectarías tu base de datos de MongoDB) ---
-        // Obtenemos los eventos o áreas planificadas para este rango de 42 días
-        var eventosDelMes = await ObtenerEventosSimuladosAsync(fechaInicioGrid, fechaInicioGrid.AddDays(41));
+        var todasLasTareas = await ObtenerEventosRealesAsync(fechaInicioGrid, fechaFinGrid);
 
-        // Inyectamos los colores correspondientes a cada día
         foreach (var dia in listaDias)
         {
-            var areasDelDia = eventosDelMes.Where(e => e.Fecha.Date == dia.Fecha.Date);
-            foreach (var area in areasDelDia)
+            var tareasDelDia = todasLasTareas.Where(e => e.Fecha.Date == dia.Fecha.Date);
+            foreach (var tarea in tareasDelDia)
             {
-                dia.ColoresAreas.Add(area.ColorHex);
+                dia.TareasDelDia.Add(tarea);
             }
         }
 
-        // Actualizamos la UI en el hilo principal
         Dias = new ObservableCollection<CalendarioDiaViewModel>(listaDias);
     }
 
-    // Mock temporal para pruebas visuales
-    private Task<List<AreaInteresEvento>> ObtenerEventosSimuladosAsync(DateTime inicio, DateTime fin)
+    private async Task<List<TareaCalendario>> ObtenerEventosRealesAsync(DateTime inicio, DateTime fin)
     {
-        return Task.FromResult(new List<AreaInteresEvento>
+        var tareasCalendario = new List<TareaCalendario>();
+        var gruposDict = new Dictionary<string, AreaSidebarGroup>();
+
+        var usuarioActual = _sesionService.UsuarioActual;
+        if (usuarioActual == null) return tareasCalendario;
+
+        var tareas = await _tareaRepo.ObtenerTareasPorUsuario(usuarioActual.IdUsuario!);
+        var areas = await _areaRepo.ObtenerAreasPorUsuario(usuarioActual.IdUsuario!);
+
+        var tareasEnRango = tareas.Where(t =>
+            t.FecLimite.HasValue &&
+            t.FecLimite.Value.Date >= inicio.Date &&
+            t.FecLimite.Value.Date <= fin.Date).ToList();
+
+        foreach (var tarea in tareasEnRango)
         {
-            new() { Fecha = DateTime.Today, ColorHex = "#ea580c" }, // Naranja
-            new() { Fecha = DateTime.Today, ColorHex = "#38bdf8" }, // Celeste
-            new() { Fecha = DateTime.Today.AddDays(1), ColorHex = "#10b981" }, // Verde
-            new() { Fecha = DateTime.Today.AddDays(-2), ColorHex = "#ef4444" }, // Rojo
-            new() { Fecha = DateTime.Today.AddDays(-2), ColorHex = "#38bdf8" }
-        });
+            var areaCorrespondiente = areas.FirstOrDefault(a => a.IdAreaInteres == tarea.IdAreaInteres);
+            var colorRealArea = areaCorrespondiente?.ColorHex ?? "#888888";
+            var colorPuntoGrid = colorRealArea;
+
+            if (tarea.FecLimite.HasValue && tarea.FecLimite.Value.Date < DateTime.Today && tarea.FecCompletado == null)
+            {
+                colorPuntoGrid = "#ef4444";
+            }
+
+            // Guardamos la tarea usando tarea.Nombre de tu BD
+            tareasCalendario.Add(new TareaCalendario
+            {
+                Titulo = tarea.Nombre ?? "Sin título",
+                ColorHex = colorPuntoGrid,
+                Fecha = tarea.FecLimite.Value
+            });
+
+            if (tarea.FecLimite.Value.Month == FechaReferencia.Month)
+            {
+                string idArea = tarea.IdAreaInteres ?? "INBOX";
+
+                if (!gruposDict.ContainsKey(idArea))
+                {
+                    gruposDict[idArea] = new AreaSidebarGroup
+                    {
+                        NombreArea = areaCorrespondiente?.Nombre ?? "Inbox",
+                        ColorHex = colorRealArea
+                    };
+                }
+
+                gruposDict[idArea].Tareas.Add(new TareaDetalleSidebar
+                {
+                    Titulo = tarea.Nombre ?? "Sin título",
+                    Fecha = tarea.FecLimite.Value
+                });
+            }
+        }
+
+        foreach (var grupo in gruposDict.Values)
+        {
+            var tareasOrdenadas = grupo.Tareas.OrderBy(t => t.Fecha).ToList();
+            grupo.Tareas = new ObservableCollection<TareaDetalleSidebar>(tareasOrdenadas);
+        }
+
+        AreasSidebar = new ObservableCollection<AreaSidebarGroup>(gruposDict.Values.OrderBy(g => g.NombreArea));
+
+        return tareasCalendario;
     }
 }

@@ -64,7 +64,6 @@ public partial class App : Application
         collection.AddTransient<EstadisticasViewModel>();
         collection.AddTransient<EstadisticaUsuarioViewModel>();
         collection.AddSingleton<UsuariosViewModel>();
-        collection.AddSingleton<EstadisticaUsuarioViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -94,6 +93,7 @@ public partial class App : Application
         collection.AddSingleton<IRegionesService, RegionesService>();
         collection.AddSingleton<IMetricasService, MetricasService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
+
         {
             // Auth
             ApplicationPageNames.Login => x.GetRequiredService<LoginViewModel>(),

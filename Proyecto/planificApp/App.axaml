@@ -30,6 +30,7 @@
             <converters:BoolToActionColorConverter x:Key="BoolToActionColorConverter"/>
             <converters:BoolToActivarTextConverter x:Key="BoolToActivarTextConverter"/>
             <converters:BoolToActivarColorConverter x:Key="BoolToActivarColorConverter"/>
+            <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
 
         
         
