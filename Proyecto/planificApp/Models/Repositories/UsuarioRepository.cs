@@ -62,4 +62,18 @@ public class UsuarioRepository : IUsuarioRepository
             .Set(u => u.DiasGeneracionSemanal, diasGeneracion);
         await _usuarios.UpdateOneAsync(filter, update);
     }
+
+    // --- NUEVOS MÉTODOS PARA EL ADMINISTRADOR ---
+
+    public async Task<IEnumerable<Usuario>> ObtenerTodosLosUsuarios()
+    {
+        // El filtro "_ => true" le dice a Mongo que traiga absolutamente todos los documentos
+        return await _usuarios.Find(_ => true).ToListAsync();
+    }
+
+    public async Task ActualizarUsuario(string idUsuario, Usuario usuarioActualizado)
+    {
+        // Reemplaza el usuario antiguo por la versión modificada en el panel de Admin
+        await _usuarios.ReplaceOneAsync(u => u.IdUsuario == idUsuario, usuarioActualizado);
+    }
 }

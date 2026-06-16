@@ -58,6 +58,20 @@ public partial class LoginViewModel : PageViewModel
             if (usuario != null)
             {
                 _sesion.IniciarSesion(usuario);
+
+                // --- LÓGICA AUTOMÁTICA DE ROLES ---
+                string correoValidar = Correo.Trim().ToLower();
+
+                if (correoValidar.Contains("@planificapp."))
+                {
+                    _navigation.IsAdminToggle = true; // Activa el rol Admin
+                }
+                else
+                {
+                    _navigation.IsAdminToggle = false; // Se asegura de que sea Usuario normal
+                }
+
+                // Disparamos el éxito. El servicio de navegación decidirá a dónde ir según el Toggle
                 _navigation.OnLoginSuccess();
             }
             else

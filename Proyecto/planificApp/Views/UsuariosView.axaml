@@ -3,9 +3,53 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Name="RootUsuariosView"
              x:Class="planificApp.Views.UsuariosView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:UsuariosViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="ListBox.pill-list">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="ListBox.pill-list ListBoxItem">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="16" Padding="16 6" Margin="0 0 8 8" Cursor="Hand">
+                        <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBox.pill-list ListBoxItem">
+            <Setter Property="Background" Value="#121212"/>
+            <Setter Property="BorderBrush" Value="#2a2a2a"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
+        </Style>
+        <Style Selector="ListBox.pill-list ListBoxItem:pointerover">
+            <Setter Property="Background" Value="#1f1f1f"/>
+            <Setter Property="BorderBrush" Value="#3a3a3a"/>
+        </Style>
+        <Style Selector="ListBox.pill-list ListBoxItem:selected">
+            <Setter Property="Background" Value="#1a0f08"/> 
+            <Setter Property="BorderBrush" Value="#ea580c"/> 
+            <Setter Property="Foreground" Value="#ea580c"/>
+        </Style>
+
+        <Style Selector="Button.row-btn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDivider}"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.row-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#0aFFFFFF"/>
+        </Style>
+    </UserControl.Styles>
 
     <Border Background="{DynamicResource AppBackground}">
         <ScrollViewer>
@@ -14,44 +58,65 @@
                 <TextBlock Text="Modificación de usuarios" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
                 <TextBlock Text="Busca y edita los datos de cualquier usuario" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0 -12 0 0"/>
 
-                <!-- Region pills -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="REGIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="RegionPills"/>
+                    <ListBox Classes="pill-list" ItemsSource="{Binding Regiones}" SelectedItem="{Binding RegionSeleccionada}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </StackPanel>
 
-                <!-- Comuna pills -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="ComunaPills"/>
+                    <ListBox Classes="pill-list" ItemsSource="{Binding Comunas}" SelectedItem="{Binding ComunaSeleccionada}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </StackPanel>
 
-                <!-- Search bar -->
-                <TextBox x:Name="SearchBox" FontSize="14" PlaceholderText="Buscar por nombre o ID..." Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                <TextBox x:Name="SearchBox" Text="{Binding TextoBusqueda}" FontSize="14" PlaceholderText="Buscar por nombre o ID..." Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
 
-                <!-- Users table -->
                 <Border Classes="card" Padding="0" CornerRadius="10">
                     <Grid>
-                        <!-- Header -->
-                        <Grid x:Name="TableHeader" ColumnDefinitions="80,2*,1*,1*,1*,1*" Margin="14 10" ShowGridLines="False">
+                        <Grid ColumnDefinitions="140,2*,1.5*,1.5*,80,60" Margin="14 10">
                             <TextBlock Grid.Column="0" Text="ID" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                             <TextBlock Grid.Column="1" Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock Grid.Column="2" Text="REGIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock Grid.Column="3" Text="COMUNA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock Grid.Column="4" Text="ESTADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6" HorizontalAlignment="Center"/>
-                            <TextBlock Grid.Column="5" Text="MESES" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="2" Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="3" Text="CORREO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                            <TextBlock Grid.Column="4" Text="ESTADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="5" Text="CREACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6" HorizontalAlignment="Center"/>
                         </Grid>
 
-                        <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Margin="0 0 0 0"/>
+                        <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Margin="0 32 0 0"/>
 
-                        <!-- Rows -->
-                        <StackPanel x:Name="TableRows" Margin="0 30 0 0"/>
+                       <ItemsControl ItemsSource="{Binding UsuariosVisibles}" Margin="0 33 0 0">
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Button Classes="row-btn"
+                    x:CompileBindings="False"
+                    Command="{Binding #RootUsuariosView.DataContext.VerDetalleUsuarioCommand}"
+                    CommandParameter="{Binding}">
+                    
+                <Grid ColumnDefinitions="140,2*,1.5*,1.5*,80,60" Margin="14 16" VerticalAlignment="Center">
+                    <TextBlock Grid.Column="0" Text="{Binding IdUsuario}" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Grid.Column="1" Text="{Binding NombreCompleto}" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="2" Text="{Binding Ubicacion}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Grid.Column="3" Text="{Binding Correo}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                    
+                    <Border Grid.Column="4" Background="{Binding EstaActivo, Converter={StaticResource BoolToBgConverter}}" BorderBrush="{Binding EstaActivo, Converter={StaticResource BoolToColorConverter}}" BorderThickness="1" CornerRadius="12" Padding="8 4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding EstaActivo, Converter={StaticResource BoolToEstadoConverter}}" FontSize="11" FontWeight="Medium" Foreground="{Binding EstaActivo, Converter={StaticResource BoolToColorConverter}}"/>
+                    </Border>
+                    
+                    <TextBlock Grid.Column="5" Text="{Binding FecCreacion, StringFormat='{}{0:MM/yy}'}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+            </Button>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
                     </Grid>
                 </Border>
-
-                <!-- Pagination -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6" x:Name="PaginationPills"/>
-
             </StackPanel>
         </ScrollViewer>
     </Border>

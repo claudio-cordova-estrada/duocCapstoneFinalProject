@@ -3,27 +3,38 @@
              x:Class="planificApp.App"
              xmlns:local="clr-namespace:planificApp"
              xmlns:helpers="clr-namespace:planificApp.Helpers"
-              RequestedThemeVariant="Dark">
+             xmlns:converters="clr-namespace:planificApp.Converters"
+             RequestedThemeVariant="Dark">
 
-<Application.DataTemplates>
+    <Application.DataTemplates>
         <local:ViewLocator></local:ViewLocator>
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
-
         <StyleInclude Source="Styles/appDefaultStyles.axaml"></StyleInclude>
     </Application.Styles>
 
-<Application.Resources>
-    
-    <ResourceDictionary>
-        <ResourceDictionary.MergedDictionaries>
-            <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
-        </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-    
-    <helpers:TareaCheckIconConverter x:Key="TareaCheckIconConverter"/>
+    <Application.Resources>
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BoolToTextConverter x:Key="BoolToTextConverter"/>        
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>        
+            <converters:BoolToBgConverter x:Key="BoolToBgConverter"/>
+            <converters:BoolToEstadoConverter x:Key="BoolToEstadoConverter"/>
+            <converters:BoolToActionTextConverter x:Key="BoolToActionTextConverter"/>
+            <converters:BoolToActionColorConverter x:Key="BoolToActionColorConverter"/>
+            <converters:BoolToActivarTextConverter x:Key="BoolToActivarTextConverter"/>
+            <converters:BoolToActivarColorConverter x:Key="BoolToActivarColorConverter"/>
+            <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+
+        
+        
+        <helpers:TareaCheckIconConverter x:Key="TareaCheckIconConverter"/>
         <helpers:TareaNombreBrushConverter x:Key="TareaNombreBrushConverter"/>
         <helpers:BoolToChevronConverter x:Key="BoolToChevronConverter"/>
         <helpers:TareaVencidaBrushConverter x:Key="TareaVencidaBrushConverter"/>
@@ -39,43 +50,36 @@
         <helpers:MetodoTransporteToIconConverter x:Key="MetodoTransporteToIconConverter"/>
         <helpers:MetodoTransporteToTextConverter x:Key="MetodoTransporteToTextConverter"/>
         
-        <!-- App Backgrounds -->
         <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>
         <SolidColorBrush x:Key="SB1Background">#0a0a0a</SolidColorBrush>
         <SolidColorBrush x:Key="SB2Background">#111111</SolidColorBrush>
         <SolidColorBrush x:Key="MainBackground">#0f0f0f</SolidColorBrush>
         
-        <!-- Cards & Panels -->
         <SolidColorBrush x:Key="CardBackground">#141414</SolidColorBrush>
         <SolidColorBrush x:Key="PanelBackground">#141414</SolidColorBrush>
         
-        <!-- Borders -->
         <SolidColorBrush x:Key="BorderDefault">#1e1e1e</SolidColorBrush>
         <SolidColorBrush x:Key="BorderSubtle">#1a1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="BorderDashed">#222222</SolidColorBrush>
         <SolidColorBrush x:Key="BorderDivider">#161616</SolidColorBrush>
         
-        <!-- Text Colors -->
         <SolidColorBrush x:Key="TextPrimary">#e2e8f0</SolidColorBrush>
         <SolidColorBrush x:Key="TextSecondary">#cccccc</SolidColorBrush>
         <SolidColorBrush x:Key="TextTertiary">#aaaaaa</SolidColorBrush>
         <SolidColorBrush x:Key="TextDisabled">#555555</SolidColorBrush>
         <SolidColorBrush x:Key="TextMuted">#444444</SolidColorBrush>
         
-        <!-- User Accent (Violet) -->
         <SolidColorBrush x:Key="AccentColor">#a78bfa</SolidColorBrush>
         <SolidColorBrush x:Key="AccentHover">#c4b5fd</SolidColorBrush>
         <SolidColorBrush x:Key="AccentBackground">#1e1a2e</SolidColorBrush>
         <SolidColorBrush x:Key="AccentBackgroundLight">#241f45</SolidColorBrush>
         <SolidColorBrush x:Key="AccentBorder">#3d3060</SolidColorBrush>
         
-        <!-- Admin Accent (Orange) -->
         <SolidColorBrush x:Key="AdminAccent">#fb923c</SolidColorBrush>
         <SolidColorBrush x:Key="AdminAccentHover">#fdba74</SolidColorBrush>
         <SolidColorBrush x:Key="AdminAccentBackground">#2d1a0a</SolidColorBrush>
         <SolidColorBrush x:Key="AdminAccentBorder">#fb923c44</SolidColorBrush>
         
-        <!-- Badges -->
         <SolidColorBrush x:Key="BadgeDangerBackground">#3d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="BadgeDangerForeground">#f87171</SolidColorBrush>
         <SolidColorBrush x:Key="BadgeWarningBackground">#2d2010</SolidColorBrush>
@@ -83,7 +87,6 @@
         <SolidColorBrush x:Key="BadgeInfoBackground">#1a2640</SolidColorBrush>
         <SolidColorBrush x:Key="BadgeInfoForeground">#60a5fa</SolidColorBrush>
         
-        <!-- Areas de Interés -->
         <SolidColorBrush x:Key="AreaTrabajoBackground">#1e1a2e</SolidColorBrush>
         <SolidColorBrush x:Key="AreaTrabajoBorder">#a78bfa</SolidColorBrush>
         <SolidColorBrush x:Key="AreaTrabajoText">#c4b5fd</SolidColorBrush>
@@ -104,55 +107,45 @@
         <SolidColorBrush x:Key="AreaLaboresText">#93c5fd</SolidColorBrush>
         <SolidColorBrush x:Key="AreaLaboresChipBackground">#0f2540</SolidColorBrush>
         
-        <!-- Traslado -->
         <SolidColorBrush x:Key="TrasladoBackground">#210101</SolidColorBrush>
         <SolidColorBrush x:Key="TrasladoBorder">#ef4444</SolidColorBrush>
         
-        <!-- Hover States -->
         <SolidColorBrush x:Key="HoverBackground">#161616</SolidColorBrush>
         <SolidColorBrush x:Key="HoverBackgroundSubtle">#141414</SolidColorBrush>
         
-        <!-- Modal -->
         <SolidColorBrush x:Key="ModalOverlay">#000000CC</SolidColorBrush>
         <SolidColorBrush x:Key="ModalBackground">#141414</SolidColorBrush>
         <SolidColorBrush x:Key="ModalBorder">#2a2a2a</SolidColorBrush>
         
-        <!-- Map -->
         <SolidColorBrush x:Key="MapBackground">#0e1515</SolidColorBrush>
         <SolidColorBrush x:Key="MapBlock">#1a1f1f</SolidColorBrush>
         <SolidColorBrush x:Key="MapRoad">#60a5fa</SolidColorBrush>
         
-        <!-- Calendar Grid -->
         <SolidColorBrush x:Key="CalendarGridBackground">#1a1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="CalendarDayBackground">#0f0f0f</SolidColorBrush>
         <SolidColorBrush x:Key="CalendarDayHeader">#111111</SolidColorBrush>
         <SolidColorBrush x:Key="CalendarHourLine">#141414</SolidColorBrush>
         <SolidColorBrush x:Key="CalendarDayOther">#222222</SolidColorBrush>
         
-        <!-- Calendar block borders (26% alpha) -->
         <SolidColorBrush x:Key="CalTrabajoBlockBorder">#44A78BFA</SolidColorBrush>
         <SolidColorBrush x:Key="CalEstudioBlockBorder">#4434D399</SolidColorBrush>
         <SolidColorBrush x:Key="CalDeporteBlockBorder">#44F472B6</SolidColorBrush>
         <SolidColorBrush x:Key="CalLaboresBlockBorder">#4460A5FA</SolidColorBrush>
         
-        <!-- Delete / Danger -->
         <SolidColorBrush x:Key="DangerBackground">#2d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="DangerBorder">#3d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="DangerForeground">#f87171</SolidColorBrush>
         
-        <!-- Input -->
         <SolidColorBrush x:Key="InputBackground">#0f0f0f</SolidColorBrush>
         <SolidColorBrush x:Key="InputBorder">#222222</SolidColorBrush>
         <SolidColorBrush x:Key="InputBorderFocus">#3d3060</SolidColorBrush>
         
-        <!-- Toggle / Pill -->
         <SolidColorBrush x:Key="PillBackground">#161616</SolidColorBrush>
         <SolidColorBrush x:Key="PillBorder">#222222</SolidColorBrush>
         <SolidColorBrush x:Key="PillActiveBackground">#1e1a2e</SolidColorBrush>
         <SolidColorBrush x:Key="PillActiveBorder">#3d3060</SolidColorBrush>
         <SolidColorBrush x:Key="PillActiveForeground">#a78bfa</SolidColorBrush>
         
-        <!-- Override Fluent Theme Button resources to remove two-step hover -->
         <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#161616</SolidColorBrush>
         <SolidColorBrush x:Key="ButtonBackgroundPressed">#1e1a2e</SolidColorBrush>
@@ -166,7 +159,6 @@
         <SolidColorBrush x:Key="ButtonBorderBrushPressed">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="ButtonBorderBrushDisabled">Transparent</SolidColorBrush>
         
-        <!-- Legacy (kept for backward compatibility) -->
         <SolidColorBrush x:Key="PrimaryBackground">#0f0f0f</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryForeground">#e2e8f0</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverBackground">#1e1a2e</SolidColorBrush>
@@ -177,7 +169,6 @@
         <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#2d1a1a</SolidColorBrush>
         <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#f87171</SolidColorBrush>
         
-        <!-- Override Fluent system accent color -->
         <Color x:Key="SystemAccentColor">#a78bfa</Color>
         
         <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>
@@ -186,5 +177,6 @@
         <FontFamily x:Key="PhosphorFill">avares://planificApp/Assets/Fonts/Phosphor-Fill.ttf#Phosphor-Fill</FontFamily>
         
         <FontFamily x:Key="Nunito">avares://planificApp/Assets/Fonts#Nunito</FontFamily>
+            </ResourceDictionary>
     </Application.Resources> 
 </Application>

@@ -40,11 +40,7 @@ public partial class App : Application
         collection.AddTransient<LoginViewModel>();
         collection.AddTransient<RegistroViewModel>();
         collection.AddTransient<RecuperarContraViewModel>();
-
-        // User - Registro ViewModels
-        collection.AddSingleton<IAuthenticationService, AuthenticationService>();
-        collection.AddSingleton<ISesionService, SesionService>();
-
+        
         // User - Tareas ViewModels
         collection.AddTransient<InboxViewModel>();
         collection.AddTransient<NewTaskViewModel>();
@@ -66,8 +62,8 @@ public partial class App : Application
         
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
-        collection.AddTransient<UsuariosViewModel>();
-        collection.AddTransient<UsuarioDetalleViewModel>();
+        collection.AddTransient<EstadisticaUsuarioViewModel>();
+        collection.AddSingleton<UsuariosViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -95,9 +91,10 @@ public partial class App : Application
         collection.AddSingleton<IRegionesService, RegionesService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
-
-
+        collection.AddSingleton<IRegionesService, RegionesService>();
+        collection.AddSingleton<IMetricasService, MetricasService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
+
         {
             // Auth
             ApplicationPageNames.Login => x.GetRequiredService<LoginViewModel>(),
@@ -123,12 +120,11 @@ public partial class App : Application
             // Admin
             ApplicationPageNames.AdminEstadisticas => x.GetRequiredService<EstadisticasViewModel>(),
             ApplicationPageNames.AdminUsuarios => x.GetRequiredService<UsuariosViewModel>(),
-            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<UsuarioDetalleViewModel>(),
+            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<EstadisticaUsuarioViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
         });
         
         collection.AddSingleton<PageFactory>();
-
 
         var services = collection.BuildServiceProvider();
         Services = services;

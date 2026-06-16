@@ -27,8 +27,10 @@ public partial class AddLocationWindow : Window
     private string _selectedTransport = "Metro";
 
     // Constructor para el diseñador
-    public AddLocationWindow() { InitializeComponent();
-                            _geoService = null!;
+    public AddLocationWindow()
+    {
+        InitializeComponent();
+        _geoService = null!;
     }
 
     // Constructor real
@@ -108,10 +110,27 @@ public partial class AddLocationWindow : Window
     }
 
     private void CancelButton_Click(object? sender, RoutedEventArgs e) { Close(null); }
+
     private void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
-        var resultado = new LocationFormData { Nombre = NameInput.Text ?? "Nueva Ubicación", Direccion = LocationInput.Text ?? "", AreaInteres = AreaSelect.SelectedItem?.ToString() ?? "General", ColorHex = _selectedColor, Transporte = _selectedTransport };
+        // NUEVO: Validación. Si no hay nombre, mostramos el error y abortamos el guardado.
+        if (string.IsNullOrWhiteSpace(NameInput.Text))
+        {
+            NameError.IsVisible = true;
+            return;
+        }
+        NameError.IsVisible = false;
+
+        var resultado = new LocationFormData
+        {
+            Nombre = NameInput.Text.Trim(),
+            Direccion = LocationInput.Text ?? "",
+            AreaInteres = AreaSelect.SelectedItem?.ToString() ?? "General",
+            ColorHex = _selectedColor,
+            Transporte = _selectedTransport
+        };
         Close(resultado);
     }
+
     private void DeleteButton_Click(object? sender, RoutedEventArgs e) { Close(null); }
 }

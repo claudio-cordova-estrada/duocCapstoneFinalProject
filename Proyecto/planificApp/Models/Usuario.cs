@@ -5,8 +5,10 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using PlanificApp.Models.Enums;
 
+
 namespace PlanificApp.Models
 {
+    [BsonIgnoreExtraElements]
     public class Usuario
     {
         [BsonId]
@@ -54,5 +56,7 @@ namespace PlanificApp.Models
         public List<DayOfWeek> DiasGeneracionSemanal { get; set; } = new() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
 
         public string? FotoPerfil { get; set; }
+
+        public bool EstaActivo { get; set; } = true;
     }
 }
