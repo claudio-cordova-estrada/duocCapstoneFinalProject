@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlanificApp.Models.Services.Interfaces;
@@ -65,9 +66,10 @@ public partial class LoginViewModel : PageViewModel
                 HasError = true;
             }
         }
-        catch
+        catch (Exception ex)
         {
-            ErrorMessage = "Error de conexión. Intenta de nuevo.";
+            System.Diagnostics.Debug.WriteLine($"[LoginAsync] Error: {ex}");
+            ErrorMessage = $"Error: {ex.Message}";
             HasError = true;
         }
         finally

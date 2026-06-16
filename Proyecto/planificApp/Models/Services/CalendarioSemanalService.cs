@@ -51,11 +51,16 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             FechaFin = fechaLunes.AddDays(6)
         };
 
+        var semanaFin = fechaLunes.AddDays(7);
+
         var tareas = await _tareaRepo.ObtenerTareasPorRango(
-            usuarioId, fechaLunes, fechaLunes.AddDays(6));
+            usuarioId, fechaLunes, semanaFin);
         var areas = await _areaRepo.ObtenerAreasPorUsuario(usuarioId);
+        var ubicaciones = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(usuarioId);
+        var tareasDict = tareas.Where(t => t.IdTarea != null).ToDictionary(t => t.IdTarea!);
+        var areaDict = areas.ToDictionary(a => a.IdAreaInteres!, a => a);
         var bloquesArea = await _bloqueAreaRepo.ObtenerPorUsuarioYRango(
-            usuarioId, fechaLunes, fechaLunes.AddDays(6));
+            usuarioId, fechaLunes, semanaFin);
         var hoy = DateTime.Today;
 
         for (int i = 0; i < 7; i++)
@@ -122,7 +127,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                 }
 
                 var area = !string.IsNullOrEmpty(tarea.IdAreaInteres)
-                    ? areas.FirstOrDefault(a => a.IdAreaInteres == tarea.IdAreaInteres)
+                    ? areaDict.GetValueOrDefault(tarea.IdAreaInteres)
                     : null;
 
                 dia.Bloques.Add(new BloqueCalendario
@@ -139,6 +144,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             }
 
             OrdenarBloques(dia);
+            await CalcularTrasladosAsync(dia, usuarioId, ubicaciones, areas, tareasDict);
             semana.Dias.Add(dia);
         }
 
@@ -296,7 +302,9 @@ public class CalendarioSemanalService : ICalendarioSemanalService
     {
         var ubicaciones = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(usuarioId);
         var areas = await _areaRepo.ObtenerAreasPorUsuario(usuarioId);
-        await CalcularTrasladosAsync(dia, usuarioId, ubicaciones, areas);
+        var tareas = await _tareaRepo.ObtenerTareasPorUsuario(usuarioId);
+        var tareasDict = tareas.Where(t => t.IdTarea != null).ToDictionary(t => t.IdTarea!);
+        await CalcularTrasladosAsync(dia, usuarioId, ubicaciones, areas, tareasDict);
     }
 
     public async Task GuardarCambiosAsync(SemanaCalendario semana, string usuarioId)
@@ -306,7 +314,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             .Where(t => t.IdTarea != null)
             .ToDictionary(t => t.IdTarea!);
 
-        await _bloqueAreaRepo.EliminarBloquesPorSemana(usuarioId, semana.FechaInicio, semana.FechaFin);
+        await _bloqueAreaRepo.EliminarBloquesPorSemana(usuarioId, semana.FechaInicio, semana.FechaFin.AddDays(1));
 
         foreach (var dia in semana.Dias)
         {
@@ -357,7 +365,8 @@ public class CalendarioSemanalService : ICalendarioSemanalService
     }
 
     private async Task CalcularTrasladosAsync(DiaCalendario dia, string usuarioId,
-        List<UbicacionGuardada> ubicaciones, List<AreaInteres> areas)
+        List<UbicacionGuardada> ubicaciones, List<AreaInteres> areas,
+        Dictionary<string, Tarea>? tareasDict = null)
     {
         var trasladosExistentes = dia.Bloques
             .Where(b => b.Tipo == TipoBloqueCalendario.SeccionTraslado)
@@ -382,24 +391,43 @@ public class CalendarioSemanalService : ICalendarioSemanalService
         for (int i = 0; i < bloquesOrdenados.Count; i++)
         {
             var bloque = bloquesOrdenados[i];
-            var ubicacionBloque = ObtenerUbicacionBloque(bloque, areaDict);
+            var ubicacionBloque = ObtenerUbicacionBloque(bloque, areaDict, tareasDict);
 
-            if (ubicacionBloque == null || ubicacionBloque == ubicacionActual) continue;
+            if (ubicacionBloque == null)
+            {
+                System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}' sin ubicación, skip");
+                continue;
+            }
+
+            if (ubicacionBloque == ubicacionActual)
+            {
+                System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}' en ubicación actual '{ubicacionActual}', skip");
+                ubicacionActual = ubicacionBloque;
+                continue;
+            }
+
+            var metodoTransporte = ObtenerTransporteBloque(bloque, areaDict, tareasDict, ubicaDict);
+
+            if (!metodoTransporte.HasValue)
+            {
+                System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}' sin método de transporte, skip");
+                ubicacionActual = ubicacionBloque;
+                continue;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}': '{ubicacionActual}' -> '{ubicacionBloque}', transporte={metodoTransporte.Value}");
 
             var origenUbic = ubicaDict.GetValueOrDefault(ubicacionActual);
             var destinoUbic = ubicaDict.GetValueOrDefault(ubicacionBloque);
 
             if (origenUbic == null || destinoUbic == null)
             {
+                InsertarTrasladoEstimado(dia, bloque, ubicacionActual, ubicacionBloque, metodoTransporte.Value);
                 ubicacionActual = ubicacionBloque;
-                InsertarTrasladoEstimado(dia, bloque, ubicacionActual, ubicacionBloque);
                 continue;
             }
 
-            var metodoTransporte = ObtenerTransporteBloque(bloque, areaDict);
-            var transporteStr = metodoTransporte.HasValue
-                ? MetodoTransporteToGeoString(metodoTransporte.Value)
-                : "automovil";
+            var transporteStr = MetodoTransporteToGeoString(metodoTransporte.Value);
 
             int duracionMin;
             bool estimado;
@@ -447,10 +475,12 @@ public class CalendarioSemanalService : ICalendarioSemanalService
         }
 
         OrdenarBloques(dia);
+        ResolveTrasladoOverlaps(dia);
     }
 
     private string? ObtenerUbicacionBloque(BloqueCalendario bloque,
-        Dictionary<string, AreaInteres> areaDict)
+        Dictionary<string, AreaInteres> areaDict,
+        Dictionary<string, Tarea>? tareasDict = null)
     {
         if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.IdAreaInteres != null)
         {
@@ -461,34 +491,78 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
         if (bloque.Tipo == TipoBloqueCalendario.Tarea)
         {
-            if (bloque.IdTarea != null && bloque.IdAreaInteresPadre != null
-                && areaDict.TryGetValue(bloque.IdAreaInteresPadre, out var area))
+            if (bloque.IdAreaInteresPadre != null
+                && areaDict.TryGetValue(bloque.IdAreaInteresPadre, out var area)
+                && !string.IsNullOrEmpty(area.UbicacionPred))
                 return area.UbicacionPred;
+
+            if (bloque.IdTarea != null && tareasDict != null
+                && tareasDict.TryGetValue(bloque.IdTarea, out var tarea)
+                && !string.IsNullOrEmpty(tarea.Ubicacion))
+                return tarea.Ubicacion;
         }
 
         return null;
     }
 
     private MetodoTransporte? ObtenerTransporteBloque(BloqueCalendario bloque,
-        Dictionary<string, AreaInteres> areaDict)
+        Dictionary<string, AreaInteres> areaDict,
+        Dictionary<string, Tarea>? tareasDict = null,
+        Dictionary<string, UbicacionGuardada>? ubicaDict = null)
     {
+        var ubicacion = ObtenerUbicacionBloque(bloque, areaDict, tareasDict);
+
+        if (ubicacion != null && ubicaDict != null
+            && ubicaDict.TryGetValue(ubicacion, out var ubicacionGuardada)
+            && !string.IsNullOrEmpty(ubicacionGuardada.TransportePreferido))
+        {
+            var fromUbicacion = TransportePreferidoToEnum(ubicacionGuardada.TransportePreferido);
+            if (fromUbicacion.HasValue)
+                return fromUbicacion;
+        }
+
         if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.IdAreaInteres != null)
         {
-            if (areaDict.TryGetValue(bloque.IdAreaInteres, out var area))
+            if (areaDict.TryGetValue(bloque.IdAreaInteres, out var area)
+                && area.MetodoTransportePred.HasValue)
                 return area.MetodoTransportePred;
         }
 
-        if (bloque.Tipo == TipoBloqueCalendario.Tarea && bloque.IdAreaInteresPadre != null)
+        if (bloque.Tipo == TipoBloqueCalendario.Tarea)
         {
-            if (areaDict.TryGetValue(bloque.IdAreaInteresPadre, out var area))
+            if (bloque.IdAreaInteresPadre != null
+                && areaDict.TryGetValue(bloque.IdAreaInteresPadre, out var area)
+                && area.MetodoTransportePred.HasValue)
                 return area.MetodoTransportePred;
+
+            if (bloque.IdTarea != null && tareasDict != null
+                && tareasDict.TryGetValue(bloque.IdTarea, out var tarea)
+                && tarea.MetodoTransporte.HasValue)
+                return tarea.MetodoTransporte;
         }
 
-        return MetodoTransporte.Automovil;
+        return null;
+    }
+
+    private static MetodoTransporte? TransportePreferidoToEnum(string transporte)
+    {
+        return transporte?.Trim().ToLowerInvariant() switch
+        {
+            "a pie" => MetodoTransporte.Caminar,
+            "caminar" => MetodoTransporte.Caminar,
+            "auto" => MetodoTransporte.Auto,
+            "automovil" => MetodoTransporte.Auto,
+            "bus" => MetodoTransporte.Bus,
+            "micro" => MetodoTransporte.Bus,
+            "metro" => MetodoTransporte.Bus,
+            "taxi" => MetodoTransporte.Auto,
+            "bicicleta" => MetodoTransporte.Caminar,
+            _ => null
+        };
     }
 
     private void InsertarTrasladoEstimado(DiaCalendario dia, BloqueCalendario bloqueSiguiente,
-        string origen, string destino)
+        string origen, string destino, MetodoTransporte metodoTransporte)
     {
         var horaInicio = bloqueSiguiente.HoraInicio - TimeSpan.FromMinutes(DefaultTravelMinutes);
         if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
@@ -502,7 +576,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             UbicacionDestino = destino,
             DuracionMinutos = DefaultTravelMinutes,
             EsEstimado = true,
-            MetodoTransporte = MetodoTransporte.Automovil,
+            MetodoTransporte = metodoTransporte,
             ColorHex = "#ef4444"
         });
     }
@@ -573,10 +647,9 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
     private static string MetodoTransporteToGeoString(MetodoTransporte metodo) => metodo switch
     {
-        MetodoTransporte.Pie => "A pie",
-        MetodoTransporte.Bicicleta => "Bicicleta",
-        MetodoTransporte.Automovil => "Automovil",
-        MetodoTransporte.TransportePublico => "Bus",
+        MetodoTransporte.Caminar => "A pie",
+        MetodoTransporte.Auto => "Automovil",
+        MetodoTransporte.Bus => "Bus",
         _ => "Automovil"
     };
 
@@ -629,5 +702,29 @@ public class CalendarioSemanalService : ICalendarioSemanalService
         var ordenados = dia.Bloques.OrderBy(b => b.HoraInicio).ToList();
         dia.Bloques.Clear();
         foreach (var b in ordenados) dia.Bloques.Add(b);
+    }
+
+    private void ResolveTrasladoOverlaps(DiaCalendario dia)
+    {
+        var traslados = dia.Bloques
+            .Where(b => b.Tipo == TipoBloqueCalendario.SeccionTraslado)
+            .OrderBy(b => b.HoraInicio)
+            .ToList();
+
+        foreach (var traslado in traslados)
+        {
+            foreach (var bloque in dia.Bloques.ToList())
+            {
+                if (bloque.Tipo == TipoBloqueCalendario.SeccionTraslado) continue;
+                if (bloque.HoraFin <= traslado.HoraInicio) continue;
+                if (bloque.HoraInicio >= traslado.HoraFin) continue;
+
+                var duracion = bloque.HoraFin - bloque.HoraInicio;
+                bloque.HoraInicio = traslado.HoraFin;
+                bloque.HoraFin = traslado.HoraFin + duracion;
+            }
+        }
+
+        OrdenarBloques(dia);
     }
 }

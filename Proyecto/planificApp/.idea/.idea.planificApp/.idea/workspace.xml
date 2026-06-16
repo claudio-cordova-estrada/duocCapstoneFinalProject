@@ -14,46 +14,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a19e2069-a5e5-44b3-8758-e2f7a7b2e0b5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/avalonia.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.planificApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/InboxViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Helpers/CalendarioConverters.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Helpers/CalendarioConverters.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/AreaInteres.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/AreaInteres.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Enums/MetodoTransporte.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Enums/MetodoTransporte.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Repositories/Interfaces/IUsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Repositories/Interfaces/IUsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Repositories/UsuarioRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Repositories/UsuarioRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/CalendarioSemanalService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Services/CalendarioSemanalService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Services/MongoContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Services/MongoContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Tarea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Tarea.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Usuario.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Usuario.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/AreaInteresViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/CalendarioSemanalViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/CalendarioSemanalViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/ConfigViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/ConfigViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/LoginViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/NewTaskViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/NewTaskViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/RegistroViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/RegistroViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModels/TareaDetailViewModelBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ViewModels/TareaDetailViewModelBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/AreaInteresView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/AreaInteresView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/CalendarioSemanalView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/ConfigView.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigView.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/ConfigView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/ConfigView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/InboxView.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/InboxView.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/NewAreaWindow.axaml" beforeDir="false" afterPath="$PROJECT_DIR$/Views/NewAreaWindow.axaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/NewAreaWindow.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/NewAreaWindow.axaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/NewTaskWindow.axaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Views/NewTaskWindow.axaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net10.0/planificApp.runtimeconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Release/net10.0/planificApp.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/references" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/references" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/Avalonia/resources" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/ref/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net10.0/refint/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/Resources.Inputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/Resources.Inputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/resources" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/Avalonia/resources" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.csproj.CoreCompileInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/planificApp.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/ref/planificApp.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Release/net10.0/refint/planificApp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/obj/planificApp.csproj.nuget.g.targets" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
     </list>
@@ -66,7 +79,7 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1" />
+    <option name="cachedIndexableFilesCount" value="8" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="ExportToHTMLSettings">
@@ -151,23 +164,23 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.532965945165154" />
-      <entry key="MS500" value="7.738164191258781" />
-      <entry key="S2" value="17.499621003446546" />
-      <entry key="S5" value="26.099145486505442" />
-      <entry key="S10" value="31.109005368408656" />
-      <entry key="S30" value="35.44931000351236" />
-      <entry key="S60" value="36.94790220836174" />
-      <entry key="M2" value="51.89656481561237" />
-      <entry key="M5" value="258.7553571630286" />
-      <entry key="M10" value="622.6189867217615" />
-      <entry key="M15" value="863.2707515899817" />
-      <entry key="M30" value="1387.0967957549362" />
-      <entry key="H1" value="2490.5363871198583" />
-      <entry key="H2" value="4791.710883883546" />
-      <entry key="H4" value="9269.789432467107" />
-      <entry key="D1" value="23996.621098319076" />
-      <entry key="W1" value="29544.042468537173" />
+      <entry key="MS100" value="1.2159562183780388" />
+      <entry key="MS500" value="5.38014887971439" />
+      <entry key="S2" value="20.503724033470306" />
+      <entry key="S5" value="50.86568976387381" />
+      <entry key="S10" value="86.31955192776888" />
+      <entry key="S30" value="138.58038395183954" />
+      <entry key="S60" value="165.8180745923136" />
+      <entry key="M2" value="189.9013896515761" />
+      <entry key="M5" value="247.5313296733818" />
+      <entry key="M10" value="404.82772411463634" />
+      <entry key="M15" value="563.6263471413193" />
+      <entry key="M30" value="1066.068765621138" />
+      <entry key="H1" value="2163.4761964891572" />
+      <entry key="H2" value="4187.035534191316" />
+      <entry key="H4" value="8208.910662910117" />
+      <entry key="D1" value="30388.246524602182" />
+      <entry key="W1" value="42976.69427684363" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -189,23 +202,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.445915843564725" />
-      <entry key="MS500" value="7.681139517324349" />
-      <entry key="S2" value="17.464352999570607" />
-      <entry key="S5" value="26.0776459106889" />
-      <entry key="S10" value="31.09612205314675" />
-      <entry key="S30" value="35.44440190558156" />
-      <entry key="S60" value="36.945341193487955" />
-      <entry key="M2" value="51.89471134508586" />
-      <entry key="M5" value="258.7515609837711" />
-      <entry key="M10" value="622.6144984930166" />
-      <entry key="M15" value="863.2666385819903" />
-      <entry key="M30" value="1387.0935274851834" />
-      <entry key="H1" value="2490.533487570106" />
-      <entry key="H2" value="4791.708092925272" />
-      <entry key="H4" value="9269.786633214113" />
-      <entry key="D1" value="23996.61982887779" />
-      <entry key="W1" value="29544.04224370027" />
+      <entry key="MS100" value="1.1824327382366076" />
+      <entry key="MS500" value="5.349501978093222" />
+      <entry key="S2" value="20.475338982214723" />
+      <entry key="S5" value="50.837325780072796" />
+      <entry key="S10" value="86.2952095161483" />
+      <entry key="S30" value="138.56720499601323" />
+      <entry key="S60" value="165.81012484770073" />
+      <entry key="M2" value="189.89679705678554" />
+      <entry key="M5" value="247.52882925675507" />
+      <entry key="M10" value="404.8255210836689" />
+      <entry key="M15" value="563.6242188627326" />
+      <entry key="M30" value="1066.0665369198032" />
+      <entry key="H1" value="2163.473690524351" />
+      <entry key="H2" value="4187.032974418481" />
+      <entry key="H4" value="8208.908056303086" />
+      <entry key="D1" value="30388.244861681895" />
+      <entry key="W1" value="42976.69393980832" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -237,7 +250,7 @@
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.3974002&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;testing&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;calendarioSemanalParteDos&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -392,6 +405,10 @@
       <workItem from="1781283523187" duration="16413000" />
       <workItem from="1781359859713" duration="9438000" />
       <workItem from="1781374546909" duration="2776000" />
+      <workItem from="1781385955722" duration="5810000" />
+      <workItem from="1781452338909" duration="10747000" />
+      <workItem from="1781534071781" duration="10739000" />
+      <workItem from="1781565592732" duration="5960000" />
     </task>
     <servers />
   </component>

@@ -50,10 +50,9 @@ public class MetodoTransporteToIconConverter : IValueConverter
         if (value is MetodoTransporte metodo)
             return metodo switch
             {
-                MetodoTransporte.Pie => "\uE80F",
-                MetodoTransporte.Bicicleta => "\uE8B5",
-                MetodoTransporte.Automovil => "\uE804",
-                MetodoTransporte.TransportePublico => "\uE806",
+                MetodoTransporte.Caminar => "\uE80F",
+                MetodoTransporte.Auto => "\uE804",
+                MetodoTransporte.Bus => "\uE806",
                 _ => "\uE804"
             };
         return "\uE804";
@@ -69,10 +68,9 @@ public class MetodoTransporteToTextConverter : IValueConverter
         if (value is MetodoTransporte metodo)
             return metodo switch
             {
-                MetodoTransporte.Pie => "A pie",
-                MetodoTransporte.Bicicleta => "Bicicleta",
-                MetodoTransporte.Automovil => "Auto",
-                MetodoTransporte.TransportePublico => "Transporte",
+                MetodoTransporte.Caminar => "A pie",
+                MetodoTransporte.Auto => "Auto",
+                MetodoTransporte.Bus => "Bus",
                 _ => "Auto"
             };
         return "Auto";

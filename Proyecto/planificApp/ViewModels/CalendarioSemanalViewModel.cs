@@ -34,6 +34,9 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     [ObservableProperty] private BloqueCalendario? _bloqueSeleccionado;
     [ObservableProperty] private DateTime _fechaLunesActual = GetLunes(DateTime.Today);
 
+    public TimeSpan HoraInicioJornada => _sesionService.UsuarioActual?.HoraInicioJornada ?? TimeSpan.FromHours(7.5);
+    public TimeSpan HoraFinJornada => _sesionService.UsuarioActual?.HoraFinJornada ?? TimeSpan.FromHours(22);
+
     public Dictionary<string, ObservableCollection<Tarea>> TareasPorArea { get; private set; } = new();
 
     public CalendarioSemanalViewModel(
@@ -345,6 +348,24 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         await CargarSemanaAsync();
     }
 
+    [RelayCommand]
+    private async Task ToggleCompletarTareaAsync(BloqueCalendario bloque)
+    {
+        if (bloque == null || string.IsNullOrEmpty(bloque.IdTarea)) return;
+
+        var tarea = await _tareaRepo.ObtenerTareasPorUsuario(_sesionService.UsuarioActual?.IdUsuario!);
+        var found = tarea.FirstOrDefault(t => t.IdTarea == bloque.IdTarea);
+        if (found == null) return;
+
+        if (found.FecCompletado == null)
+            await _tareaRepo.CompletarTarea(found.IdTarea!);
+        else
+            await _tareaRepo.DescompletarTarea(found.IdTarea!);
+
+        bloque.Completada = !bloque.Completada;
+        await CargarSemanaAsync();
+    }
+
     public async Task CargarSemanaAsync()
     {
         if (_sesionService.UsuarioActual == null) return;
@@ -416,7 +437,9 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     {
         if (_sesionService.UsuarioActual == null) return;
 
-        await _calendarioService.GuardarCambiosAsync(SemanaActual, _sesionService.UsuarioActual.IdUsuario!);
+        var usuarioId = _sesionService.UsuarioActual.IdUsuario!;
+        await _calendarioService.CalcularTrasladosAsync(dia, usuarioId);
+        await _calendarioService.GuardarCambiosAsync(SemanaActual, usuarioId);
     }
 
     private static DateTime GetLunes(DateTime fecha)

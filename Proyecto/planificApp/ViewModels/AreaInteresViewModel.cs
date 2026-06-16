@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace planificApp.ViewModels;
 
 public partial class AreaInteresViewModel : TareaDetailViewModelBase
 {
+    private readonly IUbicacionRepository _ubicacionRepo;
+
     [ObservableProperty] private AreaInteres? _areaSeleccionada;
     [ObservableProperty] private string _tituloVista = string.Empty;
     [ObservableProperty] private string _subtituloVista = string.Empty;
@@ -25,15 +28,33 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
     [ObservableProperty] private bool _hayCompletadas;
     [ObservableProperty] private bool _completadasVisibles = true;
     [ObservableProperty] private string _quickAddNombre = string.Empty;
+    [ObservableProperty] private string _ubicacionDisplay = "— Sin ubicación —";
+
+    public ObservableCollection<string> MisUbicaciones { get; } = new() { "— Sin ubicación —" };
 
     private bool esModoEdicion;
     private string? IdAreaEditando;
 
-    public AreaInteresViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion)
+    public AreaInteresViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion, IUbicacionRepository ubicacionRepo)
         : base(tareaRepo, areaRepo, sesion)
     {
+        _ubicacionRepo = ubicacionRepo;
         PageName = ApplicationPageNames.UserAreaInteres;
     }
+
+    protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName == nameof(TareaSeleccionada) && TareaSeleccionada != null)
+        {
+            UbicacionDisplay = string.IsNullOrEmpty(TareaSeleccionada.Ubicacion) || !MisUbicaciones.Contains(TareaSeleccionada.Ubicacion)
+                               ? "— Sin ubicación —"
+                               : TareaSeleccionada.Ubicacion;
+        }
+    }
+
+    partial void OnUbicacionDisplayChanged(string value) => DetalleUbicacion = (value == "— Sin ubicación —") ? null : value;
 
     public override async Task CargarTareasAsync()
     {
@@ -43,6 +64,8 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
 
         AreasInteres = new ObservableCollection<AreaInteres>(
             await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
+
+        SincronizarUbicaciones(await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario));
 
         var tareas = await TareaRepo.ObtenerTareasPorArea(AreaSeleccionada.IdAreaInteres);
 
@@ -99,6 +122,34 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
         await TareaRepo.CrearTarea(tarea);
         QuickAddNombre = string.Empty;
         await CargarTareasAsync();
+    }
+
+    private void SincronizarUbicaciones(IEnumerable<UbicacionGuardada> ubicacionesDb)
+    {
+        var nombresNuevos = ubicacionesDb
+            .Select(u => u.Nombre)
+            .Where(n => !string.IsNullOrWhiteSpace(n))
+            .Distinct()
+            .ToList();
+
+        var listaFinal = new List<string> { "— Sin ubicación —" };
+        listaFinal.AddRange(nombresNuevos);
+
+        for (int i = MisUbicaciones.Count - 1; i >= 0; i--)
+        {
+            if (!listaFinal.Contains(MisUbicaciones[i]))
+                MisUbicaciones.RemoveAt(i);
+        }
+
+        for (int i = 0; i < listaFinal.Count; i++)
+        {
+            var item = listaFinal[i];
+            int idx = MisUbicaciones.IndexOf(item);
+            if (idx == -1)
+                MisUbicaciones.Insert(i, item);
+            else if (idx != i)
+                MisUbicaciones.Move(idx, i);
+        }
     }
 
     protected override bool ShouldDeselectAfterSave(Tarea tarea)

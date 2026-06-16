@@ -127,6 +127,24 @@ public partial class NewTaskViewModel : ViewModelBase
         try
         {
             await _tareaRepo.CrearTarea(nuevaTarea);
+
+            var jornadaInicio = _sesion.UsuarioActual?.HoraInicioJornada ?? TimeSpan.FromHours(7.5);
+            var jornadaFin = _sesion.UsuarioActual?.HoraFinJornada ?? TimeSpan.FromHours(22);
+
+            if (HoraInicio.HasValue && HoraFin.HasValue
+                && (HoraInicio < jornadaInicio || HoraFin > jornadaFin))
+            {
+                ErrorMessage = $"Guardado (hora fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+            }
+            else if (HoraInicio.HasValue && HoraInicio < jornadaInicio)
+            {
+                ErrorMessage = $"Guardado (hora inicio fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+            }
+            else if (HoraFin.HasValue && HoraFin > jornadaFin)
+            {
+                ErrorMessage = $"Guardado (hora fin fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+            }
+
             GuardadoExitoso = true;
         }
         catch (Exception ex)

@@ -159,8 +159,11 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
         var dropY = e.GetPosition(panel).Y;
         var horaInicio = PixelsToTime(dropY);
         horaInicio = TimeSpan.FromMinutes(Math.Round(horaInicio.TotalMinutes / 15) * 15);
-        if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
-        if (horaInicio >= TimeSpan.FromHours(24)) horaInicio = TimeSpan.FromHours(23.75);
+
+        var horaMin = _viewModel.HoraInicioJornada;
+        var horaMax = _viewModel.HoraFinJornada;
+        if (horaInicio < horaMin) horaInicio = horaMin;
+        if (horaInicio >= horaMax) horaInicio = horaMax - TimeSpan.FromMinutes(15);
 
         try
         {
@@ -169,12 +172,22 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 var area = _viewModel.AreasDisponibles.FirstOrDefault(a => a.IdAreaInteres == dropId);
                 if (area == null) return;
 
+                if (OverlapsWithAnyTraslado(horaInicio, TimeSpan.FromHours(1), dia))
+                    return;
+
                 await _viewModel.AgregarBloqueInteresEnDiaAsync(area, dia, horaInicio);
             }
             else if (dropType == "Tarea")
             {
                 var tarea = _viewModel.TareasDisponibles.FirstOrDefault(t => t.IdTarea == dropId);
                 if (tarea == null) return;
+
+                var duracionTarea = tarea.TiempoEstimado > 0
+                    ? TimeSpan.FromMinutes(tarea.TiempoEstimado)
+                    : TimeSpan.FromMinutes(60);
+
+                if (OverlapsWithAnyTraslado(horaInicio, duracionTarea, dia))
+                    return;
 
                 await _viewModel.AgregarTareaEnDiaAsync(tarea, dia, horaInicio);
             }
@@ -256,6 +269,9 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
     {
         if (_viewModel == null) return;
 
+        var horaInicio = _viewModel.HoraInicioJornada;
+        var horaFin = _viewModel.HoraFinJornada;
+
         for (int i = 0; i < 7; i++)
         {
             if (i < _dayPanels.Length && _dayPanels[i] != null)
@@ -268,10 +284,44 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                     _dayPanels[i].Background = Brushes.Transparent;
 
                 RenderHourLines(_dayPanels[i]);
+                RenderOffHoursOverlay(_dayPanels[i], horaInicio, horaFin);
 
                 if (i < _viewModel.Dias.Count)
                     RenderDayBlocks(_dayPanels[i], _viewModel.Dias[i], i);
             }
+        }
+    }
+
+    private static readonly SolidColorBrush OffHoursBrush = new(Color.Parse("#0a0a12")) { Opacity = 0.55 };
+
+    private static void RenderOffHoursOverlay(Panel panel, TimeSpan horaInicio, TimeSpan horaFin)
+    {
+        if (horaInicio > TimeSpan.Zero)
+        {
+            var topPx = (double)horaInicio.TotalMinutes * (PixelsPerHour / 60.0);
+            var overlay = new Border
+            {
+                Height = topPx,
+                VerticalAlignment = VerticalAlignment.Top,
+                Background = OffHoursBrush,
+                IsHitTestVisible = false
+            };
+            panel.Children.Add(overlay);
+        }
+
+        if (horaFin < TimeSpan.FromHours(24))
+        {
+            var topPx = (double)horaFin.TotalMinutes * (PixelsPerHour / 60.0);
+            var heightPx = 24.0 * PixelsPerHour - topPx;
+            var overlay = new Border
+            {
+                Margin = new Thickness(0, topPx, 0, 0),
+                Height = heightPx,
+                VerticalAlignment = VerticalAlignment.Top,
+                Background = OffHoursBrush,
+                IsHitTestVisible = false
+            };
+            panel.Children.Add(overlay);
         }
     }
 
@@ -435,6 +485,11 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                     Margin = new Thickness(4, 0),
                     VerticalAlignment = VerticalAlignment.Top
                 };
+                if (bloque.Completada)
+                {
+                    taskLabel.TextDecorations = TextDecorations.Strikethrough;
+                    taskLabel.Opacity = 0.7;
+                }
                 Grid.SetRow(taskLabel, 1);
                 contentGrid.Children.Add(taskLabel);
                 border.Child = contentGrid;
@@ -648,20 +703,19 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
     {
         var menu = new ContextMenu();
 
-        var deleteItem = new MenuItem { Header = "Eliminar" };
-        deleteItem.Click += async (s, args) =>
-        {
-            if (_viewModel != null)
-            {
-                await _viewModel.EliminarTareaPermanentementeAsync(dia, bloque.Id);
-                RenderAllDays();
-            }
-        };
-
-        menu.Items.Add(deleteItem);
-
         if (bloque.Tipo == TipoBloqueCalendario.Tarea && bloque.IdTarea != null)
         {
+            var completarItem = new MenuItem { Header = bloque.Completada ? "Descompletar" : "Completar" };
+            completarItem.Click += async (s, args) =>
+            {
+                if (_viewModel != null)
+                {
+                    await _viewModel.ToggleCompletarTareaCommand.ExecuteAsync(bloque);
+                    RenderAllDays();
+                }
+            };
+            menu.Items.Add(completarItem);
+
             var unassignItem = new MenuItem { Header = "Quitar del calendario" };
             unassignItem.Click += async (s, args) =>
             {
@@ -686,6 +740,17 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
             };
             menu.Items.Add(unassignItem);
         }
+
+        var deleteItem = new MenuItem { Header = "Eliminar" };
+        deleteItem.Click += async (s, args) =>
+        {
+            if (_viewModel != null)
+            {
+                await _viewModel.EliminarTareaPermanentementeAsync(dia, bloque.Id);
+                RenderAllDays();
+            }
+        };
+        menu.Items.Add(deleteItem);
 
         menu.Open(border);
     }
@@ -782,14 +847,24 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                     var duracion = _dragOriginalHoraFin - _dragOriginalHoraInicio;
                     var newHoraFin = newHoraInicio + duracion;
 
-                    if (newHoraFin > TimeSpan.FromHours(24)) return;
+                    if (_viewModel != null)
+                    {
+                        if (newHoraInicio < _viewModel.HoraInicioJornada)
+                            newHoraInicio = _viewModel.HoraInicioJornada;
+                        if (newHoraFin > _viewModel.HoraFinJornada)
+                            return;
+                    }
+                    else if (newHoraFin > TimeSpan.FromHours(24))
+                    {
+                        return;
+                    }
 
                     _draggedBloque.HoraInicio = newHoraInicio;
-                    _draggedBloque.HoraFin = newHoraFin;
+                    _draggedBloque.HoraFin = newHoraInicio + duracion;
                     _draggedBorder.Margin = new Thickness(2, newTop, 2, 0);
                     break;
                 }
-            case DragMode.ResizeTop:
+case DragMode.ResizeTop:
                 {
                     var newTop = _dragOriginalTop + deltaY;
                     newTop = Math.Max(0, SnapToGrid(newTop));
@@ -798,6 +873,12 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
 
                     var newHoraInicio = PixelsToTime(newTop);
                     if (newHoraInicio >= _dragOriginalHoraFin - TimeSpan.FromMinutes(15)) return;
+
+                    if (_viewModel != null && newHoraInicio < _viewModel.HoraInicioJornada)
+                    {
+                        newHoraInicio = _viewModel.HoraInicioJornada;
+                        newTop = newHoraInicio.TotalMinutes * (PixelsPerHour / 60.0);
+                    }
 
                     _draggedBloque.HoraInicio = newHoraInicio;
                     var newHeight = (_dragOriginalTop + _dragOriginalHeight) - newTop;
@@ -814,13 +895,23 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                     }
                     break;
                 }
-            case DragMode.ResizeBottom:
+                case DragMode.ResizeBottom:
                 {
                     var newHeight = _dragOriginalHeight + deltaY;
                     newHeight = Math.Max(MinBlockHeight, SnapToGrid(newHeight));
                     var newHoraFin = PixelsToTime(_dragOriginalTop + newHeight);
 
-                    if (newHoraFin > TimeSpan.FromHours(24)) return;
+                    if (_viewModel != null && newHoraFin > _viewModel.HoraFinJornada)
+                    {
+                        newHoraFin = _viewModel.HoraFinJornada;
+                        newHeight = (newHoraFin.TotalMinutes - _dragOriginalHoraInicio.TotalMinutes) * (PixelsPerHour / 60.0);
+                        newHeight = Math.Max(MinBlockHeight, newHeight);
+                    }
+                    else if (newHoraFin > TimeSpan.FromHours(24))
+                    {
+                        return;
+                    }
+
                     if (newHoraFin - _draggedBloque.HoraInicio < TimeSpan.FromMinutes(15)) return;
 
                     _draggedBloque.HoraFin = newHoraFin;
@@ -910,14 +1001,12 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 var pointerPos = e.GetPosition(this);
                 var viewWidth = this.Bounds.Width;
 
-                // Bug 3: Dropped on panel → unassign
                 if (pointerPos.X > viewWidth - 210)
                 {
                     await _viewModel.EliminarBloqueAsync(_draggedDia, _draggedBloque.Id);
                 }
                 else
                 {
-                    // Bug 2: Cross-day move
                     int targetDayIdx = GetTargetDayIndex(e);
                     if (targetDayIdx >= 0 && targetDayIdx < _viewModel.Dias.Count)
                     {
@@ -926,7 +1015,14 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                         var nuevaHora = PixelsToTime(dropY);
                         nuevaHora = TimeSpan.FromMinutes(Math.Round(nuevaHora.TotalMinutes / 15) * 15);
 
-                        if (targetDayIdx != _draggedDayIndex)
+                        var duracion = _draggedBloque.HoraFin - _draggedBloque.HoraInicio;
+
+                        if (OverlapsWithForeignTraslado(nuevaHora, duracion, targetDia, _draggedBloque))
+                        {
+                            _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
+                            _draggedBloque.HoraFin = _dragOriginalHoraFin;
+                        }
+                        else if (targetDayIdx != _draggedDayIndex)
                         {
                             await _viewModel.MoverBloqueADiaAsync(_draggedDia, targetDia, _draggedBloque.Id, nuevaHora);
                             if (_draggedBloque.Tipo == TipoBloqueCalendario.Tarea
@@ -1106,9 +1202,9 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
 
     private static string GetTransportIcon(MetodoTransporte metodo) => metodo switch
     {
-        MetodoTransporte.Pie => "\uE73A",
-        MetodoTransporte.Automovil => "\uE8CC",
-        MetodoTransporte.TransportePublico => "\uE826",
+        MetodoTransporte.Caminar => "\uE73A",
+        MetodoTransporte.Auto => "\uE8CC",
+        MetodoTransporte.Bus => "\uE826",
         _ => "\uE8CC"
     };
 
@@ -1187,5 +1283,74 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
             foreach (var b in groupMembers)
                 b.ColumnCount = maxCol + 1;
         }
+
+        var traslados = blocks
+            .Where(b => b.Tipo == TipoBloqueCalendario.SeccionTraslado)
+            .OrderBy(b => b.HoraInicio)
+            .ToList();
+
+        foreach (var traslado in traslados)
+        {
+            var nextTask = sorted
+                .FirstOrDefault(b => b.HoraInicio >= traslado.HoraFin);
+
+            if (nextTask != null)
+            {
+                traslado.ColumnIndex = nextTask.ColumnIndex;
+                traslado.ColumnCount = nextTask.ColumnCount;
+            }
+            else
+            {
+                var prevTask = sorted
+                    .LastOrDefault(b => b.HoraFin <= traslado.HoraInicio);
+
+                if (prevTask != null)
+                {
+                    traslado.ColumnIndex = prevTask.ColumnIndex;
+                    traslado.ColumnCount = prevTask.ColumnCount;
+                }
+            }
+        }
+    }
+
+    private bool OverlapsWithForeignTraslado(TimeSpan horaInicio, TimeSpan duracion, DiaCalendario dia, BloqueCalendario draggedBloque)
+    {
+        var horaFin = horaInicio + duracion;
+
+        var sorted = dia.Bloques.OrderBy(b => b.HoraInicio).ToList();
+
+        for (int i = 0; i < sorted.Count; i++)
+        {
+            var bloque = sorted[i];
+            if (bloque.Tipo != TipoBloqueCalendario.SeccionTraslado) continue;
+
+            if (horaInicio < bloque.HoraFin && horaFin > bloque.HoraInicio)
+            {
+                var nextNonTraslado = sorted.Skip(i + 1)
+                    .FirstOrDefault(b => b.Tipo != TipoBloqueCalendario.SeccionTraslado);
+
+                if (nextNonTraslado != null && nextNonTraslado.Id == draggedBloque.Id)
+                    continue;
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool OverlapsWithAnyTraslado(TimeSpan horaInicio, TimeSpan duracion, DiaCalendario dia)
+    {
+        var horaFin = horaInicio + duracion;
+
+        foreach (var bloque in dia.Bloques)
+        {
+            if (bloque.Tipo != TipoBloqueCalendario.SeccionTraslado) continue;
+
+            if (horaInicio < bloque.HoraFin && horaFin > bloque.HoraInicio)
+                return true;
+        }
+
+        return false;
     }
 }

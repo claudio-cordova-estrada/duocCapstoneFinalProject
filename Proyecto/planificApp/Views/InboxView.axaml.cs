@@ -191,6 +191,10 @@ public partial class InboxView : UserControl
             DetailNombre.Text = vm.DetalleNombre;
             DetailMensaje.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#f87171"));
         }
+        else if (vm.DetalleMensaje.Contains("fuera de jornada"))
+        {
+            DetailMensaje.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#fbbf24"));
+        }
         else
         {
             DetailMensaje.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#6ee7b7"));

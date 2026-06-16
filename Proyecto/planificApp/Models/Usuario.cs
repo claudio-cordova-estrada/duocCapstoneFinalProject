@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using PlanificApp.Models.Enums;
 
 namespace PlanificApp.Models
 {
@@ -9,46 +11,47 @@ namespace PlanificApp.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdUsuario { get; set; } // Identificador estándar de MongoDB
+        public string? IdUsuario { get; set; }
 
         private string _nombreCompleto = string.Empty;
         public string NombreCompleto
         {
             get => _nombreCompleto;
-            set
-            {
-                // Validación: Solo letras y espacios. Rechaza números y símbolos
-                if (Regex.IsMatch(value, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$") || string.IsNullOrEmpty(value))
-                    _nombreCompleto = value;
-                else
-                    throw new ArgumentException("El nombre no es válido.");
-            }
+            set => _nombreCompleto = value;
+        }
+
+        public void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(NombreCompleto) || NombreCompleto.Length < 3)
+                throw new ArgumentException("El nombre debe tener al menos 3 caracteres.");
+            if (!Regex.IsMatch(NombreCompleto, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+                throw new ArgumentException("El nombre solo puede contener letras y espacios.");
         }
 
         public string Correo { get; set; } = string.Empty;
 
-        // Añadir al final de la clase Usuario[cite: 2]
         public string PasswordHash { get; set; } = string.Empty;
 
-        // Para la recuperación de contraseña rápida (Mínimo Producto Viable)[cite: 2]
         public string RespuestaSeguridad { get; set; } = string.Empty;
 
-        // Integración de ubicación administrativa
         public Region? Region { get; set; }
         public Comuna? Comuna { get; set; }
-        public TimeSpan HoraInicioJornada { get; set; }
-        public TimeSpan HoraFinJornada { get; set; }
+        public TimeSpan HoraInicioJornada { get; set; } = TimeSpan.FromHours(7.5);
+        public TimeSpan HoraFinJornada { get; set; } = TimeSpan.FromHours(22);
 
         public bool CuentaConfirmada { get; set; }
         public string? TokenConfirmacion { get; set; }
-        
-        // Fecha de creacion de la cuenta
+
         public DateTime FecCreacion { get; set; }
         public DateTime FecNacimiento { get; set; }
 
         public string Ubicacion { get; set; } = string.Empty;
 
         public string? UbicacionActual { get; set; }
+
+        public MetodoTransporte? TransportePred { get; set; }
+        public double HorasSueno { get; set; } = 7.5;
+        public List<DayOfWeek> DiasGeneracionSemanal { get; set; } = new() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
 
         public string? FotoPerfil { get; set; }
     }

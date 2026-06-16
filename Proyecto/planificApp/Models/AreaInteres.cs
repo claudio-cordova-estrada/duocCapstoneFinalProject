@@ -10,20 +10,21 @@ namespace PlanificApp.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? IdAreaInteres { get; set; } // Estándar de MongoDB para IDs
+        public string? IdAreaInteres { get; set; }
 
         private string _nombre = string.Empty;
         public string Nombre
         {
             get => _nombre;
-            set
-            {
-                // Validación: Solo letras, números y espacios para nombres de categorías
-                if (Regex.IsMatch(value, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$") || string.IsNullOrEmpty(value))
-                    _nombre = value;
-                else
-                    throw new ArgumentException("El nombre del área no puede contener caracteres especiales.");
-            }
+            set => _nombre = value;
+        }
+
+        public void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(Nombre))
+                throw new ArgumentException("El nombre del área no puede estar vacío.");
+            if (!Regex.IsMatch(Nombre, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$"))
+                throw new ArgumentException("El nombre del área no puede contener caracteres especiales.");
         }
 
         public bool GeneracionSemanal { get; set; } // Determina si el generador debe considerar esta área

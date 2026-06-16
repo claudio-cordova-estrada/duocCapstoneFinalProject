@@ -16,19 +16,17 @@ namespace PlanificApp.Models
         public string Nombre
         {
             get => _nombre;
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    _nombre = value;
-                    return;
-                }
-                if (value.Length > 500)
-                    throw new ArgumentException("El nombre de la tarea no puede superar los 500 caracteres.");
-                if (!Regex.IsMatch(value, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-\.]+$"))
-                    throw new ArgumentException("El nombre de la tarea contiene caracteres no permitidos.");
-                _nombre = value;
-            }
+            set => _nombre = value;
+        }
+
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(Nombre))
+                throw new ArgumentException("El nombre de la tarea no puede estar vacío.");
+            if (Nombre.Length > 500)
+                throw new ArgumentException("El nombre de la tarea no puede superar los 500 caracteres.");
+            if (!Regex.IsMatch(Nombre, @"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-\.]+$"))
+                throw new ArgumentException("El nombre de la tarea contiene caracteres no permitidos.");
         }
 
         public DateTime? FecLimite { get; set; }

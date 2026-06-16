@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using planificApp.Helpers;
@@ -38,7 +39,6 @@ public partial class NewTaskWindow : Window
 
     private void ApplyAreaDefaults(AreaInteres area, NewTaskViewModel vm)
     {
-        // Aplicamos los valores default directo al ViewModel (para que se reflejen en los ComboBox)
         if (area.UbicacionPred != null && vm.MisUbicaciones.Contains(area.UbicacionPred))
             vm.UbicacionDisplay = area.UbicacionPred;
 
@@ -53,15 +53,23 @@ public partial class NewTaskWindow : Window
     {
         if (DataContext is not NewTaskViewModel vm) return;
 
-        // Lo único que seguimos seteando manualmente es el Área de Interés, porque usa un ComboBox de objetos
         vm.IdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(CmbAreaInteres);
 
-        // Disparamos el comando del ViewModel (todo lo demás ya está enlazado por Binding)
         await vm.GuardarCommand.ExecuteAsync(null);
 
         if (vm.GuardadoExitoso)
         {
             Result = true;
+
+            if (!string.IsNullOrEmpty(vm.ErrorMessage) && vm.ErrorMessage.Contains("fuera de jornada"))
+            {
+                var errorText = this.FindControl<TextBlock>("ErrorMessageText");
+                if (errorText != null)
+                    errorText.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#fbbf24"));
+
+                await Task.Delay(1500);
+            }
+
             Close(true);
         }
     }

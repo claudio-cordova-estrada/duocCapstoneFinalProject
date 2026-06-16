@@ -8,6 +8,7 @@ using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -164,13 +165,17 @@ namespace planificApp.ViewModels
                     NombreCompleto = NombreCompleto,
                     Correo = Correo,
 
-                    // ¡AQUÍ ESTÁ LA MAGIA! Ahora sí la encriptamos antes de guardarla
                     PasswordHash = PasswordHelper.HashPassword(Password),
 
                     FecNacimiento = FecNacimiento.Value,
                     Ubicacion = ubicacionFinal,
                     FecCreacion = DateTime.UtcNow,
-                    CuentaConfirmada = false
+                    CuentaConfirmada = false,
+                    HoraInicioJornada = TimeSpan.FromHours(7.5),
+                    HoraFinJornada = TimeSpan.FromHours(22),
+                    UbicacionActual = "Casa",
+                    HorasSueno = 7.5,
+                    DiasGeneracionSemanal = new List<DayOfWeek> { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday }
                 };
 
                 // 5. Guardar en MongoDB
