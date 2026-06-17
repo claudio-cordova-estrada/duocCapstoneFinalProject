@@ -18,7 +18,7 @@ public partial class UsuariosViewModel : PageViewModel
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IRegionesService _regionesService;
     private readonly Func<ApplicationPageNames, PageViewModel> _pageFactory;
-    private readonly INavigationService _navigation;
+    private readonly INavigationService _navigationService;
 
     private List<Usuario> _todosLosUsuarios = new();
 
@@ -58,7 +58,7 @@ public partial class UsuariosViewModel : PageViewModel
         _usuarioRepo = usuarioRepo;
         _regionesService = regionesService;
         _pageFactory = pageFactory;
-        _navigation = navigation;
+        _navigationService = navigation;
 
         _ = InicializarAsync();
     }
@@ -152,15 +152,10 @@ public partial class UsuariosViewModel : PageViewModel
     [RelayCommand]
     private void VerDetalleUsuario(Usuario usuarioSeleccionado)
     {
-        if (usuarioSeleccionado == null) return;
-
-        // 1. Buscamos el ViewModel de los detalles
-        var detalleVm = (EstadisticaUsuarioViewModel)_pageFactory(ApplicationPageNames.AdminUsuarioDetalle);
-
-        // 2. Le inyectamos los datos del usuario clickeado
-        detalleVm.SetUsuario(usuarioSeleccionado);
-
-        // 3. Le pedimos a la app que cambie a esa pantalla
-        _navigation.NavigateToPage(ApplicationPageNames.AdminUsuarioDetalle);
+        if (usuarioSeleccionado != null)
+        {
+            // Usamos el puente que acabamos de crear pasándole el usuario
+            _navigationService.GoToAdminUsuarioDetalle(usuarioSeleccionado);
+        }
     }
 }

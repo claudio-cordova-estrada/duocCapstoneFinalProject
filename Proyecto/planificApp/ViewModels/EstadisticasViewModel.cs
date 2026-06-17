@@ -101,8 +101,23 @@ public partial class EstadisticasViewModel : PageViewModel
         CalcularMetricas();
     }
 
-    [RelayCommand] private void YearLeft() { YearActual--; CalcularMetricas(); }
-    [RelayCommand] private void YearRight() { YearActual++; CalcularMetricas(); }
+    [RelayCommand]
+    private void YearLeft()
+    {
+        YearActual--;
+        CalcularMetricas();
+    }
+
+    [RelayCommand]
+    private void YearRight()
+    {
+        // ¡Freno aplicado! Solo avanza si el año mostrado es menor al año actual real.
+        if (YearActual < DateTime.Now.Year)
+        {
+            YearActual++;
+            CalcularMetricas();
+        }
+    }
 
     private void CalcularMetricas()
     {

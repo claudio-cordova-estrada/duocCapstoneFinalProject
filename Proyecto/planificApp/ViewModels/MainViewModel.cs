@@ -142,7 +142,17 @@ public partial class MainViewModel : ViewModelBase, INavigationService
     // Admin navigation
     [RelayCommand] private void GoToAdminEstadisticas() { ActiveAdminSection = AdminSection.Estadisticas; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminEstadisticas); }
     [RelayCommand] private void GoToAdminUsuarios() { ActiveAdminSection = AdminSection.Usuarios; CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarios); }
-    public void GoToAdminUsuarioDetalle() { CurrentPage = _pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarioDetalle); }
+    public void GoToAdminUsuarioDetalle(Usuario usuario)
+    {
+        // 1. Obtenemos el ViewModel de la fábrica
+        var vm = (UsuarioDetalleViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.AdminUsuarioDetalle);
+
+        // 2. Le inyectamos los datos del usuario clickeado
+        vm.CargarDatosUsuario(usuario);
+
+        // 3. Mostramos la página ya cargada
+        CurrentPage = vm;
+    }
 
     // SB1 Navigation
     [RelayCommand] private void GoToTareas() { ActiveUserSection = UserSection.Tareas; var vm = (InboxViewModel)_pageFactory.GetPageViewModel(ApplicationPageNames.UserInbox); vm.SetModo(ModoVista.Inbox); CurrentPage = vm; }

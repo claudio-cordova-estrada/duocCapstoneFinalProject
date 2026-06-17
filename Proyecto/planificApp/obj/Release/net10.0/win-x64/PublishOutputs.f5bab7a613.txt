@@ -1,0 +1,8 @@
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\planificApp.pdb
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\appsettings.json
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\av_libglesv2.dll
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\libHarfBuzzSharp.dll
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\libHarfBuzzSharp.pdb
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\libSkiaSharp.dll
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\libSkiaSharp.pdb
+D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\bin\Release\net10.0\publish\win-x64\planificApp.exe

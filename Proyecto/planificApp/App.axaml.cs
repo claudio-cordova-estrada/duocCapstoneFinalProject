@@ -62,8 +62,8 @@ public partial class App : Application
         
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
-        collection.AddTransient<EstadisticaUsuarioViewModel>();
-        collection.AddSingleton<UsuariosViewModel>();
+        collection.AddTransient<UsuarioDetalleViewModel>();
+        collection.AddTransient<UsuariosViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -119,7 +119,7 @@ public partial class App : Application
             // Admin
             ApplicationPageNames.AdminEstadisticas => x.GetRequiredService<EstadisticasViewModel>(),
             ApplicationPageNames.AdminUsuarios => x.GetRequiredService<UsuariosViewModel>(),
-            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<EstadisticaUsuarioViewModel>(),
+            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<UsuarioDetalleViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
         });
         

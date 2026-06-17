@@ -20,124 +20,125 @@ build_property.ProjectTypeGuids =
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
 build_property.EnforceExtendedAnalyzerRules = 
+build_property.EntryPointFilePath = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = planificApp
-build_property.ProjectDir = C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\
+build_property.ProjectDir = D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 10.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/App.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/StyleControl/IconButton.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/StyleControl/IconButton.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Styles/appDefaultStyles.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Styles/appDefaultStyles.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AboutView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/AboutView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AddLocationWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/AddLocationWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AdminMainView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/AdminMainView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/AreaInteresView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/AreaInteresView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/BusquedaUsuarioView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/BusquedaUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalcularRutaWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalcularRutaWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioMensualView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioMensualView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioSemanalView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/CalendarioSemanalView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfigView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfigView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteAreaWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteAreaWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteLocationWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/ConfirmDeleteLocationWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/CuentaView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/CuentaView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/DatosView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/DatosView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/DetalleUsuarioView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/DetalleUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/EstadisticasView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/EstadisticasView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/EstadisticaUsuarioView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/EstadisticaUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/InboxView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/InboxView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/LocationView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/LocationView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/LoginView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/LoginView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/MainView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/MainView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/ModificacionUsuarioView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/ModificacionUsuarioView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewAreaWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewAreaWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewTaskWindow.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/NewTaskWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/PropuestasSemanalesView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/PropuestasSemanalesView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/RecuperarContraView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/RecuperarContraView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/RegistroView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/RegistroView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SettingsView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/SettingsView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SobreView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/SobreView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SoporteView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/SoporteView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SugerenciasSemanalesView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/SugerenciasSemanalesView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/SugerenciasView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/SugerenciasView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/TodayTaskView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/TodayTaskView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/UbicacionesView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/UbicacionesView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/UsuarioDetalleView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/UsuarioDetalleView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[C:/Documentos/GitHub/duocCapstoneFinalProject/Proyecto/planificApp/Views/UsuariosView.axaml]
+[D:/CapstoneProject/duocCapstoneFinalProject/Proyecto/planificApp/Views/UsuariosView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
