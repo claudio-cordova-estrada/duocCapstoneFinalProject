@@ -206,7 +206,8 @@
               "RelativeToolTip": "App.axaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-06-14T03:23:59.924Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -232,8 +233,7 @@
               "ViewState": "AgIAAK8AAAAAAAAAAAAiwNUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-15T01:05:42.913Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -290,8 +290,7 @@
               "ToolTip": "D:\\CapstoneProject\\duocCapstoneFinalProject\\Proyecto\\planificApp\\Views\\UbicacionesView.axaml",
               "RelativeToolTip": "Views\\UbicacionesView.axaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-15T20:34:57.597Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-15T20:34:57.597Z"
             },
             {
               "$type": "Document",
@@ -303,8 +302,7 @@
               "RelativeToolTip": "Views\\UbicacionesView.axaml.cs",
               "ViewState": "AgIAABMBAAAAAAAAAAAkwCwBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-15T20:35:15.075Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-15T20:35:15.075Z"
             },
             {
               "$type": "Document",
@@ -316,8 +314,7 @@
               "RelativeToolTip": "ViewModels\\UbicacionesViewModel.cs",
               "ViewState": "AgIAAAQCAAAAAAAAAAAkwB0CAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-15T20:34:39.45Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-15T20:34:39.45Z"
             },
             {
               "$type": "Document",
