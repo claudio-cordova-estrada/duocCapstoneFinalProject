@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
              x:Class="planificApp.Views.UbicacionesView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:UbicacionesViewModel">
@@ -19,6 +19,117 @@
                         
                         <mapsui:MapControl x:Name="MiMapa" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                         
+                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                Margin="16" Width="300" Padding="20" 
+                                Background="#1e1e2e" CornerRadius="16" 
+                                BorderBrush="{DynamicResource BorderDivider}" BorderThickness="1"
+                                BoxShadow="0 10 30 0 #A0000000"
+                                IsVisible="{Binding PanelRutaVisible}">
+                            
+                            <StackPanel Spacing="16">
+                                
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Label Content="&#xE34A;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="#6366f1" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Calcular Ruta" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Command="{Binding TogglePanelRutaCommand}" Background="Transparent" Padding="4" Cursor="Hand" CornerRadius="20">
+                                        <Label Content="&#x2715;" Foreground="{DynamicResource TextDisabled}" FontSize="12"/>
+                                    </Button>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="Auto, *">
+                                    <StackPanel Grid.Column="0" Width="20" HorizontalAlignment="Center" Margin="0 12 12 12">
+                                        <Ellipse Width="8" Height="8" Fill="#6366f1" />
+                                        <Border Width="2" Height="42" Background="{DynamicResource BorderDivider}" Margin="0 4"/>
+                                        <Ellipse Width="8" Height="8" Fill="#ef4444" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Spacing="12">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Punto de partida" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
+                                            <ComboBox ItemsSource="{Binding ListaUbicaciones}" 
+                                                      SelectedItem="{Binding OrigenRutaSeleccionado}" 
+                                                      HorizontalAlignment="Stretch"
+                                                      PlaceholderText="Selecciona origen..."
+                                                      CornerRadius="6">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Nombre}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Punto de llegada" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
+                                            <ComboBox ItemsSource="{Binding ListaUbicaciones}" 
+                                                      SelectedItem="{Binding DestinoRutaSeleccionado}" 
+                                                      HorizontalAlignment="Stretch"
+                                                      PlaceholderText="Selecciona destino..."
+                                                      CornerRadius="6">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Nombre}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel Spacing="4" Margin="0 -4 0 4">
+                                    <TextBlock Text="Método de transporte" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
+                                    <ComboBox ItemsSource="{Binding ModosDeTransporteRuta}" 
+                                              SelectedItem="{Binding ModoTransporteSeleccionado}" 
+                                              HorizontalAlignment="Stretch"
+                                              CornerRadius="6">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <Label Content="&#xE30A;" FontFamily="{DynamicResource Phosphor}" FontSize="14" VerticalAlignment="Center" Foreground="{DynamicResource TextDisabled}"/>
+                                                    <TextBlock Text="{Binding .}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
+                                    
+                                    <Button Grid.Column="0" Command="{Binding LimpiarRutaCommand}"
+                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                            Background="Transparent" Foreground="{DynamicResource TextSecondary}" FontWeight="Medium"
+                                            BorderBrush="{DynamicResource BorderDivider}" BorderThickness="1"
+                                            CornerRadius="8" Padding="10" Cursor="Hand">
+                                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                            <Label Content="&#xE16C;" FontFamily="{DynamicResource Phosphor}" FontSize="16" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Limpiar" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Grid.Column="1" Command="{Binding CalcularRutaIntegradaCommand}"
+                                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                            Background="#6366f1" Foreground="White" FontWeight="Bold"
+                                            CornerRadius="8" Padding="10" Cursor="Hand">
+                                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                            <Label Content="&#xE30A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" VerticalAlignment="Center"/>
+                                            <TextBlock Text="Trazar" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    
+                                </Grid>
+
+                                <Border Background="#064e3b" BorderBrush="#10b981" BorderThickness="1" CornerRadius="8" Padding="12"
+                                        IsVisible="{Binding InfoRutaCalculada, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                                    <TextBlock Text="{Binding InfoRutaCalculada}" 
+                                               Foreground="#34d399" FontWeight="SemiBold" FontSize="13" 
+                                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                                </Border>
+                                
+                            </StackPanel>
+                        </Border>
+
                         <!-- PANEL FLOTANTE PREMIUM PARA CALCULAR RUTAS -->
 <Border HorizontalAlignment="Left" VerticalAlignment="Top" 
         Margin="16" Width="300" Padding="20" 
@@ -181,67 +292,90 @@
                     </Grid>
                 </Border>
 
-                <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12">
-                    <ListBox Grid.Column="0" 
-                             ItemsSource="{Binding ListaUbicaciones}" 
-                             SelectedItem="{Binding UbicacionSeleccionada}"
-                             Background="Transparent" 
-                             BorderThickness="0"
-                             Padding="0">
-                        
-                        <ListBox.Styles>
-                            <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value="#1e1e2e"/>
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                            <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value="#2a2a3b"/> 
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                            <Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                                <Setter Property="Background" Value="#2e2e42"/>
-                                <Setter Property="CornerRadius" Value="8"/>
-                            </Style>
-                        </ListBox.Styles>
-
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border Classes="loc-item">
-                                    <Grid ColumnDefinitions="Auto,*,Auto">
-                                        <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{Binding ColorHex}" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                                        
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Nombre}" FontSize="15" Foreground="{DynamicResource TextSecondary}"/>
-                                            <TextBlock Text="{Binding AreaInteres}" FontSize="13" Foreground="{DynamicResource TextDisabled}"/>
+                <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12" Margin="0 10 0 0">
+                    
+                    <ScrollViewer Grid.Column="0">
+                        <ItemsControl ItemsSource="{Binding UbicacionesAgrupadas}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    
+                                    <StackPanel Margin="0 0 12 24">
+                                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 12">
+                                            <Label Content="&#xE1D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="#6366f1" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding NombreArea}" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                            
+                                            <Border Background="#2a2a3b" CornerRadius="12" Padding="8 2" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Ubicaciones.Count}" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
+                                            </Border>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
-                                            <Button Classes="loc-action" 
-                                                    Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EditarUbicacionCommand}" 
-                                                    CommandParameter="{Binding}">
-                                                <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Button>
-                                            <Button Classes="loc-action" 
-                                                    Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EliminarUbicacionCommand}" 
-                                                    CommandParameter="{Binding}">
-                                                <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                        <ItemsControl ItemsSource="{Binding Ubicaciones}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).SeleccionarUbicacionCommand}" 
+                                                            CommandParameter="{Binding}"
+                                                            Background="Transparent" BorderThickness="0" Padding="0" Margin="0 0 10 10" HorizontalAlignment="Stretch" Cursor="Hand">
+                                                        
+                                                        <Button.Styles>
+                                                            <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                                                                <Setter Property="Background" Value="Transparent"/>
+                                                            </Style>
+                                                        </Button.Styles>
+
+                                                        <Border Classes="loc-item" Classes.selected="{Binding IsSelected}">
+                                                            <Border.Styles>
+                                                                <Style Selector="Border.loc-item">
+                                                                    <Setter Property="Background" Value="Transparent"/>
+                                                                    <Setter Property="CornerRadius" Value="8"/>
+                                                                    <Setter Property="Padding" Value="8"/>
+                                                                </Style>
+                                                                <Style Selector="Border.loc-item:pointerover">
+                                                                    <Setter Property="Background" Value="#1e1e2e"/>
+                                                                </Style>
+                                                                <Style Selector="Border.loc-item.selected">
+                                                                    <Setter Property="Background" Value="#2a2a3b"/>
+                                                                </Style>
+                                                            </Border.Styles>
+
+                                                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                                                <Ellipse Grid.Column="0" Width="12" Height="12" Fill="{Binding ColorHex}" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                                                                
+                                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                    <TextBlock Text="{Binding Nombre}" FontSize="15" Foreground="{DynamicResource TextSecondary}" TextTrimming="CharacterEllipsis"/>
+                                                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                                                        <Label Content="&#xE30A;" FontFamily="{DynamicResource Phosphor}" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource TextDisabled}"/>
+                                                                        <TextBlock Text="{Binding TransportePreferido, TargetNullValue='Auto'}" FontSize="12" Foreground="{DynamicResource TextDisabled}"/>
+                                                                    </StackPanel>
+                                                                </StackPanel>
+
+                                                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+                                                                    <Button Classes="loc-action" Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EditarUbicacionCommand}" CommandParameter="{Binding}">
+                                                                        <Label Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Button>
+                                                                    <Button Classes="loc-action" Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).EliminarUbicacionCommand}" CommandParameter="{Binding}">
+                                                                        <Label Content="&#xE4A6;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                    </Button>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
 
                     <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Top" MinHeight="180">
                         <Grid>
-                            
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" 
                                         IsVisible="{Binding UbicacionSeleccionada, Converter={x:Static ObjectConverters.IsNull}}">
                                 <Label Content="&#xE3B0;" FontFamily="{DynamicResource Phosphor}" FontSize="32" Foreground="{DynamicResource BorderDivider}" HorizontalAlignment="Center"/>
@@ -251,67 +385,64 @@
                             </StackPanel>
 
                             <StackPanel IsVisible="{Binding UbicacionSeleccionada, Converter={x:Static ObjectConverters.IsNotNull}}">
-    
-                                <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 12">
-                                    <TextBlock Grid.Column="0" 
-                                               Text="{Binding UbicacionSeleccionada.Nombre}" 
-                                               FontSize="16" FontWeight="Medium" 
-                                               Foreground="{Binding UbicacionSeleccionada.ColorHex, FallbackValue='#10b981'}" 
-                                               VerticalAlignment="Top" TextWrapping="Wrap"/>
-                                               
-                                    <Button Grid.Column="1" Content="&#x2715;"
-                                            Command="{Binding UnfocusCommand}"
-                                            Background="Transparent" Foreground="#6b7280"
-                                            FontSize="14" Padding="6" Margin="0 -8 -8 0"
-                                            Cursor="Hand" VerticalAlignment="Top"/>
-                                </Grid>
-                                
-                                <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
-                                    <Grid ColumnDefinitions="Auto, *">
-                                        <TextBlock Grid.Column="0" Text="Área de interés · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                    </Grid>
-                                </Border>
+                                                            <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 12">
+                                                                <TextBlock Grid.Column="0" 
+                                                                           Text="{Binding UbicacionSeleccionada.Nombre}" 
+                                                                           FontSize="16" FontWeight="Medium" 
+                                                                           Foreground="{Binding UbicacionSeleccionada.ColorHex, FallbackValue='#10b981'}" 
+                                                                           VerticalAlignment="Top" TextWrapping="Wrap"/>
+                                                                           
+                                                                <Button Grid.Column="1" Content="&#x2715;"
+                                                                        Command="{Binding UnfocusCommand}"
+                                                                        Background="Transparent" Foreground="#6b7280"
+                                                                        FontSize="14" Padding="6" Margin="0 -8 -8 0"
+                                                                        Cursor="Hand" VerticalAlignment="Top"/>
+                                                            </Grid>
+                                                            
+                                                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
+                                                                <Grid ColumnDefinitions="Auto, *">
+                                                                    <TextBlock Grid.Column="0" Text="Área de interés · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                                                </Grid>
+                                                            </Border>
 
-                                <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
-                                    <Grid ColumnDefinitions="Auto, *">
-                                        <TextBlock Grid.Column="0" Text="Dirección · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.DireccionExacta, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                    </Grid>
-                                </Border>
-                                
-                                <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
-                                    <Grid ColumnDefinitions="Auto, *">
-                                        <TextBlock Grid.Column="0" Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.UltimaVisitaFormateada, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                    </Grid>
-                                </Border>
-                                
-                                <Grid ColumnDefinitions="*, Auto, Auto" Margin="8 8 0 0">
-                                    
-                                    <Grid Grid.Column="0" ColumnDefinitions="Auto, *" VerticalAlignment="Center">
-                                        <TextBlock Grid.Column="0" Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                                    </Grid>
+                                                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
+                                                                <Grid ColumnDefinitions="Auto, *">
+                                                                    <TextBlock Grid.Column="0" Text="Dirección · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.DireccionExacta, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            
+                                                            <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">
+                                                                <Grid ColumnDefinitions="Auto, *">
+                                                                    <TextBlock Grid.Column="0" Text="Última visita · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.UltimaVisitaFormateada, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            
+                                                            <Grid ColumnDefinitions="*, Auto, Auto" Margin="8 8 0 0">
+                                                                                            <Grid Grid.Column="0" ColumnDefinitions="Auto, *" VerticalAlignment="Center">
+                                                                    <TextBlock Grid.Column="0" Text="Transporte · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.TransportePreferido, TargetNullValue='-'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                                                                </Grid>
 
-                                    <Button Grid.Column="1" 
-                                            Content="Descartar" 
-                                            Command="{Binding DescartarUbicacionTemporalCommand}"
-                                            IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
-                                            Background="Transparent" Foreground="#ef4444" 
-                                            FontWeight="Medium" CornerRadius="6" 
-                                            Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
+                                                                <Button Grid.Column="1" 
+                                                                        Content="Descartar" 
+                                                                        Command="{Binding DescartarUbicacionTemporalCommand}"
+                                                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                                                        Background="Transparent" Foreground="#ef4444" 
+                                                                        FontWeight="Medium" CornerRadius="6" 
+                                                                        Padding="16 6" Margin="0 0 8 0" Cursor="Hand" VerticalAlignment="Center"/>
 
-                                    <Button Grid.Column="2" 
-                                            Content="Guardar" 
-                                            Command="{Binding GuardarUbicacionTemporalCommand}"
-                                            IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
-                                            Background="#10b981" Foreground="White" 
-                                            FontWeight="Medium" CornerRadius="6" 
-                                            Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
-                                </Grid>
-                            </StackPanel>
-                            
+                                                                <Button Grid.Column="2" 
+                                                                        Content="Guardar" 
+                                                                        Command="{Binding GuardarUbicacionTemporalCommand}"
+                                                                        IsVisible="{Binding UbicacionSeleccionada.EsTemporal, FallbackValue=False}"
+                                                                        Background="#10b981" Foreground="White" 
+                                                                        FontWeight="Medium" CornerRadius="6" 
+                                                                        Padding="16 6" Cursor="Hand" VerticalAlignment="Center"/>
+                                                            </Grid>
+                                                        </StackPanel>
                         </Grid>
                     </Border>
                 </Grid>

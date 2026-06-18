@@ -1,4 +1,5 @@
 using planificApp.Data;
+using PlanificApp.Models; // Añadido para reconocer a Usuario
 
 namespace planificApp.Services;
 
@@ -9,5 +10,9 @@ public interface INavigationService
     void GoToLogin();
     void GoToRegistro();
     void GoToRecuperarContra();
+
+    // ¡AQUÍ ESTÁ EL PUENTE! Ahora pide el usuario
+    void GoToAdminUsuarioDetalle(Usuario usuario);
+
     bool IsAdminToggle { get; set; }
 }

@@ -6,6 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using PlanificApp.Models.Enums;
 
 
+
 namespace PlanificApp.Models
 {
     [BsonIgnoreExtraElements]

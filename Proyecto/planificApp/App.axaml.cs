@@ -64,7 +64,8 @@ public partial class App : Application
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
         collection.AddTransient<EstadisticaUsuarioViewModel>();
-        collection.AddSingleton<UsuariosViewModel>();
+        collection.AddTransient<UsuarioDetalleViewModel>();
+        collection.AddTransient<UsuariosViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -89,8 +90,7 @@ public partial class App : Application
         collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
         collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
-        collection.AddSingleton<IGeneradorSemanalService, GeneradorSemanalService>();
-        collection.AddSingleton<IRegionesService, RegionesService>();
+>>>>>>>>> Temporary merge branch 2
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
         collection.AddSingleton<IRegionesService, RegionesService>();

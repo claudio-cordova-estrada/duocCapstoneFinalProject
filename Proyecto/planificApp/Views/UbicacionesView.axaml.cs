@@ -9,7 +9,7 @@ using planificApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia.Interactivity; // Añadido para los eventos de botones
+using Avalonia.Interactivity;
 
 namespace planificApp.Views
 {
@@ -94,11 +94,23 @@ namespace planificApp.Views
 
         private void DibujarRuta(List<(double Latitud, double Longitud)> puntosRuta)
         {
-            if (MiMapa.Map == null || puntosRuta.Count == 0) return;
+            if (MiMapa.Map == null) return;
 
+            // 1. SIEMPRE eliminamos la capa de ruta vieja primero
             var capaVieja = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaRuta");
-            if (capaVieja != null) MiMapa.Map.Layers.Remove(capaVieja);
+            if (capaVieja != null)
+            {
+                MiMapa.Map.Layers.Remove(capaVieja);
+            }
 
+            // 2. Si la lista viene vacía (Botón Limpiar), refrescamos el mapa y detenemos la función aquí
+            if (puntosRuta == null || puntosRuta.Count == 0)
+            {
+                MiMapa.Refresh();
+                return;
+            }
+
+            // 3. Si hay puntos, creamos la nueva línea y la dibujamos
             var features = new List<IFeature>();
             var lineFeature = new MemoryLayer { Name = "CapaRuta" };
 
@@ -154,7 +166,7 @@ namespace planificApp.Views
                         vm.UbicacionSeleccionada = new UbicacionVisual
                         {
                             Nombre = "Buscando dirección...",
-                            AreaInteres = "No aplica", // <--- Asignado "No aplica" durante la búsqueda
+                            AreaInteres = "No aplica",
                             ColorHex = "#6366f1",
                             Latitud = lonLat.lat,
                             Longitud = lonLat.lon
@@ -167,7 +179,7 @@ namespace planificApp.Views
                         vm.UbicacionSeleccionada = new UbicacionVisual
                         {
                             Nombre = "Punto seleccionado",
-                            AreaInteres = "No aplica", // <--- Asignado "No aplica" para el pin final
+                            AreaInteres = "No aplica",
                             DireccionExacta = direccion,
                             EsTemporal = true,
                             ColorHex = "#10b981",

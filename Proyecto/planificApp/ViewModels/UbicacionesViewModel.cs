@@ -1,11 +1,13 @@
+using planificApp.Services;
 using PlanificApp.Models;
-using PlanificApp.Models.Services.Interfaces;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services;
-using planificApp.Services;
+using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,6 +23,7 @@ namespace planificApp.ViewModels
         private readonly IAreaInteresRepository _areaRepo;
 
         public ObservableCollection<UbicacionVisual> ListaUbicaciones { get; set; } = new();
+        public ObservableCollection<GrupoUbicacion> UbicacionesAgrupadas { get; set; } = new();
 
         private UbicacionVisual? _ubicacionSeleccionada;
         public UbicacionVisual? UbicacionSeleccionada
@@ -28,17 +31,29 @@ namespace planificApp.ViewModels
             get => _ubicacionSeleccionada;
             set
             {
-                if (_ubicacionSeleccionada != value)
-                {
-                    _ubicacionSeleccionada = value;
-                    OnPropertyChanged(nameof(UbicacionSeleccionada));
+                // Apagar selección del anterior
+                if (_ubicacionSeleccionada != null) _ubicacionSeleccionada.IsSelected = false;
 
-                    if (_ubicacionSeleccionada != null)
-                    {
-                        EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
-                    }
+                _ubicacionSeleccionada = value;
+                OnPropertyChanged(nameof(UbicacionSeleccionada));
+
+                if (_ubicacionSeleccionada != null)
+                {
+                    // Encender selección del nuevo
+                    _ubicacionSeleccionada.IsSelected = true;
+                    EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
                 }
             }
+        }
+
+        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
+        public ObservableCollection<string> ModosDeTransporteRuta { get; } = new() { "Auto", "Transporte Público", "Bicicleta", "Caminando" };
+
+        private string _modoTransporteSeleccionado = "Auto";
+        public string ModoTransporteSeleccionado
+        {
+            get => _modoTransporteSeleccionado;
+            set { _modoTransporteSeleccionado = value; OnPropertyChanged(nameof(ModoTransporteSeleccionado)); }
         }
 
         // ==========================================
@@ -55,6 +70,7 @@ namespace planificApp.ViewModels
 
         public ObservableCollection<string> MisAreasDeInteres { get; set; } = new();
 
+        public ICommand SeleccionarUbicacionCommand { get; set; }
         public ICommand AgregarUbicacionCommand { get; set; }
         public ICommand EditarUbicacionCommand { get; set; }
         public ICommand EliminarUbicacionCommand { get; set; }
@@ -67,6 +83,8 @@ namespace planificApp.ViewModels
         public Action? MapaDebeActualizarse { get; set; }
         public Action<double, double>? EnfocarEnUbicacion { get; set; }
         public Action? BorrarPinTemporalDelMapa { get; set; }
+
+        public static string? UbicacionSeleccionadaIdTemporal { get; set; }
 
         public static string? UbicacionSeleccionadaIdTemporal { get; set; }
 
@@ -127,12 +145,65 @@ namespace planificApp.ViewModels
         public ICommand CalcularRutaIntegradaCommand { get; set; }
         // ==========================================
 
+
+        // ==========================================
+        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
+        // ==========================================
+        private bool _panelRutaVisible;
+        public bool PanelRutaVisible
+        {
+            get => _panelRutaVisible;
+            set { _panelRutaVisible = value; OnPropertyChanged(nameof(PanelRutaVisible)); }
+        }
+
+        private UbicacionVisual? _origenRutaSeleccionado;
+        public UbicacionVisual? OrigenRutaSeleccionado
+        {
+            get => _origenRutaSeleccionado;
+            set
+            {
+                if (_origenRutaSeleccionado != value)
+                {
+                    _origenRutaSeleccionado = value;
+                    OnPropertyChanged(nameof(OrigenRutaSeleccionado));
+
+                    // --- MAGIA: AUTO-SELECCIONAR TRANSPORTE ---
+                    if (_origenRutaSeleccionado != null && !string.IsNullOrEmpty(_origenRutaSeleccionado.TransportePreferido))
+                    {
+                        if (ModosDeTransporteRuta.Contains(_origenRutaSeleccionado.TransportePreferido))
+                        {
+                            ModoTransporteSeleccionado = _origenRutaSeleccionado.TransportePreferido;
+                        }
+                    }
+                }
+            }
+        }
+
+        private UbicacionVisual? _destinoRutaSeleccionado;
+        public UbicacionVisual? DestinoRutaSeleccionado
+        {
+            get => _destinoRutaSeleccionado;
+            set { _destinoRutaSeleccionado = value; OnPropertyChanged(nameof(DestinoRutaSeleccionado)); }
+        }
+
+        private string _infoRutaCalculada = string.Empty;
+        public string InfoRutaCalculada
+        {
+            get => _infoRutaCalculada;
+            set { _infoRutaCalculada = value; OnPropertyChanged(nameof(InfoRutaCalculada)); }
+        }
+
+        public ICommand TogglePanelRutaCommand { get; set; }
+        public ICommand CalcularRutaIntegradaCommand { get; set; }
+        public ICommand LimpiarRutaCommand { get; set; }
+
         public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService, IAreaInteresRepository areaRepo)
         {
             _geoService = geoService;
             _ubicacionRepo = ubicacionRepo;
             _sesionService = sesionService;
             _dialogService = dialogService;
+            _areaRepo = areaRepo;
             _areaRepo = areaRepo;
 
             EliminarUbicacionCommand = new RelayCommand<UbicacionVisual>(EliminarUbicacion);
@@ -141,6 +212,7 @@ namespace planificApp.ViewModels
             AbrirCalculadoraRutaCommand = new RelayCommand<object>(AbrirCalculadoraRuta);
             GuardarUbicacionTemporalCommand = new RelayCommand<object>(GuardarUbicacionTemporal);
             DescartarUbicacionTemporalCommand = new RelayCommand<object>(DescartarUbicacionTemporal);
+            SeleccionarUbicacionCommand = new RelayCommand<UbicacionVisual>(u => UbicacionSeleccionada = u);
             UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             // Comandos del panel de rutas
@@ -154,6 +226,11 @@ namespace planificApp.ViewModels
                 }
             });
             CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
+
+            // Comandos del panel de rutas
+            TogglePanelRutaCommand = new RelayCommand<object>(_ => PanelRutaVisible = !PanelRutaVisible);
+            CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
+            LimpiarRutaCommand = new RelayCommand<object>(LimpiarRuta);
 
             _ = CargarUbicacionesRealesAsync();
             _ = CargarAreasDeInteresRealesAsync();
@@ -249,6 +326,7 @@ namespace planificApp.ViewModels
 
                 MisAreasDeInteres.Clear();
                 MisAreasDeInteres.Add("General");
+                MisAreasDeInteres.Add("General");
 
                 foreach (var area in areasDb)
                 {
@@ -261,6 +339,22 @@ namespace planificApp.ViewModels
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error al cargar áreas de interés: {ex.Message}");
+            }
+        }
+
+        public void ActualizarGrupos()
+        {
+            UbicacionesAgrupadas.Clear();
+
+            var agrupadas = ListaUbicaciones.GroupBy(u => string.IsNullOrWhiteSpace(u.AreaInteres) ? "General" : u.AreaInteres);
+
+            foreach (var grupo in agrupadas.OrderBy(g => g.Key))
+            {
+                UbicacionesAgrupadas.Add(new GrupoUbicacion
+                {
+                    NombreArea = grupo.Key,
+                    Ubicaciones = new ObservableCollection<UbicacionVisual>(grupo)
+                });
             }
         }
 
@@ -284,7 +378,19 @@ namespace planificApp.ViewModels
                 });
             }
 
+
+            ActualizarGrupos(); // Agrupar para la vista
             MapaDebeActualizarse?.Invoke();
+
+            if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
+            {
+                var ubiTarget = ListaUbicaciones.FirstOrDefault(u => u.IdUbicacion == UbicacionSeleccionadaIdTemporal);
+                if (ubiTarget != null)
+                {
+                    UbicacionSeleccionada = ubiTarget;
+                }
+                UbicacionSeleccionadaIdTemporal = null;
+            }
 
             if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
             {
@@ -328,6 +434,8 @@ namespace planificApp.ViewModels
                         Latitud = nuevaUbicacionDb.Latitud,
                         Longitud = nuevaUbicacionDb.Longitud
                     });
+
+                    ActualizarGrupos();
                     MapaDebeActualizarse?.Invoke();
                 }
             }
@@ -339,6 +447,8 @@ namespace planificApp.ViewModels
             var resultado = await _dialogService.ShowEditLocationDialog(
                 _geoService, MisAreasDeInteres,
                 ubicacionAEditar.Nombre!, ubicacionAEditar.DireccionExacta!,
+                ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
+
                 ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
 
             if (resultado != null && _sesionService.UsuarioActual != null)
@@ -380,6 +490,30 @@ namespace planificApp.ViewModels
                         UbicacionSeleccionada = actualizada;
                 }
 
+
+                int index = ListaUbicaciones.IndexOf(ubicacionAEditar);
+                if (index >= 0)
+                {
+                    var actualizada = new UbicacionVisual
+                    {
+                        IdUbicacion = ubicacionDb.IdUbicacion,
+                        Nombre = ubicacionDb.Nombre,
+                        AreaInteres = ubicacionDb.AreaInteres,
+                        DireccionExacta = ubicacionDb.DireccionExacta,
+                        ColorHex = ubicacionDb.ColorHex,
+                        TransportePreferido = ubicacionDb.TransportePreferido,
+                        Latitud = ubicacionDb.Latitud,
+                        Longitud = ubicacionDb.Longitud,
+                        EsTemporal = false
+                    };
+
+                    ListaUbicaciones[index] = actualizada;
+
+                    if (UbicacionSeleccionada == ubicacionAEditar)
+                        UbicacionSeleccionada = actualizada;
+                }
+
+                ActualizarGrupos();
                 MapaDebeActualizarse?.Invoke();
             }
         }
@@ -389,6 +523,8 @@ namespace planificApp.ViewModels
             if (ubicacionAEliminar == null || ubicacionAEliminar.IdUbicacion == null) return;
             await _ubicacionRepo.EliminarUbicacion(ubicacionAEliminar.IdUbicacion);
             ListaUbicaciones.Remove(ubicacionAEliminar);
+
+            ActualizarGrupos();
             MapaDebeActualizarse?.Invoke();
         }
 
@@ -433,8 +569,12 @@ namespace planificApp.ViewModels
                         TransportePreferido = nuevaUbicacionDb.TransportePreferido,
                         Latitud = nuevaUbicacionDb.Latitud,
                         Longitud = nuevaUbicacionDb.Longitud,
+                        EsTemporal = false,
                         EsTemporal = false
                     };
+
+                    var temporal = ListaUbicaciones.FirstOrDefault(u => u.EsTemporal);
+                    if (temporal != null) ListaUbicaciones.Remove(temporal);
 
                     var temporal = ListaUbicaciones.FirstOrDefault(u => u.EsTemporal);
                     if (temporal != null) ListaUbicaciones.Remove(temporal);
@@ -442,6 +582,9 @@ namespace planificApp.ViewModels
                     ListaUbicaciones.Add(nuevaVisual);
                     UbicacionSeleccionada = nuevaVisual;
 
+                    BorrarPinTemporalDelMapa?.Invoke();
+
+                    ActualizarGrupos();
                     BorrarPinTemporalDelMapa?.Invoke();
                     MapaDebeActualizarse?.Invoke();
                 }
@@ -470,7 +613,13 @@ namespace planificApp.ViewModels
         public event EventHandler? CanExecuteChanged;
     }
 
-    public class UbicacionVisual
+    public class GrupoUbicacion
+    {
+        public string NombreArea { get; set; } = string.Empty;
+        public ObservableCollection<UbicacionVisual> Ubicaciones { get; set; } = new();
+    }
+
+    public class UbicacionVisual : INotifyPropertyChanged
     {
         public string? IdUbicacion { get; set; }
         public string? Nombre { get; set; }
@@ -482,7 +631,15 @@ namespace planificApp.ViewModels
         public string? TransportePreferido { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }
-    }
 
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }
-#pragma warning restore CS0067

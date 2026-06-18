@@ -5,6 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
              x:Class="planificApp.Views.CalendarioMensualView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
+             xmlns:models="clr-namespace:PlanificApp.Models"
              xmlns:converters="clr-namespace:planificApp.Converters"
              x:DataType="vm:CalendarioMensualViewModel">
 
@@ -23,37 +24,61 @@
                     <TextBlock Grid.Row="0" Text="Tareas" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="5 0 0 20"/>
                     
                     <ScrollViewer Grid.Row="1">
-                        <ItemsControl ItemsSource="{Binding AreasSidebar}">
+    <StackPanel>
+        
+        <!-- 1. TUS ÁREAS NORMALES -->
+        <ItemsControl ItemsSource="{Binding AreasSidebar}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:AreaSidebarGroup">
+                    <StackPanel Margin="0 0 0 16">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 8">
+                            <Ellipse Width="10" Height="10" Fill="{Binding ColorHex, FallbackValue='#6366f1'}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NombreArea}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <ItemsControl ItemsSource="{Binding Tareas}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Margin="0 0 0 16">
-                                        
-                                        <!-- Cabecera del Área -->
-                                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 8">
-                                            <Border Width="10" Height="10" CornerRadius="2" VerticalAlignment="Center">
-                                                <Border.Background>
-                                                    <SolidColorBrush Color="{Binding ColorHex}"/>
-                                                </Border.Background>
-                                            </Border>
-                                            <TextBlock Text="{Binding NombreArea}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                        
-                                        <!-- Tareas del Área -->
-                                        <ItemsControl ItemsSource="{Binding Tareas}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border Background="#161616" BorderBrush="#2A2A2A" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
-                                                        <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap"/>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-
-                                    </StackPanel>
+                                <DataTemplate x:DataType="vm:TareaDetalleSidebar">
+                                    <Border Background="#161616" BorderBrush="#2A2A2A" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                                        <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap"/>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </ScrollViewer>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- 2. NUEVA SECCIÓN: TAREAS VENCIDAS -->
+        <!-- Solo se muestra si "HayTareasVencidas" es True -->
+        <StackPanel IsVisible="{Binding HayTareasVencidas}">
+            
+            <!-- Línea separadora sutil -->
+            <Border Height="1" Background="{DynamicResource BorderSubtle}" Margin="0 4 0 16"/>
+
+            <!-- Cabecera Roja -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 8">
+                <Ellipse Width="10" Height="10" Fill="#ef4444" VerticalAlignment="Center"/>
+                <TextBlock Text="Vencidas" FontSize="13" FontWeight="Bold" Foreground="#ef4444" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Lista con diseño de urgencia -->
+            <ItemsControl ItemsSource="{Binding TareasVencidas}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TareaDetalleSidebar">
+                        <!-- El fondo rojizo oscuro resalta sobre el gris de las tareas normales -->
+                        <Border Background="#2a1010" BorderBrush="#5c1a1a" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                            <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="#f87171" FontWeight="Medium" TextWrapping="Wrap"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+        </StackPanel>
+
+    </StackPanel>
+</ScrollViewer>
                 </Grid>
             </Border>
 
@@ -74,34 +99,34 @@
                     </Grid>
                 </Border>
 
-                <!-- Legend -->
-                <Border DockPanel.Dock="Bottom" Padding="6 10" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 1 0 0">
-                    <StackPanel Orientation="Horizontal" Spacing="14" HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Spacing="6">
-                            <Ellipse Width="12" Height="12" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Trabajo" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="6">
-                            <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaEstudioBorder}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Estudio" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="6">
-                            <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaDeporteBorder}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Deporte" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="6">
-                            <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaLaboresBorder}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Labores" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Spacing="6">
-                            <Ellipse Width="12" Height="12" Fill="{DynamicResource DangerForeground}" VerticalAlignment="Center"/>
-                            <TextBlock Text="Vencida" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        </StackPanel>
+                <!-- LEYENDA INFERIOR DINÁMICA -->
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 16 16 16" Spacing="16">
+                    <!-- Este ItemsControl dibuja las áreas del usuario automáticamente -->
+                    <ItemsControl ItemsSource="{Binding AreasDelUsuario}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="16"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <!-- Importante: Avalonia necesita saber qué objeto lee aquí -->
+                            <DataTemplate x:DataType="models:AreaInteres">
+                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <Ellipse Width="10" Height="10" Fill="{Binding ColorHex, FallbackValue='#6366f1'}" />
+                                    <TextBlock Text="{Binding Nombre}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="16 0 0 0">
+                        <Ellipse Width="10" Height="10" Fill="#ef4444" /> <!-- Rojo para vencidas -->
+                        <TextBlock Text="Vencida" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
                     </StackPanel>
-                </Border>
+                </StackPanel>
 
                 <!-- Cuadrícula Dinámica del Calendario -->
-                <Border Classes="card" Padding="0">
+                <Border Classes="card" Padding="0" Margin="16 16 16 0">
                     <Grid RowDefinitions="Auto,*">
                         <UniformGrid Grid.Row="0" Columns="7" Rows="1" Background="{DynamicResource CalendarDayHeader}">
                             <TextBlock Text="Lun" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
@@ -141,7 +166,6 @@
                                                 
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate x:DataType="vm:TareaCalendario">
-                                                        
                                                         <!-- Diseño de la "pastilla" de la tarea -->
                                                         <Border Background="#1A1A1A" BorderBrush="#333333" BorderThickness="1" CornerRadius="4" Padding="6 4">
                                                             <StackPanel Orientation="Horizontal" Spacing="6">
@@ -154,7 +178,6 @@
                                                                            VerticalAlignment="Center"/>
                                                             </StackPanel>
                                                         </Border>
-                                                        
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
