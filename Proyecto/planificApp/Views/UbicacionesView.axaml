@@ -82,7 +82,15 @@
                     </ComboBox>
                 </StackPanel>
             </StackPanel>
-        </Grid>
+            </Grid>
+
+        <!-- Transporte del destino -->
+        <StackPanel Spacing="4" IsVisible="{Binding DestinoRutaSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <TextBlock Text="Transporte" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
+            <Border Background="#2a2a3b" CornerRadius="6" Padding="8 4" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding TransporteRutaLabel}" FontSize="13" Foreground="{DynamicResource TextTertiary}"/>
+            </Border>
+        </StackPanel>
 
         <!-- Botón de acción -->
         <Button Command="{Binding CalcularRutaIntegradaCommand}"

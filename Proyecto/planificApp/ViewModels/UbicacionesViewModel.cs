@@ -45,11 +45,11 @@ namespace planificApp.ViewModels
         // PROPIEDADES PARA EL MÉTODO DE TRANSPORTE
         // ==========================================
 
-        private string _modoTransporteSeleccionado = "Auto";
-        public string ModoTransporteSeleccionado
+        private string _transporteRutaLabel = string.Empty;
+        public string TransporteRutaLabel
         {
-            get => _modoTransporteSeleccionado;
-            set { _modoTransporteSeleccionado = value; OnPropertyChanged(nameof(ModoTransporteSeleccionado)); }
+            get => _transporteRutaLabel;
+            set { _transporteRutaLabel = value; OnPropertyChanged(nameof(TransporteRutaLabel)); }
         }
         // ==========================================
 
@@ -85,6 +85,7 @@ namespace planificApp.ViewModels
         }
 
         public Action<List<(double Latitud, double Longitud)>>? TrazarRutaEnMapa { get; set; }
+        public Action? LimpiarRutaDelMapa { get; set; }
 
         // ==========================================
         // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
@@ -107,7 +108,12 @@ namespace planificApp.ViewModels
         public UbicacionVisual? DestinoRutaSeleccionado
         {
             get => _destinoRutaSeleccionado;
-            set { _destinoRutaSeleccionado = value; OnPropertyChanged(nameof(DestinoRutaSeleccionado)); }
+            set
+            {
+                _destinoRutaSeleccionado = value;
+                OnPropertyChanged(nameof(DestinoRutaSeleccionado));
+                TransporteRutaLabel = value?.TransportePreferido ?? "Auto";
+            }
         }
 
         private string _infoRutaCalculada = string.Empty;
@@ -117,7 +123,6 @@ namespace planificApp.ViewModels
             set { _infoRutaCalculada = value; OnPropertyChanged(nameof(InfoRutaCalculada)); }
         }
 
-        public ObservableCollection<string> ModosDeTransporteRuta { get; } = new() { "Auto", "Transporte Público", "Bicicleta", "Caminando" };
         public ICommand TogglePanelRutaCommand { get; set; }
         public ICommand CalcularRutaIntegradaCommand { get; set; }
         // ==========================================
@@ -139,7 +144,15 @@ namespace planificApp.ViewModels
             UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
             // Comandos del panel de rutas
-            TogglePanelRutaCommand = new RelayCommand<object>(_ => PanelRutaVisible = !PanelRutaVisible);
+            TogglePanelRutaCommand = new RelayCommand<object>(_ =>
+            {
+                PanelRutaVisible = !PanelRutaVisible;
+                if (!PanelRutaVisible)
+                {
+                    InfoRutaCalculada = string.Empty;
+                    LimpiarRutaDelMapa?.Invoke();
+                }
+            });
             CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
 
             _ = CargarUbicacionesRealesAsync();
@@ -156,26 +169,20 @@ namespace planificApp.ViewModels
 
             InfoRutaCalculada = "Calculando ruta...";
 
-            // 1. Traducir el modo de transporte de tu variable al inglés de Google
-            string modoGoogle = "DRIVE"; // Valor por defecto (Auto)
-
-            if (ModoTransporteSeleccionado != null)
+            string transporte = DestinoRutaSeleccionado.TransportePreferido ?? "Auto";
+            string modoGoogle = transporte switch
             {
-                string seleccionStr = ModoTransporteSeleccionado.ToString() ?? "";
-
-                if (seleccionStr.Contains("Caminando")) modoGoogle = "WALK";
-                else if (seleccionStr.Contains("Bicicleta")) modoGoogle = "BICYCLE";
-                else if (seleccionStr.Contains("Público") || seleccionStr.Contains("Publico")) modoGoogle = "TRANSIT";
-                else if (seleccionStr.Contains("Auto")) modoGoogle = "DRIVE";
-            }
+                "A pie" => "WALK",
+                "Bus" => "TRANSIT",
+                _ => "DRIVE"
+            };
 
             try
             {
-                // 2. AHORA SÍ PASAMOS LOS 5 PARÁMETROS (incluyendo modoGoogle al final)
                 var respuesta = await _geoService.CalcularRutaGoogleAsync(
                     OrigenRutaSeleccionado.Latitud, OrigenRutaSeleccionado.Longitud,
                     DestinoRutaSeleccionado.Latitud, DestinoRutaSeleccionado.Longitud,
-                    modoGoogle); // <--- ¡Aquí está el 5to parámetro que pedía el error!
+                    modoGoogle);
 
                 if (respuesta != null)
                 {

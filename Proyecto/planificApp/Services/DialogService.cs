@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia;
@@ -78,26 +79,38 @@ public class DialogService : IDialogService
         return await dialog.ShowDialog<bool>(window);
     }
 
-    // Devuelto a 'async void' para respetar tu IDialogService
-    public async void ShowGenerarSemanaDialog()
+    public async Task<CondicionesGeneracion?> ShowCondicionesGeneracionDialog(DateTime fechaLunes)
     {
         var window = GetMainWindow();
-        if (window == null) return;
+        if (window == null) return null;
 
-        var tareaRepo = App.Services.GetRequiredService<ITareaRepository>();
         var areaRepo = App.Services.GetRequiredService<IAreaInteresRepository>();
-        var sesion = App.Services.GetRequiredService<ISesionService>();
+        var tareaRepo = App.Services.GetRequiredService<ITareaRepository>();
         var ubicacionRepo = App.Services.GetRequiredService<IUbicacionRepository>();
+        var sesion = App.Services.GetRequiredService<ISesionService>();
+        var calendarioService = App.Services.GetRequiredService<ICalendarioSemanalService>();
 
-        var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion, ubicacionRepo);
-        var dialog = new NewTaskWindow { DataContext = viewModel, Title = "Generar semana" };
+        var viewModel = new CondicionesGeneracionViewModel(areaRepo, tareaRepo, ubicacionRepo, sesion, calendarioService);
+        var dialog = new CondicionesGeneracionWindow { DataContext = viewModel };
+        dialog.SetFechaLunes(fechaLunes);
+
         var result = await dialog.ShowDialog<bool>(window);
 
-        if (result)
+        if (result && dialog.ResultadoConfirmado && dialog.Condiciones != null)
         {
-            var navigation = App.Services.GetRequiredService<INavigationService>();
-            navigation.NavigateToPage(ApplicationPageNames.UserPropuestasSemanales);
+            return dialog.Condiciones;
         }
+
+        return null;
+    }
+
+    public async void ShowPropuestasSemanales(CondicionesGeneracion condiciones)
+    {
+        var navigation = App.Services.GetRequiredService<INavigationService>();
+        var vm = App.Services.GetRequiredService<PropuestasSemanalesViewModel>();
+        vm.SetCondiciones(condiciones);
+        await vm.GenerarPropuestasCommand.ExecuteAsync(null);
+        navigation.NavigateToPage(ApplicationPageNames.UserPropuestasSemanales);
     }
 
     public async Task<LocationFormData?> ShowAddLocationDialog(IGeoService geoService, ObservableCollection<string> areas)

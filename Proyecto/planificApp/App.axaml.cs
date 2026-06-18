@@ -51,7 +51,8 @@ public partial class App : Application
         collection.AddTransient<CalendarioSemanalViewModel>();
         collection.AddTransient<CalendarioMensualViewModel>();
         collection.AddTransient<SugerenciasViewModel>();
-        collection.AddTransient<PropuestasSemanalesViewModel>();
+        collection.AddSingleton<PropuestasSemanalesViewModel>();
+        collection.AddTransient<CondicionesGeneracionViewModel>();
         
         // User - Otras ViewModels
         collection.AddTransient<UbicacionesViewModel>();
@@ -88,6 +89,7 @@ public partial class App : Application
         collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
         collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
+        collection.AddSingleton<IGeneradorSemanalService, GeneradorSemanalService>();
         collection.AddSingleton<IRegionesService, RegionesService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());

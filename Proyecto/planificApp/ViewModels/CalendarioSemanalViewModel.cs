@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,7 @@ using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
 using planificApp.Data;
+using planificApp.Services;
 
 namespace planificApp.ViewModels;
 
@@ -21,6 +23,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     private readonly IUbicacionRepository _ubicacionRepo;
     private readonly ISesionService _sesionService;
     private readonly IGeoService _geoService;
+    private readonly IDialogService _dialogService;
+    private readonly SemaphoreSlim _operationLock = new(1, 1);
 
     [ObservableProperty] private SemanaCalendario _semanaActual = new();
     [ObservableProperty] private ObservableCollection<DiaCalendario> _dias = new();
@@ -45,7 +49,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         IAreaInteresRepository areaRepo,
         IUbicacionRepository ubicacionRepo,
         ISesionService sesionService,
-        IGeoService geoService)
+        IGeoService geoService,
+        IDialogService dialogService)
     {
         PageName = ApplicationPageNames.UserCalendarioSemanal;
 
@@ -55,6 +60,7 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         _ubicacionRepo = ubicacionRepo;
         _sesionService = sesionService;
         _geoService = geoService;
+        _dialogService = dialogService;
     }
 
     public async Task InitializeAsync()
@@ -85,9 +91,82 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         FechaLunesActual = GetLunes(DateTime.Today);
     }
 
-    [RelayCommand]
-    private void GenerarSemana()
+[RelayCommand]
+    private async Task GenerarSemanaAsync()
     {
+        var condiciones = await _dialogService.ShowCondicionesGeneracionDialog(FechaLunesActual);
+        if (condiciones != null)
+        {
+            _dialogService.ShowPropuestasSemanales(condiciones);
+        }
+    }
+
+    public async Task AplicarPropuestaGeneracionAsync(SemanaCalendario propuesta)
+    {
+        if (_sesionService.UsuarioActual == null) return;
+
+        IsLoading = true;
+        try
+        {
+            var usuarioId = _sesionService.UsuarioActual.IdUsuario!;
+
+            foreach (var dia in propuesta.Dias)
+            {
+                await _calendarioService.CalcularTrasladosAsync(dia, usuarioId);
+            }
+
+            await _calendarioService.GuardarCambiosAsync(propuesta, usuarioId);
+
+            // Mark generated tasks with UsoGeneracion=true and ModificacionGeneracion=false
+            var todasLasTareas = await _tareaRepo.ObtenerTareasPorUsuario(usuarioId);
+            var tareasDict = todasLasTareas.Where(t => t.IdTarea != null).ToDictionary(t => t.IdTarea!);
+            var idsProcesados = new HashSet<string>();
+
+            foreach (var dia in propuesta.Dias)
+            {
+                foreach (var bloque in dia.Bloques)
+                {
+                    if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.TareasInternas != null)
+                    {
+                        foreach (var sub in bloque.TareasInternas)
+                        {
+                            if (!string.IsNullOrEmpty(sub.IdTarea) && !idsProcesados.Contains(sub.IdTarea)
+                                && tareasDict.TryGetValue(sub.IdTarea, out var tarea))
+                            {
+                                tarea.UsoGeneracion = true;
+                                tarea.ModificacionGeneracion = false;
+                                await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+                                idsProcesados.Add(sub.IdTarea);
+                            }
+                        }
+                    }
+                    else if (bloque.Tipo == TipoBloqueCalendario.Tarea && bloque.IdTarea != null
+                        && !idsProcesados.Contains(bloque.IdTarea)
+                        && tareasDict.TryGetValue(bloque.IdTarea, out var tareaT))
+                    {
+                        tareaT.UsoGeneracion = true;
+                        tareaT.ModificacionGeneracion = false;
+                        await _tareaRepo.ActualizarTarea(tareaT.IdTarea!, tareaT);
+                        idsProcesados.Add(bloque.IdTarea);
+                    }
+                }
+            }
+
+            SemanaActual = propuesta;
+            Dias = propuesta.Dias;
+            NumeroSemana = $"Semana {propuesta.NumeroSemana}";
+            FechaRango = $"{propuesta.FechaInicio:dd} \u2013 {propuesta.FechaFin:dd MMM yyyy}";
+
+            await CargarTareasYAreasAsync(usuarioId);
+        }
+        catch (Exception ex)
+        {
+            NumeroSemana = $"Error al aplicar propuesta: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     public async Task AgregarBloqueInteresAsync(AreaInteres area)
@@ -160,6 +239,7 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     public async Task MoverBloqueAsync(DiaCalendario dia, string bloqueId, TimeSpan nuevaHora)
     {
         _calendarioService.MoverBloque(dia, bloqueId, nuevaHora);
+        await MarcarModificacionGeneracionAsync(dia, bloqueId);
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
     }
@@ -175,10 +255,45 @@ public partial class CalendarioSemanalViewModel : PageViewModel
 
         if (tareaBloque.IdAreaInteresPadre != bloqueInteres.IdAreaInteres) return false;
 
+        if (bloqueInteres.TareasInternas != null && bloqueInteres.TareasInternas.Count > 0)
+        {
+            var existingSub = bloqueInteres.TareasInternas[0];
+            var existingTask = existingSub.IdTarea != null
+                ? await _tareaRepo.ObtenerTareaPorId(existingSub.IdTarea)
+                : null;
+            var incomingTask = await _tareaRepo.ObtenerTareaPorId(tareaBloque.IdTarea);
+
+            var existingArea = existingTask?.IdAreaInteres != null
+                ? AreasDisponibles.FirstOrDefault(a => a.IdAreaInteres == existingTask.IdAreaInteres)
+                : null;
+            var incomingArea = incomingTask?.IdAreaInteres != null
+                ? AreasDisponibles.FirstOrDefault(a => a.IdAreaInteres == incomingTask.IdAreaInteres)
+                : null;
+
+            var existingUbi = existingTask?.Ubicacion ?? existingArea?.UbicacionPred;
+            var incomingUbi = incomingTask?.Ubicacion ?? incomingArea?.UbicacionPred;
+
+            if (!string.IsNullOrEmpty(existingUbi) && !string.IsNullOrEmpty(incomingUbi)
+                && !string.Equals(existingUbi, incomingUbi, StringComparison.OrdinalIgnoreCase))
+                return false;
+        }
+
         _calendarioService.InsertarTareaEnBloqueInteres(
             dia, bloqueInteresId, tareaBloque.IdTarea,
             tareaBloque.NombreTarea ?? "Tarea",
             tareaBloque.HoraInicio, tareaBloque.HoraFin, tareaBloque.Completada);
+
+        // Re-inserting into area block: restore generation flags
+        if (tareaBloque.IdTarea != null)
+        {
+            var tarea = await _tareaRepo.ObtenerTareaPorId(tareaBloque.IdTarea);
+            if (tarea != null)
+            {
+                tarea.UsoGeneracion = true;
+                tarea.ModificacionGeneracion = false;
+                await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+            }
+        }
 
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
@@ -208,6 +323,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         diaOrigen.Bloques.Clear();
         foreach (var b in ordenadosOrigen) diaOrigen.Bloques.Add(b);
 
+        await MarcarModificacionGeneracionBloqueAsync(bloque);
+
         await RecalcularTrasladosYGuardarAsync(diaOrigen);
         await RecalcularTrasladosYGuardarAsync(diaDestino);
 
@@ -217,6 +334,7 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     public async Task RedimensionarBloqueAsyncResult(DiaCalendario dia, string bloqueId, TimeSpan nuevaHoraInicio, TimeSpan nuevaHoraFin)
     {
         _calendarioService.RedimensionarBloque(dia, bloqueId, nuevaHoraInicio, nuevaHoraFin);
+        await MarcarModificacionGeneracionAsync(dia, bloqueId);
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
     }
@@ -234,7 +352,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
                 tarea.HoraInicio = null;
                 tarea.HoraFin = null;
                 tarea.FecInicio = null;
-                tarea.UsoGeneracion = false;
+                tarea.UsoGeneracion = null;
+                tarea.ModificacionGeneracion = false;
                 await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
             }
         }
@@ -248,7 +367,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
                     tarea.HoraInicio = null;
                     tarea.HoraFin = null;
                     tarea.FecInicio = null;
-                    tarea.UsoGeneracion = false;
+                    tarea.UsoGeneracion = null;
+                    tarea.ModificacionGeneracion = false;
                     await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
                 }
             }
@@ -262,6 +382,14 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     public async Task MoverSubTareaAsync(DiaCalendario dia, string parentBloqueId, string idTarea, TimeSpan nuevaInicio, TimeSpan nuevaFin)
     {
         _calendarioService.MoverSubTarea(dia, parentBloqueId, idTarea, nuevaInicio, nuevaFin);
+
+        var tarea = await _tareaRepo.ObtenerTareaPorId(idTarea);
+        if (tarea != null && tarea.UsoGeneracion == true)
+        {
+            tarea.ModificacionGeneracion = true;
+            await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+        }
+
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
     }
@@ -279,6 +407,12 @@ public partial class CalendarioSemanalViewModel : PageViewModel
                 var duracion = sub.HoraFin - sub.HoraInicio;
                 var newBloque = _calendarioService.AgregarTarea(dia, tarea, nuevaHoraInicio.Value, nuevaHoraInicio.Value + duracion);
                 if (newBloque.ColorHex == null) newBloque.ColorHex = parentBloque.ColorHex ?? "#666666";
+
+                if (tarea.UsoGeneracion == true)
+                {
+                    tarea.ModificacionGeneracion = true;
+                    await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+                }
             }
         }
         else
@@ -289,7 +423,8 @@ public partial class CalendarioSemanalViewModel : PageViewModel
                 tarea.HoraInicio = null;
                 tarea.HoraFin = null;
                 tarea.FecInicio = null;
-                tarea.UsoGeneracion = false;
+                tarea.UsoGeneracion = null;
+                tarea.ModificacionGeneracion = false;
                 await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
             }
         }
@@ -437,9 +572,50 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     {
         if (_sesionService.UsuarioActual == null) return;
 
-        var usuarioId = _sesionService.UsuarioActual.IdUsuario!;
-        await _calendarioService.CalcularTrasladosAsync(dia, usuarioId);
-        await _calendarioService.GuardarCambiosAsync(SemanaActual, usuarioId);
+        if (!await _operationLock.WaitAsync(TimeSpan.FromSeconds(5))) return;
+        try
+        {
+            var usuarioId = _sesionService.UsuarioActual.IdUsuario!;
+            await _calendarioService.CalcularTrasladosAsync(dia, usuarioId);
+            await _calendarioService.GuardarCambiosAsync(SemanaActual, usuarioId);
+        }
+        finally
+        {
+            _operationLock.Release();
+        }
+    }
+
+    private async Task MarcarModificacionGeneracionAsync(DiaCalendario dia, string bloqueId)
+    {
+        var bloque = dia.Bloques.FirstOrDefault(b => b.Id == bloqueId);
+        if (bloque == null) return;
+        await MarcarModificacionGeneracionBloqueAsync(bloque);
+    }
+
+    private async Task MarcarModificacionGeneracionBloqueAsync(BloqueCalendario bloque)
+    {
+        if (bloque.Tipo == TipoBloqueCalendario.Tarea && bloque.IdTarea != null)
+        {
+            var tarea = await _tareaRepo.ObtenerTareaPorId(bloque.IdTarea);
+            if (tarea != null && tarea.UsoGeneracion == true)
+            {
+                tarea.ModificacionGeneracion = true;
+                await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+            }
+        }
+        else if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.TareasInternas != null)
+        {
+            foreach (var sub in bloque.TareasInternas)
+            {
+                if (string.IsNullOrEmpty(sub.IdTarea)) continue;
+                var tarea = await _tareaRepo.ObtenerTareaPorId(sub.IdTarea);
+                if (tarea != null && tarea.UsoGeneracion == true)
+                {
+                    tarea.ModificacionGeneracion = true;
+                    await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+                }
+            }
+        }
     }
 
     private static DateTime GetLunes(DateTime fecha)

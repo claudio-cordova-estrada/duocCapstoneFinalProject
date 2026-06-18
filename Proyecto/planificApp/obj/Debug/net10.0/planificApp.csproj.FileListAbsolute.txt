@@ -27,7 +27,6 @@ C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Avalonia.Win32.Automation.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Avalonia.Win32.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Avalonia.X11.dll
-C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\AvaloniaUI.DiagnosticsSupport.Avalonia.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\CommunityToolkit.Mvvm.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\DnsClient.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\HarfBuzzSharp.dll
@@ -43,7 +42,6 @@ C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Microsoft.Extensions.Primitives.dll
-C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\MongoDB.Bson.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\MongoDB.Driver.dll
 C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\SharpCompress.dll
@@ -252,3 +250,5 @@ D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10
 D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\planificApp.pdb
 D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\planificApp.genruntimeconfig.cache
 D:\CapstoneProject\duocCapstoneFinalProject\Proyecto\planificApp\obj\Debug\net10.0\ref\planificApp.dll
+C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\AvaloniaUI.DiagnosticsSupport.Avalonia.dll
+C:\Documentos\GitHub\duocCapstoneFinalProject\Proyecto\planificApp\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll

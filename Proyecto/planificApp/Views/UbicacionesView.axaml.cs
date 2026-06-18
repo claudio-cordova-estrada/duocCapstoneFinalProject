@@ -68,6 +68,7 @@ namespace planificApp.Views
                 };
 
                 vm.TrazarRutaEnMapa = DibujarRuta;
+                vm.LimpiarRutaDelMapa = LimpiarRuta;
 
                 if (MiMapa.Map != null)
                 {
@@ -120,6 +121,17 @@ namespace planificApp.Views
 
             MiMapa.Map.Layers.Add(lineFeature);
             MiMapa.Refresh();
+        }
+
+        private void LimpiarRuta()
+        {
+            if (MiMapa.Map == null) return;
+            var capaRuta = MiMapa.Map.Layers.FirstOrDefault(l => l.Name == "CapaRuta");
+            if (capaRuta != null)
+            {
+                MiMapa.Map.Layers.Remove(capaRuta);
+                MiMapa.Refresh();
+            }
         }
 
         private async void MiMapa_Info(object? sender, MapInfoEventArgs e)

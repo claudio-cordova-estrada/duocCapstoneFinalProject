@@ -44,20 +44,11 @@
             <StackPanel Spacing="5">
                 <TextBlock Text="TRANSPORTE HABITUAL" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <StackPanel Orientation="Horizontal" Spacing="5" x:Name="TransportGrid">
-                    <Border Classes="transport-pill" Tag="Metro" Tapped="TransportOption_Tapped">
-                        <TextBlock Text="Metro" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
-                    </Border>
                     <Border Classes="transport-pill" Tag="Bus" Tapped="TransportOption_Tapped">
                         <TextBlock Text="Bus" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
                     </Border>
                     <Border Classes="transport-pill" Tag="Auto" Tapped="TransportOption_Tapped">
                         <TextBlock Text="Auto" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
-                    </Border>
-                    <Border Classes="transport-pill" Tag="Taxi" Tapped="TransportOption_Tapped">
-                        <TextBlock Text="Taxi" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
-                    </Border>
-                    <Border Classes="transport-pill" Tag="Bicicleta" Tapped="TransportOption_Tapped">
-                        <TextBlock Text="Bicicleta" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
                     </Border>
                     <Border Classes="transport-pill" Tag="A pie" Tapped="TransportOption_Tapped">
                         <TextBlock Text="A pie" FontSize="11" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>

@@ -102,6 +102,15 @@
                 </ComboBox>
             </StackPanel>
 
+            <!-- Generación semanal -->
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="4" VerticalAlignment="Center">
+                    <TextBlock Text="GENERACIÓN SEMANAL" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <TextBlock Text="Incluir esta área en la generación semanal" FontSize="12" Foreground="{DynamicResource TextDisabled}" Opacity="0.7"/>
+                </StackPanel>
+                <ToggleSwitch Grid.Column="1" IsChecked="{Binding GeneracionSemanal}" VerticalAlignment="Center" Margin="8 0 0 0"/>
+            </Grid>
+
             <!-- Error message -->
             <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 

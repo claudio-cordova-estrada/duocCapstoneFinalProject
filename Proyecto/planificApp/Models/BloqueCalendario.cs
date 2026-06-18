@@ -44,6 +44,11 @@ namespace PlanificApp.Models
         public int? DuracionMinutos { get; set; }
         public bool EsEstimado { get; set; }
 
+        public string NombreMostrar => Tipo == TipoBloqueCalendario.SeccionTraslado
+            ? $"{UbicacionOrigen} \u2192 {UbicacionDestino}"
+            : NombreArea ?? NombreTarea ?? "";
+        public bool EsTraslado => Tipo == TipoBloqueCalendario.SeccionTraslado;
+
         public double TopPx => HoraInicio.TotalMinutes * (64.0 / 60.0);
         public double HeightPx => (HoraFin - HoraInicio).TotalMinutes * (64.0 / 60.0);
         public int ColumnIndex { get; set; }

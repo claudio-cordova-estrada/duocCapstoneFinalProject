@@ -41,7 +41,7 @@ namespace PlanificApp.Models
 
         public int Prioridad { get; set; } = 1;
 
-        public bool UsoGeneracion { get; set; }
+        public bool? UsoGeneracion { get; set; }
         public bool ModificacionGeneracion { get; set; }
         public bool CompletadoEnTiempo { get; set; }
 

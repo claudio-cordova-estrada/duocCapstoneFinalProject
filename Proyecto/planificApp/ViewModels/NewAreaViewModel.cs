@@ -25,11 +25,12 @@ public partial class NewAreaViewModel : ViewModelBase
     [ObservableProperty] private string? _tipoActividadMentalPred;
     [ObservableProperty] private int _prioridad = 1;
     [ObservableProperty] private int _horasSemanales;
+    [ObservableProperty] private bool _generacionSemanal = true;
     [ObservableProperty] private string _errorMessage = string.Empty;
     [ObservableProperty] private bool _hasError;
-    [ObservableProperty] private string _titulo = "Nueva área de interés";
+    [ObservableProperty] private string _titulo = "Nueva ï¿½rea de interï¿½s";
 
-    // SOLUCIÓN CS1503: Usamos el modelo correcto 'UbicacionGuardada'
+    // SOLUCIï¿½N CS1503: Usamos el modelo correcto 'UbicacionGuardada'
     public ObservableCollection<UbicacionGuardada> UbicacionesGuardadasLista { get; } = new();
     [ObservableProperty] private UbicacionGuardada? _ubicacionSeleccionada;
 
@@ -46,7 +47,7 @@ public partial class NewAreaViewModel : ViewModelBase
 
     public async Task CargarUbicacionesAsync()
     {
-        // SOLUCIÓN CS8604: Blindaje para asegurar que el ID no sea nulo antes de buscar
+        // SOLUCIï¿½N CS8604: Blindaje para asegurar que el ID no sea nulo antes de buscar
         if (_sesion.UsuarioActual == null || string.IsNullOrEmpty(_sesion.UsuarioActual.IdUsuario))
             return;
 
@@ -79,7 +80,7 @@ public partial class NewAreaViewModel : ViewModelBase
     {
         EsModoEdicion = true;
         IdAreaEditando = area.IdAreaInteres;
-        Titulo = "Editar área de interés";
+        Titulo = "Editar ï¿½rea de interï¿½s";
         Nombre = area.Nombre;
         ColorHex = area.ColorHex;
         UbicacionPred = area.UbicacionPred;
@@ -88,6 +89,7 @@ public partial class NewAreaViewModel : ViewModelBase
         TipoActividadMentalPred = area.TipoActividadMentalPred;
         Prioridad = (int)area.Prioridad;
         HorasSemanales = area.HorasSemanales;
+        GeneracionSemanal = area.GeneracionSemanal ?? true;
     }
 
     [RelayCommand]
@@ -98,7 +100,7 @@ public partial class NewAreaViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(Nombre))
         {
-            ErrorMessage = "Ingresa un nombre para el área.";
+            ErrorMessage = "Ingresa un nombre para el ï¿½rea.";
             HasError = true;
             return;
         }
@@ -106,7 +108,7 @@ public partial class NewAreaViewModel : ViewModelBase
         // Blindaje extra al guardar
         if (_sesion.UsuarioActual == null || string.IsNullOrEmpty(_sesion.UsuarioActual.IdUsuario))
         {
-            ErrorMessage = "Sesión no encontrada.";
+            ErrorMessage = "Sesiï¿½n no encontrada.";
             HasError = true;
             return;
         }
@@ -125,6 +127,7 @@ public partial class NewAreaViewModel : ViewModelBase
                 TipoActividadMentalPred = TipoActividadMentalPred,
                 Prioridad = (PrioridadAreaInteres)Prioridad,
                 HorasSemanales = HorasSemanales,
+                GeneracionSemanal = GeneracionSemanal,
                 IdUsuario = _sesion.UsuarioActual.IdUsuario
             };
 
@@ -143,8 +146,8 @@ public partial class NewAreaViewModel : ViewModelBase
         catch (Exception ex)
         {
             ErrorMessage = EsModoEdicion
-                ? $"Error al actualizar el área: {ex.Message}"
-                : $"Error al crear el área: {ex.Message}";
+                ? $"Error al actualizar el ï¿½rea: {ex.Message}"
+                : $"Error al crear el ï¿½rea: {ex.Message}";
             HasError = true;
         }
     }

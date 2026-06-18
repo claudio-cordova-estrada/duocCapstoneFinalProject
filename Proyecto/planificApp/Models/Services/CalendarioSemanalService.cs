@@ -342,7 +342,6 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                                 tarea.HoraInicio = sub.HoraInicio;
                                 tarea.HoraFin = sub.HoraFin;
                                 tarea.FecInicio = dia.Fecha;
-                                tarea.UsoGeneracion = true;
                                 await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
                             }
                         }
@@ -356,7 +355,6 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                         tarea.HoraInicio = bloque.HoraInicio;
                         tarea.HoraFin = bloque.HoraFin;
                         tarea.FecInicio = dia.Fecha;
-                        tarea.UsoGeneracion = true;
                         await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
                     }
                 }
@@ -368,6 +366,12 @@ public class CalendarioSemanalService : ICalendarioSemanalService
         List<UbicacionGuardada> ubicaciones, List<AreaInteres> areas,
         Dictionary<string, Tarea>? tareasDict = null)
     {
+        var existingTraslados = dia.Bloques
+            .Where(b => b.Tipo == TipoBloqueCalendario.SeccionTraslado)
+            .ToDictionary(
+                b => $"{b.UbicacionOrigen}|{b.UbicacionDestino}|{b.MetodoTransporte}",
+                b => (b.DuracionMinutos ?? DefaultTravelMinutes, b.EsEstimado));
+
         var trasladosExistentes = dia.Bloques
             .Where(b => b.Tipo == TipoBloqueCalendario.SeccionTraslado)
             .ToList();
@@ -381,17 +385,25 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
         if (!bloquesOrdenados.Any()) return;
 
-        var ubicacionActual = _sesionService.UsuarioActual?.UbicacionActual ?? "Casa";
-
+        var ubicacionActual = _sesionService.UsuarioActual?.UbicacionActual?.Trim() ?? "Casa";
         var areaDict = areas.ToDictionary(a => a.IdAreaInteres!, a => a);
         var ubicaDict = ubicaciones
-            .GroupBy(u => u.Nombre)
+            .GroupBy(u => u.Nombre, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.First());
+        var areaNombreToUbicacionNombre = ubicaciones
+            .Where(u => !string.IsNullOrEmpty(u.AreaInteres) && !string.IsNullOrEmpty(u.Nombre))
+            .GroupBy(u => u.AreaInteres, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.First().Nombre, StringComparer.OrdinalIgnoreCase);
+
+        UbicacionGuardada? origenCache = null;
+        var firstUbicacion = FindIgnoreCase(ubicaDict, ubicacionActual);
+        if (firstUbicacion != null)
+            origenCache = firstUbicacion;
 
         for (int i = 0; i < bloquesOrdenados.Count; i++)
         {
             var bloque = bloquesOrdenados[i];
-            var ubicacionBloque = ObtenerUbicacionBloque(bloque, areaDict, tareasDict);
+            var ubicacionBloque = ObtenerUbicacionBloque(bloque, areaDict, tareasDict, areaNombreToUbicacionNombre);
 
             if (ubicacionBloque == null)
             {
@@ -399,14 +411,16 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                 continue;
             }
 
-            if (ubicacionBloque == ubicacionActual)
+            ubicacionBloque = ubicacionBloque.Trim();
+
+            if (ubicacionBloque.Equals(ubicacionActual, StringComparison.OrdinalIgnoreCase))
             {
                 System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}' en ubicación actual '{ubicacionActual}', skip");
                 ubicacionActual = ubicacionBloque;
                 continue;
             }
 
-            var metodoTransporte = ObtenerTransporteBloque(bloque, areaDict, tareasDict, ubicaDict);
+            var metodoTransporte = ObtenerTransporteBloque(bloque, areaDict, tareasDict, ubicaDict, areaNombreToUbicacionNombre);
 
             if (!metodoTransporte.HasValue)
             {
@@ -417,45 +431,86 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
             System.Diagnostics.Debug.WriteLine($"[TRASLADO] Bloque '{bloque.NombreTarea ?? bloque.NombreArea}': '{ubicacionActual}' -> '{ubicacionBloque}', transporte={metodoTransporte.Value}");
 
-            var origenUbic = ubicaDict.GetValueOrDefault(ubicacionActual);
-            var destinoUbic = ubicaDict.GetValueOrDefault(ubicacionBloque);
+            var origenUbic = FindIgnoreCase(ubicaDict, ubicacionActual);
+            var destinoUbic = FindIgnoreCase(ubicaDict, ubicacionBloque);
+
+            if (origenUbic == null && destinoUbic != null && origenCache != null)
+                origenUbic = origenCache;
+
+            if (origenUbic == null && destinoUbic != null)
+            {
+                var firstSaved = ubicaciones.FirstOrDefault();
+                if (firstSaved != null)
+                    origenUbic = firstSaved;
+            }
 
             if (origenUbic == null || destinoUbic == null)
             {
+                System.Diagnostics.Debug.WriteLine($"[TRASLADO] No se encontraron coordenadas: origen={ubicacionActual} ({origenUbic?.Nombre ?? "null"}) destino={ubicacionBloque} ({destinoUbic?.Nombre ?? "null"}), usando estimado {DefaultTravelMinutes}min");
                 InsertarTrasladoEstimado(dia, bloque, ubicacionActual, ubicacionBloque, metodoTransporte.Value);
                 ubicacionActual = ubicacionBloque;
                 continue;
             }
 
             var transporteStr = MetodoTransporteToGeoString(metodoTransporte.Value);
+            var modoGoogle = transporteStr switch
+            {
+                "A pie" => "WALK",
+                "Bus" => "TRANSIT",
+                _ => "DRIVE"
+            };
 
+            var cacheKey = $"{ubicacionActual}|{ubicacionBloque}|{metodoTransporte.Value}";
             int duracionMin;
             bool estimado;
 
-            try
+            if (existingTraslados.TryGetValue(cacheKey, out var cached))
             {
-                var resultado = await _geoService.CalcularTiempoTrasladoAsync(
-                    origenUbic.Latitud, origenUbic.Longitud,
-                    destinoUbic.Latitud, destinoUbic.Longitud,
-                    transporteStr);
-
-                duracionMin = ParseDurationMinutes(resultado);
-                estimado = duracionMin <= 0;
-                if (estimado) duracionMin = DefaultTravelMinutes;
+                duracionMin = cached.Item1;
+                estimado = cached.Item2;
             }
-            catch
+            else
             {
-                duracionMin = DefaultTravelMinutes;
-                estimado = true;
+                try
+                {
+                    var resultado = await _geoService.CalcularRutaGoogleAsync(
+                        origenUbic.Latitud, origenUbic.Longitud,
+                        destinoUbic.Latitud, destinoUbic.Longitud,
+                        modoGoogle);
+
+                    if (resultado.HasValue)
+                    {
+                        duracionMin = ParseDurationMinutes(resultado.Value.Tiempo);
+                        estimado = duracionMin <= 0;
+                        if (estimado) duracionMin = DefaultTravelMinutes;
+                    }
+                    else
+                    {
+                        duracionMin = DefaultTravelMinutes;
+                        estimado = true;
+                    }
+                }
+                catch
+                {
+                    duracionMin = DefaultTravelMinutes;
+                    estimado = true;
+                }
             }
 
             var horaFinAnterior = i == 0
                 ? TimeSpan.Zero
-                : bloquesOrdenados[i - 1].HoraFin;
+                : bloquesOrdenados[i - 1].HoraFin + TimeSpan.FromMinutes(15);
 
             var horaInicioTraslado = bloque.HoraInicio - TimeSpan.FromMinutes(duracionMin);
             if (horaInicioTraslado < horaFinAnterior)
                 horaInicioTraslado = horaFinAnterior;
+
+            if (bloque.HoraInicio - horaInicioTraslado < TimeSpan.FromMinutes(DuracionMinima.TotalMinutes))
+            {
+                horaInicioTraslado = bloque.HoraInicio - TimeSpan.FromMinutes(DuracionMinima.TotalMinutes);
+                if (horaInicioTraslado < TimeSpan.Zero) horaInicioTraslado = TimeSpan.Zero;
+                duracionMin = (int)(bloque.HoraInicio - horaInicioTraslado).TotalMinutes;
+            }
 
             var traslado = new BloqueCalendario
             {
@@ -472,6 +527,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
             dia.Bloques.Add(traslado);
             ubicacionActual = ubicacionBloque;
+            origenCache = destinoUbic;
         }
 
         OrdenarBloques(dia);
@@ -480,12 +536,41 @@ public class CalendarioSemanalService : ICalendarioSemanalService
 
     private string? ObtenerUbicacionBloque(BloqueCalendario bloque,
         Dictionary<string, AreaInteres> areaDict,
-        Dictionary<string, Tarea>? tareasDict = null)
+        Dictionary<string, Tarea>? tareasDict = null,
+        Dictionary<string, string>? areaNombreToUbicacionNombre = null)
     {
         if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.IdAreaInteres != null)
         {
-            if (areaDict.TryGetValue(bloque.IdAreaInteres, out var area))
+            if (areaDict.TryGetValue(bloque.IdAreaInteres, out var area)
+                && !string.IsNullOrEmpty(area.UbicacionPred))
                 return area.UbicacionPred;
+
+            if (bloque.TareasInternas != null)
+            {
+                foreach (var sub in bloque.TareasInternas)
+                {
+                    if (sub.IdTarea != null && tareasDict != null
+                        && tareasDict.TryGetValue(sub.IdTarea, out var tarea)
+                        && !string.IsNullOrEmpty(tarea.Ubicacion))
+                        return tarea.Ubicacion;
+
+                    if (sub.IdTarea != null && tareasDict != null
+                        && tareasDict.TryGetValue(sub.IdTarea, out var tarea2)
+                        && !string.IsNullOrEmpty(tarea2.IdAreaInteres)
+                        && areaDict.TryGetValue(tarea2.IdAreaInteres, out var subArea)
+                        && !string.IsNullOrEmpty(subArea.UbicacionPred))
+                        return subArea.UbicacionPred;
+                }
+            }
+
+            if (areaDict.TryGetValue(bloque.IdAreaInteres, out var area2))
+            {
+                if (areaNombreToUbicacionNombre != null
+                    && areaNombreToUbicacionNombre.TryGetValue(area2.Nombre, out var ubicNombre))
+                    return ubicNombre;
+                return area2.Nombre;
+            }
+
             return null;
         }
 
@@ -500,6 +585,15 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                 && tareasDict.TryGetValue(bloque.IdTarea, out var tarea)
                 && !string.IsNullOrEmpty(tarea.Ubicacion))
                 return tarea.Ubicacion;
+
+            if (bloque.IdAreaInteresPadre != null
+                && areaDict.TryGetValue(bloque.IdAreaInteresPadre, out var area3))
+            {
+                if (areaNombreToUbicacionNombre != null
+                    && areaNombreToUbicacionNombre.TryGetValue(area3.Nombre, out var ubicNombre2))
+                    return ubicNombre2;
+                return area3.Nombre;
+            }
         }
 
         return null;
@@ -508,9 +602,10 @@ public class CalendarioSemanalService : ICalendarioSemanalService
     private MetodoTransporte? ObtenerTransporteBloque(BloqueCalendario bloque,
         Dictionary<string, AreaInteres> areaDict,
         Dictionary<string, Tarea>? tareasDict = null,
-        Dictionary<string, UbicacionGuardada>? ubicaDict = null)
+        Dictionary<string, UbicacionGuardada>? ubicaDict = null,
+        Dictionary<string, string>? areaNombreToUbicacionNombre = null)
     {
-        var ubicacion = ObtenerUbicacionBloque(bloque, areaDict, tareasDict);
+        var ubicacion = ObtenerUbicacionBloque(bloque, areaDict, tareasDict, areaNombreToUbicacionNombre);
 
         if (ubicacion != null && ubicaDict != null
             && ubicaDict.TryGetValue(ubicacion, out var ubicacionGuardada)
@@ -564,8 +659,17 @@ public class CalendarioSemanalService : ICalendarioSemanalService
     private void InsertarTrasladoEstimado(DiaCalendario dia, BloqueCalendario bloqueSiguiente,
         string origen, string destino, MetodoTransporte metodoTransporte)
     {
-        var horaInicio = bloqueSiguiente.HoraInicio - TimeSpan.FromMinutes(DefaultTravelMinutes);
+        var duracion = TimeSpan.FromMinutes(DefaultTravelMinutes);
+        if (duracion < DuracionMinima) duracion = DuracionMinima;
+
+        var horaInicio = bloqueSiguiente.HoraInicio - duracion;
         if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
+
+        if (bloqueSiguiente.HoraInicio - horaInicio < DuracionMinima)
+        {
+            horaInicio = bloqueSiguiente.HoraInicio - DuracionMinima;
+            if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
+        }
 
         dia.Bloques.Add(new BloqueCalendario
         {
@@ -574,7 +678,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             HoraFin = bloqueSiguiente.HoraInicio,
             UbicacionOrigen = origen,
             UbicacionDestino = destino,
-            DuracionMinutos = DefaultTravelMinutes,
+            DuracionMinutos = (int)(bloqueSiguiente.HoraInicio - horaInicio).TotalMinutes,
             EsEstimado = true,
             MetodoTransporte = metodoTransporte,
             ColorHex = "#ef4444"
@@ -648,9 +752,9 @@ public class CalendarioSemanalService : ICalendarioSemanalService
     private static string MetodoTransporteToGeoString(MetodoTransporte metodo) => metodo switch
     {
         MetodoTransporte.Caminar => "A pie",
-        MetodoTransporte.Auto => "Automovil",
+        MetodoTransporte.Auto => "Auto",
         MetodoTransporte.Bus => "Bus",
-        _ => "Automovil"
+        _ => "Auto"
     };
 
     public BloqueCalendario? FindInteresBlockAtTime(DiaCalendario dia, TimeSpan horaInicio)
@@ -719,12 +823,34 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                 if (bloque.HoraFin <= traslado.HoraInicio) continue;
                 if (bloque.HoraInicio >= traslado.HoraFin) continue;
 
-                var duracion = bloque.HoraFin - bloque.HoraInicio;
-                bloque.HoraInicio = traslado.HoraFin;
-                bloque.HoraFin = traslado.HoraFin + duracion;
+                if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres)
+                {
+                    bloque.HoraInicio = traslado.HoraFin;
+                }
+                else
+                {
+                    var duracion = bloque.HoraFin - bloque.HoraInicio;
+                    bloque.HoraInicio = traslado.HoraFin;
+                    bloque.HoraFin = traslado.HoraFin + duracion;
+                }
             }
         }
 
         OrdenarBloques(dia);
+    }
+
+private static UbicacionGuardada? FindIgnoreCase(Dictionary<string, UbicacionGuardada> dict, string key)
+    {
+        if (string.IsNullOrEmpty(key)) return null;
+
+        if (dict.TryGetValue(key, out var exact)) return exact;
+
+        var found = dict.Keys.FirstOrDefault(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
+        if (found != null) return dict[found];
+
+        var partial = dict.Keys.FirstOrDefault(k =>
+            k.IndexOf(key, StringComparison.OrdinalIgnoreCase) >= 0 ||
+            key.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0);
+        return partial != null ? dict[partial] : null;
     }
 }

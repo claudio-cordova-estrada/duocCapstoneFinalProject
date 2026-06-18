@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using PlanificApp.Models;
@@ -13,7 +14,8 @@ public interface IDialogService
     Task<bool> ShowNewAreaDialog();
     Task<bool> ShowEditAreaDialog(AreaInteres area);
     Task<bool> ShowConfirmDeleteAreaDialog(AreaInteres area);
-    void ShowGenerarSemanaDialog();
+    Task<CondicionesGeneracion?> ShowCondicionesGeneracionDialog(DateTime fechaLunes);
+    void ShowPropuestasSemanales(CondicionesGeneracion condiciones);
 
     Task<LocationFormData?> ShowAddLocationDialog(IGeoService geoService, ObservableCollection<string> areas);
     Task<LocationFormData?> ShowEditLocationDialog(IGeoService geoService, ObservableCollection<string> areas, string nombre, string direccion, string area, string color, string transporte);

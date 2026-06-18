@@ -27,7 +27,7 @@ namespace PlanificApp.Models
                 throw new ArgumentException("El nombre del área no puede contener caracteres especiales.");
         }
 
-        public bool GeneracionSemanal { get; set; } // Determina si el generador debe considerar esta área
+        public bool? GeneracionSemanal { get; set; } = true;
 
         public PrioridadAreaInteres Prioridad { get; set; } = PrioridadAreaInteres.Predeterminado;
 

@@ -24,7 +24,7 @@ public partial class AddLocationWindow : Window
     private readonly IGeoService _geoService;
     public ObservableCollection<string> Sugerencias { get; set; } = new();
     private string _selectedColor = "#a78bfa";
-    private string _selectedTransport = "Metro";
+    private string _selectedTransport = "Auto";
 
     // Constructor para el diseñador
     public AddLocationWindow()

@@ -109,10 +109,10 @@ namespace PlanificApp.Models.Services
         public async Task<string> CalcularTiempoTrasladoAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string transporteApp)
         {
             // 1. Traducimos tu transporte al formato de Google
-            string mode = "driving"; // Auto y Taxi por defecto
+            string mode = "driving";
             if (transporteApp == "A pie") mode = "walking";
-            else if (transporteApp == "Bicicleta") mode = "bicycling";
-            else if (transporteApp == "Metro" || transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Auto") mode = "driving";
 
             // 2. Armamos la URL para la Distance Matrix API (en español para que devuelva "15 min" o "2 horas")
             var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?origins={latOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)}&destinations={latDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)}&mode={mode}&key={_apiKey}&language=es";
@@ -161,8 +161,8 @@ namespace PlanificApp.Models.Services
         {
             string mode = "driving";
             if (transporteApp == "A pie") mode = "walking";
-            else if (transporteApp == "Bicicleta") mode = "bicycling";
-            else if (transporteApp == "Metro" || transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Auto") mode = "driving";
 
             // Usamos Directions API en lugar de Matrix API para obtener la geometría de la ruta
             var url = $"https://maps.googleapis.com/maps/api/directions/json?origin={latOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)}&destination={latDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)}&mode={mode}&key={_apiKey}&language=es";

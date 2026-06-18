@@ -495,43 +495,63 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 border.Child = contentGrid;
                 break;
 
-            case TipoBloqueCalendario.SeccionTraslado:
+case TipoBloqueCalendario.SeccionTraslado:
                 border.Background = TrasladoBackgroundBrush;
                 border.BorderBrush = TrasladoBorderBrush;
                 border.BorderThickness = new Thickness(2, 0, 0, 0);
                 border.CornerRadius = new CornerRadius(3);
                 border.Cursor = new Cursor(StandardCursorType.Arrow);
 
-                var trasladoText = bloque.DuracionMinutos.HasValue
-                    ? $"Traslado {bloque.DuracionMinutos} min"
-                    : "Traslado";
-                if (bloque.EsEstimado && bloque.DuracionMinutos.HasValue) trasladoText += " ~";
+                if (heightPx < 30)
+                {
+                    topPx = topPx + heightPx - 30;
+                    if (topPx < 0) topPx = 0;
+                    heightPx = 30;
+                    border.Margin = new Thickness(leftOffset, topPx, 2, 0);
+                    border.Height = heightPx;
+                }
+                border.Margin = new Thickness(leftOffset, topPx, 2, 0);
+                border.Height = heightPx;
+
+                var durationText = bloque.DuracionMinutos.HasValue
+                    ? $"{bloque.DuracionMinutos} min"
+                    : "~15 min";
+                if (bloque.EsEstimado) durationText += " ~";
+                var transportLabel = bloque.MetodoTransporte switch
+                {
+                    MetodoTransporte.Caminar => "A pie",
+                    MetodoTransporte.Auto => "Auto",
+                    MetodoTransporte.Bus => "Bus",
+                    _ => ""
+                };
 
                 var trasladoStack = new StackPanel
                 {
                     Orientation = Orientation.Vertical,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Spacing = 1
                 };
 
-                if (bloque.MetodoTransporte.HasValue)
+                trasladoStack.Children.Add(new TextBlock
+                {
+                    Text = durationText,
+                    FontSize = 9,
+                    FontWeight = FontWeight.Bold,
+                    Foreground = TrasladoBorderBrush,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
+
+                if (!string.IsNullOrEmpty(transportLabel))
                 {
                     trasladoStack.Children.Add(new TextBlock
                     {
-                        Text = GetTransportIcon(bloque.MetodoTransporte.Value),
-                        FontSize = 12,
+                        Text = transportLabel,
+                        FontSize = 8,
                         Foreground = TrasladoBorderBrush,
                         HorizontalAlignment = HorizontalAlignment.Center
                     });
                 }
-
-                trasladoStack.Children.Add(new TextBlock
-                {
-                    Text = trasladoText,
-                    FontSize = 9,
-                    Foreground = TrasladoBorderBrush,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                });
 
                 border.Child = trasladoStack;
                 break;
@@ -1319,6 +1339,8 @@ case DragMode.ResizeTop:
 
         var sorted = dia.Bloques.OrderBy(b => b.HoraInicio).ToList();
 
+        var draggedIndex = sorted.FindIndex(b => b.Id == draggedBloque.Id);
+
         for (int i = 0; i < sorted.Count; i++)
         {
             var bloque = sorted[i];
@@ -1326,10 +1348,9 @@ case DragMode.ResizeTop:
 
             if (horaInicio < bloque.HoraFin && horaFin > bloque.HoraInicio)
             {
-                var nextNonTraslado = sorted.Skip(i + 1)
-                    .FirstOrDefault(b => b.Tipo != TipoBloqueCalendario.SeccionTraslado);
-
-                if (nextNonTraslado != null && nextNonTraslado.Id == draggedBloque.Id)
+                if (i > 0 && sorted[i - 1].Id == draggedBloque.Id)
+                    continue;
+                if (i + 1 < sorted.Count && sorted[i + 1].Id == draggedBloque.Id)
                     continue;
 
                 return true;

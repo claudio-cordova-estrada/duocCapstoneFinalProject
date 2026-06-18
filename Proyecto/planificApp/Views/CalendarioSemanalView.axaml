@@ -30,7 +30,7 @@
                             Command="{Binding IrHoyCommand}">
                         <TextBlock Text="Hoy" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
                     </Button>
-                    <Button Grid.Column="4" Classes="accent" IsEnabled="False" Margin="12 0 0 0">
+                    <Button Grid.Column="4" Classes="accent" Margin="12 0 0 0" Command="{Binding GenerarSemanaCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="6">
                             <Label Classes="icon-btn" Content="&#xE6B6;" FontSize="14"/>
                             <TextBlock Text="Generar semana" VerticalAlignment="Center"/>
