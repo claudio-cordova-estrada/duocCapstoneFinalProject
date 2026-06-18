@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -31,22 +30,17 @@ namespace planificApp.ViewModels
             get => _ubicacionSeleccionada;
             set
             {
-                // Apagar selección del anterior
                 if (_ubicacionSeleccionada != null) _ubicacionSeleccionada.IsSelected = false;
-
                 _ubicacionSeleccionada = value;
                 OnPropertyChanged(nameof(UbicacionSeleccionada));
-
                 if (_ubicacionSeleccionada != null)
                 {
-                    // Encender selección del nuevo
                     _ubicacionSeleccionada.IsSelected = true;
                     EnfocarEnUbicacion?.Invoke(_ubicacionSeleccionada.Latitud, _ubicacionSeleccionada.Longitud);
                 }
             }
         }
 
-        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
         public ObservableCollection<string> ModosDeTransporteRuta { get; } = new() { "Auto", "Transporte Público", "Bicicleta", "Caminando" };
 
         private string _modoTransporteSeleccionado = "Auto";
@@ -56,17 +50,12 @@ namespace planificApp.ViewModels
             set { _modoTransporteSeleccionado = value; OnPropertyChanged(nameof(ModoTransporteSeleccionado)); }
         }
 
-        // ==========================================
-        // PROPIEDADES PARA EL MÉTODO DE TRANSPORTE
-        // ==========================================
-
         private string _transporteRutaLabel = string.Empty;
         public string TransporteRutaLabel
         {
             get => _transporteRutaLabel;
             set { _transporteRutaLabel = value; OnPropertyChanged(nameof(TransporteRutaLabel)); }
         }
-        // ==========================================
 
         public ObservableCollection<string> MisAreasDeInteres { get; set; } = new();
 
@@ -83,8 +72,6 @@ namespace planificApp.ViewModels
         public Action? MapaDebeActualizarse { get; set; }
         public Action<double, double>? EnfocarEnUbicacion { get; set; }
         public Action? BorrarPinTemporalDelMapa { get; set; }
-
-        public static string? UbicacionSeleccionadaIdTemporal { get; set; }
 
         public static string? UbicacionSeleccionadaIdTemporal { get; set; }
 
@@ -105,9 +92,6 @@ namespace planificApp.ViewModels
         public Action<List<(double Latitud, double Longitud)>>? TrazarRutaEnMapa { get; set; }
         public Action? LimpiarRutaDelMapa { get; set; }
 
-        // ==========================================
-        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
-        // ==========================================
         private bool _panelRutaVisible;
         public bool PanelRutaVisible
         {
@@ -119,7 +103,12 @@ namespace planificApp.ViewModels
         public UbicacionVisual? OrigenRutaSeleccionado
         {
             get => _origenRutaSeleccionado;
-            set { _origenRutaSeleccionado = value; OnPropertyChanged(nameof(OrigenRutaSeleccionado)); }
+            set
+            {
+                _origenRutaSeleccionado = value;
+                OnPropertyChanged(nameof(OrigenRutaSeleccionado));
+                ActualizarTransporteRuta();
+            }
         }
 
         private UbicacionVisual? _destinoRutaSeleccionado;
@@ -130,60 +119,8 @@ namespace planificApp.ViewModels
             {
                 _destinoRutaSeleccionado = value;
                 OnPropertyChanged(nameof(DestinoRutaSeleccionado));
-                TransporteRutaLabel = value?.TransportePreferido ?? "Auto";
+                ActualizarTransporteRuta();
             }
-        }
-
-        private string _infoRutaCalculada = string.Empty;
-        public string InfoRutaCalculada
-        {
-            get => _infoRutaCalculada;
-            set { _infoRutaCalculada = value; OnPropertyChanged(nameof(InfoRutaCalculada)); }
-        }
-
-        public ICommand TogglePanelRutaCommand { get; set; }
-        public ICommand CalcularRutaIntegradaCommand { get; set; }
-        // ==========================================
-
-
-        // ==========================================
-        // PROPIEDADES PARA EL PANEL DE RUTAS FLOTANTE
-        // ==========================================
-        private bool _panelRutaVisible;
-        public bool PanelRutaVisible
-        {
-            get => _panelRutaVisible;
-            set { _panelRutaVisible = value; OnPropertyChanged(nameof(PanelRutaVisible)); }
-        }
-
-        private UbicacionVisual? _origenRutaSeleccionado;
-        public UbicacionVisual? OrigenRutaSeleccionado
-        {
-            get => _origenRutaSeleccionado;
-            set
-            {
-                if (_origenRutaSeleccionado != value)
-                {
-                    _origenRutaSeleccionado = value;
-                    OnPropertyChanged(nameof(OrigenRutaSeleccionado));
-
-                    // --- MAGIA: AUTO-SELECCIONAR TRANSPORTE ---
-                    if (_origenRutaSeleccionado != null && !string.IsNullOrEmpty(_origenRutaSeleccionado.TransportePreferido))
-                    {
-                        if (ModosDeTransporteRuta.Contains(_origenRutaSeleccionado.TransportePreferido))
-                        {
-                            ModoTransporteSeleccionado = _origenRutaSeleccionado.TransportePreferido;
-                        }
-                    }
-                }
-            }
-        }
-
-        private UbicacionVisual? _destinoRutaSeleccionado;
-        public UbicacionVisual? DestinoRutaSeleccionado
-        {
-            get => _destinoRutaSeleccionado;
-            set { _destinoRutaSeleccionado = value; OnPropertyChanged(nameof(DestinoRutaSeleccionado)); }
         }
 
         private string _infoRutaCalculada = string.Empty;
@@ -197,13 +134,19 @@ namespace planificApp.ViewModels
         public ICommand CalcularRutaIntegradaCommand { get; set; }
         public ICommand LimpiarRutaCommand { get; set; }
 
+        private void ActualizarTransporteRuta()
+        {
+            TransporteRutaLabel = DestinoRutaSeleccionado?.TransportePreferido
+                ?? OrigenRutaSeleccionado?.TransportePreferido
+                ?? "Auto";
+        }
+
         public UbicacionesViewModel(IGeoService geoService, IUbicacionRepository ubicacionRepo, ISesionService sesionService, IDialogService dialogService, IAreaInteresRepository areaRepo)
         {
             _geoService = geoService;
             _ubicacionRepo = ubicacionRepo;
             _sesionService = sesionService;
             _dialogService = dialogService;
-            _areaRepo = areaRepo;
             _areaRepo = areaRepo;
 
             EliminarUbicacionCommand = new RelayCommand<UbicacionVisual>(EliminarUbicacion);
@@ -215,20 +158,17 @@ namespace planificApp.ViewModels
             SeleccionarUbicacionCommand = new RelayCommand<UbicacionVisual>(u => UbicacionSeleccionada = u);
             UnfocusCommand = new RelayCommand<object>(UnfocusLocation);
 
-            // Comandos del panel de rutas
             TogglePanelRutaCommand = new RelayCommand<object>(_ =>
             {
                 PanelRutaVisible = !PanelRutaVisible;
                 if (!PanelRutaVisible)
                 {
                     InfoRutaCalculada = string.Empty;
+                    OrigenRutaSeleccionado = null;
+                    DestinoRutaSeleccionado = null;
                     LimpiarRutaDelMapa?.Invoke();
                 }
             });
-            CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
-
-            // Comandos del panel de rutas
-            TogglePanelRutaCommand = new RelayCommand<object>(_ => PanelRutaVisible = !PanelRutaVisible);
             CalcularRutaIntegradaCommand = new RelayCommand<object>(EjecutarCalculoRuta);
             LimpiarRutaCommand = new RelayCommand<object>(LimpiarRuta);
 
@@ -246,11 +186,14 @@ namespace planificApp.ViewModels
 
             InfoRutaCalculada = "Calculando ruta...";
 
-            string transporte = DestinoRutaSeleccionado.TransportePreferido ?? "Auto";
+            string transporte = DestinoRutaSeleccionado.TransportePreferido
+                ?? OrigenRutaSeleccionado.TransportePreferido
+                ?? "Auto";
             string modoGoogle = transporte switch
             {
-                "A pie" => "WALK",
-                "Bus" => "TRANSIT",
+                "A pie" or "Caminando" => "WALK",
+                "Bus" or "Transporte Público" => "TRANSIT",
+                "Bicicleta" => "WALK",
                 _ => "DRIVE"
             };
 
@@ -264,7 +207,6 @@ namespace planificApp.ViewModels
                 if (respuesta != null)
                 {
                     InfoRutaCalculada = $"Tiempo: {respuesta.Value.Tiempo}  |  Distancia: {respuesta.Value.Distancia}";
-
                     var puntosRuta = DecodificarPolyline(respuesta.Value.Polyline);
                     TrazarRutaEnMapa?.Invoke(puntosRuta);
                 }
@@ -279,7 +221,12 @@ namespace planificApp.ViewModels
             }
         }
 
-        // Utilidad para convertir el texto de Google en puntos dibujables
+        private void LimpiarRuta(object parametro)
+        {
+            InfoRutaCalculada = string.Empty;
+            LimpiarRutaDelMapa?.Invoke();
+        }
+
         public static List<(double Latitud, double Longitud)> DecodificarPolyline(string polylineEnconded)
         {
             if (string.IsNullOrEmpty(polylineEnconded))
@@ -325,7 +272,6 @@ namespace planificApp.ViewModels
                 var areasDb = await _areaRepo.ObtenerAreasPorUsuario(_sesionService.UsuarioActual.IdUsuario);
 
                 MisAreasDeInteres.Clear();
-                MisAreasDeInteres.Add("General");
                 MisAreasDeInteres.Add("General");
 
                 foreach (var area in areasDb)
@@ -378,19 +324,8 @@ namespace planificApp.ViewModels
                 });
             }
 
-
-            ActualizarGrupos(); // Agrupar para la vista
+            ActualizarGrupos();
             MapaDebeActualizarse?.Invoke();
-
-            if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
-            {
-                var ubiTarget = ListaUbicaciones.FirstOrDefault(u => u.IdUbicacion == UbicacionSeleccionadaIdTemporal);
-                if (ubiTarget != null)
-                {
-                    UbicacionSeleccionada = ubiTarget;
-                }
-                UbicacionSeleccionadaIdTemporal = null;
-            }
 
             if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
             {
@@ -449,8 +384,6 @@ namespace planificApp.ViewModels
                 ubicacionAEditar.Nombre!, ubicacionAEditar.DireccionExacta!,
                 ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
 
-                ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
-
             if (resultado != null && _sesionService.UsuarioActual != null)
             {
                 var ubicacionDb = new UbicacionGuardada
@@ -467,29 +400,6 @@ namespace planificApp.ViewModels
                 };
 
                 await _ubicacionRepo.ActualizarUbicacion(ubicacionAEditar.IdUbicacion!, ubicacionDb);
-
-                int index = ListaUbicaciones.IndexOf(ubicacionAEditar);
-                if (index >= 0)
-                {
-                    var actualizada = new UbicacionVisual
-                    {
-                        IdUbicacion = ubicacionDb.IdUbicacion,
-                        Nombre = ubicacionDb.Nombre,
-                        AreaInteres = ubicacionDb.AreaInteres,
-                        DireccionExacta = ubicacionDb.DireccionExacta,
-                        ColorHex = ubicacionDb.ColorHex,
-                        TransportePreferido = ubicacionDb.TransportePreferido,
-                        Latitud = ubicacionDb.Latitud,
-                        Longitud = ubicacionDb.Longitud,
-                        EsTemporal = false
-                    };
-
-                    ListaUbicaciones[index] = actualizada;
-
-                    if (UbicacionSeleccionada == ubicacionAEditar)
-                        UbicacionSeleccionada = actualizada;
-                }
-
 
                 int index = ListaUbicaciones.IndexOf(ubicacionAEditar);
                 if (index >= 0)
@@ -569,12 +479,8 @@ namespace planificApp.ViewModels
                         TransportePreferido = nuevaUbicacionDb.TransportePreferido,
                         Latitud = nuevaUbicacionDb.Latitud,
                         Longitud = nuevaUbicacionDb.Longitud,
-                        EsTemporal = false,
                         EsTemporal = false
                     };
-
-                    var temporal = ListaUbicaciones.FirstOrDefault(u => u.EsTemporal);
-                    if (temporal != null) ListaUbicaciones.Remove(temporal);
 
                     var temporal = ListaUbicaciones.FirstOrDefault(u => u.EsTemporal);
                     if (temporal != null) ListaUbicaciones.Remove(temporal);
@@ -585,7 +491,6 @@ namespace planificApp.ViewModels
                     BorrarPinTemporalDelMapa?.Invoke();
 
                     ActualizarGrupos();
-                    BorrarPinTemporalDelMapa?.Invoke();
                     MapaDebeActualizarse?.Invoke();
                 }
             }

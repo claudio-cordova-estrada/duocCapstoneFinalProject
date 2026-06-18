@@ -42,6 +42,9 @@ public partial class CalendarioMensualViewModel : PageViewModel
     [ObservableProperty] private ObservableCollection<CalendarioDiaViewModel> _dias = new();
 
     [ObservableProperty] private ObservableCollection<AreaSidebarGroup> _areasSidebar = new();
+    [ObservableProperty] private ObservableCollection<TareaDetalleSidebar> _tareasVencidas = new();
+    [ObservableProperty] private bool _hayTareasVencidas;
+    [ObservableProperty] private ObservableCollection<AreaInteres> _areasDelUsuario = new();
 
     public CalendarioMensualViewModel(
         ISesionService sesionService,
@@ -174,6 +177,17 @@ public partial class CalendarioMensualViewModel : PageViewModel
         }
 
         AreasSidebar = new ObservableCollection<AreaSidebarGroup>(gruposDict.Values.OrderBy(g => g.NombreArea));
+
+        var vencidas = tareasEnRango.Where(t => t.FecLimite.Value.Date < DateTime.Today && t.FecCompletado == null).ToList();
+        TareasVencidas = new ObservableCollection<TareaDetalleSidebar>(
+            vencidas.Select(t => new TareaDetalleSidebar
+            {
+                Titulo = t.Nombre ?? "Sin título",
+                Fecha = t.FecLimite!.Value
+            }).OrderBy(t => t.Fecha));
+        HayTareasVencidas = TareasVencidas.Count > 0;
+
+        AreasDelUsuario = new ObservableCollection<AreaInteres>(areas);
 
         return tareasCalendario;
     }

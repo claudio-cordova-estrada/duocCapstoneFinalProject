@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "mcp__avalonia-docs__search_avalonia_docs"
+      "mcp__avalonia-docs__search_avalonia_docs",
+      "Bash(git check-ignore *)",
+      "PowerShell(dotnet build \"C:\\\\Documentos\\\\GitHub\\\\duocCapstoneFinalProject\\\\Proyecto\\\\planificApp\\\\planificApp.csproj\" -c Debug --nologo -v minimal 2>&1)"
     ]
   }
 }

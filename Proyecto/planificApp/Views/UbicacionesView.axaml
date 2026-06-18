@@ -78,21 +78,11 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <StackPanel Spacing="4" Margin="0 -4 0 4">
-                                    <TextBlock Text="Método de transporte" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
-                                    <ComboBox ItemsSource="{Binding ModosDeTransporteRuta}" 
-                                              SelectedItem="{Binding ModoTransporteSeleccionado}" 
-                                              HorizontalAlignment="Stretch"
-                                              CornerRadius="6">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                                    <Label Content="&#xE30A;" FontFamily="{DynamicResource Phosphor}" FontSize="14" VerticalAlignment="Center" Foreground="{DynamicResource TextDisabled}"/>
-                                                    <TextBlock Text="{Binding .}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
+                                <StackPanel Spacing="4" IsVisible="{Binding DestinoRutaSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="Transporte" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
+                                    <Border Background="#2a2a3b" CornerRadius="6" Padding="8 4" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding TransporteRutaLabel}" FontSize="13" Foreground="{DynamicResource TextTertiary}"/>
+                                    </Border>
                                 </StackPanel>
 
                                 <Grid ColumnDefinitions="*, *" ColumnSpacing="8">
@@ -129,101 +119,6 @@
                                 
                             </StackPanel>
                         </Border>
-
-                        <!-- PANEL FLOTANTE PREMIUM PARA CALCULAR RUTAS -->
-<Border HorizontalAlignment="Left" VerticalAlignment="Top" 
-        Margin="16" Width="300" Padding="20" 
-        Background="#1e1e2e" CornerRadius="16" 
-        BorderBrush="{DynamicResource BorderDivider}" BorderThickness="1"
-        BoxShadow="0 10 30 0 #A0000000"
-        IsVisible="{Binding PanelRutaVisible}">
-    
-    <StackPanel Spacing="16">
-        
-        <!-- Cabecera -->
-        <Grid ColumnDefinitions="*, Auto">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-                <Label Content="&#xE34A;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="#6366f1" VerticalAlignment="Center"/>
-                <TextBlock Text="Calcular Ruta" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
-            </StackPanel>
-            <Button Grid.Column="1" Command="{Binding TogglePanelRutaCommand}" Background="Transparent" Padding="4" Cursor="Hand" CornerRadius="20">
-                <Label Content="&#x2715;" Foreground="{DynamicResource TextDisabled}" FontSize="12"/>
-            </Button>
-        </Grid>
-
-        <!-- Contenedor de inputs con línea indicadora visual -->
-        <Grid ColumnDefinitions="Auto, *">
-            
-            <!-- Línea visual (Origen -> Destino) -->
-            <StackPanel Grid.Column="0" Width="20" HorizontalAlignment="Center" Margin="0 12 12 12">
-                <Ellipse Width="8" Height="8" Fill="#6366f1" />
-                <Border Width="2" Height="42" Background="{DynamicResource BorderDivider}" Margin="0 4"/>
-                <Ellipse Width="8" Height="8" Fill="#ef4444" />
-            </StackPanel>
-
-            <!-- Selectores -->
-            <StackPanel Grid.Column="1" Spacing="12">
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Punto de partida" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
-                    <ComboBox ItemsSource="{Binding ListaUbicaciones}" 
-                              SelectedItem="{Binding OrigenRutaSeleccionado}" 
-                              HorizontalAlignment="Stretch"
-                              PlaceholderText="Selecciona origen..."
-                              CornerRadius="6">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Nombre}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-
-                <StackPanel Spacing="4">
-                    <TextBlock Text="Punto de llegada" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
-                    <ComboBox ItemsSource="{Binding ListaUbicaciones}" 
-                              SelectedItem="{Binding DestinoRutaSeleccionado}" 
-                              HorizontalAlignment="Stretch"
-                              PlaceholderText="Selecciona destino..."
-                              CornerRadius="6">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Nombre}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-            </StackPanel>
-            </Grid>
-
-        <!-- Transporte del destino -->
-        <StackPanel Spacing="4" IsVisible="{Binding DestinoRutaSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
-            <TextBlock Text="Transporte" FontSize="11" Foreground="{DynamicResource TextDisabled}" FontWeight="Medium"/>
-            <Border Background="#2a2a3b" CornerRadius="6" Padding="8 4" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding TransporteRutaLabel}" FontSize="13" Foreground="{DynamicResource TextTertiary}"/>
-            </Border>
-        </StackPanel>
-
-        <!-- Botón de acción -->
-        <Button Command="{Binding CalcularRutaIntegradaCommand}"
-                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                Background="#6366f1" Foreground="White" FontWeight="Bold"
-                CornerRadius="8" Padding="10" Cursor="Hand">
-            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                <Label Content="&#xE30A;" FontFamily="{DynamicResource Phosphor}" FontSize="16" VerticalAlignment="Center"/>
-                <TextBlock Text="Trazar ruta" VerticalAlignment="Center"/>
-            </StackPanel>
-        </Button>
-
-        <!-- Badge de Resultado -->
-        <Border Background="#064e3b" BorderBrush="#10b981" BorderThickness="1" CornerRadius="8" Padding="12"
-                IsVisible="{Binding InfoRutaCalculada, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <TextBlock Text="{Binding InfoRutaCalculada}" 
-                       Foreground="#34d399" FontWeight="SemiBold" FontSize="13" 
-                       HorizontalAlignment="Center" TextWrapping="Wrap"/>
-        </Border>
-        
-    </StackPanel>
-</Border>
 
                         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16" Spacing="12">
     

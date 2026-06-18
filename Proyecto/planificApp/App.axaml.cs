@@ -41,6 +41,7 @@ public partial class App : Application
         collection.AddTransient<RegistroViewModel>();
         collection.AddTransient<RecuperarContraViewModel>();
         
+        
         // User - Tareas ViewModels
         collection.AddTransient<InboxViewModel>();
         collection.AddTransient<NewTaskViewModel>();
@@ -89,8 +90,8 @@ public partial class App : Application
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();
         collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
-        collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
->>>>>>>>> Temporary merge branch 2
+collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
+        collection.AddSingleton<IGeneradorSemanalService, GeneradorSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
         collection.AddSingleton<IRegionesService, RegionesService>();
@@ -122,7 +123,7 @@ public partial class App : Application
             // Admin
             ApplicationPageNames.AdminEstadisticas => x.GetRequiredService<EstadisticasViewModel>(),
             ApplicationPageNames.AdminUsuarios => x.GetRequiredService<UsuariosViewModel>(),
-            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<EstadisticaUsuarioViewModel>(),
+            ApplicationPageNames.AdminUsuarioDetalle => x.GetRequiredService<UsuarioDetalleViewModel>(),
             _ => throw new ArgumentOutOfRangeException(nameof(name), name, null)
         });
         
