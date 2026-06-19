@@ -18,6 +18,10 @@ namespace PlanificApp.Models
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFin { get; set; }
         public bool Completada { get; set; }
+
+        // Layout: columnas para sub-tareas que se solapan dentro del bloque de área.
+        public int ColumnIndex { get; set; }
+        public int ColumnCount { get; set; } = 1;
     }
 
     public class BloqueCalendario

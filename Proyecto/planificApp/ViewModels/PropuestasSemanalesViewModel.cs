@@ -62,6 +62,9 @@ public partial class PropuestasSemanalesViewModel : PageViewModel
         Propuestas = new ObservableCollection<PropuestaGeneracion>();
         MensajeError = string.Empty;
         PropuestaSeleccionada = null;
+        // Mostramos el overlay de carga de inmediato, antes de navegar a la página,
+        // para que el usuario vea feedback mientras se generan las propuestas.
+        IsLoading = true;
     }
 
     [RelayCommand]

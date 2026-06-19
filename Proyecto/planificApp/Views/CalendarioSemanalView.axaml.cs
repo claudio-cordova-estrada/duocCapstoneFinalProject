@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -63,6 +64,10 @@ public partial class CalendarioSemanalView : UserControl
     private object? _panelDragItem;
     private string? _panelDragType;
 
+    // B1: mientras haya un ContextMenu abierto, posponemos el re-render para no cerrarlo.
+    private bool _isContextMenuOpen;
+    private bool _pendingRender;
+
     public CalendarioSemanalView()
     {
         InitializeComponent();
@@ -73,6 +78,26 @@ public partial class CalendarioSemanalView : UserControl
             _dayHeaderNames[i] = this.FindControl<TextBlock>($"DayHeader{i}_Name")!;
             _dayHeaderNums[i] = this.FindControl<TextBlock>($"DayHeader{i}_Num")!;
             _dayHeaders[i] = this.FindControl<Border>($"DayHeader{i}")!;
+
+            // Feature escoba: botón para limpiar todas las tareas/bloques del día.
+            if (_dayHeaders[i].Child is StackPanel headerPanel)
+            {
+                int dayIdx = i;
+                var broom = new Button
+                {
+                    Content = "\U0001F9F9",
+                    FontSize = 11,
+                    Padding = new Thickness(2, 0),
+                    Margin = new Thickness(0, 2, 0, 0),
+                    Background = Brushes.Transparent,
+                    BorderThickness = new Thickness(0),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Cursor = new Cursor(StandardCursorType.Hand)
+                };
+                ToolTip.SetTip(broom, "Limpiar día");
+                broom.Click += async (s, e) => await LimpiarDiaSeguro(dayIdx);
+                headerPanel.Children.Add(broom);
+            }
         }
 
         PointerPressed += OnPointerPressed;
@@ -265,9 +290,38 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
         }
     }
 
+    private async Task LimpiarDiaSeguro(int dayIdx)
+    {
+        if (_viewModel == null || dayIdx < 0 || dayIdx >= _viewModel.Dias.Count) return;
+        try
+        {
+            await _viewModel.LimpiarDiaAsync(_viewModel.Dias[dayIdx]);
+            RenderAllDays();
+        }
+        catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Limpiar día falló: {ex.Message}"); }
+    }
+
+    // B1: marca el menú como abierto y, al cerrarse, ejecuta el render que quedó pendiente.
+    private void TrackContextMenu(ContextMenu menu)
+    {
+        _isContextMenuOpen = true;
+        menu.Closed += (s, e) =>
+        {
+            _isContextMenuOpen = false;
+            if (_pendingRender)
+            {
+                _pendingRender = false;
+                RenderAllDays();
+            }
+        };
+    }
+
     private void RenderAllDays()
     {
         if (_viewModel == null) return;
+
+        // B1: si hay un menú contextual abierto, posponemos el render para no cerrarlo.
+        if (_isContextMenuOpen) { _pendingRender = true; return; }
 
         var horaInicio = _viewModel.HoraInicioJornada;
         var horaFin = _viewModel.HoraFinJornada;
@@ -392,40 +446,24 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 border.BorderBrush = CreateBrush(areaColor, 0.27);
                 border.BorderThickness = new Thickness(1, 0, 0, 2);
 
-                contentGrid = new Grid();
-                contentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(ResizeHandleSize) });
-                contentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                contentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(ResizeHandleSize) });
-
-                var topHandle = new Border
-                {
-                    Height = ResizeHandleSize,
-                    Background = Brushes.Transparent,
-                    Cursor = new Cursor(StandardCursorType.SizeNorthSouth)
-                };
-                topHandle.PointerPressed += (s, e) => OnResizeHandlePressed(e, border, bloque, dia, dayIndex, DragMode.ResizeTop);
-                Grid.SetRow(topHandle, 0);
-                contentGrid.Children.Add(topHandle);
-
-                var bottomHandle = new Border
-                {
-                    Height = ResizeHandleSize,
-                    Background = Brushes.Transparent,
-                    Cursor = new Cursor(StandardCursorType.SizeNorthSouth)
-                };
-                bottomHandle.PointerPressed += (s, e) => OnResizeHandlePressed(e, border, bloque, dia, dayIndex, DragMode.ResizeBottom);
-                Grid.SetRow(bottomHandle, 2);
-                contentGrid.Children.Add(bottomHandle);
+                // Panel raíz que ocupa TODO el alto del bloque. Antes el contenido vivía en la
+                // fila central de un Grid con manijas de 6px arriba/abajo, lo que desplazaba las
+                // sub-tareas ~6px y las acortaba 12px (no calzaban). Ahora el contentPanel cubre
+                // todo el bloque y las manijas van superpuestas, así el relativeTop de cada
+                // sub-tarea coincide 1:1 con el eje de tiempo del bloque.
+                var rootPanel = new Panel { ClipToBounds = false };
 
                 var contentPanel = new Panel { ClipToBounds = false };
-                Grid.SetRow(contentPanel, 1);
-                contentGrid.Children.Add(contentPanel);
+                rootPanel.Children.Add(contentPanel);
 
                 if (bloque.TareasInternas != null && bloque.TareasInternas.Count > 0)
                 {
+                    // C2: columnas para sub-tareas que se solapan, para que se partan dentro del
+                    // bloque en vez de encimarse.
+                    CalculateSubOverlapColumns(bloque.TareasInternas);
                     foreach (var sub in bloque.TareasInternas)
                     {
-                        var subBorder = CreateSubBloqueVisual(sub, bloque, dia, dayIndex, contentPanel);
+                        var subBorder = CreateSubBloqueVisual(sub, bloque, dia, dayIndex, contentPanel, blockWidth);
                         contentPanel.Children.Add(subBorder);
                     }
                 }
@@ -441,8 +479,29 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                     });
                 }
 
+                // Manijas de resize superpuestas (no consumen alto del contenido)
+                var topHandle = new Border
+                {
+                    Height = ResizeHandleSize,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Background = Brushes.Transparent,
+                    Cursor = new Cursor(StandardCursorType.SizeNorthSouth)
+                };
+                topHandle.PointerPressed += (s, e) => OnResizeHandlePressed(e, border, bloque, dia, dayIndex, DragMode.ResizeTop);
+                rootPanel.Children.Add(topHandle);
+
+                var bottomHandle = new Border
+                {
+                    Height = ResizeHandleSize,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Background = Brushes.Transparent,
+                    Cursor = new Cursor(StandardCursorType.SizeNorthSouth)
+                };
+                bottomHandle.PointerPressed += (s, e) => OnResizeHandlePressed(e, border, bloque, dia, dayIndex, DragMode.ResizeBottom);
+                rootPanel.Children.Add(bottomHandle);
+
                 border.ClipToBounds = false;
-                border.Child = contentGrid;
+                border.Child = rootPanel;
                 break;
 
             case TipoBloqueCalendario.Tarea:
@@ -565,18 +624,27 @@ case TipoBloqueCalendario.SeccionTraslado:
         return border;
     }
 
-    private Border CreateSubBloqueVisual(SubBloqueTarea sub, BloqueCalendario parentBloque, DiaCalendario dia, int dayIndex, Panel contentPanel)
+    private Border CreateSubBloqueVisual(SubBloqueTarea sub, BloqueCalendario parentBloque, DiaCalendario dia, int dayIndex, Panel contentPanel, double anchoBloque)
     {
         double relativeTop = (sub.HoraInicio - parentBloque.HoraInicio).TotalMinutes * (PixelsPerHour / 60.0);
         double subHeight = Math.Max(MinBlockHeight, (sub.HoraFin - sub.HoraInicio).TotalMinutes * (PixelsPerHour / 60.0));
         var areaColor = parentBloque.ColorHex ?? "#a78bfa";
 
+        // C2: ancho y posición por columna cuando hay sub-tareas solapadas dentro del bloque.
+        var colCount = Math.Max(1, sub.ColumnCount);
+        var colIndex = Math.Max(0, sub.ColumnIndex);
+        var anchoCol = (anchoBloque - 2) / colCount;
+        if (anchoCol < 8) anchoCol = 8;
+        var leftOffset = 1 + colIndex * anchoCol;
+        var anchoSub = colCount > 1 ? anchoCol - 2 : anchoCol;
+
         var subBorder = new Border
         {
-            Margin = new Thickness(1, relativeTop, 1, 0),
+            Margin = new Thickness(leftOffset, relativeTop, 0, 0),
+            Width = anchoSub,
             Height = subHeight,
             VerticalAlignment = VerticalAlignment.Top,
-            HorizontalAlignment = HorizontalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Left,
             Background = CreateBrush(areaColor, 0.6),
             BorderBrush = CreateBrush(areaColor, 1.0),
             BorderThickness = new Thickness(1, 1, 1, 2),
@@ -667,11 +735,13 @@ case TipoBloqueCalendario.SeccionTraslado:
         var extractItem = new MenuItem { Header = "Quitar del bloque" };
         extractItem.Click += async (s, args) =>
         {
-            if (_viewModel != null)
+            if (_viewModel == null) return;
+            try
             {
                 await _viewModel.ExtraerSubTareaAsync(dia, parentBloque, sub.IdTarea, null);
                 RenderAllDays();
             }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Quitar del bloque falló: {ex.Message}"); }
         };
         menu.Items.Add(extractItem);
 
@@ -682,14 +752,17 @@ case TipoBloqueCalendario.SeccionTraslado:
         var deleteItem = new MenuItem { Header = "Eliminar" };
         deleteItem.Click += async (s, args) =>
         {
-            if (_viewModel != null)
+            if (_viewModel == null) return;
+            try
             {
                 await _viewModel.EliminarSubTareaAsync(dia, parentBloque.Id, sub.IdTarea);
                 RenderAllDays();
             }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Eliminar sub-tarea falló: {ex.Message}"); }
         };
         menu.Items.Add(deleteItem);
 
+        TrackContextMenu(menu);
         menu.Open(subBorder);
     }
 
@@ -728,22 +801,26 @@ case TipoBloqueCalendario.SeccionTraslado:
             var completarItem = new MenuItem { Header = bloque.Completada ? "Descompletar" : "Completar" };
             completarItem.Click += async (s, args) =>
             {
-                if (_viewModel != null)
+                if (_viewModel == null) return;
+                try
                 {
                     await _viewModel.ToggleCompletarTareaCommand.ExecuteAsync(bloque);
                     RenderAllDays();
                 }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Completar tarea falló: {ex.Message}"); }
             };
             menu.Items.Add(completarItem);
 
             var unassignItem = new MenuItem { Header = "Quitar del calendario" };
             unassignItem.Click += async (s, args) =>
             {
-                if (_viewModel != null)
+                if (_viewModel == null) return;
+                try
                 {
                     await _viewModel.EliminarBloqueAsync(dia, bloque.Id);
                     RenderAllDays();
                 }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Quitar del calendario falló: {ex.Message}"); }
             };
             menu.Items.Add(unassignItem);
         }
@@ -752,11 +829,13 @@ case TipoBloqueCalendario.SeccionTraslado:
             var unassignItem = new MenuItem { Header = "Quitar del calendario" };
             unassignItem.Click += async (s, args) =>
             {
-                if (_viewModel != null)
+                if (_viewModel == null) return;
+                try
                 {
                     await _viewModel.EliminarBloqueAsync(dia, bloque.Id);
                     RenderAllDays();
                 }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Quitar del calendario falló: {ex.Message}"); }
             };
             menu.Items.Add(unassignItem);
         }
@@ -764,14 +843,17 @@ case TipoBloqueCalendario.SeccionTraslado:
         var deleteItem = new MenuItem { Header = "Eliminar" };
         deleteItem.Click += async (s, args) =>
         {
-            if (_viewModel != null)
+            if (_viewModel == null) return;
+            try
             {
                 await _viewModel.EliminarTareaPermanentementeAsync(dia, bloque.Id);
                 RenderAllDays();
             }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[CAL] Eliminar tarea falló: {ex.Message}"); }
         };
         menu.Items.Add(deleteItem);
 
+        TrackContextMenu(menu);
         menu.Open(border);
     }
 
@@ -969,10 +1051,20 @@ case DragMode.ResizeTop:
                         var posOnDay = _draggedSubDayIndex >= 0 ? e.GetPosition(_dayPanels[_draggedSubDayIndex]) : new Point(0, 0);
                         var aboveParent = posOnDay.Y < _draggedSubParentBloque.TopPx;
                         var belowParent = posOnDay.Y > _draggedSubParentBloque.TopPx + _draggedSubParentBloque.HeightPx;
+                        var targetDayIdx = GetTargetDayIndex(e);
 
                         if (onPanel)
                         {
                             await _viewModel.ExtraerSubTareaAsync(_draggedSubDia, _draggedSubParentBloque, _draggedSubBloque.IdTarea, null);
+                        }
+                        else if (targetDayIdx >= 0 && targetDayIdx != _draggedSubDayIndex && targetDayIdx < _viewModel.Dias.Count)
+                        {
+                            // C4: soltada en OTRO día → sale del bloque y se coloca en ese día.
+                            var targetDia = _viewModel.Dias[targetDayIdx];
+                            var posOnTarget = e.GetPosition(_dayPanels[targetDayIdx]);
+                            var horaDestino = PixelsToTime(posOnTarget.Y);
+                            horaDestino = TimeSpan.FromMinutes(Math.Round(horaDestino.TotalMinutes / SnapMinutes) * SnapMinutes);
+                            await _viewModel.MoverSubTareaADiaAsync(_draggedSubDia, _draggedSubParentBloque, _draggedSubBloque.IdTarea, targetDia, horaDestino);
                         }
                         else if (aboveParent || belowParent)
                         {
@@ -1037,13 +1129,79 @@ case DragMode.ResizeTop:
 
                         var duracion = _draggedBloque.HoraFin - _draggedBloque.HoraInicio;
 
-                        if (OverlapsWithForeignTraslado(nuevaHora, duracion, targetDia, _draggedBloque))
+                        // Soltar una tarea sobre un bloque de área de SU área (mismo día): se inserta
+                        // directamente en un solo paso (el bloque crece y la absorbe), evitando el
+                        // mover-recalcular intermedio que antes dejaba la tarea afuera (1ª tarea).
+                        BloqueCalendario? areaTarget = null;
+                        if (targetDayIdx == _draggedDayIndex
+                            && _draggedBloque.Tipo == TipoBloqueCalendario.Tarea
+                            && !string.IsNullOrEmpty(_draggedBloque.IdAreaInteresPadre))
+                        {
+                            areaTarget = targetDia.Bloques.FirstOrDefault(b =>
+                                b.Tipo == TipoBloqueCalendario.BloqueInteres
+                                && b.Id != _draggedBloque.Id
+                                && b.IdAreaInteres == _draggedBloque.IdAreaInteresPadre
+                                && nuevaHora >= b.HoraInicio && nuevaHora < b.HoraFin);
+                        }
+
+                        // Soltar un bloque de área sobre una tarea de SU área (o su traslado): el
+                        // bloque se adapta para cubrir la tarea y la absorbe, heredando el traslado.
+                        // Se decide por dónde cae el MOUSE (nuevaHora), no por el rango del bloque.
+                        BloqueCalendario? tareaAbsorber = null;
+                        if (targetDayIdx == _draggedDayIndex
+                            && _draggedBloque.Tipo == TipoBloqueCalendario.BloqueInteres
+                            && _draggedBloque.IdAreaInteres != null)
+                        {
+                            // El mouse cae sobre una tarea de esta área.
+                            tareaAbsorber = targetDia.Bloques.FirstOrDefault(b =>
+                                b.Tipo == TipoBloqueCalendario.Tarea
+                                && b.IdAreaInteresPadre == _draggedBloque.IdAreaInteres
+                                && nuevaHora >= b.HoraInicio && nuevaHora < b.HoraFin);
+
+                            // O bien el mouse cae sobre el traslado cuya tarea siguiente es de esta área.
+                            if (tareaAbsorber == null)
+                            {
+                                var traslEnPunto = targetDia.Bloques.FirstOrDefault(b =>
+                                    b.Tipo == TipoBloqueCalendario.SeccionTraslado
+                                    && nuevaHora >= b.HoraInicio && nuevaHora < b.HoraFin);
+                                if (traslEnPunto != null)
+                                    tareaAbsorber = targetDia.Bloques.FirstOrDefault(b =>
+                                        b.Tipo == TipoBloqueCalendario.Tarea
+                                        && b.IdAreaInteresPadre == _draggedBloque.IdAreaInteres
+                                        && Math.Abs((b.HoraInicio - traslEnPunto.HoraFin).TotalMinutes) < 1);
+                            }
+                        }
+
+                        if (areaTarget != null)
+                        {
+                            _draggedBloque.HoraInicio = nuevaHora;
+                            _draggedBloque.HoraFin = nuevaHora + duracion;
+                            var insertado = await _viewModel.IntentarInsertarTareaEnBloqueAsync(_draggedDia, _draggedBloque.Id, areaTarget.Id);
+                            if (!insertado)
+                            {
+                                _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
+                                _draggedBloque.HoraFin = _dragOriginalHoraFin;
+                            }
+                        }
+                        else if (tareaAbsorber != null)
+                        {
+                            // Restauramos el inicio original para que el movimiento del bloque (y
+                            // sus sub-tareas) calcule el delta correcto antes de absorber la tarea.
+                            _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
+                            _draggedBloque.HoraFin = _dragOriginalHoraFin;
+                            await _viewModel.AbsorberTareaEnBloqueAsync(_draggedDia, _draggedBloque.Id, tareaAbsorber.Id, nuevaHora);
+                        }
+                        else if (OverlapsWithForeignTraslado(nuevaHora, duracion, targetDia, _draggedBloque, _dragOriginalHoraInicio))
                         {
                             _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
                             _draggedBloque.HoraFin = _dragOriginalHoraFin;
                         }
                         else if (targetDayIdx != _draggedDayIndex)
                         {
+                            // Restauramos el inicio original para que MoverBloqueADia calcule el
+                            // delta real (final - original) y desplace también las sub-tareas (B2).
+                            _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
+                            _draggedBloque.HoraFin = _dragOriginalHoraFin;
                             await _viewModel.MoverBloqueADiaAsync(_draggedDia, targetDia, _draggedBloque.Id, nuevaHora);
                             if (_draggedBloque.Tipo == TipoBloqueCalendario.Tarea
                                 && !string.IsNullOrEmpty(_draggedBloque.IdAreaInteresPadre))
@@ -1064,7 +1222,12 @@ case DragMode.ResizeTop:
                         }
                         else
                         {
-                            await _viewModel.MoverBloqueAsync(_draggedDia, _draggedBloque.Id, _draggedBloque.HoraInicio);
+                            // Restauramos el inicio original para que MoverBloque calcule el delta
+                            // real (final - original) y desplace también las sub-tareas (B2).
+                            var finalHora = _draggedBloque.HoraInicio;
+                            _draggedBloque.HoraInicio = _dragOriginalHoraInicio;
+                            _draggedBloque.HoraFin = _dragOriginalHoraFin;
+                            await _viewModel.MoverBloqueAsync(_draggedDia, _draggedBloque.Id, finalHora);
                             if (_draggedBloque.Tipo == TipoBloqueCalendario.Tarea
                                 && !string.IsNullOrEmpty(_draggedBloque.IdAreaInteresPadre))
                             {
@@ -1228,6 +1391,55 @@ case DragMode.ResizeTop:
         _ => "\uE8CC"
     };
 
+    // C2: asigna columnas a las sub-tareas que se solapan dentro de un bloque de área, para que
+    // se dibujen lado a lado en vez de encimarse.
+    private static void CalculateSubOverlapColumns(IList<SubBloqueTarea> subs)
+    {
+        foreach (var s in subs) { s.ColumnIndex = 0; s.ColumnCount = 1; }
+        if (subs.Count <= 1) return;
+
+        var sorted = subs
+            .OrderBy(s => s.HoraInicio)
+            .ThenByDescending(s => s.HoraFin - s.HoraInicio)
+            .ToList();
+
+        var columns = new List<List<SubBloqueTarea>>();
+        foreach (var s in sorted)
+        {
+            int placed = -1;
+            for (int c = 0; c < columns.Count; c++)
+            {
+                bool overlaps = columns[c].Any(o => o.HoraInicio < s.HoraFin && o.HoraFin > s.HoraInicio);
+                if (!overlaps) { placed = c; break; }
+            }
+            if (placed == -1) { placed = columns.Count; columns.Add(new List<SubBloqueTarea>()); }
+            columns[placed].Add(s);
+            s.ColumnIndex = placed;
+        }
+
+        // ColumnCount por componente de solape (mismo criterio que CalculateOverlapColumns).
+        var assigned = new HashSet<SubBloqueTarea>();
+        foreach (var s in sorted)
+        {
+            if (assigned.Contains(s)) continue;
+            var queue = new Queue<SubBloqueTarea>();
+            queue.Enqueue(s);
+            var group = new List<SubBloqueTarea>();
+            while (queue.Count > 0)
+            {
+                var cur = queue.Dequeue();
+                if (assigned.Contains(cur)) continue;
+                assigned.Add(cur);
+                group.Add(cur);
+                foreach (var o in sorted)
+                    if (!assigned.Contains(o) && o.HoraInicio < cur.HoraFin && o.HoraFin > cur.HoraInicio)
+                        queue.Enqueue(o);
+            }
+            var maxCol = group.Max(g => g.ColumnIndex);
+            foreach (var g in group) g.ColumnCount = maxCol + 1;
+        }
+    }
+
     private static void CalculateOverlapColumns(List<BloqueCalendario> blocks)
     {
         foreach (var b in blocks)
@@ -1333,28 +1545,21 @@ case DragMode.ResizeTop:
         }
     }
 
-    private bool OverlapsWithForeignTraslado(TimeSpan horaInicio, TimeSpan duracion, DiaCalendario dia, BloqueCalendario draggedBloque)
+    private bool OverlapsWithForeignTraslado(TimeSpan horaInicio, TimeSpan duracion, DiaCalendario dia, BloqueCalendario draggedBloque, TimeSpan originalStart)
     {
         var horaFin = horaInicio + duracion;
 
-        var sorted = dia.Bloques.OrderBy(b => b.HoraInicio).ToList();
-
-        var draggedIndex = sorted.FindIndex(b => b.Id == draggedBloque.Id);
-
-        for (int i = 0; i < sorted.Count; i++)
+        foreach (var bloque in dia.Bloques)
         {
-            var bloque = sorted[i];
             if (bloque.Tipo != TipoBloqueCalendario.SeccionTraslado) continue;
 
-            if (horaInicio < bloque.HoraFin && horaFin > bloque.HoraInicio)
-            {
-                if (i > 0 && sorted[i - 1].Id == draggedBloque.Id)
-                    continue;
-                if (i + 1 < sorted.Count && sorted[i + 1].Id == draggedBloque.Id)
-                    continue;
+            // Excluimos el traslado PROPIO del bloque arrastrado (el que llegaba a su posición
+            // original; se recalcula al mover). Cualquier OTRO traslado que se solape cancela el
+            // movimiento (B4: no se puede colocar una tarea/bloque encima de un traslado).
+            if (Math.Abs((bloque.HoraFin - originalStart).TotalMinutes) < 1) continue;
 
+            if (horaInicio < bloque.HoraFin && horaFin > bloque.HoraInicio)
                 return true;
-            }
         }
 
         return false;

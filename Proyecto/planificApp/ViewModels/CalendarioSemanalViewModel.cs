@@ -244,6 +244,46 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
     }
 
+    // Soltar un bloque de área sobre una tarea de SU área: el bloque se mueve a la posición
+    // soltada, se agranda para cubrir el tiempo de la tarea y la absorbe como sub-tarea (luego
+    // recalcula su traslado). Todo en un solo paso.
+    public async Task<bool> AbsorberTareaEnBloqueAsync(DiaCalendario dia, string areaBloqueId, string tareaBloqueId, TimeSpan nuevaHoraInicio)
+    {
+        var areaBloque = dia.Bloques.FirstOrDefault(b => b.Id == areaBloqueId
+            && b.Tipo == TipoBloqueCalendario.BloqueInteres);
+        if (areaBloque == null) return false;
+
+        var tareaBloque = dia.Bloques.FirstOrDefault(b => b.Id == tareaBloqueId
+            && b.Tipo == TipoBloqueCalendario.Tarea);
+        if (tareaBloque == null || tareaBloque.IdTarea == null) return false;
+        if (tareaBloque.IdAreaInteresPadre != areaBloque.IdAreaInteres) return false;
+
+        // Movemos el bloque (y sus sub-tareas) a la posición soltada.
+        _calendarioService.MoverBloque(dia, areaBloqueId, nuevaHoraInicio);
+
+        // El bloque se adapta para cubrir el tiempo de la tarea (crece hacia arriba y/o abajo).
+        if (tareaBloque.HoraInicio < areaBloque.HoraInicio) areaBloque.HoraInicio = tareaBloque.HoraInicio;
+        if (tareaBloque.HoraFin > areaBloque.HoraFin) areaBloque.HoraFin = tareaBloque.HoraFin;
+
+        _calendarioService.InsertarTareaEnBloqueInteres(
+            dia, areaBloqueId, tareaBloque.IdTarea,
+            tareaBloque.NombreTarea ?? "Tarea",
+            tareaBloque.HoraInicio, tareaBloque.HoraFin, tareaBloque.Completada);
+
+        var tarea = await _tareaRepo.ObtenerTareaPorId(tareaBloque.IdTarea);
+        if (tarea != null)
+        {
+            tarea.UsoGeneracion = true;
+            tarea.ModificacionGeneracion = false;
+            await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+        }
+
+        await RecalcularTrasladosYGuardarAsync(dia);
+        Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
+        await CargarTareasYAreasAsync(_sesionService.UsuarioActual?.IdUsuario!);
+        return true;
+    }
+
     public async Task<bool> IntentarInsertarTareaEnBloqueAsync(DiaCalendario dia, string tareaBloqueId, string bloqueInteresId)
     {
         var tareaBloque = dia.Bloques.FirstOrDefault(b => b.Id == tareaBloqueId);
@@ -255,29 +295,9 @@ public partial class CalendarioSemanalViewModel : PageViewModel
 
         if (tareaBloque.IdAreaInteresPadre != bloqueInteres.IdAreaInteres) return false;
 
-        if (bloqueInteres.TareasInternas != null && bloqueInteres.TareasInternas.Count > 0)
-        {
-            var existingSub = bloqueInteres.TareasInternas[0];
-            var existingTask = existingSub.IdTarea != null
-                ? await _tareaRepo.ObtenerTareaPorId(existingSub.IdTarea)
-                : null;
-            var incomingTask = await _tareaRepo.ObtenerTareaPorId(tareaBloque.IdTarea);
-
-            var existingArea = existingTask?.IdAreaInteres != null
-                ? AreasDisponibles.FirstOrDefault(a => a.IdAreaInteres == existingTask.IdAreaInteres)
-                : null;
-            var incomingArea = incomingTask?.IdAreaInteres != null
-                ? AreasDisponibles.FirstOrDefault(a => a.IdAreaInteres == incomingTask.IdAreaInteres)
-                : null;
-
-            var existingUbi = existingTask?.Ubicacion ?? existingArea?.UbicacionPred;
-            var incomingUbi = incomingTask?.Ubicacion ?? incomingArea?.UbicacionPred;
-
-            if (!string.IsNullOrEmpty(existingUbi) && !string.IsNullOrEmpty(incomingUbi)
-                && !string.Equals(existingUbi, incomingUbi, StringComparison.OrdinalIgnoreCase))
-                return false;
-        }
-
+        // El bloque de área absorbe la tarea (crece para contenerla) y luego recalcula su
+        // traslado. No bloqueamos por diferencia de ubicación: el comportamiento deseado es
+        // que el bloque siempre tome la tarea de su área.
         _calendarioService.InsertarTareaEnBloqueInteres(
             dia, bloqueInteresId, tareaBloque.IdTarea,
             tareaBloque.NombreTarea ?? "Tarea",
@@ -308,11 +328,22 @@ public partial class CalendarioSemanalViewModel : PageViewModel
 
         var duracion = bloque.HoraFin - bloque.HoraInicio;
         var nuevaHoraFin = nuevaHoraInicio + duracion;
+        var delta = nuevaHoraInicio - bloque.HoraInicio;
 
         diaOrigen.Bloques.Remove(bloque);
 
         bloque.HoraInicio = nuevaHoraInicio;
         bloque.HoraFin = nuevaHoraFin;
+
+        // B2: desplazar también las sub-tareas para que no vuelvan a su tiempo viejo.
+        if (bloque.TareasInternas != null)
+        {
+            foreach (var sub in bloque.TareasInternas)
+            {
+                sub.HoraInicio += delta;
+                sub.HoraFin += delta;
+            }
+        }
 
         diaDestino.Bloques.Add(bloque);
         var ordenados = diaDestino.Bloques.OrderBy(b => b.HoraInicio).ToList();
@@ -337,6 +368,59 @@ public partial class CalendarioSemanalViewModel : PageViewModel
         await MarcarModificacionGeneracionAsync(dia, bloqueId);
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
+    }
+
+    // Feature escoba: limpia todas las tareas y bloques de área del día (las tareas vuelven al
+    // panel/inbox, no se eliminan).
+    public async Task LimpiarDiaAsync(DiaCalendario dia)
+    {
+        if (_sesionService.UsuarioActual == null) return;
+
+        IsLoading = true;
+        try
+        {
+            var bloques = dia.Bloques
+                .Where(b => b.Tipo != TipoBloqueCalendario.SeccionTraslado)
+                .ToList();
+
+            foreach (var bloque in bloques)
+            {
+                if (bloque.Tipo == TipoBloqueCalendario.Tarea && bloque.IdTarea != null)
+                {
+                    await DesasignarTareaAsync(bloque.IdTarea);
+                }
+                else if (bloque.Tipo == TipoBloqueCalendario.BloqueInteres && bloque.TareasInternas != null)
+                {
+                    foreach (var sub in bloque.TareasInternas)
+                        if (!string.IsNullOrEmpty(sub.IdTarea))
+                            await DesasignarTareaAsync(sub.IdTarea);
+                }
+            }
+
+            dia.Bloques.Clear();
+
+            await RecalcularTrasladosYGuardarAsync(dia);
+            Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
+            await CargarTareasYAreasAsync(_sesionService.UsuarioActual.IdUsuario!);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task DesasignarTareaAsync(string idTarea)
+    {
+        var tarea = await _tareaRepo.ObtenerTareaPorId(idTarea);
+        if (tarea != null)
+        {
+            tarea.HoraInicio = null;
+            tarea.HoraFin = null;
+            tarea.FecInicio = null;
+            tarea.UsoGeneracion = null;
+            tarea.ModificacionGeneracion = false;
+            await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+        }
     }
 
     public async Task EliminarBloqueAsync(DiaCalendario dia, string bloqueId)
@@ -392,6 +476,32 @@ public partial class CalendarioSemanalViewModel : PageViewModel
 
         await RecalcularTrasladosYGuardarAsync(dia);
         Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
+    }
+
+    // C4: mover una sub-tarea desde un bloque de área hacia OTRO día (sale del bloque y se
+    // coloca como tarea suelta en el día destino, en la hora soltada).
+    public async Task MoverSubTareaADiaAsync(DiaCalendario diaOrigen, BloqueCalendario parentBloque,
+        string idTarea, DiaCalendario diaDestino, TimeSpan nuevaHoraInicio)
+    {
+        var sub = _calendarioService.ExtraerSubTarea(diaOrigen, parentBloque.Id, idTarea);
+        if (sub == null) return;
+
+        var tarea = await _tareaRepo.ObtenerTareaPorId(idTarea);
+        if (tarea == null) return;
+
+        var duracion = sub.HoraFin - sub.HoraInicio;
+        _calendarioService.AgregarTarea(diaDestino, tarea, nuevaHoraInicio, nuevaHoraInicio + duracion, AreasDisponibles.ToList());
+
+        if (tarea.UsoGeneracion == true)
+        {
+            tarea.ModificacionGeneracion = true;
+            await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
+        }
+
+        await RecalcularTrasladosYGuardarAsync(diaOrigen);
+        await RecalcularTrasladosYGuardarAsync(diaDestino);
+        Dias = new ObservableCollection<DiaCalendario>(SemanaActual.Dias);
+        await CargarTareasYAreasAsync(_sesionService.UsuarioActual?.IdUsuario!);
     }
 
     public async Task ExtraerSubTareaAsync(DiaCalendario dia, BloqueCalendario parentBloque, string idTarea, TimeSpan? nuevaHoraInicio)
@@ -572,7 +682,9 @@ public partial class CalendarioSemanalViewModel : PageViewModel
     {
         if (_sesionService.UsuarioActual == null) return;
 
-        if (!await _operationLock.WaitAsync(TimeSpan.FromSeconds(5))) return;
+        // Sin timeout: serializamos de verdad. Antes, al expirar los 5s, una segunda operación
+        // pasaba en paralelo y corrompía la colección de bloques (causa del crash).
+        await _operationLock.WaitAsync();
         try
         {
             var usuarioId = _sesionService.UsuarioActual.IdUsuario!;

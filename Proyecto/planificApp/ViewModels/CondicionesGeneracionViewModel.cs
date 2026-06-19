@@ -39,9 +39,11 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
     [ObservableProperty] private bool _puedeGenerar = true;
     [ObservableProperty] private DateTime _fechaLunes;
+    [ObservableProperty] private bool _semanaSiguiente;
 
     private List<Tarea> _todasLasTareas = new();
     private double _horasOcupadas = 0;
+    private DateTime _baseFechaLunes;
 
     public CondicionesGeneracion Condiciones { get; private set; } = new();
     public bool ResultadoConfirmado { get; private set; }

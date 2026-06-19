@@ -109,8 +109,20 @@ public class DialogService : IDialogService
         var navigation = App.Services.GetRequiredService<INavigationService>();
         var vm = App.Services.GetRequiredService<PropuestasSemanalesViewModel>();
         vm.SetCondiciones(condiciones);
-        await vm.GenerarPropuestasCommand.ExecuteAsync(null);
+
+        // Navegamos PRIMERO para que la página de propuestas (con su overlay
+        // "Generando propuestas...") quede visible mientras corre la generación,
+        // que puede tardar varios segundos (cálculo de traslados con Mongo + Google).
         navigation.NavigateToPage(ApplicationPageNames.UserPropuestasSemanales);
+
+        try
+        {
+            await vm.GenerarPropuestasCommand.ExecuteAsync(null);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[DIALOG] Error generando propuestas: {ex.Message}");
+        }
     }
 
     public async Task<LocationFormData?> ShowAddLocationDialog(IGeoService geoService, ObservableCollection<string> areas)

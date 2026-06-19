@@ -13,11 +13,14 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 {
     private readonly ITareaRepository _tareaRepo;
     private readonly ISesionService _sesionService;
+    private readonly ICalendarioSemanalService _calendarioService;
 
-    public GeneradorSemanalService(ITareaRepository tareaRepo, ISesionService sesionService)
+    public GeneradorSemanalService(ITareaRepository tareaRepo, ISesionService sesionService,
+        ICalendarioSemanalService calendarioService)
     {
         _tareaRepo = tareaRepo;
         _sesionService = sesionService;
+        _calendarioService = calendarioService;
     }
 
     private static readonly string[] NombresDias = { "Lun", "Mar", "Mi\u00e9", "Jue", "Vie", "S\u00e1b", "Dom" };
@@ -31,9 +34,12 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         var tareasElegibles = await ObtenerTareasElegiblesAsync(condiciones);
         var random = new Random();
 
-        var propuestaEq = GenerarEquilibrio(condiciones, random, tareasElegibles);
-        var propuestaRush = GenerarIntensiva(condiciones, random, tareasElegibles);
-        var propuestaRel = GenerarRelajado(condiciones, random, tareasElegibles);
+        var usuarioId = _sesionService.UsuarioActual?.IdUsuario ?? "";
+        var ubicacionInicio = _sesionService.UsuarioActual?.UbicacionActual?.Trim() ?? "Casa";
+
+        var propuestaEq = await GenerarEquilibrio(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio);
+        var propuestaRush = await GenerarIntensiva(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio);
+        var propuestaRel = await GenerarRelajado(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio);
 
         return new List<PropuestaGeneracion> { propuestaEq, propuestaRush, propuestaRel };
     }
@@ -90,7 +96,8 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
 #region Equilibrio — spread across ALL selected days, 1-4h per area per day
 
-    private PropuestaGeneracion GenerarEquilibrio(CondicionesGeneracion condiciones, Random random, List<Tarea> tareasElegibles)
+    private async Task<PropuestaGeneracion> GenerarEquilibrio(CondicionesGeneracion condiciones, Random random,
+        List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Equilibrio, "Equilibrio",
             "Distribuye las actividades de forma pareja entre los d\u00edas seleccionados",
@@ -123,6 +130,7 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         // Track per-day cursor and which areas already placed
         var cursorPorDia = diasGeneracion.ToDictionary(d => d.Fecha,
             d => CalcularHoraInicioDia(d.Fecha, horaInicioJornada));
+        var ubicacionPorDia = diasGeneracion.ToDictionary(d => d.Fecha, d => ubicacionInicio);
         var horasUsadasPorDia = diasGeneracion.ToDictionary(d => d.Fecha, d => 0.0);
         var areasPorDia = diasGeneracion.ToDictionary(d => d.Fecha, d => new HashSet<string>());
         var tareasUsadasPorArea = condiciones.AreasPriorizadas
@@ -157,7 +165,11 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 if (bloqueHoras < 1.0 && horasAreaRestantes >= MinBloqueHoras)
                     bloqueHoras = horasAreaRestantes;
 
-                var horaDisponible = cursorPorDia[dia.Fecha];
+                // Reservamos el viaje real desde la ubicación actual del día hasta esta área,
+                // para que el bloque arranque después del traslado (que A2 dibujará en ese hueco).
+                var viajeMin = await _calendarioService.ObtenerMinutosTrasladoAsync(
+                    usuarioId, ubicacionPorDia[dia.Fecha], area.UbicacionPred, area.MetodoTransportePred);
+                var horaDisponible = cursorPorDia[dia.Fecha] + TimeSpan.FromMinutes(viajeMin);
 
                 // Don't place if doesn't fit before end of day + gap
                 if (horaDisponible + TimeSpan.FromHours(bloqueHoras) + GapEntreBloques > horaFin)
@@ -167,6 +179,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 }
 
                 if (bloqueHoras < MinBloqueHoras) continue;
+
+                // El bloque se coloca: la ubicación actual del día pasa a ser la de esta área.
+                if (!string.IsNullOrEmpty(area.UbicacionPred))
+                    ubicacionPorDia[dia.Fecha] = area.UbicacionPred;
 
                 var bloque = new BloqueCalendario
                 {
@@ -204,7 +220,8 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
     #region Intensiva
 
-    private PropuestaGeneracion GenerarIntensiva(CondicionesGeneracion condiciones, Random random, List<Tarea> tareasElegibles)
+    private async Task<PropuestaGeneracion> GenerarIntensiva(CondicionesGeneracion condiciones, Random random,
+        List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Rushear, "Intensiva",
             "Concentra las actividades en la menor cantidad de d\u00edas posible",
@@ -233,6 +250,7 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
         var cursorPorDia = diasSeleccionados.ToDictionary(d => d.Fecha,
             d => CalcularHoraInicioDia(d.Fecha, horaInicioJornada));
+        var ubicacionPorDia = diasSeleccionados.ToDictionary(d => d.Fecha, d => ubicacionInicio);
         var horasUsadasPorDia = diasSeleccionados.ToDictionary(d => d.Fecha, d => 0.0);
         var areasPorDia = diasSeleccionados.ToDictionary(d => d.Fecha, d => new HashSet<string>());
         var tareasUsadasPorArea = condiciones.AreasPriorizadas
@@ -262,7 +280,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 double disponible = maxHorasPorDia - horasUsadasPorDia[dia.Fecha];
                 double bloqueHoras = Math.Min(horasAreaRestantes, disponible);
 
-                var horaDisponible = cursorPorDia[dia.Fecha];
+                // Reservamos el viaje real desde la ubicación actual del día hasta esta área.
+                var viajeMin = await _calendarioService.ObtenerMinutosTrasladoAsync(
+                    usuarioId, ubicacionPorDia[dia.Fecha], area.UbicacionPred, area.MetodoTransportePred);
+                var horaDisponible = cursorPorDia[dia.Fecha] + TimeSpan.FromMinutes(viajeMin);
                 if (horaDisponible + TimeSpan.FromHours(bloqueHoras) + GapEntreBloques > horaFin)
                 {
                     bloqueHoras = (horaFin - horaDisponible).TotalHours - GapEntreBloques.TotalHours;
@@ -273,6 +294,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
                 // Cap at 3h per block
                 if (bloqueHoras > 3.0) bloqueHoras = 3.0;
+
+                // El bloque se coloca: la ubicación actual del día pasa a ser la de esta área.
+                if (!string.IsNullOrEmpty(area.UbicacionPred))
+                    ubicacionPorDia[dia.Fecha] = area.UbicacionPred;
 
                 var bloque = new BloqueCalendario
                 {
@@ -310,7 +335,8 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
     #region Relajado — max 2h/d\u00eda, 1h per \u00e1rea, day-first, gaps between blocks
 
-    private PropuestaGeneracion GenerarRelajado(CondicionesGeneracion condiciones, Random random, List<Tarea> tareasElegibles)
+    private async Task<PropuestaGeneracion> GenerarRelajado(CondicionesGeneracion condiciones, Random random,
+        List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Relajado, "Relajado",
             "M\u00e1ximo 2 horas por d\u00eda, 1 hora por \u00e1rea, repartido en todos los d\u00edas",
@@ -340,6 +366,7 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
         var cursorPorDia = diasGeneracion.ToDictionary(d => d.Fecha,
             d => CalcularHoraInicioDia(d.Fecha, horaInicioJornada));
+        var ubicacionPorDia = diasGeneracion.ToDictionary(d => d.Fecha, d => ubicacionInicio);
         var horasUsadasPorDia = diasGeneracion.ToDictionary(d => d.Fecha, d => 0.0);
         var horasAreaPorDia = new Dictionary<string, Dictionary<DateTime, double>>();
         var horasAreaRestantes = new Dictionary<string, double>();
@@ -376,9 +403,16 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 bloqueHoras = Math.Min(bloqueHoras, 1.0);
                 if (bloqueHoras < MinBloqueHoras) continue;
 
-                var horaDisponible = cursorPorDia[dia.Fecha];
+                // Reservamos el viaje real desde la ubicación actual del día hasta esta área.
+                var viajeMin = await _calendarioService.ObtenerMinutosTrasladoAsync(
+                    usuarioId, ubicacionPorDia[dia.Fecha], area.UbicacionPred, area.MetodoTransportePred);
+                var horaDisponible = cursorPorDia[dia.Fecha] + TimeSpan.FromMinutes(viajeMin);
                 // Include gap after block
                 if (horaDisponible + TimeSpan.FromHours(bloqueHoras) + GapEntreBloques > horaFin) continue;
+
+                // El bloque se coloca: la ubicación actual del día pasa a ser la de esta área.
+                if (!string.IsNullOrEmpty(area.UbicacionPred))
+                    ubicacionPorDia[dia.Fecha] = area.UbicacionPred;
 
                 var bloque = new BloqueCalendario
                 {

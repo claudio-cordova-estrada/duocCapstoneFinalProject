@@ -19,7 +19,7 @@
             </Border>
 
             <Border DockPanel.Dock="Bottom" Padding="16" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 1 0 0"
-                    IsVisible="{Binding IsLoading}">
+                    IsVisible="{Binding !IsLoading}">
                 <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
                     <Button Classes="accent" Command="{Binding GenerarPropuestasCommand}">
                         <StackPanel Orientation="Horizontal" Spacing="6">
@@ -30,12 +30,9 @@
                 </StackPanel>
             </Border>
 
-            <ScrollViewer>
+            <Grid>
+            <ScrollViewer IsVisible="{Binding !IsLoading}">
                 <StackPanel Spacing="16" Margin="24">
-
-                    <Border IsVisible="{Binding IsLoading}" Background="{DynamicResource HoverBackground}" CornerRadius="8" Padding="20">
-                        <TextBlock Text="Generando propuestas..." FontSize="14" Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center"/>
-                    </Border>
 
                     <Border IsVisible="{Binding MensajeError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                             Background="#33ff6666" CornerRadius="8" Padding="16">
@@ -90,10 +87,17 @@
                                                                     </ItemsControl.ItemsPanel>
                                                                     <ItemsControl.ItemTemplate>
 <DataTemplate>
-                                                                        <Border Background="{Binding ColorHex, FallbackValue=#a78bfa}" CornerRadius="3" Padding="4 2" Opacity="0.7" MinWidth="16">
-                                                                            <TextBlock FontSize="9" Foreground="#ffffff" TextTrimming="CharacterEllipsis" MaxWidth="80"
-                                                                                       Text="{Binding NombreMostrar}"/>
-                                                                        </Border>
+                                                                        <Panel>
+                                                                            <!-- Bloque normal: píldora con texto -->
+                                                                            <Border IsVisible="{Binding !EsTraslado}" Background="{Binding ColorHex, FallbackValue=#a78bfa}" CornerRadius="3" Padding="4 2" Opacity="0.7" MinWidth="16">
+                                                                                <TextBlock FontSize="9" Foreground="#ffffff" TextTrimming="CharacterEllipsis" MaxWidth="80"
+                                                                                           Text="{Binding NombreMostrar}"/>
+                                                                            </Border>
+                                                                            <!-- Traslado: rectángulo angosto sin texto, mismo alto que las píldoras -->
+                                                                            <Border IsVisible="{Binding EsTraslado}" Width="14" CornerRadius="3"
+                                                                                    VerticalAlignment="Stretch" Opacity="0.4"
+                                                                                    Background="{Binding ColorHex, FallbackValue=#ef4444}"/>
+                                                                        </Panel>
                                                                     </DataTemplate>
                                                                     </ItemsControl.ItemTemplate>
                                                                 </ItemsControl>
@@ -133,6 +137,14 @@
 
                 </StackPanel>
             </ScrollViewer>
+
+            <!-- Estado de carga: centrado vertical y horizontal, con el fondo de la vista -->
+            <Border IsVisible="{Binding IsLoading}" Background="{DynamicResource AppBackground}">
+                <TextBlock Text="Generando propuestas..." FontSize="14"
+                           Foreground="{DynamicResource TextSecondary}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            </Grid>
         </DockPanel>
     </Border>
 </UserControl>
