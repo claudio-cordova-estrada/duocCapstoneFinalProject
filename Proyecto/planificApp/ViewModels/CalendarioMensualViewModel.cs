@@ -86,7 +86,6 @@ public partial class CalendarioMensualViewModel : PageViewModel
         DateTime primerDiaMes = new DateTime(FechaReferencia.Year, FechaReferencia.Month, 1);
         int diasDesfase = ((int)primerDiaMes.DayOfWeek - 1 + 7) % 7;
         DateTime fechaInicioGrid = primerDiaMes.AddDays(-diasDesfase);
-        DateTime fechaFinGrid = fechaInicioGrid.AddDays(41);
 
         for (int i = 0; i < 42; i++)
         {
@@ -100,95 +99,79 @@ public partial class CalendarioMensualViewModel : PageViewModel
             });
         }
 
-        var todasLasTareas = await ObtenerEventosRealesAsync(fechaInicioGrid, fechaFinGrid);
-
-        foreach (var dia in listaDias)
-        {
-            var tareasDelDia = todasLasTareas.Where(e => e.Fecha.Date == dia.Fecha.Date);
-            foreach (var tarea in tareasDelDia)
-            {
-                dia.TareasDelDia.Add(tarea);
-            }
-        }
-
-        Dias = new ObservableCollection<CalendarioDiaViewModel>(listaDias);
-    }
-
-    private async Task<List<TareaCalendario>> ObtenerEventosRealesAsync(DateTime inicio, DateTime fin)
-    {
-        var tareasCalendario = new List<TareaCalendario>();
-        var gruposDict = new Dictionary<string, AreaSidebarGroup>();
-
         var usuarioActual = _sesionService.UsuarioActual;
-        if (usuarioActual == null) return tareasCalendario;
+        if (usuarioActual == null)
+        {
+            Dias = new ObservableCollection<CalendarioDiaViewModel>(listaDias);
+            return;
+        }
 
         var tareas = await _tareaRepo.ObtenerTareasPorUsuario(usuarioActual.IdUsuario!);
         var areas = await _areaRepo.ObtenerAreasPorUsuario(usuarioActual.IdUsuario!);
 
-        var tareasEnRango = tareas.Where(t =>
-            t.FecLimite.HasValue &&
-            t.FecLimite.Value.Date >= inicio.Date &&
-            t.FecLimite.Value.Date <= fin.Date).ToList();
+        string ColorDeArea(Tarea t) =>
+            areas.FirstOrDefault(a => a.IdAreaInteres == t.IdAreaInteres)?.ColorHex ?? "#888888";
+        string NombreDeArea(Tarea t) =>
+            areas.FirstOrDefault(a => a.IdAreaInteres == t.IdAreaInteres)?.Nombre ?? "Inbox";
 
-        foreach (var tarea in tareasEnRango)
+        // --- Puntitos en la grilla: por cada día, un punto por cada área PLANIFICADA (FecInicio) ese día ---
+        foreach (var dia in listaDias)
         {
-            var areaCorrespondiente = areas.FirstOrDefault(a => a.IdAreaInteres == tarea.IdAreaInteres);
-            var colorRealArea = areaCorrespondiente?.ColorHex ?? "#888888";
-            var colorPuntoGrid = colorRealArea;
-
-            if (tarea.FecLimite.HasValue && tarea.FecLimite.Value.Date < DateTime.Today && tarea.FecCompletado == null)
-            {
-                colorPuntoGrid = "#ef4444";
-            }
-
-            // Guardamos la tarea usando tarea.Nombre de tu BD
-            tareasCalendario.Add(new TareaCalendario
-            {
-                Titulo = tarea.Nombre ?? "Sin título",
-                ColorHex = colorPuntoGrid,
-                Fecha = tarea.FecLimite.Value
-            });
-
-            if (tarea.FecLimite.Value.Month == FechaReferencia.Month)
-            {
-                string idArea = tarea.IdAreaInteres ?? "INBOX";
-
-                if (!gruposDict.ContainsKey(idArea))
+            var puntos = tareas
+                .Where(t => t.FecInicio.HasValue && t.FecInicio.Value.Date == dia.Fecha.Date)
+                .GroupBy(t => t.IdAreaInteres ?? "INBOX")
+                .Select(g => new PuntoAreaDia
                 {
-                    gruposDict[idArea] = new AreaSidebarGroup
+                    ColorHex = ColorDeArea(g.First()),
+                    NombreArea = NombreDeArea(g.First())
+                })
+                .OrderBy(p => p.NombreArea);
+
+            foreach (var punto in puntos)
+                dia.PuntosAreas.Add(punto);
+        }
+
+        // --- Panel lateral: áreas con las tareas planificadas en el mes visible ---
+        var planificadasMes = tareas
+            .Where(t => t.FecInicio.HasValue
+                && t.FecInicio.Value.Month == FechaReferencia.Month
+                && t.FecInicio.Value.Year == FechaReferencia.Year)
+            .ToList();
+
+        var grupos = planificadasMes
+            .GroupBy(t => t.IdAreaInteres ?? "INBOX")
+            .Select(g => new AreaSidebarGroup
+            {
+                NombreArea = NombreDeArea(g.First()),
+                ColorHex = ColorDeArea(g.First()),
+                Tareas = new ObservableCollection<TareaDetalleSidebar>(
+                    g.OrderBy(t => t.FecInicio).Select(t => new TareaDetalleSidebar
                     {
-                        NombreArea = areaCorrespondiente?.Nombre ?? "Inbox",
-                        ColorHex = colorRealArea
-                    };
-                }
+                        Titulo = t.Nombre ?? "Sin título",
+                        Fecha = t.FecInicio!.Value
+                    }))
+            })
+            .OrderBy(g => g.NombreArea);
 
-                gruposDict[idArea].Tareas.Add(new TareaDetalleSidebar
-                {
-                    Titulo = tarea.Nombre ?? "Sin título",
-                    Fecha = tarea.FecLimite.Value
-                });
-            }
-        }
+        AreasSidebar = new ObservableCollection<AreaSidebarGroup>(grupos);
 
-        foreach (var grupo in gruposDict.Values)
-        {
-            var tareasOrdenadas = grupo.Tareas.OrderBy(t => t.Fecha).ToList();
-            grupo.Tareas = new ObservableCollection<TareaDetalleSidebar>(tareasOrdenadas);
-        }
-
-        AreasSidebar = new ObservableCollection<AreaSidebarGroup>(gruposDict.Values.OrderBy(g => g.NombreArea));
-
-        var vencidas = tareasEnRango.Where(t => t.FecLimite.Value.Date < DateTime.Today && t.FecCompletado == null).ToList();
-        TareasVencidas = new ObservableCollection<TareaDetalleSidebar>(
-            vencidas.Select(t => new TareaDetalleSidebar
+        // --- Vencidas: con fecha límite pasada y sin completar ---
+        var vencidas = tareas
+            .Where(t => t.FecLimite.HasValue
+                && t.FecLimite.Value.Date < DateTime.Today
+                && t.FecCompletado == null)
+            .OrderBy(t => t.FecLimite)
+            .Select(t => new TareaDetalleSidebar
             {
                 Titulo = t.Nombre ?? "Sin título",
                 Fecha = t.FecLimite!.Value
-            }).OrderBy(t => t.Fecha));
+            });
+
+        TareasVencidas = new ObservableCollection<TareaDetalleSidebar>(vencidas);
         HayTareasVencidas = TareasVencidas.Count > 0;
 
         AreasDelUsuario = new ObservableCollection<AreaInteres>(areas);
 
-        return tareasCalendario;
+        Dias = new ObservableCollection<CalendarioDiaViewModel>(listaDias);
     }
 }

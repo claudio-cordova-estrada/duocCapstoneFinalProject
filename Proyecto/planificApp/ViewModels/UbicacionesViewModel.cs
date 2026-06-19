@@ -22,7 +22,9 @@ namespace planificApp.ViewModels
         private readonly IAreaInteresRepository _areaRepo;
 
         public ObservableCollection<UbicacionVisual> ListaUbicaciones { get; set; } = new();
-        public ObservableCollection<GrupoUbicacion> UbicacionesAgrupadas { get; set; } = new();
+
+        // Áreas del usuario, cacheadas para resolver qué áreas usan cada ubicación (vía UbicacionPred).
+        private List<AreaInteres> _areasUsuario = new();
 
         private UbicacionVisual? _ubicacionSeleccionada;
         public UbicacionVisual? UbicacionSeleccionada
@@ -56,8 +58,6 @@ namespace planificApp.ViewModels
             get => _transporteRutaLabel;
             set { _transporteRutaLabel = value; OnPropertyChanged(nameof(TransporteRutaLabel)); }
         }
-
-        public ObservableCollection<string> MisAreasDeInteres { get; set; } = new();
 
         public ICommand SeleccionarUbicacionCommand { get; set; }
         public ICommand AgregarUbicacionCommand { get; set; }
@@ -173,7 +173,6 @@ namespace planificApp.ViewModels
             LimpiarRutaCommand = new RelayCommand<object>(LimpiarRuta);
 
             _ = CargarUbicacionesRealesAsync();
-            _ = CargarAreasDeInteresRealesAsync();
         }
 
         private async void EjecutarCalculoRuta(object parametro)
@@ -263,44 +262,26 @@ namespace planificApp.ViewModels
             return puntos;
         }
 
-        private async Task CargarAreasDeInteresRealesAsync()
+        // Para cada ubicación, calcula qué áreas la usan como su ubicación predeterminada
+        // (AreaInteres.UbicacionPred == Ubicacion.Nombre). Es la relación inversa, en modo lectura.
+        public void RecalcularAreasDeUso()
         {
-            if (_sesionService.UsuarioActual == null || string.IsNullOrEmpty(_sesionService.UsuarioActual.IdUsuario)) return;
-
-            try
+            foreach (var ubi in ListaUbicaciones)
             {
-                var areasDb = await _areaRepo.ObtenerAreasPorUsuario(_sesionService.UsuarioActual.IdUsuario);
+                ubi.AreasQueUsan.Clear();
 
-                MisAreasDeInteres.Clear();
-                MisAreasDeInteres.Add("General");
-
-                foreach (var area in areasDb)
+                if (!string.IsNullOrWhiteSpace(ubi.Nombre))
                 {
-                    if (!string.IsNullOrWhiteSpace(area.Nombre) && area.Nombre != "General")
-                    {
-                        MisAreasDeInteres.Add(area.Nombre);
-                    }
+                    var areas = _areasUsuario
+                        .Where(a => !string.IsNullOrWhiteSpace(a.UbicacionPred)
+                                 && string.Equals(a.UbicacionPred, ubi.Nombre, StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(a => a.Nombre);
+
+                    foreach (var a in areas)
+                        ubi.AreasQueUsan.Add(new AreaUso { Nombre = a.Nombre, ColorHex = a.ColorHex });
                 }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error al cargar áreas de interés: {ex.Message}");
-            }
-        }
 
-        public void ActualizarGrupos()
-        {
-            UbicacionesAgrupadas.Clear();
-
-            var agrupadas = ListaUbicaciones.GroupBy(u => string.IsNullOrWhiteSpace(u.AreaInteres) ? "General" : u.AreaInteres);
-
-            foreach (var grupo in agrupadas.OrderBy(g => g.Key))
-            {
-                UbicacionesAgrupadas.Add(new GrupoUbicacion
-                {
-                    NombreArea = grupo.Key,
-                    Ubicaciones = new ObservableCollection<UbicacionVisual>(grupo)
-                });
+                ubi.TieneAreasQueUsan = ubi.AreasQueUsan.Count > 0;
             }
         }
 
@@ -308,6 +289,10 @@ namespace planificApp.ViewModels
         {
             if (_sesionService.UsuarioActual == null) return;
             var ubicacionesDb = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(_sesionService.UsuarioActual.IdUsuario);
+
+            // Cacheamos las áreas para resolver la relación inversa (qué áreas usan cada ubicación).
+            _areasUsuario = await _areaRepo.ObtenerAreasPorUsuario(_sesionService.UsuarioActual.IdUsuario);
+
             ListaUbicaciones.Clear();
             foreach (var ubi in ubicacionesDb)
             {
@@ -324,7 +309,7 @@ namespace planificApp.ViewModels
                 });
             }
 
-            ActualizarGrupos();
+            RecalcularAreasDeUso();
             MapaDebeActualizarse?.Invoke();
 
             if (!string.IsNullOrEmpty(UbicacionSeleccionadaIdTemporal))
@@ -340,7 +325,7 @@ namespace planificApp.ViewModels
 
         private async void AgregarUbicacion(object parametro)
         {
-            var resultado = await _dialogService.ShowAddLocationDialog(_geoService, MisAreasDeInteres);
+            var resultado = await _dialogService.ShowAddLocationDialog(_geoService);
             if (resultado != null && !string.IsNullOrWhiteSpace(resultado.Direccion))
             {
                 var geo = await _geoService.ValidarDireccionAsync(resultado.Nombre, resultado.Direccion);
@@ -370,7 +355,7 @@ namespace planificApp.ViewModels
                         Longitud = nuevaUbicacionDb.Longitud
                     });
 
-                    ActualizarGrupos();
+                    RecalcularAreasDeUso();
                     MapaDebeActualizarse?.Invoke();
                 }
             }
@@ -380,7 +365,7 @@ namespace planificApp.ViewModels
         {
             if (ubicacionAEditar == null) return;
             var resultado = await _dialogService.ShowEditLocationDialog(
-                _geoService, MisAreasDeInteres,
+                _geoService,
                 ubicacionAEditar.Nombre!, ubicacionAEditar.DireccionExacta!,
                 ubicacionAEditar.AreaInteres ?? "General", ubicacionAEditar.ColorHex!, ubicacionAEditar.TransportePreferido!);
 
@@ -423,7 +408,7 @@ namespace planificApp.ViewModels
                         UbicacionSeleccionada = actualizada;
                 }
 
-                ActualizarGrupos();
+                RecalcularAreasDeUso();
                 MapaDebeActualizarse?.Invoke();
             }
         }
@@ -434,7 +419,7 @@ namespace planificApp.ViewModels
             await _ubicacionRepo.EliminarUbicacion(ubicacionAEliminar.IdUbicacion);
             ListaUbicaciones.Remove(ubicacionAEliminar);
 
-            ActualizarGrupos();
+            RecalcularAreasDeUso();
             MapaDebeActualizarse?.Invoke();
         }
 
@@ -448,7 +433,7 @@ namespace planificApp.ViewModels
             if (UbicacionSeleccionada == null || !UbicacionSeleccionada.EsTemporal) return;
 
             var resultado = await _dialogService.ShowEditLocationDialog(
-                _geoService, MisAreasDeInteres,
+                _geoService,
                 "", UbicacionSeleccionada.DireccionExacta ?? "", "General", "#10b981", "Auto");
 
             if (resultado != null && !string.IsNullOrWhiteSpace(resultado.Direccion))
@@ -490,7 +475,7 @@ namespace planificApp.ViewModels
 
                     BorrarPinTemporalDelMapa?.Invoke();
 
-                    ActualizarGrupos();
+                    RecalcularAreasDeUso();
                     MapaDebeActualizarse?.Invoke();
                 }
             }
@@ -518,10 +503,11 @@ namespace planificApp.ViewModels
         public event EventHandler? CanExecuteChanged;
     }
 
-    public class GrupoUbicacion
+    // Un área que usa una ubicación como su ubicación predeterminada (relación inversa, solo lectura).
+    public class AreaUso
     {
-        public string NombreArea { get; set; } = string.Empty;
-        public ObservableCollection<UbicacionVisual> Ubicaciones { get; set; } = new();
+        public string Nombre { get; set; } = string.Empty;
+        public string ColorHex { get; set; } = "#a78bfa";
     }
 
     public class UbicacionVisual : INotifyPropertyChanged
@@ -536,6 +522,16 @@ namespace planificApp.ViewModels
         public string? TransportePreferido { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }
+
+        // Áreas que usan esta ubicación como su ubicación predeterminada (UbicacionPred).
+        public ObservableCollection<AreaUso> AreasQueUsan { get; } = new();
+
+        private bool _tieneAreasQueUsan;
+        public bool TieneAreasQueUsan
+        {
+            get => _tieneAreasQueUsan;
+            set { _tieneAreasQueUsan = value; OnPropertyChanged(nameof(TieneAreasQueUsan)); }
+        }
 
         private bool _isSelected;
         public bool IsSelected

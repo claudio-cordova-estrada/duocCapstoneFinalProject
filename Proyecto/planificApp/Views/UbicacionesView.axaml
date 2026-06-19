@@ -190,29 +190,24 @@
                 <Grid ColumnDefinitions="2*, 1*" ColumnSpacing="12" Margin="0 10 0 0">
                     
                     <ScrollViewer Grid.Column="0">
-                        <ItemsControl ItemsSource="{Binding UbicacionesAgrupadas}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    
-                                    <StackPanel Margin="0 0 12 24">
-                                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 12">
-                                            <Label Content="&#xE1D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="#6366f1" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding NombreArea}" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
-                                            
-                                            <Border Background="#2a2a3b" CornerRadius="12" Padding="8 2" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Ubicaciones.Count}" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
-                                            </Border>
-                                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 12">
+                                <Label Content="&#xE1D6;" FontFamily="{DynamicResource Phosphor}" FontSize="16" Foreground="#6366f1" VerticalAlignment="Center"/>
+                                <TextBlock Text="Ubicaciones" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                <Border Background="#2a2a3b" CornerRadius="12" Padding="8 2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding ListaUbicaciones.Count}" FontSize="11" FontWeight="Medium" Foreground="{DynamicResource TextSecondary}"/>
+                                </Border>
+                            </StackPanel>
 
-                                        <ItemsControl ItemsSource="{Binding Ubicaciones}">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <UniformGrid Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding ListaUbicaciones}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
                                                     <Button Command="{Binding $parent[UserControl].((vm:UbicacionesViewModel)DataContext).SeleccionarUbicacionCommand}" 
                                                             CommandParameter="{Binding}"
                                                             Background="Transparent" BorderThickness="0" Padding="0" Margin="0 0 10 10" HorizontalAlignment="Stretch" Cursor="Hand">
@@ -260,13 +255,10 @@
                                                             </Grid>
                                                         </Border>
                                                     </Button>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </ScrollViewer>
 
                     <Border Grid.Column="1" Classes="card" Padding="14" VerticalAlignment="Top" MinHeight="180">
@@ -295,10 +287,32 @@
                                                             </Grid>
                                                             
                                                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
-                                                                <Grid ColumnDefinitions="Auto, *">
-                                                                    <TextBlock Grid.Column="0" Text="Área de interés · " FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Top"/>
-                                                                    <TextBlock Grid.Column="1" Text="{Binding UbicacionSeleccionada.AreaInteres, TargetNullValue='No registrada'}" FontSize="14" Foreground="{DynamicResource TextTertiary}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                                                                </Grid>
+                                                                <StackPanel Spacing="6">
+                                                                    <TextBlock Text="Áreas que la usan" FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+
+                                                                    <ItemsControl ItemsSource="{Binding UbicacionSeleccionada.AreasQueUsan}">
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <WrapPanel Orientation="Horizontal"/>
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate x:DataType="vm:AreaUso">
+                                                                                <Border Background="#2a2a3b" CornerRadius="12" Padding="8 3" Margin="0 0 6 6">
+                                                                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                                                                        <Ellipse Width="9" Height="9" Fill="{Binding ColorHex}" VerticalAlignment="Center"/>
+                                                                                        <TextBlock Text="{Binding Nombre}" FontSize="13" Foreground="{DynamicResource TextTertiary}" VerticalAlignment="Center"/>
+                                                                                    </StackPanel>
+                                                                                </Border>
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+
+                                                                    <TextBlock Text="Ninguna área usa esta ubicación"
+                                                                               FontSize="13" FontStyle="Italic"
+                                                                               Foreground="{DynamicResource TextDisabled}"
+                                                                               IsVisible="{Binding !UbicacionSeleccionada.TieneAreasQueUsan}"/>
+                                                                </StackPanel>
                                                             </Border>
 
                                                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 8 0 8">

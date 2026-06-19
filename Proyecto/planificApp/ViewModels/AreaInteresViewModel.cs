@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using planificApp.Data;
@@ -66,6 +67,7 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
             await AreaRepo.ObtenerAreasPorUsuario(idUsuario));
 
         SincronizarUbicaciones(await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario));
+        ReaplicarUbicacionSeleccionada();
 
         var tareas = await TareaRepo.ObtenerTareasPorArea(AreaSeleccionada.IdAreaInteres);
 
@@ -122,6 +124,24 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
         await TareaRepo.CrearTarea(tarea);
         QuickAddNombre = string.Empty;
         await CargarTareasAsync();
+    }
+
+    // Tras reconstruir MisUbicaciones, el ComboBox del detalle puede resetear su SelectedItem a
+    // null y propagarlo por el binding TwoWay (dejando "— Sin ubicación —" vacío). Volvemos a
+    // aplicar la selección correcta una vez que el control procesó el cambio de items.
+    private void ReaplicarUbicacionSeleccionada()
+    {
+        if (TareaSeleccionada == null) return;
+
+        var objetivo = string.IsNullOrEmpty(TareaSeleccionada.Ubicacion) || !MisUbicaciones.Contains(TareaSeleccionada.Ubicacion)
+            ? "— Sin ubicación —"
+            : TareaSeleccionada.Ubicacion;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (TareaSeleccionada != null && UbicacionDisplay != objetivo)
+                UbicacionDisplay = objetivo;
+        }, DispatcherPriority.Background);
     }
 
     private void SincronizarUbicaciones(IEnumerable<UbicacionGuardada> ubicacionesDb)

@@ -64,15 +64,9 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
     public async Task InicializarAsync(DateTime fechaLunes)
     {
-        FechaLunes = fechaLunes;
-        var cultura = new System.Globalization.CultureInfo("es-ES");
-        var mesInicio = cultura.DateTimeFormat.GetMonthName(fechaLunes.Month);
-        var mesFin = cultura.DateTimeFormat.GetMonthName(fechaLunes.AddDays(6).Month);
-
-        if (fechaLunes.Month == fechaLunes.AddDays(6).Month)
-            RangoFechas = $"Generaci\u00f3n desde el {fechaLunes.Day} hasta el {fechaLunes.AddDays(6).Day} de {mesInicio}";
-        else
-            RangoFechas = $"Generaci\u00f3n desde el {fechaLunes.Day} de {mesInicio} hasta el {fechaLunes.AddDays(6).Day} de {mesFin}";
+        _baseFechaLunes = fechaLunes;
+        FechaLunes = SemanaSiguiente ? fechaLunes.AddDays(7) : fechaLunes;
+        ActualizarRangoFechas();
 
         if (_sesionService.UsuarioActual == null) return;
 
@@ -92,7 +86,34 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         }
 
         InicializarDiasDesdeUsuario(usuario);
-        await CalcularHorasGeneracionAsync(fechaLunes);
+        await CalcularHorasGeneracionAsync(FechaLunes);
+        ActualizarPriorizacion();
+    }
+
+    private void ActualizarRangoFechas()
+    {
+        var cultura = new System.Globalization.CultureInfo("es-ES");
+        var mesInicio = cultura.DateTimeFormat.GetMonthName(FechaLunes.Month);
+        var mesFin = cultura.DateTimeFormat.GetMonthName(FechaLunes.AddDays(6).Month);
+
+        if (FechaLunes.Month == FechaLunes.AddDays(6).Month)
+            RangoFechas = $"Generaci\u00f3n desde el {FechaLunes.Day} hasta el {FechaLunes.AddDays(6).Day} de {mesInicio}";
+        else
+            RangoFechas = $"Generaci\u00f3n desde el {FechaLunes.Day} de {mesInicio} hasta el {FechaLunes.AddDays(6).Day} de {mesFin}";
+    }
+
+    // Feature: alternar entre semana actual y siguiente. Reubica FechaLunes y recalcula.
+    partial void OnSemanaSiguienteChanged(bool value)
+    {
+        if (_baseFechaLunes == default) return;
+        FechaLunes = _baseFechaLunes.AddDays(value ? 7 : 0);
+        ActualizarRangoFechas();
+        _ = RecalcularSemanaAsync();
+    }
+
+    private async Task RecalcularSemanaAsync()
+    {
+        await CalcularHorasGeneracionAsync(FechaLunes);
         ActualizarPriorizacion();
     }
 

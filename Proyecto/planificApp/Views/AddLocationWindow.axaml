@@ -23,11 +23,6 @@
             </StackPanel>
 
             <StackPanel Spacing="5">
-                <TextBlock Text="ÁREA DE INTERÉS" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="AreaSelect" HorizontalAlignment="Stretch"/>
-            </StackPanel>
-
-            <StackPanel Spacing="5">
                 <TextBlock Text="COLOR" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <StackPanel Orientation="Horizontal" Spacing="7" x:Name="ColorGrid">
                     <Border Classes="color-opt" Background="#a78bfa" Tag="#a78bfa" Tapped="ColorOption_Tapped"/>

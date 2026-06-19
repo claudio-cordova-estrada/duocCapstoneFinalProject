@@ -170,6 +170,7 @@ public partial class InboxViewModel : TareaDetailViewModelBase
 
         // 2. SINCRONIZAMOS UBICACIONES REALES DESDE MONGODB (sin Clear())
         SincronizarUbicaciones(await _ubicacionRepo.ObtenerUbicacionesPorUsuario(idUsuario));
+        ReaplicarUbicacionSeleccionada();
 
         // 3. CARGAMOS TAREAS
         var tareas = ModoActual switch
@@ -294,6 +295,24 @@ public partial class InboxViewModel : TareaDetailViewModelBase
                 AreasInteres[idx] = nueva;
             }
         }
+    }
+
+    // Tras reconstruir MisUbicaciones, el ComboBox del detalle puede resetear su SelectedItem a
+    // null y propagarlo por el binding TwoWay (dejando "— Sin ubicación —" vacío). Volvemos a
+    // aplicar la selección correcta una vez que el control procesó el cambio de items.
+    private void ReaplicarUbicacionSeleccionada()
+    {
+        if (TareaSeleccionada == null) return;
+
+        var objetivo = string.IsNullOrEmpty(TareaSeleccionada.Ubicacion) || !MisUbicaciones.Contains(TareaSeleccionada.Ubicacion)
+            ? "— Sin ubicación —"
+            : TareaSeleccionada.Ubicacion;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (TareaSeleccionada != null && UbicacionDisplay != objetivo)
+                UbicacionDisplay = objetivo;
+        }, DispatcherPriority.Background);
     }
 
     private void SincronizarUbicaciones(IEnumerable<UbicacionGuardada> ubicacionesDb)

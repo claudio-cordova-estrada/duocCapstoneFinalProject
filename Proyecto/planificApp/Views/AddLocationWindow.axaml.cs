@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Avalonia;
@@ -25,6 +26,9 @@ public partial class AddLocationWindow : Window
     public ObservableCollection<string> Sugerencias { get; set; } = new();
     private string _selectedColor = "#a78bfa";
     private string _selectedTransport = "Auto";
+    // El área de la ubicación ya no se elige aquí (se gestiona desde el área vía UbicacionPred).
+    // Se conserva el valor que traía la ubicación al editar; en creación queda "General".
+    private string _areaInteres = "General";
 
     // Constructor para el diseñador
     public AddLocationWindow()
@@ -44,34 +48,49 @@ public partial class AddLocationWindow : Window
     }
 
     // --- MÉTODOS DE LA VENTANA ---
-    public void SetAreasDeInteres(IEnumerable<string> areas)
-    {
-        AreaSelect.ItemsSource = areas;
-        if (AreaSelect.ItemCount > 0) AreaSelect.SelectedIndex = 0;
-    }
-
     public void SetEditMode(string name, string direccion, string area, string color, string transport)
     {
-        Title = "Editar ubicación";
-        NameInput.Text = name;
-        LocationInput.Text = direccion;
-        DeleteButton.IsVisible = true;
-        _selectedColor = color;
-        _selectedTransport = transport;
-        AreaSelect.SelectedItem = area;
-        SelectColor(_selectedColor);
-        SelectTransport(_selectedTransport);
+        try
+        {
+            Title = "Editar ubicación";
+            NameInput.Text = name;
+            LocationInput.Text = direccion;
+            DeleteButton.IsVisible = true;
+            _selectedColor = string.IsNullOrWhiteSpace(color) ? _selectedColor : color;
+            _selectedTransport = string.IsNullOrWhiteSpace(transport) ? _selectedTransport : transport;
+
+            // Conservamos el área que ya tenía la ubicación (la usa el generador semanal),
+            // aunque ya no se pueda cambiar desde este diálogo.
+            _areaInteres = string.IsNullOrWhiteSpace(area) ? "General" : area;
+
+            SelectColor(_selectedColor);
+            SelectTransport(_selectedTransport);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ADD_LOCATION] Error al entrar en modo edición: {ex.Message}");
+        }
     }
 
     private async void OnLocationInputPopulating(object? sender, PopulatingEventArgs e)
     {
-        var text = LocationInput.Text;
-        if (string.IsNullOrWhiteSpace(text) || text.Length < 3) return;
-        e.Cancel = true;
-        var resultados = await _geoService.GetPredictionsAsync(text);
-        Sugerencias.Clear();
-        foreach (var item in resultados) Sugerencias.Add(item);
-        LocationInput.PopulateComplete();
+        // async void: cualquier excepción que escape de aquí cae la app entera
+        // (no hay manejador global). Por eso TODO va dentro de un try/catch.
+        try
+        {
+            var text = LocationInput.Text;
+            if (string.IsNullOrWhiteSpace(text) || text.Length < 3) return;
+            if (_geoService == null) return;
+            e.Cancel = true;
+            var resultados = await _geoService.GetPredictionsAsync(text);
+            Sugerencias.Clear();
+            foreach (var item in resultados) Sugerencias.Add(item);
+            LocationInput.PopulateComplete();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"[ADD_LOCATION] Error en autocompletado: {ex.Message}");
+        }
     }
 
     private void ColorOption_Tapped(object? sender, TappedEventArgs e)
@@ -113,23 +132,30 @@ public partial class AddLocationWindow : Window
 
     private void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
-        // NUEVO: Validación. Si no hay nombre, mostramos el error y abortamos el guardado.
-        if (string.IsNullOrWhiteSpace(NameInput.Text))
+        try
         {
-            NameError.IsVisible = true;
-            return;
-        }
-        NameError.IsVisible = false;
+            // Validación. Si no hay nombre, mostramos el error y abortamos el guardado.
+            if (string.IsNullOrWhiteSpace(NameInput.Text))
+            {
+                NameError.IsVisible = true;
+                return;
+            }
+            NameError.IsVisible = false;
 
-        var resultado = new LocationFormData
+            var resultado = new LocationFormData
+            {
+                Nombre = NameInput.Text.Trim(),
+                Direccion = LocationInput.Text ?? "",
+                AreaInteres = _areaInteres,
+                ColorHex = _selectedColor,
+                Transporte = _selectedTransport
+            };
+            Close(resultado);
+        }
+        catch (Exception ex)
         {
-            Nombre = NameInput.Text.Trim(),
-            Direccion = LocationInput.Text ?? "",
-            AreaInteres = AreaSelect.SelectedItem?.ToString() ?? "General",
-            ColorHex = _selectedColor,
-            Transporte = _selectedTransport
-        };
-        Close(resultado);
+            System.Diagnostics.Debug.WriteLine($"[ADD_LOCATION] Error al guardar: {ex.Message}");
+        }
     }
 
     private void DeleteButton_Click(object? sender, RoutedEventArgs e) { Close(null); }

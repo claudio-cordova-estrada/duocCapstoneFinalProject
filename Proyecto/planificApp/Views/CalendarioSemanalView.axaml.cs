@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -68,6 +69,16 @@ public partial class CalendarioSemanalView : UserControl
     private bool _isContextMenuOpen;
     private bool _pendingRender;
 
+    // C3: fantasma (preview) que sigue al cursor mientras se arrastra un bloque/sub-tarea.
+    private Border? _dragGhost;
+
+    // Resize: para re-renderizar los bloques cuando cambia el ancho de la vista.
+    private double _lastRenderWidth = -1;
+
+    // Bug 2: guard de re-entrada — mientras se procesa un drop, ignoramos nuevos arrastres/drops
+    // para evitar que operaciones async se solapen y corrompan el estado (crash con acciones rápidas).
+    private bool _isProcessingDrop;
+
     public CalendarioSemanalView()
     {
         InitializeComponent();
@@ -108,7 +119,24 @@ public partial class CalendarioSemanalView : UserControl
         AddHandler(PointerMovedEvent, OnPanelPointerMoved, RoutingStrategies.Tunnel);
         AddHandler(PointerReleasedEvent, OnPanelPointerReleased, RoutingStrategies.Tunnel);
 
+        // Resize: cuando cambia el ancho de la vista, re-renderizamos para que los bloques tomen
+        // el nuevo ancho de las columnas (que ahora son proporcionales).
+        this.PropertyChanged += OnViewPropertyChanged;
+
         Loaded += OnLoaded;
+    }
+
+    private void OnViewPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == BoundsProperty)
+        {
+            var w = Bounds.Width;
+            if (Math.Abs(w - _lastRenderWidth) > 1)
+            {
+                _lastRenderWidth = w;
+                RenderAllDays();
+            }
+        }
     }
 
     private async void OnLoaded(object? sender, RoutedEventArgs e)
@@ -147,6 +175,8 @@ public partial class CalendarioSemanalView : UserControl
 
 private void OnDayDragOver(object? sender, DragEventArgs e)
     {
+        if (_dragGhost != null) ActualizarDragGhost(e.GetPosition(this));
+
         if (e.DataTransfer.Formats.Contains(DataFormat.Text))
         {
             var text = e.DataTransfer.TryGetText();
@@ -288,6 +318,53 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 _dayHeaderNums[i].Text = "";
             }
         }
+    }
+
+    // C3: muestra un fantasma (preview) con el nombre/color del bloque siguiendo al cursor.
+    private void MostrarDragGhost(string texto, string? colorHex, Point posEnView)
+    {
+        var overlay = OverlayLayer.GetOverlayLayer(this);
+        if (overlay == null) return;
+        QuitarDragGhost();
+
+        var color = !string.IsNullOrEmpty(colorHex) ? colorHex : "#a78bfa";
+        _dragGhost = new Border
+        {
+            Background = CreateBrush(color, 0.85),
+            BorderBrush = CreateBrush(color, 1.0),
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(4),
+            Padding = new Thickness(8, 4),
+            IsHitTestVisible = false,
+            Opacity = 0.9,
+            Child = new TextBlock
+            {
+                Text = string.IsNullOrWhiteSpace(texto) ? "Mover" : texto,
+                FontSize = 11,
+                Foreground = new SolidColorBrush(Color.Parse("#ffffff")),
+                TextTrimming = TextTrimming.CharacterEllipsis,
+                MaxWidth = 160
+            }
+        };
+        overlay.Children.Add(_dragGhost);
+        ActualizarDragGhost(posEnView);
+    }
+
+    private void ActualizarDragGhost(Point posEnView)
+    {
+        if (_dragGhost == null) return;
+        var overlay = OverlayLayer.GetOverlayLayer(this);
+        if (overlay == null) return;
+        var p = this.TranslatePoint(posEnView, overlay) ?? posEnView;
+        Canvas.SetLeft(_dragGhost, p.X + 12);
+        Canvas.SetTop(_dragGhost, p.Y + 12);
+    }
+
+    private void QuitarDragGhost()
+    {
+        if (_dragGhost == null) return;
+        OverlayLayer.GetOverlayLayer(this)?.Children.Remove(_dragGhost);
+        _dragGhost = null;
     }
 
     private async Task LimpiarDiaSeguro(int dayIdx)
@@ -696,8 +773,11 @@ case TipoBloqueCalendario.SeccionTraslado:
             return;
         }
 
+        if (_isProcessingDrop) return;
+
         e.Handled = true;
         _dragMode = DragMode.MoveSubBloque;
+        MostrarDragGhost(sub.Nombre, parentBloque.ColorHex, e.GetCurrentPoint(this).Position);
         _draggedSubBloque = sub;
         _draggedSubParentBloque = parentBloque;
         _draggedSubBorder = subBorder;
@@ -777,6 +857,8 @@ case TipoBloqueCalendario.SeccionTraslado:
             return;
         }
 
+        if (_isProcessingDrop) return;
+
         e.Handled = true;
         _dragMode = DragMode.Move;
         _draggedBorder = border;
@@ -788,6 +870,7 @@ case TipoBloqueCalendario.SeccionTraslado:
         _dragOriginalHoraInicio = bloque.HoraInicio;
         _dragOriginalHoraFin = bloque.HoraFin;
         _dragOriginalHeight = bloque.HeightPx;
+        MostrarDragGhost(bloque.NombreMostrar, bloque.ColorHex, e.GetCurrentPoint(this).Position);
 
         if (_viewModel != null) _viewModel.BloqueSeleccionado = bloque;
     }
@@ -886,6 +969,8 @@ case TipoBloqueCalendario.SeccionTraslado:
 
         var currentY = e.GetCurrentPoint(this).Position.Y;
         var deltaY = currentY - _dragStartY;
+
+        if (_dragGhost != null) ActualizarDragGhost(e.GetCurrentPoint(this).Position);
 
         if (_dragMode is DragMode.MoveSubBloque or DragMode.ResizeTopSubBloque or DragMode.ResizeBottomSubBloque)
         {
@@ -1035,6 +1120,13 @@ case DragMode.ResizeTop:
 
     private async void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
+        QuitarDragGhost();
+
+        if (_isProcessingDrop) { _dragMode = DragMode.None; return; }
+        _isProcessingDrop = true;
+        try
+        {
+
         if (_dragMode is DragMode.MoveSubBloque or DragMode.ResizeTopSubBloque or DragMode.ResizeBottomSubBloque)
         {
             var wasSubMove = _dragMode == DragMode.MoveSubBloque;
@@ -1257,6 +1349,11 @@ case DragMode.ResizeTop:
         _draggedDayIndex = -1;
 
         RenderAllDays();
+        }
+        finally
+        {
+            _isProcessingDrop = false;
+        }
     }
 
     private int GetTargetDayIndex(PointerEventArgs e)
@@ -1324,11 +1421,13 @@ case DragMode.ResizeTop:
         {
             data.Add(DataTransferItem.CreateText(
                 $"CalendarDrop:AreaInteres:{area.IdAreaInteres}:{area.ColorHex ?? "#a78bfa"}"));
+            MostrarDragGhost(area.Nombre, area.ColorHex, initiator.GetPosition(this));
         }
         else if (dragType == "Tarea" && dragItem is Tarea tarea)
         {
             data.Add(DataTransferItem.CreateText(
                 $"CalendarDrop:Tarea:{tarea.IdTarea}:{tarea.IdAreaInteres ?? ""}:{tarea.TiempoEstimado}"));
+            MostrarDragGhost(tarea.Nombre, "#666666", initiator.GetPosition(this));
         }
         else
         {
@@ -1340,6 +1439,10 @@ case DragMode.ResizeTop:
             await DragDrop.DoDragDropAsync(initiator, data, DragDropEffects.Copy);
         }
         catch { }
+        finally
+        {
+            QuitarDragGhost();
+        }
     }
 
     private (object?, string?) FindPanelDragItem(Visual? source)

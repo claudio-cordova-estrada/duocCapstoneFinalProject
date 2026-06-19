@@ -156,28 +156,19 @@
                                                        Foreground="{DynamicResource TextSecondary}"
                                                        Opacity="{Binding EsMesActual, Converter={StaticResource BoolToOpacityConverter}}"/>
 
-                                            <!-- Lista de tareas con texto y color -->
-                                            <ItemsControl ItemsSource="{Binding TareasDelDia}">
+                                            <!-- Puntitos de color: uno por cada área trabajada ese día -->
+                                            <ItemsControl ItemsSource="{Binding PuntosAreas}" Margin="4 0 0 0">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
-                                                        <StackPanel Spacing="2"/>
+                                                        <WrapPanel Orientation="Horizontal"/>
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
-                                                
+
                                                 <ItemsControl.ItemTemplate>
-                                                    <DataTemplate x:DataType="vm:TareaCalendario">
-                                                        <!-- Diseño de la "pastilla" de la tarea -->
-                                                        <Border Background="#1A1A1A" BorderBrush="#333333" BorderThickness="1" CornerRadius="4" Padding="6 4">
-                                                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                                                <Ellipse Width="8" Height="8" Fill="{Binding ColorHex}" VerticalAlignment="Center"/>
-                                                                <TextBlock Text="{Binding Titulo}" 
-                                                                           FontSize="11" 
-                                                                           Foreground="{DynamicResource TextSecondary}" 
-                                                                           TextTrimming="CharacterEllipsis" 
-                                                                           MaxWidth="100" 
-                                                                           VerticalAlignment="Center"/>
-                                                            </StackPanel>
-                                                        </Border>
+                                                    <DataTemplate x:DataType="vm:PuntoAreaDia">
+                                                        <Ellipse Width="9" Height="9" Margin="2"
+                                                                 Fill="{Binding ColorHex}"
+                                                                 ToolTip.Tip="{Binding NombreArea}"/>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

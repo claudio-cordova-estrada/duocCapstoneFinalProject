@@ -6,7 +6,8 @@
         x:Class="planificApp.MainView"
         xmlns:vm="clr-namespace:planificApp.ViewModels"
         x:DataType="vm:MainViewModel"
-        Title="PlanificApp">
+        Title="PlanificApp"
+        MinWidth="960" MinHeight="600">
     
     <Design.DataContext>
         <vm:MainViewModel/>

@@ -9,6 +9,7 @@
              x:DataType="vm:CalendarioSemanalViewModel">
 
     <Border Background="{DynamicResource AppBackground}">
+        <Grid>
         <DockPanel>
 
             <!-- Sub-header -->
@@ -74,7 +75,7 @@
 
                     <!-- Day headers -->
                     <Border Grid.Row="0" Background="{DynamicResource CalendarDayHeader}">
-                        <Grid x:Name="DayHeaderGrid" ColumnDefinitions="52,190,190,190,190,190,190,190">
+                        <Grid x:Name="DayHeaderGrid" ColumnDefinitions="52,*,*,*,*,*,*,*">
                             <TextBlock Grid.Column="0" Text="" FontSize="9" Margin="0 0 4 0" HorizontalAlignment="Right"/>
                             <Border x:Name="DayHeader0" Grid.Column="1" Padding="4 6">
                                 <StackPanel HorizontalAlignment="Center" Spacing="1">
@@ -218,11 +219,12 @@
                 </Border>
             </Grid>
 
-            <!-- Loading overlay -->
-            <Border IsVisible="{Binding IsLoading}" Background="#00000088" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <TextBlock Text="Cargando..." HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#ffffff" FontSize="14"/>
-            </Border>
-
         </DockPanel>
+
+        <!-- Loading overlay: cubre toda la vista y centra el texto -->
+        <Border IsVisible="{Binding IsLoading}" Background="#00000088">
+            <TextBlock Text="Cargando..." HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#ffffff" FontSize="14"/>
+        </Border>
+        </Grid>
     </Border>
 </UserControl>
