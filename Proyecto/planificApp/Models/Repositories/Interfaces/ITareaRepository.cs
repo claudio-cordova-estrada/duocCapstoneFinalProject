@@ -15,6 +15,7 @@ public interface ITareaRepository
     Task<List<Tarea>> ObtenerTareasCompletadas(string idUsuario);
     Task<List<Tarea>> ObtenerTareasVencidas(string idUsuario);
     Task<List<Tarea>> ObtenerTareasPorArea(string areaId);
+    Task<Tarea?> ObtenerTareaPorId(string idTarea);
     Task CompletarTarea(string idTarea);
     Task DescompletarTarea(string idTarea);
     Task ActualizarTarea(string id, Tarea tareaActualizada);

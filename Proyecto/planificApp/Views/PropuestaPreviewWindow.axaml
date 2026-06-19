@@ -1,0 +1,31 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="planificApp.Views.PropuestaPreviewWindow"
+        Title="Previsualizaci&#xF3;n de propuesta"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        MaxWidth="850" MaxHeight="700"
+        Background="{DynamicResource AppBackground}">
+
+    <DockPanel Margin="16">
+        <Border DockPanel.Dock="Top" Padding="0 0 0 12" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1">
+            <StackPanel HorizontalAlignment="Center" Spacing="2">
+                <TextBlock x:Name="TxtTitulo" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="TxtDescripcion" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Padding="0 12 0 0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 1 0 0">
+            <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                <TextBlock x:Name="TxtEstadisticas" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer>
+            <StackPanel x:Name="DiasPanel" Spacing="8" Margin="8"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

@@ -7,148 +7,179 @@
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:UsuarioDetalleViewModel">
 
+    <UserControl.Styles>
+        <Style Selector="ListBox.meses-list">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="ListBox.meses-list ListBoxItem">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="10 4" Margin="0 0 6 0" Cursor="Hand">
+                        <ContentPresenter Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="ListBox.meses-list ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#cccccc"/>
+        </Style>
+        <Style Selector="ListBox.meses-list ListBoxItem:pointerover">
+            <Setter Property="Background" Value="#1f1f1f"/>
+        </Style>
+        <Style Selector="ListBox.meses-list ListBoxItem:selected">
+            <Setter Property="Background" Value="#ea580c"/> 
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </UserControl.Styles>
+
     <Border Background="{DynamicResource AppBackground}">
         <ScrollViewer>
             <StackPanel Spacing="18" Margin="28 26">
 
-                <!-- Back button -->
-                <Button Classes="transparent" Click="Back_Click" HorizontalAlignment="Left" Padding="5 9">
+                <Button Classes="transparent" Command="{Binding VolverCommand}" HorizontalAlignment="Left" Padding="5 9">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="14" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
                         <TextBlock Text="Volver a usuarios" FontSize="14" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
 
-                <!-- Name + ID + badge -->
                 <StackPanel Spacing="4">
-                    <TextBlock x:Name="UserName" Text="Carlos López" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                    <TextBlock Text="{Binding Nombre}" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <TextBlock x:Name="UserId" Text="USR001" FontSize="12" Foreground="{DynamicResource TextDisabled}" FontFamily="Consolas"/>
-                        <Border x:Name="StatusBadge" CornerRadius="4" Padding="8 3">
-                            <TextBlock x:Name="StatusText" FontSize="11"/>
-                        </Border>
+                        <TextBlock Text="{Binding IdUsuario}" FontSize="12" Foreground="{DynamicResource TextDisabled}" FontFamily="Consolas"/>
+                        <Border CornerRadius="4" Padding="8 3" Background="#1e1e2e">
+    <TextBlock Text="{Binding StatusBadgeText}" Foreground="{Binding ColorBadgeEstado}" FontSize="11" FontWeight="Bold"/>
+</Border>
                     </StackPanel>
                 </StackPanel>
 
-                <!-- Detail grid 2x4 -->
                 <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
                     
-                    <!-- Nombre -->
                     <Border Grid.Column="0" Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="NOMBRE" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBox x:Name="FieldName" Grid.Column="0" IsReadOnly="True" Text="Carlos López" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                                <Button x:Name="BtnName" Grid.Column="1" Classes="transparent" Click="BtnName_Click" VerticalAlignment="Center">
-                                    <Label x:Name="IconName" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
-                                </Button>
-                            </Grid>
+                            <TextBox Text="{Binding Nombre}" FontSize="14" Foreground="{DynamicResource TextPrimary}" Background="Transparent" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="0 4"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Correo -->
                     <Border Grid.Column="1" Grid.Row="0" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="CORREO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBox x:Name="FieldCorreo" Grid.Column="0" IsReadOnly="True" Text="carlos.lopez@ejemplo.com" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                                <Button x:Name="BtnCorreo" Grid.Column="1" Classes="transparent" Click="BtnCorreo_Click" VerticalAlignment="Center">
-                                    <Label x:Name="IconCorreo" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
-                                </Button>
-                            </Grid>
+                            <TextBox Text="{Binding Correo}" FontSize="14" Foreground="{DynamicResource TextPrimary}" Background="Transparent" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="0 4"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Fecha de nacimiento -->
                     <Border Grid.Column="0" Grid.Row="1" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="FECHA DE NACIMIENTO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBox x:Name="FieldFechaNac" Grid.Column="0" IsReadOnly="True" Text="15 mar 1998" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                                <Button x:Name="BtnFechaNac" Grid.Column="1" Classes="transparent" Click="BtnFechaNac_Click" VerticalAlignment="Center">
-                                    <Label x:Name="IconFechaNac" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="13" Foreground="#999999"/>
-                                </Button>
-                            </Grid>
+                            <CalendarDatePicker SelectedDate="{Binding FechaNacimientoDate}" FontSize="14" Foreground="{DynamicResource TextPrimary}" Background="Transparent" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="0 4" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Edad (read-only) -->
                     <Border Grid.Column="1" Grid.Row="1" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="EDAD" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <TextBlock x:Name="FieldEdad" Text="28" FontSize="14" Foreground="{DynamicResource TextSecondary}"  Padding="0 9 0 0 "/>
+                            <TextBlock Text="{Binding Edad}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Padding="0 9 0 0 "/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Región -->
                     <Border Grid.Column="0" Grid.Row="2" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="REGIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <ComboBox x:Name="FieldRegion" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4"/>
+                            <ComboBox ItemsSource="{Binding Regiones}" SelectedItem="{Binding RegionSeleccionada}" FontSize="14" Foreground="{DynamicResource TextPrimary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Comuna -->
                     <Border Grid.Column="1" Grid.Row="2" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <ComboBox x:Name="FieldComuna" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4" IsEnabled="False" SelectedIndex="0"/>
+                            <ComboBox ItemsSource="{Binding Comunas}" SelectedItem="{Binding ComunaSeleccionada}" FontSize="14" Foreground="{DynamicResource TextPrimary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="8 4" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Meses activo (read-only) -->
                     <Border Grid.Column="0" Grid.Row="3" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="MESES ACTIVO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <TextBlock x:Name="FieldMeses" Text="14 meses" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="{Binding MesesActivo}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Padding="0 9 0 0"/>
                         </StackPanel>
                     </Border>
 
-                    <!-- Fecha registro (read-only) -->
                     <Border Grid.Column="1" Grid.Row="3" Background="{DynamicResource AppBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" CornerRadius="8" Padding="14">
                         <StackPanel Spacing="4">
                             <TextBlock Text="FECHA DE REGISTRO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                            <TextBlock x:Name="FieldRegistro" Text="12 mar 2025" FontSize="14" Foreground="{DynamicResource TextSecondary}"/>
+                            <TextBlock Text="{Binding FechaRegistro}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Padding="0 9 0 0"/>
                         </StackPanel>
                     </Border>
                 </Grid>
 
-                <!-- Metrics section -->
                 <TextBlock Text="MÉTRICAS" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
 
-                <!-- Year/Month navigation -->
                 <Border Classes="card" Padding="16" CornerRadius="10">
                     <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
-                        <Button x:Name="DetailYearLeft" Grid.Column="0" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="DetailYearLeft_Click">
+                        <Button Grid.Column="0" Classes="transparent" Padding="10" VerticalAlignment="Center" Command="{Binding DetailYearLeftCommand}">
                             <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="#999999"/>
                         </Button>
-                        <TextBlock x:Name="DetailYearLabel" Grid.Column="1" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="10 0" MinWidth="72" TextAlignment="Center"/>
-                        <Button x:Name="DetailYearRight" Grid.Column="2" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="DetailYearRight_Click">
+                        <TextBlock Text="{Binding YearActual}" Grid.Column="1" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="10 0" MinWidth="72" TextAlignment="Center"/>
+                        <Button Grid.Column="2" Classes="transparent" Padding="10" VerticalAlignment="Center" Command="{Binding DetailYearRightCommand}">
                             <Label Content="&#xE52C;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="#999999"/>
                         </Button>
                         <Border Grid.Column="3" Width="1" Background="{DynamicResource BorderSubtle}" Margin="14 0"/>
-                        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" x:Name="DetailMonthPills"/>
+                        
+                        <ListBox Classes="meses-list" Grid.Column="4" ItemsSource="{Binding ListaMeses}" SelectedItem="{Binding MesSeleccionado}" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Nombre}" FontSize="13"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
                 </Border>
 
-                <!-- Metrics grid -->
-                <Grid x:Name="DetailMetricsGrid" ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10"/>
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0" Classes="card" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Tareas creadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                            <TextBlock Text="{Binding TareasCreadas}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource AdminAccent}" Margin="0 4 0 0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Classes="card" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Tareas completadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                            <TextBlock Text="{Binding TareasCompletadas}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 4 0 0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Classes="card" Padding="20">
+                        <StackPanel>
+                            <TextBlock Text="Generaciones" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                            <TextBlock Text="{Binding GeneracionesRealizadas}" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 4 0 0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                <!-- Action buttons -->
-                <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 4 0 0">
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto" Margin="0 4 0 0" VerticalAlignment="Center">
                     <Border Grid.Column="0"/>
-                    <Button Grid.Column="1" Classes="danger" Padding="14 7" CornerRadius="7" FontSize="13" Click="Desactivar_Click">
-                        <TextBlock Text="Desactivar usuario" HorizontalAlignment="Center"/>
-                    </Button>
-                    <Button Grid.Column="2" Classes="accent-admin" Padding="14 7" Margin="8 0 0 0" FontSize="13" Click="Guardar_Click">
+
+                    <TextBlock Grid.Column="1" Text="{Binding ErrorValidacion}" FontSize="13" Foreground="#ef4444" IsVisible="{Binding MostrarError, FallbackValue=False}" VerticalAlignment="Center" Margin="0 0 16 0"/>
+                    <TextBlock Grid.Column="1" Text="Cambios guardados con éxito" FontSize="13" Foreground="#4ade80" IsVisible="{Binding MostrarMensajeExito}" VerticalAlignment="Center" Margin="0 0 16 0"/>
+
+                    <Button Grid.Column="2" Padding="14 7" CornerRadius="7" FontSize="13" Background="#16161e" BorderBrush="#2a2a3b" BorderThickness="1" Command="{Binding ToggleEstadoUsuarioCommand}">
+    <TextBlock Text="{Binding TextoBotonEstado}" Foreground="{Binding ColorTextoEstado}" HorizontalAlignment="Center" FontWeight="Medium"/>
+</Button>
+
+                    <Button Grid.Column="3" Classes="accent-admin" Padding="14 7" Margin="8 0 0 0" FontSize="13" Command="{Binding GuardarCambiosCommand}">
                         <TextBlock Text="Guardar cambios" HorizontalAlignment="Center"/>
                     </Button>
                 </Grid>
 
-                <!-- Success message -->
-                <TextBlock x:Name="SuccessMessage" Text="Cambios realizados con éxito" FontSize="14" FontWeight="Medium" Foreground="#4ade80" IsVisible="False" HorizontalAlignment="Right" Opacity="1"/>
-
             </StackPanel>
         </ScrollViewer>
     </Border>
-</UserControl>
+</UserControl> 

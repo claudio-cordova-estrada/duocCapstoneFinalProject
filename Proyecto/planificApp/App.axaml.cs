@@ -41,6 +41,7 @@ public partial class App : Application
         collection.AddTransient<RegistroViewModel>();
         collection.AddTransient<RecuperarContraViewModel>();
         
+        
         // User - Tareas ViewModels
         collection.AddTransient<InboxViewModel>();
         collection.AddTransient<NewTaskViewModel>();
@@ -51,7 +52,8 @@ public partial class App : Application
         collection.AddTransient<CalendarioSemanalViewModel>();
         collection.AddTransient<CalendarioMensualViewModel>();
         collection.AddTransient<SugerenciasViewModel>();
-        collection.AddTransient<PropuestasSemanalesViewModel>();
+        collection.AddSingleton<PropuestasSemanalesViewModel>();
+        collection.AddTransient<CondicionesGeneracionViewModel>();
         
         // User - Otras ViewModels
         collection.AddTransient<UbicacionesViewModel>();
@@ -62,8 +64,9 @@ public partial class App : Application
         
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
-        collection.AddTransient<UsuariosViewModel>();
+        collection.AddTransient<EstadisticaUsuarioViewModel>();
         collection.AddTransient<UsuarioDetalleViewModel>();
+        collection.AddTransient<UsuariosViewModel>();
 
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
@@ -81,15 +84,20 @@ public partial class App : Application
         collection.AddSingleton<ITareaRepository, TareaRepository>();
         collection.AddSingleton<IAreaInteresRepository, AreaInteresRepository>();
         collection.AddSingleton<IUbicacionRepository, UbicacionRepository>();
+        collection.AddSingleton<IBloqueAreaInteresScheduleRepository, BloqueAreaInteresScheduleRepository>();
 
         // Services
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();
-        collection.AddSingleton<ISesionService, SesionService>();
+        collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
+collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
+        collection.AddSingleton<IGeneradorSemanalService, GeneradorSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
-
+        collection.AddSingleton<IRegionesService, RegionesService>();
+        collection.AddSingleton<IMetricasService, MetricasService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
+
         {
             // Auth
             ApplicationPageNames.Login => x.GetRequiredService<LoginViewModel>(),

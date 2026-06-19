@@ -10,5 +10,5 @@ public interface IGeoService
     Task<List<string>> GetPredictionsAsync(string input);
     Task<string> CalcularTiempoTrasladoAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string transporteApp);
     Task<(string Tiempo, List<(double Latitud, double Longitud)> Ruta)> CalcularRutaConTrazadoAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string transporteApp);
-    Task<string> ObtenerDireccionDesdeCoordenadasAsync(double lat, double lon);
+    Task<string> ObtenerDireccionDesdeCoordenadasAsync(double lat, double lon);Task<(string Tiempo, string Distancia, string Polyline)?> CalcularRutaGoogleAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string modoTransporte);
 }

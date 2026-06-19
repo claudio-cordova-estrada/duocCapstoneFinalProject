@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PlanificApp.Models.Services.Interfaces;
@@ -57,6 +58,20 @@ public partial class LoginViewModel : PageViewModel
             if (usuario != null)
             {
                 _sesion.IniciarSesion(usuario);
+
+                // --- LÓGICA AUTOMÁTICA DE ROLES ---
+                string correoValidar = Correo.Trim().ToLower();
+
+                if (correoValidar.Contains("@planificapp."))
+                {
+                    _navigation.IsAdminToggle = true; // Activa el rol Admin
+                }
+                else
+                {
+                    _navigation.IsAdminToggle = false; // Se asegura de que sea Usuario normal
+                }
+
+                // Disparamos el éxito. El servicio de navegación decidirá a dónde ir según el Toggle
                 _navigation.OnLoginSuccess();
             }
             else
@@ -65,9 +80,10 @@ public partial class LoginViewModel : PageViewModel
                 HasError = true;
             }
         }
-        catch
+        catch (Exception ex)
         {
-            ErrorMessage = "Error de conexión. Intenta de nuevo.";
+            System.Diagnostics.Debug.WriteLine($"[LoginAsync] Error: {ex}");
+            ErrorMessage = $"Error: {ex.Message}";
             HasError = true;
         }
         finally

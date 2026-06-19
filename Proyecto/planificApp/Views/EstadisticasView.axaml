@@ -2,82 +2,197 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
              x:Class="planificApp.Views.EstadisticasView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:EstadisticasViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="ListBox.pill-list">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <Style Selector="ListBox.pill-list ListBoxItem">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="16"
+                            Padding="16 6"
+                            Margin="0 0 8 8"
+                            Cursor="Hand">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+        <Style Selector="ListBox.pill-list ListBoxItem">
+            <Setter Property="Background" Value="#121212"/>
+            <Setter Property="BorderBrush" Value="#2a2a2a"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
+        </Style>
+        
+        <Style Selector="ListBox.pill-list ListBoxItem:pointerover">
+            <Setter Property="Background" Value="#1f1f1f"/>
+            <Setter Property="BorderBrush" Value="#3a3a3a"/>
+        </Style>
+        
+        <Style Selector="ListBox.pill-list ListBoxItem:selected">
+            <Setter Property="Background" Value="#1a0f08"/> 
+            <Setter Property="BorderBrush" Value="#ea580c"/> 
+            <Setter Property="Foreground" Value="#ea580c"/>
+        </Style>
+    </UserControl.Styles>
 
     <Border Background="{DynamicResource AppBackground}">
         <ScrollViewer>
             <StackPanel Spacing="18" Margin="28 26">
 
-                <TextBlock Text="Estadísticas de usuario" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
-                <TextBlock Text="Datos de uso · actualizado hoy" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0 -12 0 0"/>
+                <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 10">
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Estadísticas de usuario" FontSize="24" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                        <TextBlock Text="Datos de uso · actualizado hoy" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0 -2 0 0"/>
+                    </StackPanel>
 
-                <!-- Region pills -->
+                    <Border Grid.Column="1" Background="#121212" BorderBrush="#222222" BorderThickness="1" CornerRadius="8" Width="300" Height="42" VerticalAlignment="Center">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Label Grid.Column="0" Content="&#xE318;" FontFamily="{DynamicResource Phosphor}" FontSize="20" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="12 0 4 0"/>
+                            <AutoCompleteBox Grid.Column="1" 
+                 Text="{Binding TextoBusqueda}" 
+                 ItemsSource="{Binding SugerenciasBusqueda}"
+                 PlaceholderText="Buscar nombre, correo, ID..." 
+                 Background="Transparent" 
+                 BorderThickness="0" 
+                 FontSize="13" 
+                 Foreground="{DynamicResource TextPrimary}"
+                 VerticalAlignment="Center"
+                 Margin="0"
+                 FilterMode="Contains"
+                 MinimumPrefixLength="1">
+                             <AutoCompleteBox.ItemTemplate>
+        <DataTemplate>
+            <TextBlock Text="{Binding .}" Foreground="{DynamicResource TextPrimary}" Padding="4"/>
+        </DataTemplate>
+    </AutoCompleteBox.ItemTemplate>
+    
+</AutoCompleteBox>
+                        </Grid>
+                    </Border>
+                </Grid>
+
                 <StackPanel Spacing="8">
                     <TextBlock Text="REGIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="RegionPills"/>
+                    <ListBox Classes="pill-list" ItemsSource="{Binding Regiones}" SelectedItem="{Binding RegionSeleccionada}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </StackPanel>
 
-                <!-- Comuna pills -->
                 <StackPanel Spacing="8">
                     <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                    <StackPanel Orientation="Horizontal" Spacing="6" x:Name="ComunaPills"/>
+                    <ListBox Classes="pill-list" ItemsSource="{Binding Comunas}" SelectedItem="{Binding ComunaSeleccionada}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </StackPanel>
 
-                <!-- Year/Month navigation -->
                 <Border Classes="card" Padding="16" CornerRadius="10">
                     <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*">
-                        <Button x:Name="YearLeft" Grid.Column="0" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="YearLeft_Click">
+                        <Button x:Name="YearLeft" Grid.Column="0" Classes="transparent" Padding="10" VerticalAlignment="Center" Command="{Binding YearLeftCommand}">
                             <Label Content="&#xE51A;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="{DynamicResource TextMuted}"/>
                         </Button>
-                        <TextBlock x:Name="YearLabel" Grid.Column="1" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="10 0" MinWidth="72" TextAlignment="Center"/>
-                        <Button x:Name="YearRight" Grid.Column="2" Classes="transparent" Padding="10" VerticalAlignment="Center" Click="YearRight_Click">
+                        
+                        <TextBlock x:Name="YearLabel" Text="{Binding YearActual}" Grid.Column="1" FontSize="28" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="10 0" MinWidth="72" TextAlignment="Center"/>
+                        
+                        <Button x:Name="YearRight" Grid.Column="2" Classes="transparent" Padding="10" VerticalAlignment="Center" Command="{Binding YearRightCommand}">
                             <Label Content="&#xE52C;" FontFamily="{DynamicResource Phosphor}" FontSize="24" Foreground="{DynamicResource TextMuted}"/>
                         </Button>
+                        
                         <Border Grid.Column="3" Width="1" Background="{DynamicResource BorderSubtle}" Margin="14 0"/>
                         <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" x:Name="MonthPills"/>
                     </Grid>
                 </Border>
 
-                <!-- Stat cards 2x2 -->
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" RowSpacing="10">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    
                     <Border Grid.Column="0" Grid.Row="0" Classes="card" Padding="20">
                         <StackPanel>
                             <TextBlock Text="TOTAL USUARIOS" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock x:Name="StatTotalUsuarios" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
+                            <TextBlock x:Name="StatTotalUsuarios" Text="{Binding TotalUsuarios}" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
                             <TextBlock Text="registrados en la plataforma" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
                         </StackPanel>
                     </Border>
+                    
                     <Border Grid.Column="1" Grid.Row="0" Classes="card" Padding="20">
                         <StackPanel>
                             <TextBlock Text="USUARIOS ACTIVOS" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock x:Name="StatUsuariosActivos" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource AdminAccent}" Margin="0 8 0 4"/>
+                            <TextBlock x:Name="StatUsuariosActivos" Text="{Binding UsuariosActivos}" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource AdminAccent}" Margin="0 8 0 4"/>
                             <TextBlock Text="con actividad reciente" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
                         </StackPanel>
                     </Border>
+                    
                     <Border Grid.Column="0" Grid.Row="1" Classes="card" Padding="20">
                         <StackPanel>
                             <TextBlock Text="USAN GENERACIÓN SEMANAL" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock x:Name="StatUsanGen" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
-                            <TextBlock x:Name="StatUsanGenSub" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
+                            <TextBlock x:Name="StatUsanGen" Text="{Binding UsanGeneracionSemanal}" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
+                            <TextBlock x:Name="StatUsanGenSub" Text="estimado sobre activos" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
                         </StackPanel>
                     </Border>
+                    
                     <Border Grid.Column="1" Grid.Row="1" Classes="card" Padding="20">
                         <StackPanel>
                             <TextBlock Text="CAMBIOS / GENERACIÓN" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                            <TextBlock x:Name="StatCambiosGen" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
+                            <TextBlock x:Name="StatCambiosGen" Text="{Binding CambiosPorGeneracion, StringFormat={}{0:F1}}" FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0 8 0 4"/>
                             <TextBlock Text="promedio de modificaciones" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
                         </StackPanel>
                     </Border>
+                    
                 </Grid>
 
-                <!-- Metrics card -->
                 <Border Classes="card" Padding="18" CornerRadius="10">
                     <StackPanel Spacing="14">
-                        <TextBlock x:Name="MetricsMonthLabel" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource AdminAccent}"/>
-                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10" x:Name="MetricsGrid"/>
+                        <TextBlock x:Name="MetricsMonthLabel" Text="{Binding YearActual, StringFormat='Métricas globales del año {0}'}" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource AdminAccent}"/>
+                        
+                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10" x:Name="MetricsGrid">
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="Tareas creadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="{Binding TareasCreadas}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="Tareas completadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="{Binding TareasCompletadas}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="2">
+                                <TextBlock Text="Generaciones realizadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="{Binding GeneracionesRealizadas}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Generaciones modificadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="0" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="Tareas en G.S." FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="0" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                <TextBlock Text="Tareas mod. en G.S." FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="{Binding TareasModificadasGS}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                            </StackPanel>
+                        </Grid>
+
                     </StackPanel>
                 </Border>
 

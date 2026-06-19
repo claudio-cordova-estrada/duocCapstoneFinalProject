@@ -82,6 +82,33 @@ public abstract partial class TareaDetailViewModelBase : PageViewModel
 
         DetalleMensaje = string.Empty;
 
+        var jornadaInicio = _sesion.UsuarioActual?.HoraInicioJornada ?? TimeSpan.FromHours(7.5);
+        var jornadaFin = _sesion.UsuarioActual?.HoraFinJornada ?? TimeSpan.FromHours(22);
+
+        if (DetalleHoraInicio.HasValue && DetalleHoraFin.HasValue)
+        {
+            if (DetalleHoraInicio < jornadaInicio || DetalleHoraFin > jornadaFin)
+            {
+                DetalleMensaje = $"Guardado (hora fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+            }
+            else
+            {
+                DetalleMensaje = "Guardado";
+            }
+        }
+        else if (DetalleHoraInicio.HasValue && DetalleHoraInicio < jornadaInicio)
+        {
+            DetalleMensaje = $"Guardado (hora inicio fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+        }
+        else if (DetalleHoraFin.HasValue && DetalleHoraFin > jornadaFin)
+        {
+            DetalleMensaje = $"Guardado (hora fin fuera de jornada {jornadaInicio:hh\\:mm}-{jornadaFin:hh\\:mm})";
+        }
+        else
+        {
+            DetalleMensaje = "Guardado";
+        }
+
         try
         {
             var oldAreaId = TareaSeleccionada.IdAreaInteres;
@@ -111,7 +138,6 @@ public abstract partial class TareaDetailViewModelBase : PageViewModel
             }
 
             await _tareaRepo.ActualizarTarea(TareaSeleccionada.IdTarea, TareaSeleccionada);
-            DetalleMensaje = "Guardado";
 
             if (ShouldDeselectAfterSave(TareaSeleccionada))
             {

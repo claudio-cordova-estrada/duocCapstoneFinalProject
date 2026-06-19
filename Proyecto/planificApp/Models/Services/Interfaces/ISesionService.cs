@@ -9,4 +9,5 @@ public interface ISesionService
     event Action? SesionCambiada;
     void IniciarSesion(Usuario usuario);
     void CerrarSesion();
+    void SetUbicacionActual(string ubicacion);
 }

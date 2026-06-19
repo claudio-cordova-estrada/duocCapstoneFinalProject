@@ -1,5 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using PlanificApp.Models;
 using PlanificApp.Models.Enums;
 using planificApp.Helpers;
@@ -10,10 +13,20 @@ namespace planificApp.Views;
 public partial class NewAreaWindow : Window
 {
     public bool Result { get; private set; }
+    private string _selectedColor = "#a78bfa";
 
     public NewAreaWindow()
     {
         InitializeComponent();
+
+        this.DataContextChanged += async (sender, e) =>
+        {
+            if (DataContext is NewAreaViewModel vm)
+            {
+                await vm.CargarUbicacionesAsync();
+                SelectColor(vm.ColorHex);
+            }
+        };
     }
 
     public void SetEditMode(AreaInteres? area)
@@ -30,51 +43,67 @@ public partial class NewAreaWindow : Window
             _ => 0
         };
 
-        CmbUbicacionPred.SelectedIndex = area.UbicacionPred switch
-        {
-            "Casa" => 1,
-            "Trabajo" => 2,
-            "Universidad" => 3,
-            "Gimnasio" => 4,
-            "Supermercado" => 5,
-            "Otro" => 6,
-            _ => 0
-        };
-
         CmbTransporte.SelectedIndex = area.MetodoTransportePred switch
         {
-            MetodoTransporte.Pie => 1,
-            MetodoTransporte.Bicicleta => 2,
-            MetodoTransporte.Automovil => 3,
-            MetodoTransporte.TransportePublico => 4,
+            MetodoTransporte.Caminar => 1,
+            MetodoTransporte.Auto => 2,
+            MetodoTransporte.Bus => 3,
             _ => 0
         };
 
         CmbTipoActividadFisicaPred.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(area.TipoActividadFisicaPred);
         CmbTipoActividadMentalPred.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(area.TipoActividadMentalPred);
+
+        _selectedColor = area.ColorHex;
+        SelectColor(_selectedColor);
+    }
+
+    private void ColorOption_Tapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Border b && b.Tag is string color)
+        {
+            _selectedColor = color;
+            if (DataContext is NewAreaViewModel vm)
+                vm.ColorHex = color;
+            SelectColor(color);
+        }
+    }
+
+    private void SelectColor(string color)
+    {
+        if (this.FindControl<StackPanel>("ColorGrid") is not StackPanel colorGrid) return;
+
+        foreach (var child in colorGrid.Children)
+        {
+            if (child is Border b)
+            {
+                if (b.Tag?.ToString() == color)
+                {
+                    b.BorderThickness = new Thickness(2);
+                    b.BorderBrush = new SolidColorBrush(Colors.White);
+                    b.Width = 26;
+                    b.Height = 26;
+                }
+                else
+                {
+                    b.BorderThickness = new Thickness(0);
+                    b.Width = 22;
+                    b.Height = 22;
+                }
+            }
+        }
     }
 
     private async void SaveButton_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not NewAreaViewModel vm) return;
 
-        if (CmbUbicacionPred.SelectedIndex <= 0)
-            vm.UbicacionPred = null;
-        else
-            vm.UbicacionPred = CmbUbicacionPred.SelectedIndex switch
-            {
-                1 => "Casa", 2 => "Trabajo", 3 => "Universidad",
-                4 => "Gimnasio", 5 => "Supermercado", 6 => "Otro",
-                _ => null
-            };
-
         vm.MetodoTransportePred = CmbTransporte.SelectedIndex switch
         {
             0 => null,
-            1 => MetodoTransporte.Pie,
-            2 => MetodoTransporte.Bicicleta,
-            3 => MetodoTransporte.Automovil,
-            4 => MetodoTransporte.TransportePublico,
+            1 => MetodoTransporte.Caminar,
+            2 => MetodoTransporte.Auto,
+            3 => MetodoTransporte.Bus,
             _ => null
         };
 

@@ -11,11 +11,9 @@
     <Border x:Name="RootBorder" Padding="28 26" Background="{DynamicResource AppBackground}" PointerPressed="RootPointerPressed">
         <Grid ColumnDefinitions="2*,1*" ColumnSpacing="20">
 
-            <!-- Left: Task list -->
             <ScrollViewer Grid.Column="0">
                 <StackPanel Spacing="16">
 
-                    <!-- Header -->
                     <Grid ColumnDefinitions="*,Auto">
                         <StackPanel Grid.Column="0" Spacing="3">
                             <TextBlock Text="{Binding TituloVista}" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
@@ -29,7 +27,6 @@
                         </Button>
                     </Grid>
 
-                    <!-- Add task input -->
                     <TextBox x:Name="AddTaskInput" Classes="add-task" Text="{Binding QuickAddNombre}"/>
 
                     <ItemsControl ItemsSource="{Binding TareasPendientesFiltradas}">
@@ -51,7 +48,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- Completadas section (collapsible, hidden when empty) -->
                     <Border Classes="card" Padding="10 8" Tapped="ToggleCompletadas_Tapped" Cursor="Hand" IsVisible="{Binding HayCompletadas}">
                         <Grid ColumnDefinitions="Auto,*,Auto">
                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="{Binding CompletadasVisibles, Converter={StaticResource BoolToChevronConverter}}" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
@@ -82,18 +78,15 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- Right: Detail panel -->
             <Border x:Name="DetailPanelBorder" Grid.Column="1" Classes="card" Padding="16" VerticalAlignment="Stretch">
                 <ScrollViewer>
                     <StackPanel Spacing="12">
 
-                        <!-- Placeholder when no task selected -->
                         <StackPanel x:Name="DetailPlaceholder" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 40 0 0">
                             <Label Content="&#xE4C4;" FontFamily="{DynamicResource Phosphor}" FontSize="32" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
                             <TextBlock Text="Selecciona una tarea" FontSize="13" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center"/>
                         </StackPanel>
 
-                        <!-- Detail content when task selected -->
                         <StackPanel x:Name="DetailContent" IsVisible="False" Spacing="12">
 
                             <Grid ColumnDefinitions="*,Auto">
@@ -102,23 +95,21 @@
                                     <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource DangerForeground}" VerticalAlignment="Center"/>
                                 </Button>
                             </Grid>
+                            
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1" Padding="0 0 0 8">
                                 <TextBlock x:Name="DetailEstado" Text="Activa" FontSize="12" Foreground="{DynamicResource TextDisabled}"/>
                             </Border>
 
-                            <!-- Nombre -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <TextBox x:Name="DetailNombre" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                                <TextBox x:Name="DetailNombre" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Text="{Binding DetalleNombre}"/>
                             </StackPanel>
                             
-                            <!-- Area interes -->
                              <StackPanel Spacing="4">
                                  <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                  <ComboBox x:Name="DetailAreaInteres" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
                              </StackPanel>
 
-                            <!-- Fecha inicio -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="FECHA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
@@ -129,7 +120,6 @@
                                 </Grid>
                             </StackPanel>
 
-                            <!-- Fecha limite -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="FECHA LIMITE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
@@ -140,7 +130,6 @@
                                 </Grid>
                             </StackPanel>
 
-                            <!-- Hora inicio / Hora fin -->
                             <Grid ColumnDefinitions="*,12,*">
                                 <StackPanel Grid.Column="0" Spacing="4">
                                     <TextBlock Text="HORA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
@@ -162,86 +151,48 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Ubicacion -->
                             <StackPanel Spacing="4">
-                                <TextBlock Text="UBICACION" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailUbicacion" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="— Sin ubicación —"/>
-                                    <ComboBoxItem Content="Casa"/>
-                                    <ComboBoxItem Content="Trabajo"/>
-                                    <ComboBoxItem Content="Universidad"/>
-                                    <ComboBoxItem Content="Gimnasio"/>
-                                    <ComboBoxItem Content="Supermercado"/>
-                                    <ComboBoxItem Content="Otro"/>
-                                </ComboBox>
+                                <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding MisUbicaciones}" SelectedItem="{Binding UbicacionDisplay}"/>
                             </StackPanel>
 
-                            <!-- Prioridad -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="PRIORIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailPrioridad" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="1 - Baja"/>
-                                    <ComboBoxItem Content="2 - Media"/>
-                                    <ComboBoxItem Content="3 - Alta"/>
-                                    <ComboBoxItem Content="4 - Urgente"/>
-                                    <ComboBoxItem Content="5 - Fija"/>
-                                </ComboBox>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Prioridades}" SelectedItem="{Binding PrioridadDisplay}"/>
                             </StackPanel>
 
-                            <!-- Tiempo estimado -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="TIEMPO ESTIMADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailTiempoEstimado" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="— Sin definir —"/>
-                                    <ComboBoxItem Content="5 minutos"/>
-                                    <ComboBoxItem Content="10 minutos"/>
-                                    <ComboBoxItem Content="15 minutos"/>
-                                    <ComboBoxItem Content="30 minutos"/>
-                                    <ComboBoxItem Content="45 minutos"/>
-                                    <ComboBoxItem Content="1 hora"/>
-                                    <ComboBoxItem Content="1.5 horas"/>
-                                    <ComboBoxItem Content="2 horas"/>
-                                    <ComboBoxItem Content="3 horas"/>
-                                    <ComboBoxItem Content="4 horas"/>
-                                </ComboBox>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Tiempos}" SelectedItem="{Binding TiempoDisplay}"/>
                             </StackPanel>
                             
-                            <!-- Actividad física -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="ACTIVIDAD FÍSICA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailTipoActividadFisica" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="— Ninguna —"/>
-                                    <ComboBoxItem Content="Activa"/>
-                                    <ComboBoxItem Content="Pasiva"/>
-                                </ComboBox>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding NivelesActividadFisica}" SelectedItem="{Binding ActividadFisicaDisplay}"/>
                             </StackPanel>
 
-                            <!-- Actividad mental -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="ACTIVIDAD MENTAL" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailTipoActividadMental" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="— Ninguna —"/>
-                                    <ComboBoxItem Content="Obligación"/>
-                                    <ComboBoxItem Content="Recreación"/>
-                                </ComboBox>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding NivelesActividadMental}" SelectedItem="{Binding ActividadMentalDisplay}"/>
                             </StackPanel>
                             
-                            <!-- Recordatorio -->
                             <StackPanel Spacing="4">
                                 <TextBlock Text="RECORDATORIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <CalendarDatePicker x:Name="PickerRecordatorio" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Fecha del recordatorio" HorizontalAlignment="Stretch"/>
                             </StackPanel>
 
-                            <!-- Save button -->
                             <Button Classes="accent" HorizontalAlignment="Stretch" Click="SaveDetail_Click">
                                 <TextBlock Text="Guardar cambios" HorizontalAlignment="Center" FontSize="13"/>
                             </Button>
 
-                            <!-- Save message below button -->
-                            <TextBlock x:Name="DetailMensaje" FontSize="12" Foreground="{DynamicResource AreaEstudioText}" HorizontalAlignment="Center" IsVisible="False"/>
+                            <TextBlock x:Name="DetailMensaje" Text="{Binding DetalleMensaje}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" IsVisible="False"/>
 
                         </StackPanel>
-
                     </StackPanel>
                 </ScrollViewer>
             </Border>

@@ -27,11 +27,11 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="HORA INICIO ACTIVIDADES" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <Grid ColumnDefinitions="*,Auto,*,Auto">
-                                    <TextBox x:Name="FieldInicioHoras" Grid.Column="0" IsReadOnly="True" Text="07" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" HorizontalContentAlignment="Center"/>
+                                    <TextBox Grid.Column="0" Text="{Binding HoraInicioHoras}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="0 4" HorizontalContentAlignment="Center" MaxLength="2"/>
                                     <TextBlock Grid.Column="1" Text=":" FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="6 0 6 0"/>
-                                    <TextBox x:Name="FieldInicioMinutos" Grid.Column="2" IsReadOnly="True" Text="30" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" HorizontalContentAlignment="Center"/>
-                                    <Button x:Name="BtnHoraInicio" Grid.Column="3" Classes="transparent" Click="BtnHoraInicio_Click" VerticalAlignment="Center">
-                                        <Label x:Name="IconHoraInicio" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextMuted}"/>
+                                    <TextBox Grid.Column="2" Text="{Binding HoraInicioMinutos}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="0 4" HorizontalContentAlignment="Center" MaxLength="2"/>
+                                    <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Command="{Binding ResetHoraInicioCommand}" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                                     </Button>
                                 </Grid>
                             </StackPanel>
@@ -40,52 +40,60 @@
                             <StackPanel Spacing="6">
                                 <TextBlock Text="HORA FIN ACTIVIDADES" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <Grid ColumnDefinitions="*,Auto,*,Auto">
-                                    <TextBox x:Name="FieldFinHoras" Grid.Column="0" IsReadOnly="True" Text="22" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" HorizontalContentAlignment="Center"/>
+                                    <TextBox Grid.Column="0" Text="{Binding HoraFinHoras}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="0 4" HorizontalContentAlignment="Center" MaxLength="2"/>
                                     <TextBlock Grid.Column="1" Text=":" FontSize="14" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="6 0 6 0"/>
-                                    <TextBox x:Name="FieldFinMinutos" Grid.Column="2" IsReadOnly="True" Text="00" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 4" HorizontalContentAlignment="Center"/>
-                                    <Button x:Name="BtnHoraFin" Grid.Column="3" Classes="transparent" Click="BtnHoraFin_Click" VerticalAlignment="Center">
-                                        <Label x:Name="IconHoraFin" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="15" Foreground="{DynamicResource TextMuted}"/>
+                                    <TextBox Grid.Column="2" Text="{Binding HoraFinMinutos}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" Padding="0 4" HorizontalContentAlignment="Center" MaxLength="2"/>
+                                    <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Command="{Binding ResetHoraFinCommand}" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                                     </Button>
                                 </Grid>
                             </StackPanel>
 
                             <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1"/>
 
-                            <!-- Ubicación predeterminada -->
+                            <!-- Ubicación de inicio -->
                             <StackPanel Spacing="6">
-                                <TextBlock Text="UBICACIÓN PRED." FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="CbUbicacion" SelectedIndex="0" HorizontalAlignment="Stretch" FontSize="14">
-                                    <ComboBoxItem Content="Casa"/>
-                                    <ComboBoxItem Content="Oficina"/>
-                                    <ComboBoxItem Content="Universidad"/>
-                                </ComboBox>
+                                <TextBlock Text="UBICACIÓN DE INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                                    <ComboBox Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                              ItemsSource="{Binding MisUbicaciones}" SelectedItem="{Binding UbicacionInicioDisplay}"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Command="{Binding ResetUbicacionCommand}" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
                             </StackPanel>
 
                             <!-- Transporte predeterminado -->
                             <StackPanel Spacing="6">
                                 <TextBlock Text="TRANSPORTE PRED." FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="CbTransporte" SelectedIndex="0" HorizontalAlignment="Stretch" FontSize="14">
-                                    <ComboBoxItem Content="Caminar"/>
-                                    <ComboBoxItem Content="Auto"/>
-                                    <ComboBoxItem Content="Bus"/>
-                                    <ComboBoxItem Content="Metro"/>
-                                    <ComboBoxItem Content="Bicicleta"/>
-                                </ComboBox>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                                    <ComboBox Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                              ItemsSource="{Binding OpcionesTransporte}" SelectedItem="{Binding TransporteDisplay}"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Command="{Binding ResetTransporteCommand}" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
                             </StackPanel>
 
                             <!-- Horas de sueño -->
                             <StackPanel Spacing="6">
                                 <TextBlock Text="HORAS DE SUEÑO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="CbSueno" SelectedIndex="3" HorizontalAlignment="Stretch" FontSize="14">
-                                    <ComboBoxItem Content="6"/>
-                                    <ComboBoxItem Content="6.5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="7.5"/>
-                                    <ComboBoxItem Content="8"/>
-                                    <ComboBoxItem Content="8.5"/>
-                                    <ComboBoxItem Content="9"/>
-                                </ComboBox>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                                    <ComboBox Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                              ItemsSource="{Binding OpcionesHorasSueno}" SelectedItem="{Binding HorasSueno}"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Command="{Binding ResetSuenoCommand}" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
                             </StackPanel>
+
+                            <!-- Warning/message -->
+                            <TextBlock Text="{Binding Mensaje}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" IsVisible="{Binding HayMensaje}" TextWrapping="Wrap" TextAlignment="Center"/>
+
+                            <!-- Save button -->
+                            <Button Classes="accent" HorizontalAlignment="Stretch" Command="{Binding GuardarCommand}">
+                                <TextBlock Text="Guardar cambios" HorizontalAlignment="Center" FontSize="13"/>
+                            </Button>
                         </StackPanel>
                     </Border>
 
@@ -97,29 +105,29 @@
 
                             <!-- Row 1: Lunes-Viernes -->
                             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="BtnLunes" Classes="pill-rounded active" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnLunes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Lunes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnMartes" Classes="pill-rounded active" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnMartes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Martes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnMiercoles" Classes="pill-rounded active" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnMiercoles" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Miércoles" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnJueves" Classes="pill-rounded active" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnJueves" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Jueves" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnViernes" Classes="pill-rounded active" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnViernes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Viernes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
 
                             <!-- Row 2: Sábado-Domingo -->
                             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="BtnSabado" Classes="pill-rounded" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnSabado" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Sábado" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnDomingo" Classes="pill-rounded" Click="ToggleDia_Click" Width="100">
+                                <Button x:Name="BtnDomingo" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
                                     <TextBlock Text="Domingo" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>

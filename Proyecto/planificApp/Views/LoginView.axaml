@@ -40,12 +40,6 @@
                     <!-- Error message -->
                     <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
-                    <!-- Admin toggle (temporary) -->
-                    <Grid ColumnDefinitions="*,Auto" Margin="0 4 0 0">
-                        <TextBlock Grid.Column="0" Text="Modo administrador" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                        <ToggleSwitch Grid.Column="1" IsChecked="{Binding IsAdminToggle}" OnContent="" OffContent="" Margin="0 0 -8 0"/>
-                    </Grid>
-
                     <!-- Login button -->
                     <Button Classes="accent" HorizontalAlignment="Stretch" IsDefault="True" Command="{Binding LoginCommand}" Margin="0 4 0 0">
                         <TextBlock Text="Iniciar sesión" FontSize="14" HorizontalAlignment="Center"/>

@@ -17,7 +17,7 @@ public class MongoContext
         var nombreRepo = configuration["MongoDb:NombreRepo"]
             ?? throw new InvalidOperationException("MongoDb:NombreRepo no encontrado en appsettings.json.");
 
-        var connectionString = $"mongodb+srv://{usuario}:{contrasena}@planificapp.a1hyplb.mongodb.net/";
+        var connectionString = $"mongodb+srv://{usuario}:{contrasena}@planificapp.a1hyplb.mongodb.net/?retryWrites=true&w=majority";
         var client = new MongoClient(connectionString);
         _database = client.GetDatabase(nombreRepo);
     }

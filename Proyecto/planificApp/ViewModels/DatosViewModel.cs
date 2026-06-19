@@ -7,6 +7,7 @@ using planificApp.Helpers;
 using PlanificApp.Models.Services.Interfaces;
 using PlanificApp.Models.Repositories.Interfaces;
 using Avalonia.Media.Imaging;
+using planificApp.Services;
 
 namespace planificApp.ViewModels;
 
@@ -21,16 +22,20 @@ public partial class DatosViewModel : PageViewModel
     [ObservableProperty] private Bitmap? _fotoPerfil;
     [ObservableProperty] private bool _tieneFoto = false;
 
+    public IRegionesService ServicioRegiones { get; }
+
     private readonly ISesionService _sesion;
     private readonly IUsuarioRepository _usuarioRepo;
 
-    public DatosViewModel(ISesionService sesion, IUsuarioRepository usuarioRepo)
+    public DatosViewModel(ISesionService sesion, IUsuarioRepository usuarioRepo, IRegionesService regionesService)
     {
         _sesion = sesion;
         _usuarioRepo = usuarioRepo;
         PageName = ApplicationPageNames.UserDatos;
+        ServicioRegiones = regionesService;
         CargarDatos();
     }
+
 
     private void CargarDatos()
     {

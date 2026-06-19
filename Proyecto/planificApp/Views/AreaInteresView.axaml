@@ -187,18 +187,10 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Ubicacion -->
                             <StackPanel Spacing="4">
-                                <TextBlock Text="UBICACION" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox x:Name="DetailUbicacion" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                                    <ComboBoxItem Content="— Sin ubicación —"/>
-                                    <ComboBoxItem Content="Casa"/>
-                                    <ComboBoxItem Content="Trabajo"/>
-                                    <ComboBoxItem Content="Universidad"/>
-                                    <ComboBoxItem Content="Gimnasio"/>
-                                    <ComboBoxItem Content="Supermercado"/>
-                                    <ComboBoxItem Content="Otro"/>
-                                </ComboBox>
+                                <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding MisUbicaciones}" SelectedItem="{Binding UbicacionDisplay}"/>
                             </StackPanel>
 
                             <!-- Prioridad -->

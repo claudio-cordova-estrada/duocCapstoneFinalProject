@@ -155,14 +155,9 @@ public partial class InboxView : UserControl
         DetailFecLimite.SelectedDate = vm.TareaSeleccionada?.FecLimite;
         DetailHoraInicio.SelectedTime = vm.TareaSeleccionada?.HoraInicio;
         DetailHoraFin.SelectedTime = vm.TareaSeleccionada?.HoraFin;
-        DetailUbicacion.SelectedIndex = string.IsNullOrEmpty(vm.TareaSeleccionada?.Ubicacion) ? 0 : DetalleTareaHelper.UbicacionToIndex(vm.TareaSeleccionada.Ubicacion);
-        DetailPrioridad.SelectedIndex = vm.DetallePrioridad - 1;
-        DetailTiempoEstimado.SelectedIndex = DetalleTareaHelper.TiempoEstimadoToIndex(vm.DetalleTiempoEstimado);
         DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
         DetailMensaje.IsVisible = false;
-        DetailTipoActividadFisica.SelectedIndex = DetalleTareaHelper.TipoActividadFisicaToIndex(vm.DetalleTipoActividadFisica);
-        DetailTipoActividadMental.SelectedIndex = DetalleTareaHelper.TipoActividadMentalToIndex(vm.DetalleTipoActividadMental);
     }
 
     private void HideDetail()
@@ -175,17 +170,12 @@ public partial class InboxView : UserControl
     {
         if (DataContext is not InboxViewModel vm || vm.TareaSeleccionada == null) return;
 
-        vm.DetalleNombre = DetailNombre.Text;
+        vm.DetalleNombre = DetailNombre.Text ?? string.Empty;
         vm.DetalleFecInicio = DetailFecInicio.SelectedDate;
         vm.DetalleFecLimite = DetailFecLimite.SelectedDate;
         vm.DetalleHoraInicio = DetailHoraInicio.SelectedTime;
         vm.DetalleHoraFin = DetailHoraFin.SelectedTime;
-        vm.DetallePrioridad = DetailPrioridad.SelectedIndex + 1;
-        vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
-        vm.DetalleUbicacion = DetailUbicacion.SelectedIndex <= 0 ? null : DetalleTareaHelper.UbicacionFromIndex(DetailUbicacion.SelectedIndex);
         vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
-        vm.DetalleTipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(DetailTipoActividadFisica.SelectedIndex);
-        vm.DetalleTipoActividadMental = DetalleTareaHelper.TipoActividadMentalFromIndex(DetailTipoActividadMental.SelectedIndex);
 
         await vm.GuardarDetalleCommand.ExecuteAsync(null);
 
@@ -200,6 +190,10 @@ public partial class InboxView : UserControl
         {
             DetailNombre.Text = vm.DetalleNombre;
             DetailMensaje.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#f87171"));
+        }
+        else if (vm.DetalleMensaje.Contains("fuera de jornada"))
+        {
+            DetailMensaje.Foreground = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#fbbf24"));
         }
         else
         {

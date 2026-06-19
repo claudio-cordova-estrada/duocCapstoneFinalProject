@@ -13,53 +13,46 @@
         CanResize="False"
         Background="{DynamicResource ModalBackground}">
 
-    <Design.DataContext><vm:NewTaskViewModel/></Design.DataContext>
-
     <Border Classes="modal-panel" Margin="0" Padding="24">
         <StackPanel Spacing="14">
 
             <TextBlock Text="Nueva tarea" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
 
-            <!-- Nombre -->
             <StackPanel Spacing="4">
                 <TextBlock Text="NOMBRE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <TextBox Text="{Binding Nombre}" FontSize="14" PlaceholderText="Nombre de la tarea" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
             </StackPanel>
             
-            <!-- Area de interes -->
             <StackPanel Spacing="4">
                 <TextBlock Text="ÁREA DE INTERÉS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <ComboBox x:Name="CmbAreaInteres" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
             </StackPanel>
 
-            <!-- Fecha de inicio -->
             <StackPanel Spacing="4">
                 <TextBlock Text="FECHA DE INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <Grid ColumnDefinitions="*,Auto">
-                    <CalendarDatePicker x:Name="PickerFecInicio" Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha de inicio" HorizontalAlignment="Stretch"/>
+                    <CalendarDatePicker x:Name="PickerFecInicio" SelectedDate="{Binding FecInicio}" Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha de inicio" HorizontalAlignment="Stretch"/>
                     <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="ClearFecInicio_Click" Cursor="Hand">
                         <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                     </Button>
                 </Grid>
             </StackPanel>
 
-            <!-- Fecha limite -->
             <StackPanel Spacing="4">
                 <TextBlock Text="FECHA LIMITE" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                 <Grid ColumnDefinitions="*,Auto">
-                    <CalendarDatePicker x:Name="PickerFecLimite" Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha limite" HorizontalAlignment="Stretch"/>
+                    <CalendarDatePicker x:Name="PickerFecLimite" SelectedDate="{Binding FecLimite}" Grid.Column="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona fecha limite" HorizontalAlignment="Stretch"/>
                     <Button Grid.Column="1" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="ClearFecLimite_Click" Cursor="Hand">
                         <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                     </Button>
                 </Grid>
             </StackPanel>
 
-            <!-- Hora inicio / Hora fin row -->
             <Grid ColumnDefinitions="*,16,*">
                 <StackPanel Grid.Column="0" Spacing="4">
                     <TextBlock Text="HORA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                     <Grid ColumnDefinitions="*,Auto">
-                        <TimePicker x:Name="PickerHoraInicio" Grid.Column="0" ClockIdentifier="24HourClock" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
+                        <TimePicker x:Name="PickerHoraInicio" SelectedTime="{Binding HoraInicio}" Grid.Column="0" ClockIdentifier="24HourClock" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
                         <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraInicio_Click" Cursor="Hand">
                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                         </Button>
@@ -68,7 +61,7 @@
                 <StackPanel Grid.Column="2" Spacing="4">
                     <TextBlock Text="HORA FIN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                     <Grid ColumnDefinitions="*,Auto">
-                        <TimePicker x:Name="PickerHoraFin" Grid.Column="0" ClockIdentifier="24HourClock" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
+                        <TimePicker x:Name="PickerHoraFin" SelectedTime="{Binding HoraFin}" Grid.Column="0" ClockIdentifier="24HourClock" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
                         <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraFin_Click" Cursor="Hand">
                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                         </Button>
@@ -76,80 +69,43 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Ubicacion -->
             <StackPanel Spacing="4">
-                <TextBlock Text="UBICACION" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbUbicacion" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="— Sin ubicación —"/>
-                    <ComboBoxItem Content="Casa"/>
-                    <ComboBoxItem Content="Trabajo"/>
-                    <ComboBoxItem Content="Universidad"/>
-                    <ComboBoxItem Content="Gimnasio"/>
-                    <ComboBoxItem Content="Supermercado"/>
-                    <ComboBoxItem Content="Otro"/>
-                </ComboBox>
+                <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding MisUbicaciones}" SelectedItem="{Binding UbicacionDisplay}"/>
             </StackPanel>
 
-            <!-- Prioridad -->
             <StackPanel Spacing="4">
                 <TextBlock Text="PRIORIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbPrioridad" SelectedIndex="0" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="1 - Baja"/>
-                    <ComboBoxItem Content="2 - Media"/>
-                    <ComboBoxItem Content="3 - Alta"/>
-                    <ComboBoxItem Content="4 - Urgente"/>
-                    <ComboBoxItem Content="5 - Fija"/>
-                </ComboBox>
+                <ComboBox FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Prioridades}" SelectedItem="{Binding PrioridadDisplay}"/>
             </StackPanel>
 
-            <!-- Tiempo estimado -->
             <StackPanel Spacing="4">
                 <TextBlock Text="TIEMPO ESTIMADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbTiempoEstimado" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="— Sin definir —"/>
-                    <ComboBoxItem Content="5 minutos"/>
-                    <ComboBoxItem Content="10 minutos"/>
-                    <ComboBoxItem Content="15 minutos"/>
-                    <ComboBoxItem Content="30 minutos"/>
-                    <ComboBoxItem Content="45 minutos"/>
-                    <ComboBoxItem Content="1 hora"/>
-                    <ComboBoxItem Content="1.5 horas"/>
-                    <ComboBoxItem Content="2 horas"/>
-                    <ComboBoxItem Content="3 horas"/>
-                    <ComboBoxItem Content="4 horas"/>
-                </ComboBox>
+                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Tiempos}" SelectedItem="{Binding TiempoDisplay}"/>
             </StackPanel>
             
-            <!-- Actividad física -->
             <StackPanel Spacing="4">
                 <TextBlock Text="ACTIVIDAD FÍSICA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbTipoActividadFisica" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="— Ninguna —"/>
-                    <ComboBoxItem Content="Activa"/>
-                    <ComboBoxItem Content="Pasiva"/>
-                </ComboBox>
+                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding NivelesActividadFisica}" SelectedItem="{Binding ActividadFisicaDisplay}"/>
             </StackPanel>
 
-            <!-- Actividad mental -->
             <StackPanel Spacing="4">
                 <TextBlock Text="ACTIVIDAD MENTAL" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <ComboBox x:Name="CmbTipoActividadMental" SelectedIndex="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="— Ninguna —"/>
-                    <ComboBoxItem Content="Obligación"/>
-                    <ComboBoxItem Content="Recreación"/>
-                </ComboBox>
+                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding NivelesActividadMental}" SelectedItem="{Binding ActividadMentalDisplay}"/>
             </StackPanel>
 
-            <!-- Recordatorio -->
             <StackPanel Spacing="4">
                 <TextBlock Text="RECORDATORIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <CalendarDatePicker x:Name="PickerRecordatorio" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Fecha del recordatorio" HorizontalAlignment="Stretch"/>
+                <CalendarDatePicker x:Name="PickerRecordatorio" SelectedDate="{Binding Recordatorio}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Fecha del recordatorio" HorizontalAlignment="Stretch"/>
             </StackPanel>
 
-            <!-- Error message -->
             <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" FontSize="12" Foreground="{DynamicResource DangerForeground}" HorizontalAlignment="Center" TextWrapping="Wrap"/>
 
-            <!-- Buttons -->
             <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 6 0 0">
                 <Border Width="0" Grid.Column="0"/>
                 <Button Grid.Column="1" Classes="transparent" Margin="0 0 8 0" Click="CancelButton_Click" Content="Cancelar"/>

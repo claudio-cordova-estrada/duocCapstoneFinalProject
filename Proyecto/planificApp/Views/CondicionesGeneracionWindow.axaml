@@ -1,0 +1,183 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="620"
+        x:Class="planificApp.Views.CondicionesGeneracionWindow"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
+        xmlns:models="clr-namespace:PlanificApp.Models;assembly=planificApp"
+        x:DataType="vm:CondicionesGeneracionViewModel"
+        Title="Generaci&#xF3;n semanal"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="Height"
+        Width="900"
+        CanResize="False"
+        Background="{DynamicResource ModalBackground}">
+
+    <Border Classes="modal-panel" Margin="0" Padding="24">
+        <StackPanel Spacing="16">
+
+            <TextBlock Text="Condiciones de generaci&#xF3;n semanal" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+
+            <Grid ColumnDefinitions="*,*,*">
+
+                <!-- Columna 1: &#xC1;reas -->
+                <StackPanel Spacing="8" Margin="0 0 12 0">
+                    <TextBlock Text="&#xC1;REAS DE INTER&#xC9;S" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+
+                    <TextBlock Text="Considerar" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" Margin="0 4 0 0"/>
+                    <Border Classes="card" Padding="6" MinHeight="80" MaxHeight="160">
+                        <ItemsControl ItemsSource="{Binding AreasConsiderar}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:AreaInteres">
+                                    <Border Padding="8 4" Margin="0 1" Background="{DynamicResource HoverBackground}" CornerRadius="3" Cursor="Hand" Tapped="AreaConsiderar_Tapped">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <Border Width="10" Height="10" CornerRadius="2" VerticalAlignment="Center"
+                                                    Background="{Binding ColorHex, Converter={StaticResource HexToBrushConverter}}"/>
+                                            <TextBlock Text="{Binding Nombre}" FontSize="12" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <TextBlock Text="No considerar" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextDisabled}" Margin="0 4 0 0"/>
+                    <Border Classes="card" Padding="6" MinHeight="60" MaxHeight="120">
+                        <ItemsControl ItemsSource="{Binding AreasNoConsiderar}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:AreaInteres">
+                                    <Border Padding="8 4" Margin="0 1" Background="{DynamicResource HoverBackground}" CornerRadius="3" Cursor="Hand" Tapped="AreaNoConsiderar_Tapped">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <Border Width="10" Height="10" CornerRadius="2" VerticalAlignment="Center"
+                                                    Background="{Binding ColorHex, Converter={StaticResource HexToBrushConverter}}"/>
+                                            <TextBlock Text="{Binding Nombre}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+
+                <!-- Columna 2: Priorizaci&#xF3;n -->
+                <StackPanel Grid.Column="1" Spacing="8" Margin="12 0 12 0">
+                    <TextBlock Text="PRIORIZACI&#xD3;N" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <TextBlock Text="Orden en que se evaluar&#xE1;n las &#xE1;reas y tareas" FontSize="11" Foreground="{DynamicResource TextDisabled}" Opacity="0.7" TextWrapping="Wrap"/>
+
+                    <Border Classes="card" Padding="8" MinHeight="120" MaxHeight="280">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding AreasPriorizadas}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="6 4" Margin="0 2" Background="{DynamicResource AppBackground}" CornerRadius="3" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1">
+                                            <StackPanel Spacing="2">
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Border Width="10" Height="10" CornerRadius="2" VerticalAlignment="Center"
+                                                            Background="{Binding Area.ColorHex, Converter={StaticResource HexToBrushConverter}}"/>
+                                                    <TextBlock Text="{Binding Area.Nombre}" FontSize="12" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Spacing="8" Margin="16 0 0 0">
+                                                    <TextBlock FontSize="10" Foreground="{DynamicResource TextDisabled}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}Prioridad {0}">
+                                                                <Binding Path="NivelPriorizacion"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock FontSize="10" Foreground="{DynamicResource TextDisabled}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} cercanas - {1} total">
+                                                                <Binding Path="TareasCercanas"/>
+                                                                <Binding Path="TareasTotales"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </StackPanel>
+
+                <!-- Columna 3: Par&#xE1;metros -->
+                <StackPanel Grid.Column="2" Spacing="8" Margin="12 0 0 0">
+                    <TextBlock Text="PAR&#xC1;METROS" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+
+                    <Border Classes="card" Padding="10">
+                        <StackPanel Spacing="8">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="M&#xE1;ximo de horas disponibles" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
+                                <TextBlock Text="{Binding MaxHorasGeneracionSemanal, StringFormat='{}{0:F1} hrs'}" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource AccentColor}"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="HORAS FUNCIONALES" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                                    <TextBox Text="{Binding HorasFuncionales}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="2">
+                                    <TextBlock Text="HORAS LIBRES" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
+                                    <TextBox Text="{Binding HorasLibres}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding RangoFechas}" FontSize="11" Foreground="{DynamicResource TextDisabled}" TextWrapping="Wrap"/>
+                            </StackPanel>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="0 2 0 0">
+                                <ToggleSwitch IsChecked="{Binding SemanaSiguiente}" Grid.Column="0"/>
+                                <TextBlock Grid.Column="1" Text="Generar semana siguiente" FontSize="12" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Text="D&#xED;AS PARA GENERACI&#xD3;N" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding LunesSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Lunes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding MartesSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Martes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding MiercolesSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Mi&#xE9;rcoles" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding JuevesSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Jueves" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding ViernesSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Viernes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding SabadoSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="S&#xE1;bado" FontSize="13" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ToggleSwitch IsChecked="{Binding DomingoSeleccionado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Domingo" FontSize="13" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+
+            <!-- Buttons -->
+            <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 6 0 0">
+                <Border Width="0" Grid.Column="0"/>
+                <Button Grid.Column="1" Classes="transparent" Margin="0 0 8 0" Click="CancelButton_Click" Content="Cancelar"/>
+                <Button Grid.Column="2" Classes="accent" Click="GenerarButton_Click" Content="Generaci&#xF3;n" IsEnabled="{Binding PuedeGenerar}"/>
+            </Grid>
+
+        </StackPanel>
+    </Border>
+</Window>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PlanificApp.Models;
+using PlanificApp.Models.Enums;
 using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -108,10 +109,10 @@ namespace PlanificApp.Models.Services
         public async Task<string> CalcularTiempoTrasladoAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string transporteApp)
         {
             // 1. Traducimos tu transporte al formato de Google
-            string mode = "driving"; // Auto y Taxi por defecto
+            string mode = "driving";
             if (transporteApp == "A pie") mode = "walking";
-            else if (transporteApp == "Bicicleta") mode = "bicycling";
-            else if (transporteApp == "Metro" || transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Auto") mode = "driving";
 
             // 2. Armamos la URL para la Distance Matrix API (en español para que devuelva "15 min" o "2 horas")
             var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?origins={latOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)}&destinations={latDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)}&mode={mode}&key={_apiKey}&language=es";
@@ -160,8 +161,8 @@ namespace PlanificApp.Models.Services
         {
             string mode = "driving";
             if (transporteApp == "A pie") mode = "walking";
-            else if (transporteApp == "Bicicleta") mode = "bicycling";
-            else if (transporteApp == "Metro" || transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Bus") mode = "transit";
+            else if (transporteApp == "Auto") mode = "driving";
 
             // Usamos Directions API en lugar de Matrix API para obtener la geometría de la ruta
             var url = $"https://maps.googleapis.com/maps/api/directions/json?origin={latOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonOrigen.ToString(System.Globalization.CultureInfo.InvariantCulture)}&destination={latDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)},{lonDestino.ToString(System.Globalization.CultureInfo.InvariantCulture)}&mode={mode}&key={_apiKey}&language=es";
@@ -193,6 +194,7 @@ namespace PlanificApp.Models.Services
             }
             return ("No disponible", new List<(double, double)>());
         }
+
 
         // 2. Método para Reverse Geocoding (Clic en el mapa)
         public async Task<string> ObtenerDireccionDesdeCoordenadasAsync(double lat, double lon)
@@ -235,6 +237,65 @@ namespace PlanificApp.Models.Services
                 points.Add((lat / 1E5, lng / 1E5));
             }
             return points;
+        }
+
+        public async Task<(string Tiempo, string Distancia, string Polyline)?> CalcularRutaGoogleAsync(double latOrigen, double lonOrigen, double latDestino, double lonDestino, string modoTransporte)
+        {
+            string url = "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+            // Preparamos los datos tal como los pide Google
+            var requestBody = new
+            {
+                origin = new { location = new { latLng = new { latitude = latOrigen, longitude = lonOrigen } } },
+                destination = new { location = new { latLng = new { latitude = latDestino, longitude = lonDestino } } },
+                travelMode = modoTransporte // Aquí usamos la variable dinámica ("DRIVE", "WALK", etc.)
+            };
+
+            // Usamos HttpRequestMessage para no modificar los headers globales de tu _httpClient
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+
+            // AQUÍ USAMOS TU VARIABLE PRIVADA _apiKey QUE YA LEYÓ EL APPSETTINGS
+            request.Headers.Add("X-Goog-Api-Key", _apiKey);
+            request.Headers.Add("X-Goog-FieldMask", "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline");
+
+            request.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(requestBody), System.Text.Encoding.UTF8, "application/json");
+
+            try
+            {
+                // AQUÍ USAMOS TU VARIABLE PRIVADA _httpClient
+                var response = await _httpClient.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode) return null;
+
+                var json = await response.Content.ReadAsStringAsync();
+                using var document = System.Text.Json.JsonDocument.Parse(json);
+                var root = document.RootElement;
+
+                if (root.TryGetProperty("routes", out var routes) && routes.GetArrayLength() > 0)
+                {
+                    var route = routes[0];
+                    string duration = route.GetProperty("duration").GetString() ?? "0s";
+                    int distanceMeters = route.GetProperty("distanceMeters").GetInt32();
+                    string polyline = route.GetProperty("polyline").GetProperty("encodedPolyline").GetString() ?? "";
+
+                    // Convertir de "1500s" a algo legible como "25 min"
+                    if (duration.EndsWith("s") && int.TryParse(duration.TrimEnd('s'), out int seconds))
+                    {
+                        var span = TimeSpan.FromSeconds(seconds);
+                        duration = span.TotalHours >= 1 ? $"{(int)span.TotalHours}h {span.Minutes}m" : $"{span.Minutes} min";
+                    }
+
+                    string distance = distanceMeters >= 1000 ? $"{(distanceMeters / 1000.0):0.0} km" : $"{distanceMeters} m";
+
+                    return (duration, distance, polyline);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error al calcular la ruta en Google API: {ex.Message}");
+            }
+
+            return null;
         }
     }
 }

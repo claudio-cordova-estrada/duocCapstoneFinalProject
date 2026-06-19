@@ -29,15 +29,11 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <!-- Selector Transporte -->
-        <TextBlock Text="Medio de Transporte:" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0,5,0,0"/>
-        <ComboBox x:Name="ComboTransporte" HorizontalAlignment="Stretch" SelectedIndex="0" CornerRadius="6">
-            <ComboBoxItem Content="Auto"/>
-            <ComboBoxItem Content="A pie"/>
-            <ComboBoxItem Content="Bicicleta"/>
-            <ComboBoxItem Content="Tren / Metro"/>
-            <ComboBoxItem Content="Bus"/>
-        </ComboBox>
+        <!-- Transporte del destino -->
+        <StackPanel Spacing="4">
+            <TextBlock Text="Transporte:" FontSize="14" Foreground="{DynamicResource TextDisabled}"/>
+            <TextBlock x:Name="TxtTransporte" Text="Selecciona un destino" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+        </StackPanel>
 
         <!-- Botón Calcular -->
         <Button x:Name="BtnCalcular" Click="BtnCalcular_Click" Content="Calcular tiempo" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#5b21b6" Foreground="White" CornerRadius="6" Margin="0,15,0,0" Padding="10"/>

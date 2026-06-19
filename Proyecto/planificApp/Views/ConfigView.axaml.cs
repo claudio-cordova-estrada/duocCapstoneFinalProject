@@ -1,113 +1,60 @@
 ﻿using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
+using planificApp.ViewModels;
 
 namespace planificApp.Views;
 
 public partial class ConfigView : UserControl
 {
-    private readonly SolidColorBrush _readonlyBg = new(Color.Parse("#00000000"));
-    private readonly SolidColorBrush _readonlyBorder = new(Color.Parse("#00000000"));
-    private readonly SolidColorBrush _editBg = new(Color.Parse("#0f0f0f"));
-    private readonly SolidColorBrush _editBorder = new(Color.Parse("#3d3060"));
-    private readonly SolidColorBrush _fieldFg = new(Color.Parse("#cccccc"));
-
-    private readonly Dictionary<TextBox, Label> _fieldIcons = new();
+    private readonly Dictionary<Button, string> _dayButtons = new();
 
     public ConfigView()
     {
         InitializeComponent();
+        Loaded += ConfigView_Loaded;
 
-        _fieldIcons[FieldInicioHoras] = IconHoraInicio;
-        _fieldIcons[FieldInicioMinutos] = IconHoraInicio;
-        _fieldIcons[FieldFinHoras] = IconHoraFin;
-        _fieldIcons[FieldFinMinutos] = IconHoraFin;
-
-        FieldInicioHoras.GotFocus += Field_GotFocus;
-        FieldInicioMinutos.GotFocus += Field_GotFocus;
-        FieldFinHoras.GotFocus += Field_GotFocus;
-        FieldFinMinutos.GotFocus += Field_GotFocus;
+        _dayButtons[BtnLunes] = "Lunes";
+        _dayButtons[BtnMartes] = "Martes";
+        _dayButtons[BtnMiercoles] = "Miercoles";
+        _dayButtons[BtnJueves] = "Jueves";
+        _dayButtons[BtnViernes] = "Viernes";
+        _dayButtons[BtnSabado] = "Sabado";
+        _dayButtons[BtnDomingo] = "Domingo";
     }
 
-    private void EnterEditMode(TextBox field)
+    private async void ConfigView_Loaded(object? sender, RoutedEventArgs e)
     {
-        if (!field.IsReadOnly) return;
-
-        field.IsReadOnly = false;
-        field.Background = _editBg;
-        field.BorderBrush = _editBorder;
-        field.BorderThickness = new Thickness(1);
-        field.Foreground = _fieldFg;
-        field.Focus();
-        field.SelectAll();
-
-        var icon = _fieldIcons[field];
-        icon.Content = "\xEBA6";
-        icon.Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
-    }
-
-    private void ExitEditMode(TextBox field)
-    {
-        if (field.IsReadOnly) return;
-
-        field.IsReadOnly = true;
-        field.Background = _readonlyBg;
-        field.BorderBrush = _readonlyBorder;
-        field.BorderThickness = new Thickness(0);
-        field.Foreground = _fieldFg;
-
-        var icon = _fieldIcons[field];
-        icon.Content = "\xE3B2";
-        icon.Foreground = new SolidColorBrush(Color.Parse("#888888"));
-    }
-
-    private void EnterPair(TextBox horas, TextBox minutos)
-    {
-        if (!horas.IsReadOnly) return;
-        EnterEditMode(horas);
-        EnterEditMode(minutos);
-    }
-
-    private void ExitPair(TextBox horas, TextBox minutos)
-    {
-        ExitEditMode(horas);
-        ExitEditMode(minutos);
-    }
-
-    private void Field_GotFocus(object? sender, RoutedEventArgs e)
-    {
-        if (sender is not TextBox tb || !tb.IsReadOnly) return;
-
-        if (tb == FieldInicioHoras || tb == FieldInicioMinutos)
-            EnterPair(FieldInicioHoras, FieldInicioMinutos);
-        else if (tb == FieldFinHoras || tb == FieldFinMinutos)
-            EnterPair(FieldFinHoras, FieldFinMinutos);
-    }
-
-    private void BtnHoraInicio_Click(object? sender, RoutedEventArgs e)
-    {
-        if (FieldInicioHoras.IsReadOnly) EnterPair(FieldInicioHoras, FieldInicioMinutos);
-        else ExitPair(FieldInicioHoras, FieldInicioMinutos);
-    }
-
-    private void BtnHoraFin_Click(object? sender, RoutedEventArgs e)
-    {
-        if (FieldFinHoras.IsReadOnly) EnterPair(FieldFinHoras, FieldFinMinutos);
-        else ExitPair(FieldFinHoras, FieldFinMinutos);
+        if (DataContext is ConfigViewModel vm)
+        {
+            await vm.CargarConfigAsync();
+            SyncDayButtons(vm);
+        }
     }
 
     private void ToggleDia_Click(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button btn)
+        if (sender is not Button btn || DataContext is not ConfigViewModel vm) return;
+        if (!_dayButtons.TryGetValue(btn, out var prop)) return;
+
+        var currentValue = (bool?)vm.GetType().GetProperty(prop)?.GetValue(vm);
+        vm.GetType().GetProperty(prop)?.SetValue(vm, !currentValue);
+
+        if (btn.Classes.Contains("active"))
+            btn.Classes.Remove("active");
+        else
+            btn.Classes.Add("active");
+    }
+
+    private void SyncDayButtons(ConfigViewModel vm)
+    {
+        foreach (var kvp in _dayButtons)
         {
-            var classes = btn.Classes;
-            if (classes.Contains("active"))
-                classes.Remove("active");
+            var isActive = (bool?)vm.GetType().GetProperty(kvp.Value)?.GetValue(vm) ?? false;
+            if (isActive)
+                kvp.Key.Classes.Add("active");
             else
-                classes.Add("active");
+                kvp.Key.Classes.Remove("active");
         }
     }
 }

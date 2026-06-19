@@ -2,240 +2,185 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="700"
              x:Class="planificApp.Views.CalendarioMensualView"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
+             xmlns:models="clr-namespace:PlanificApp.Models"
+             xmlns:converters="clr-namespace:planificApp.Converters"
              x:DataType="vm:CalendarioMensualViewModel">
 
-    <Border Background="{DynamicResource AppBackground}">
-        <DockPanel>
+    <UserControl.Resources>
+        <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+    </UserControl.Resources>
 
-            <!-- Header -->
-            <Border DockPanel.Dock="Top" Padding="10 14" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1">
-                <Grid ColumnDefinitions="Auto,*,Auto">
-                    <Button Grid.Column="0" Classes="transparent" Padding="4" VerticalAlignment="Center">
-                        <Label Classes="icon-only" Content="&#xE51A;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
-                    </Button>
-                    <TextBlock Grid.Column="1" Text="Mayo 2026" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Button Grid.Column="2" Classes="transparent" Padding="4" VerticalAlignment="Center">
-                        <Label Classes="icon-only" Content="&#xE52C;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
-                    </Button>
+    <Border Background="{DynamicResource AppBackground}">
+        <Grid ColumnDefinitions="260, *">
+            
+            <!-- ========================================== -->
+            <!-- COLUMNA 0: PANEL LATERAL AGRUPADO          -->
+            <!-- ========================================== -->
+            <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0" Padding="15">
+                <Grid RowDefinitions="Auto, *">
+                    <TextBlock Grid.Row="0" Text="Tareas" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="5 0 0 20"/>
+                    
+                    <ScrollViewer Grid.Row="1">
+    <StackPanel>
+        
+        <!-- 1. TUS ÁREAS NORMALES -->
+        <ItemsControl ItemsSource="{Binding AreasSidebar}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:AreaSidebarGroup">
+                    <StackPanel Margin="0 0 0 16">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 8">
+                            <Ellipse Width="10" Height="10" Fill="{Binding ColorHex, FallbackValue='#6366f1'}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NombreArea}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <ItemsControl ItemsSource="{Binding Tareas}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:TareaDetalleSidebar">
+                                    <Border Background="#161616" BorderBrush="#2A2A2A" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                                        <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- 2. NUEVA SECCIÓN: TAREAS VENCIDAS -->
+        <!-- Solo se muestra si "HayTareasVencidas" es True -->
+        <StackPanel IsVisible="{Binding HayTareasVencidas}">
+            
+            <!-- Línea separadora sutil -->
+            <Border Height="1" Background="{DynamicResource BorderSubtle}" Margin="0 4 0 16"/>
+
+            <!-- Cabecera Roja -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Margin="0 0 0 8">
+                <Ellipse Width="10" Height="10" Fill="#ef4444" VerticalAlignment="Center"/>
+                <TextBlock Text="Vencidas" FontSize="13" FontWeight="Bold" Foreground="#ef4444" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Lista con diseño de urgencia -->
+            <ItemsControl ItemsSource="{Binding TareasVencidas}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TareaDetalleSidebar">
+                        <!-- El fondo rojizo oscuro resalta sobre el gris de las tareas normales -->
+                        <Border Background="#2a1010" BorderBrush="#5c1a1a" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                            <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="#f87171" FontWeight="Medium" TextWrapping="Wrap"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+        </StackPanel>
+
+    </StackPanel>
+</ScrollViewer>
                 </Grid>
             </Border>
 
-            <!-- Legend -->
-            <Border DockPanel.Dock="Bottom" Padding="6 10" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 1 0 0">
-                <StackPanel Orientation="Horizontal" Spacing="14">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Ellipse Width="12" Height="12" Fill="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Trabajo" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaEstudioBorder}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Estudio" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaDeporteBorder}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Deporte" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Ellipse Width="12" Height="12" Fill="{DynamicResource AreaLaboresBorder}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Labores" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Ellipse Width="12" Height="12" Fill="{DynamicResource DangerForeground}" VerticalAlignment="Center"/>
-                        <TextBlock Text="Vencida" FontSize="13" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+            <!-- ========================================== -->
+            <!-- COLUMNA 1: CALENDARIO PRINCIPAL            -->
+            <!-- ========================================== -->
+            <DockPanel Grid.Column="1">
+                <!-- Header Dinámico -->
+                <Border DockPanel.Dock="Top" Padding="10 14" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Button Grid.Column="0" Command="{Binding MesAnteriorCommand}" Classes="transparent" Padding="4" VerticalAlignment="Center">
+                            <Label Classes="icon-only" Content="&#xE51A;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
+                        </Button>
+                        <TextBlock Grid.Column="1" Text="{Binding NombreMesAnio}" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Button Grid.Column="2" Command="{Binding MesSiguienteCommand}" Classes="transparent" Padding="4" VerticalAlignment="Center">
+                            <Label Classes="icon-only" Content="&#xE52C;" FontSize="16" Foreground="{DynamicResource TextSecondary}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- LEYENDA INFERIOR DINÁMICA -->
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 16 16 16" Spacing="16">
+                    <!-- Este ItemsControl dibuja las áreas del usuario automáticamente -->
+                    <ItemsControl ItemsSource="{Binding AreasDelUsuario}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Spacing="16"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <!-- Importante: Avalonia necesita saber qué objeto lee aquí -->
+                            <DataTemplate x:DataType="models:AreaInteres">
+                                <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <Ellipse Width="10" Height="10" Fill="{Binding ColorHex, FallbackValue='#6366f1'}" />
+                                    <TextBlock Text="{Binding Nombre}" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Margin="16 0 0 0">
+                        <Ellipse Width="10" Height="10" Fill="#ef4444" /> <!-- Rojo para vencidas -->
+                        <TextBlock Text="Vencida" FontSize="12" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
-            </Border>
 
-            <!-- Calendar Grid (fills remaining space) -->
-            <Border Classes="card" Padding="0">
-                <Grid RowDefinitions="Auto,*,*,*,*,*">
-                    <!-- Day headers -->
-                    <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayHeader}">
-                        <TextBlock Grid.Column="0" Text="Lun" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="1" Text="Mar" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="2" Text="Mi&#xE9;" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="3" Text="Jue" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="4" Text="Vie" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="5" Text="S&#xE1;b" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" Margin="0 10"/>
-                        <TextBlock Grid.Column="6" Text="Dom" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" Margin="0 10"/>
+                <!-- Cuadrícula Dinámica del Calendario -->
+                <Border Classes="card" Padding="0" Margin="16 16 16 0">
+                    <Grid RowDefinitions="Auto,*">
+                        <UniformGrid Grid.Row="0" Columns="7" Rows="1" Background="{DynamicResource CalendarDayHeader}">
+                            <TextBlock Text="Lun" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Mar" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Mié" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Jue" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Vie" FontSize="12" Foreground="{DynamicResource TextDisabled}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Sáb" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" Margin="0 10"/>
+                            <TextBlock Text="Dom" FontSize="12" Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" Margin="0 10"/>
+                        </UniformGrid>
+
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding Dias}" Background="{DynamicResource CalendarDayBackground}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="7" Rows="6"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:CalendarioDiaViewModel">
+                                    <Border BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="4" MinHeight="90">
+                                        <StackPanel Spacing="4">
+                                            
+                                            <!-- Número del día -->
+                                            <TextBlock Text="{Binding NumeroDia}" 
+                                                       FontSize="13" 
+                                                       Margin="4 2 0 4"
+                                                       Foreground="{DynamicResource TextSecondary}"
+                                                       Opacity="{Binding EsMesActual, Converter={StaticResource BoolToOpacityConverter}}"/>
+
+                                            <!-- Puntitos de color: uno por cada área trabajada ese día -->
+                                            <ItemsControl ItemsSource="{Binding PuntosAreas}" Margin="4 0 0 0">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:PuntoAreaDia">
+                                                        <Ellipse Width="9" Height="9" Margin="2"
+                                                                 Fill="{Binding ColorHex}"
+                                                                 ToolTip.Tip="{Binding NombreArea}"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
-
-                    <!-- Week 1 -->
-                    <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayBackground}">
-                        <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="27" FontSize="13" Foreground="{DynamicResource CalendarDayOther}"/>
-                        </Border>
-                        <Border Grid.Column="1" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="28" FontSize="13" Foreground="{DynamicResource CalendarDayOther}"/>
-                        </Border>
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="29" FontSize="13" Foreground="{DynamicResource CalendarDayOther}"/>
-                        </Border>
-                        <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="30" FontSize="13" Foreground="{DynamicResource CalendarDayOther}"/>
-                        </Border>
-                        <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="1" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="2" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="8 6">
-                            <TextBlock Text="3" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
-
-                    <!-- Week 2 -->
-                    <Grid Grid.Row="2" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayBackground}">
-                        <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="4" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="1" BorderBrush="{DynamicResource AccentColor}" BorderThickness="2 0 0 0" Padding="8 6" Background="{DynamicResource AccentBackgroundLight}">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="5" FontSize="13" Foreground="{DynamicResource AccentColor}"/>
-                                <StackPanel Orientation="Horizontal" Spacing="3">
-                                    <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                                    <Ellipse Width="10" Height="10" Fill="{DynamicResource TrasladoBorder}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="6" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AreaEstudioBorder}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="3" BorderBrush="{DynamicResource AccentColor}" BorderThickness="2 0 0 0" Padding="8 6" Background="{DynamicResource AccentBackgroundLight}">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="7" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource AccentColor}"/>
-                                <StackPanel Orientation="Horizontal" Spacing="3">
-                                    <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                                    <Ellipse Width="10" Height="10" Fill="{DynamicResource AreaDeporteBorder}"/>
-                                    <Ellipse Width="10" Height="10" Fill="{DynamicResource DangerForeground}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="8" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="9" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="8 6">
-                            <TextBlock Text="10" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
-
-                    <!-- Week 3 -->
-                    <Grid Grid.Row="3" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayBackground}">
-                        <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="11" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="1" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="12" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="13" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AreaEstudioBorder}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="14" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="15" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="16" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="8 6">
-                            <TextBlock Text="17" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
-
-                    <!-- Week 4 -->
-                    <Grid Grid.Row="4" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayBackground}">
-                        <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="18" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="1" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="19" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AreaDeporteBorder}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="20" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="21" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="22" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="23" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="8 6">
-                            <TextBlock Text="24" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
-
-                    <!-- Week 5 -->
-                    <Grid Grid.Row="5" ColumnDefinitions="*,*,*,*,*,*,*" Background="{DynamicResource CalendarDayBackground}">
-                        <Border Grid.Column="0" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="25" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="1" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="26" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AccentColor}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="2" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="27" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="3" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="28" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="4" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <StackPanel Spacing="3">
-                                <TextBlock Text="29" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                                <Ellipse Width="10" Height="10" Fill="{DynamicResource AreaLaboresBorder}"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Grid.Column="5" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 1" Padding="8 6">
-                            <TextBlock Text="30" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                        <Border Grid.Column="6" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 0 1" Padding="8 6">
-                            <TextBlock Text="31" FontSize="13" Foreground="{DynamicResource TextSecondary}"/>
-                        </Border>
-                    </Grid>
-                </Grid>
-            </Border>
-
-        </DockPanel>
+                </Border>
+            </DockPanel>
+        </Grid>
     </Border>
 </UserControl>
