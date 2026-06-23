@@ -371,6 +371,17 @@ namespace planificApp.ViewModels
 
             if (resultado != null && _sesionService.UsuarioActual != null)
             {
+                // Si cambió la dirección, re-geocodificamos para mover el pin.
+                // Si la geocodificación falla, conservamos las coordenadas previas.
+                double lat = ubicacionAEditar.Latitud;
+                double lon = ubicacionAEditar.Longitud;
+                if (!string.IsNullOrWhiteSpace(resultado.Direccion) &&
+                    resultado.Direccion != ubicacionAEditar.DireccionExacta)
+                {
+                    var geo = await _geoService.ValidarDireccionAsync(resultado.Nombre, resultado.Direccion);
+                    if (geo != null) { lat = geo.Latitud; lon = geo.Longitud; }
+                }
+
                 var ubicacionDb = new UbicacionGuardada
                 {
                     IdUbicacion = ubicacionAEditar.IdUbicacion!,
@@ -380,8 +391,8 @@ namespace planificApp.ViewModels
                     DireccionExacta = resultado.Direccion,
                     ColorHex = resultado.ColorHex,
                     TransportePreferido = resultado.Transporte,
-                    Latitud = ubicacionAEditar.Latitud,
-                    Longitud = ubicacionAEditar.Longitud
+                    Latitud = lat,
+                    Longitud = lon
                 };
 
                 await _ubicacionRepo.ActualizarUbicacion(ubicacionAEditar.IdUbicacion!, ubicacionDb);

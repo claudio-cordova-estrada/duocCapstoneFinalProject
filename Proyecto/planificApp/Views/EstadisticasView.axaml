@@ -121,7 +121,20 @@
                         </Button>
                         
                         <Border Grid.Column="3" Width="1" Background="{DynamicResource BorderSubtle}" Margin="14 0"/>
-                        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" x:Name="MonthPills"/>
+                        <ItemsControl Grid.Column="4" ItemsSource="{Binding Meses}" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:MesPill">
+                                    <Button Classes="pill-rounded" Classes.disabled="{Binding !Habilitado}" Margin="3 0" IsHitTestVisible="False">
+                                        <TextBlock Text="{Binding Nombre}" FontSize="12"/>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </Border>
 

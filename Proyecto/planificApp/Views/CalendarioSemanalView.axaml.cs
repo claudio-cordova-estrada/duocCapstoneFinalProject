@@ -24,10 +24,18 @@ public partial class CalendarioSemanalView : UserControl
     private readonly TextBlock[] _dayHeaderNames = new TextBlock[7];
     private readonly TextBlock[] _dayHeaderNums = new TextBlock[7];
     private readonly Border[] _dayHeaders = new Border[7];
-    private static readonly SolidColorBrush HourLineBrush = new(Color.Parse("#141414"));
-    private static readonly SolidColorBrush AccentLightBrush = new(Color.Parse("#241f45"));
     private static readonly SolidColorBrush TrasladoBackgroundBrush = new(Color.Parse("#210101"));
     private static readonly SolidColorBrush TrasladoBorderBrush = new(Color.Parse("#ef4444"));
+
+    // Resuelve un brush del tema actual (claro/oscuro); usa el fallback si no existe.
+    private static IBrush ThemeBrush(string key, string fallback)
+    {
+        if (Avalonia.Application.Current is { } app
+            && app.TryGetResource(key, app.ActualThemeVariant, out var res)
+            && res is IBrush b)
+            return b;
+        return new SolidColorBrush(Color.Parse(fallback));
+    }
     private const double PixelsPerHour = 64.0;
     private const double SnapMinutes = 15;
     private const double SnapPixels = PixelsPerHour * SnapMinutes / 60.0;
@@ -297,16 +305,16 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
 
                 if (dia.EsHoy)
                 {
-                    _dayHeaderNames[i].Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
-                    _dayHeaderNums[i].Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
+                    _dayHeaderNames[i].Foreground = ThemeBrush("AccentColor", "#a78bfa");
+                    _dayHeaderNums[i].Foreground = ThemeBrush("AccentColor", "#a78bfa");
                     _dayHeaderNums[i].FontWeight = Avalonia.Media.FontWeight.Medium;
                     if (i < _dayHeaders.Length && _dayHeaders[i] != null)
-                        _dayHeaders[i].Background = AccentLightBrush;
+                        _dayHeaders[i].Background = ThemeBrush("CalendarTodayBackground", "#1c1832");
                 }
                 else
                 {
-                    _dayHeaderNames[i].Foreground = new SolidColorBrush(Color.Parse("#555555"));
-                    _dayHeaderNums[i].Foreground = new SolidColorBrush(Color.Parse("#555555"));
+                    _dayHeaderNames[i].Foreground = ThemeBrush("TextDisabled", "#555555");
+                    _dayHeaderNums[i].Foreground = ThemeBrush("TextDisabled", "#555555");
                     _dayHeaderNums[i].FontWeight = Avalonia.Media.FontWeight.Normal;
                     if (i < _dayHeaders.Length && _dayHeaders[i] != null)
                         _dayHeaders[i].Background = Brushes.Transparent;
@@ -410,7 +418,7 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
                 _dayPanels[i].Children.Clear();
 
                 if (i < _viewModel.Dias.Count && _viewModel.Dias[i].EsHoy)
-                    _dayPanels[i].Background = AccentLightBrush;
+                    _dayPanels[i].Background = ThemeBrush("CalendarTodayBackground", "#1c1832");
                 else
                     _dayPanels[i].Background = Brushes.Transparent;
 
@@ -464,7 +472,7 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
             {
                 Margin = new Thickness(0, hour * 64, 0, 0),
                 Height = 1,
-                Background = HourLineBrush,
+                Background = ThemeBrush("CalendarHourLine", "#141414"),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Top
             };

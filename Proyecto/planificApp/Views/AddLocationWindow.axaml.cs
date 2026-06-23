@@ -1,16 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using PlanificApp.Models.Services.Interfaces;
+using planificApp.ViewModels;
 
 namespace planificApp.Views;
 
-// Clase para enviar los datos de vuelta
+// DTO que la ventana devuelve al cerrarse (lo consume DialogService).
 public class LocationFormData
 {
     public string Nombre { get; set; } = string.Empty;
@@ -22,53 +21,45 @@ public class LocationFormData
 
 public partial class AddLocationWindow : Window
 {
-    private readonly IGeoService _geoService;
-    public ObservableCollection<string> Sugerencias { get; set; } = new();
-    private string _selectedColor = "#a78bfa";
-    private string _selectedTransport = "Auto";
-    // El área de la ubicación ya no se elige aquí (se gestiona desde el área vía UbicacionPred).
-    // Se conserva el valor que traía la ubicación al editar; en creación queda "General".
-    private string _areaInteres = "General";
+    private readonly AddLocationWindowViewModel _vm;
 
     // Constructor para el diseñador
     public AddLocationWindow()
     {
         InitializeComponent();
-        _geoService = null!;
+        _vm = new AddLocationWindowViewModel();
+        DataContext = _vm;
     }
 
     // Constructor real
-    public AddLocationWindow(IGeoService geoService) : this()
+    public AddLocationWindow(IGeoService geoService)
     {
-        _geoService = geoService;
-        LocationInput.ItemsSource = Sugerencias;
+        InitializeComponent();
+        _vm = new AddLocationWindowViewModel(geoService);
+        DataContext = _vm;
+
+        _vm.CerrarSolicitado += OnCerrarSolicitado;
+        _vm.PropertyChanged += Vm_PropertyChanged;
         LocationInput.Populating += OnLocationInputPopulating;
-        SelectColor(_selectedColor);
-        SelectTransport(_selectedTransport);
+
+        ActualizarSeleccionVisual();
     }
 
-    // --- MÉTODOS DE LA VENTANA ---
+    // API pública usada por DialogService para el modo edición.
     public void SetEditMode(string name, string direccion, string area, string color, string transport)
     {
-        try
-        {
-            Title = "Editar ubicación";
-            NameInput.Text = name;
-            LocationInput.Text = direccion;
-            DeleteButton.IsVisible = true;
-            _selectedColor = string.IsNullOrWhiteSpace(color) ? _selectedColor : color;
-            _selectedTransport = string.IsNullOrWhiteSpace(transport) ? _selectedTransport : transport;
+        _vm.ConfigurarEdicion(name, direccion, area, color, transport);
+        ActualizarSeleccionVisual();
+    }
 
-            // Conservamos el área que ya tenía la ubicación (la usa el generador semanal),
-            // aunque ya no se pueda cambiar desde este diálogo.
-            _areaInteres = string.IsNullOrWhiteSpace(area) ? "General" : area;
+    private void OnCerrarSolicitado(LocationFormData? resultado) => Close(resultado);
 
-            SelectColor(_selectedColor);
-            SelectTransport(_selectedTransport);
-        }
-        catch (Exception ex)
+    private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(AddLocationWindowViewModel.SelectedColor)
+            or nameof(AddLocationWindowViewModel.SelectedTransport))
         {
-            System.Diagnostics.Debug.WriteLine($"[ADD_LOCATION] Error al entrar en modo edición: {ex.Message}");
+            ActualizarSeleccionVisual();
         }
     }
 
@@ -80,11 +71,8 @@ public partial class AddLocationWindow : Window
         {
             var text = LocationInput.Text;
             if (string.IsNullOrWhiteSpace(text) || text.Length < 3) return;
-            if (_geoService == null) return;
             e.Cancel = true;
-            var resultados = await _geoService.GetPredictionsAsync(text);
-            Sugerencias.Clear();
-            foreach (var item in resultados) Sugerencias.Add(item);
+            await _vm.BuscarSugerenciasAsync(text);
             LocationInput.PopulateComplete();
         }
         catch (Exception ex)
@@ -95,68 +83,48 @@ public partial class AddLocationWindow : Window
 
     private void ColorOption_Tapped(object? sender, TappedEventArgs e)
     {
-        if (sender is Border b && b.Tag is string color) { _selectedColor = color; SelectColor(color); }
+        if (sender is Border b && b.Tag is string color)
+            _vm.SeleccionarColorCommand.Execute(color);
     }
 
-    private void SelectColor(string color)
+    private void TransportOption_Tapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Border b && b.Tag is string transport)
+            _vm.SeleccionarTransporteCommand.Execute(transport);
+    }
+
+    // Resuelve un brush del tema actual (claro/oscuro); usa el fallback si no existe.
+    private static IBrush ThemeBrush(string key, string fallback)
+    {
+        var app = Avalonia.Application.Current;
+        if (app != null && app.TryGetResource(key, app.ActualThemeVariant, out var res) && res is IBrush b)
+            return b;
+        return new SolidColorBrush(Color.Parse(fallback));
+    }
+
+    // Realce visual de los recuadros de color/transporte según la selección del VM.
+    // Es manipulación directa de Borders concretos → propio de la vista.
+    private void ActualizarSeleccionVisual()
     {
         foreach (var child in ColorGrid.Children)
         {
             if (child is Border b)
             {
-                if (b.Tag?.ToString() == color) { b.BorderThickness = new Thickness(2); b.BorderBrush = new SolidColorBrush(Colors.White); b.Width = 26; b.Height = 26; }
+                bool sel = b.Tag?.ToString() == _vm.SelectedColor;
+                // Anillo de selección con el color de texto del tema (contrasta en claro y oscuro).
+                if (sel) { b.BorderThickness = new Thickness(2); b.BorderBrush = ThemeBrush("TextPrimary", "#ffffff"); b.Width = 26; b.Height = 26; }
                 else { b.BorderThickness = new Thickness(0); b.Width = 22; b.Height = 22; }
             }
         }
-    }
 
-    private void TransportOption_Tapped(object? sender, TappedEventArgs e)
-    {
-        if (sender is Border b && b.Tag is string transport) { _selectedTransport = transport; SelectTransport(transport); }
-    }
-
-    private void SelectTransport(string transport)
-    {
         foreach (var child in TransportGrid.Children)
         {
             if (child is Border b)
             {
-                bool isSelected = b.Tag?.ToString() == transport;
-                if (isSelected) { b.Background = new SolidColorBrush(Color.Parse("#1e1a2e")); b.BorderBrush = new SolidColorBrush(Color.Parse("#3d3060")); if (b.Child is TextBlock tb) tb.Foreground = new SolidColorBrush(Color.Parse("#a78bfa")); }
-                else { b.Background = new SolidColorBrush(Color.Parse("#1a1a1a")); b.BorderBrush = new SolidColorBrush(Color.Parse("#222222")); if (b.Child is TextBlock tb) tb.Foreground = new SolidColorBrush(Color.Parse("#555555")); }
+                bool sel = b.Tag?.ToString() == _vm.SelectedTransport;
+                if (sel) { b.Background = ThemeBrush("AccentBackgroundLight", "#1e1a2e"); b.BorderBrush = ThemeBrush("AccentBorder", "#3d3060"); if (b.Child is TextBlock tb) tb.Foreground = ThemeBrush("AccentColor", "#a78bfa"); }
+                else { b.Background = ThemeBrush("PillBackground", "#1a1a1a"); b.BorderBrush = ThemeBrush("PillBorder", "#222222"); if (b.Child is TextBlock tb) tb.Foreground = ThemeBrush("TextDisabled", "#555555"); }
             }
         }
     }
-
-    private void CancelButton_Click(object? sender, RoutedEventArgs e) { Close(null); }
-
-    private void SaveButton_Click(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            // Validación. Si no hay nombre, mostramos el error y abortamos el guardado.
-            if (string.IsNullOrWhiteSpace(NameInput.Text))
-            {
-                NameError.IsVisible = true;
-                return;
-            }
-            NameError.IsVisible = false;
-
-            var resultado = new LocationFormData
-            {
-                Nombre = NameInput.Text.Trim(),
-                Direccion = LocationInput.Text ?? "",
-                AreaInteres = _areaInteres,
-                ColorHex = _selectedColor,
-                Transporte = _selectedTransport
-            };
-            Close(resultado);
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine($"[ADD_LOCATION] Error al guardar: {ex.Message}");
-        }
-    }
-
-    private void DeleteButton_Click(object? sender, RoutedEventArgs e) { Close(null); }
 }

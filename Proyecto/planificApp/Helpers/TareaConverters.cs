@@ -121,6 +121,21 @@ public class TareaAtrasadaBorderConverter : IValueConverter
     }
 }
 
+// Devuelve true si la tarea está atrasada (para togglear la clase visual ".atrasada"
+// y dejar que los colores los resuelva el tema vía DynamicResource).
+public class TareaEsAtrasadaConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return value is Tarea tarea && TareaAtrasada.EsAtrasada(tarea);
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return null;
+    }
+}
+
 public class TareaCheckIconConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

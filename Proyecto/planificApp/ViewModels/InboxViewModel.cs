@@ -222,7 +222,8 @@ public partial class InboxViewModel : TareaDetailViewModelBase
 
     private void AplicarFiltro()
     {
-        var pendientes = Tareas.Where(t => t.FecCompletado == null).ToList();
+        // Más recientes arriba (la tarea recién creada aparece al tope de la lista).
+        var pendientes = Tareas.Where(t => t.FecCompletado == null).OrderByDescending(t => t.FecCreacion).ToList();
         var completadas = Tareas.Where(t => t.FecCompletado != null).ToList();
         TareasPendientes = pendientes.Count;
         TareasCompletadasCount = completadas.Count;

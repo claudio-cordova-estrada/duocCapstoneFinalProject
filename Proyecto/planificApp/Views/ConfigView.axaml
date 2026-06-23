@@ -97,42 +97,75 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Right: Días para generación semanal -->
-                    <Border Grid.Column="1" Classes="card" Padding="20" VerticalAlignment="Top">
+                    <!-- Right: Días + Apariencia -->
+                    <StackPanel Grid.Column="1" Spacing="18" VerticalAlignment="Top">
+                    <Border Classes="card" Padding="20">
                         <StackPanel Spacing="16">
                             <TextBlock Text="Días para generación semanal" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
                             <TextBlock Text="Selecciona los días en los que deseas generar tu semana" FontSize="13" Foreground="{DynamicResource TextDisabled}" Margin="0 -10 0 0" HorizontalAlignment="Center"/>
 
                             <!-- Row 1: Lunes-Viernes -->
                             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="BtnLunes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Lunes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Lunes">
                                     <TextBlock Text="Lunes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnMartes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Martes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Martes">
                                     <TextBlock Text="Martes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnMiercoles" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Miercoles}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Miercoles">
                                     <TextBlock Text="Miércoles" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnJueves" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Jueves}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Jueves">
                                     <TextBlock Text="Jueves" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnViernes" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Viernes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Viernes">
                                     <TextBlock Text="Viernes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
 
                             <!-- Row 2: Sábado-Domingo -->
                             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button x:Name="BtnSabado" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Sabado}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Sabado">
                                     <TextBlock Text="Sábado" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button x:Name="BtnDomingo" Classes="pill-rounded" Width="100" Click="ToggleDia_Click">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Domingo}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Domingo">
                                     <TextBlock Text="Domingo" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
                         </StackPanel>
                     </Border>
+
+                    <!-- Apariencia -->
+                    <Border Classes="card" Padding="20">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Apariencia" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+                                <TextBlock Text="TEMA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <TextBlock Text="Cambia entre modo claro y oscuro" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding ModoOscuro}" OnContent="Oscuro" OffContent="Claro" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Border BorderBrush="{DynamicResource BorderDivider}" BorderThickness="0 0 0 1"/>
+
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+                                    <TextBlock Text="TAMAÑO DE LETRA" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                    <TextBlock Text="Agranda o achica toda la interfaz" FontSize="13" Foreground="{DynamicResource TextMuted}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="{Binding FontScalePorcentaje}" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                                <TextBlock Grid.Column="0" Text="A" FontSize="12" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                <Slider Grid.Column="1" Minimum="0.8" Maximum="1.4" Value="{Binding FontScale}" TickFrequency="0.05" IsSnapToTickEnabled="True" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="A" FontSize="20" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                    </StackPanel>
 
                 </Grid>
 

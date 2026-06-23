@@ -96,6 +96,7 @@ collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
         collection.AddSingleton<IRegionesService, RegionesService>();
         collection.AddSingleton<IMetricasService, MetricasService>();
+        collection.AddSingleton<IAppearanceService, AppearanceService>();
         collection.AddSingleton<Func<ApplicationPageNames, PageViewModel>>(x => name => name switch
 
         {
@@ -131,7 +132,10 @@ collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
 
         var services = collection.BuildServiceProvider();
         Services = services;
-        
+
+        // Aplica el tema guardado (claro/oscuro) antes de mostrar la ventana.
+        services.GetRequiredService<IAppearanceService>().ApplyOnStartup();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var mainVm = services.GetRequiredService<MainViewModel>();

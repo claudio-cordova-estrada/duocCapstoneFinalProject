@@ -1,11 +1,16 @@
+using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Styling;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
+using PlanificApp.Models.Services.Interfaces;
 using planificApp.Services;
 using planificApp.ViewModels;
 
@@ -16,6 +21,34 @@ public partial class MainView : Window
     public MainView()
     {
         InitializeComponent();
+
+        var appearance = App.Services.GetRequiredService<IAppearanceService>();
+        appearance.ThemeChanged += OnThemeChanged;
+    }
+
+    // Transición suave al cambiar tema: cubrimos con el color del tema ANTERIOR
+    // y lo desvanecemos para revelar el nuevo (rampa de brillo, sin fogonazo).
+    private async void OnThemeChanged()
+    {
+        var app = Avalonia.Application.Current;
+        if (app == null) return;
+
+        var variantePrevia = app.ActualThemeVariant == ThemeVariant.Dark ? ThemeVariant.Light : ThemeVariant.Dark;
+        if (app.TryGetResource("AppBackground", variantePrevia, out var res) && res is IBrush brushPrevio)
+            ThemeFadeOverlay.Background = brushPrevio;
+
+        ThemeFadeOverlay.Opacity = 1;
+        ThemeFadeOverlay.IsVisible = true;
+
+        const int steps = 15;
+        const int durationMs = 250;
+        for (int i = steps; i >= 0; i--)
+        {
+            ThemeFadeOverlay.Opacity = (double)i / steps;
+            await Task.Delay(durationMs / steps);
+        }
+
+        ThemeFadeOverlay.IsVisible = false;
     }
 
     private async void NewAreaInteresButton_Click(object? sender, RoutedEventArgs e)

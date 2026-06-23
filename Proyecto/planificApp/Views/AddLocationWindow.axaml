@@ -1,7 +1,9 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:planificApp.ViewModels"
         x:Class="planificApp.Views.AddLocationWindow"
-        Title="PlanificApp"
+        x:DataType="vm:AddLocationWindowViewModel"
+        Title="{Binding Titulo}"
         Width="400" SizeToContent="Height"
         WindowStartupLocation="CenterOwner"
         CanResize="False"
@@ -13,13 +15,13 @@
 
             <StackPanel Spacing="5">
                 <TextBlock Text="NOMBRE" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <TextBox x:Name="NameInput" PlaceholderText="Ej: Casa, Oficina&#x2026;"/>
-                <TextBlock x:Name="NameError" Text="El nombre no puede estar vacío" FontSize="11" Foreground="#ef4444" IsVisible="False"/>
+                <TextBox x:Name="NameInput" Text="{Binding Nombre}" PlaceholderText="Ej: Casa, Oficina&#x2026;"/>
+                <TextBlock x:Name="NameError" Text="El nombre no puede estar vacío" FontSize="11" Foreground="#ef4444" IsVisible="{Binding MostrarErrorNombre}"/>
             </StackPanel>
 
             <StackPanel Spacing="5">
                 <TextBlock Text="UBICACIÓN" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                <AutoCompleteBox x:Name="LocationInput" PlaceholderText="Buscar dirección…" FilterMode="None"/>
+                <AutoCompleteBox x:Name="LocationInput" Text="{Binding Direccion}" ItemsSource="{Binding Sugerencias}" PlaceholderText="Buscar dirección…" FilterMode="None"/>
             </StackPanel>
 
             <StackPanel Spacing="5">
@@ -52,13 +54,10 @@
             </StackPanel>
 
             <Grid ColumnDefinitions="*,Auto,Auto" Margin="0 4 0 0">
-                <Button x:Name="DeleteButton" Grid.Column="0" Classes="danger" HorizontalAlignment="Left" IsVisible="False" Click="DeleteButton_Click">
+                <Button Grid.Column="1" Command="{Binding CancelarCommand}" Margin="0 0 8 0">
                     <TextBlock Text="Cancelar" FontSize="12"/>
                 </Button>
-                <Button Grid.Column="1" Classes="transparent" HorizontalAlignment="Right" Click="CancelButton_Click" Margin="0 0 8 0">
-                    <TextBlock Text="Cancelar" FontSize="12" Foreground="{DynamicResource TextDisabled}"/>
-                </Button>
-                <Button Grid.Column="2" Classes="accent" Click="SaveButton_Click">
+                <Button Grid.Column="2" Classes="accent" Command="{Binding GuardarCommand}">
                     <TextBlock Text="Guardar" FontSize="12"/>
                 </Button>
             </Grid>

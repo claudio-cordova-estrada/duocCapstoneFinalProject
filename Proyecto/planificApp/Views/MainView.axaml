@@ -12,12 +12,22 @@
     <Design.DataContext>
         <vm:MainViewModel/>
     </Design.DataContext>
-    
+
+    <LayoutTransformControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <LayoutTransformControl.LayoutTransform>
+            <ScaleTransform ScaleX="{DynamicResource AppFontScale}" ScaleY="{DynamicResource AppFontScale}"/>
+        </LayoutTransformControl.LayoutTransform>
+
     <Grid Background="{DynamicResource AppBackground}">
         
         <!-- Auth overlay (visible when NOT logged in) -->
         <Border IsVisible="{Binding !IsLoggedIn}" Background="{DynamicResource AppBackground}">
-            <ContentControl Content="{Binding CurrentPage}"/>
+            <Panel>
+                <ContentControl Content="{Binding CurrentPage}"/>
+                <Button Classes="sb1-item" Command="{Binding ToggleThemeCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="16" ToolTip.Tip="Cambiar tema claro / oscuro">
+                    <PathIcon Width="17" Height="17" Data="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </Button>
+            </Panel>
         </Border>
 
         <!-- App layout (visible when logged in) -->
@@ -26,7 +36,7 @@
             <!-- SB1 — Icon Navigation (User mode) -->
             <Border Grid.Column="0" Background="{DynamicResource SB1Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0" IsVisible="{Binding !IsAdminToggle}">
                 <Border Padding="0 12">
-                    <Grid ColumnDefinitions="Auto" RowDefinitions="*, Auto, Auto" HorizontalAlignment="Center">
+                    <Grid ColumnDefinitions="Auto" RowDefinitions="*, Auto, Auto, Auto" HorizontalAlignment="Center">
                         <StackPanel Spacing="10">
                             <!-- Logo -->
                             <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AccentBackground}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 14">
@@ -39,8 +49,11 @@
                             
                             <Border Height="1"/>
                         </StackPanel>
-                        <IconButton Grid.Row="1" IconText="&#xE4C2;" Classes="sb1-item" Classes.active="{Binding IsCuentaActive}" Command="{Binding GoToCuentaCommand}" />
-                        <IconButton Grid.Row="2" IconText="&#xE270;" Classes="sb1-item" Classes.active="{Binding IsConfigActive}" Command="{Binding GoToConfigCommand}" />
+                        <Button Grid.Row="1" Classes="sb1-item" Command="{Binding ToggleThemeCommand}" ToolTip.Tip="Cambiar tema claro / oscuro">
+                            <PathIcon Width="17" Height="17" Data="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </Button>
+                        <IconButton Grid.Row="2" IconText="&#xE4C2;" Classes="sb1-item" Classes.active="{Binding IsCuentaActive}" Command="{Binding GoToCuentaCommand}" />
+                        <IconButton Grid.Row="3" IconText="&#xE270;" Classes="sb1-item" Classes.active="{Binding IsConfigActive}" Command="{Binding GoToConfigCommand}" />
                     </Grid>
                 </Border>
             </Border>
@@ -48,21 +61,24 @@
             <!-- SB1 — Icon Navigation (Admin mode) -->
             <Border Grid.Column="0" Background="{DynamicResource SB1Background}" BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0 0 1 0" IsVisible="{Binding IsAdminToggle}">
                 <Border Padding="0 12">
-                    <Grid ColumnDefinitions="Auto" RowDefinitions="*, Auto" HorizontalAlignment="Center">
+                    <Grid ColumnDefinitions="Auto" RowDefinitions="*, Auto, Auto" HorizontalAlignment="Center">
                         <StackPanel Spacing="10">
                             <Border Width="32" Height="32" CornerRadius="8" Background="{DynamicResource AdminAccentBackground}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 14">
                                 <Label Classes="icon-only" Content="&#xEA3A;" Foreground="{DynamicResource AdminAccent}" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
-                            
+
                             <Button Classes="sb1-item admin" Classes.active="{Binding IsAdminEstadisticasActive}" Command="{Binding GoToAdminEstadisticasCommand}">
                                 <Label Classes="icon-only" Content="&#xEAA6;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button>
-                            
+
                             <Button Classes="sb1-item admin" Classes.active="{Binding IsAdminUsuariosActive}" Command="{Binding GoToAdminUsuariosCommand}">
                                 <Label Classes="icon-only" Content="&#xE2C8;" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Button>
                         </StackPanel>
-                        <IconButton Grid.Row="1" IconText="&#xE42A;" Classes="sb1-item" Command="{Binding LogoutCommand}" />
+                        <Button Grid.Row="1" Classes="sb1-item" Command="{Binding ToggleThemeCommand}" ToolTip.Tip="Cambiar tema claro / oscuro">
+                            <PathIcon Width="17" Height="17" Data="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </Button>
+                        <IconButton Grid.Row="2" IconText="&#xE42A;" Classes="sb1-item" Command="{Binding LogoutCommand}" />
                     </Grid>
                 </Border>
             </Border>
@@ -186,8 +202,12 @@
             
             <!-- Main Content -->
             <ContentControl Grid.Column="2" Content="{Binding CurrentPage}"/>
-            
+
         </Grid>
 
+        <!-- Overlay para la transición suave de tema (claro <-> oscuro) -->
+        <Border x:Name="ThemeFadeOverlay" IsHitTestVisible="False" IsVisible="False" Opacity="0"/>
+
     </Grid>
+    </LayoutTransformControl>
 </Window>

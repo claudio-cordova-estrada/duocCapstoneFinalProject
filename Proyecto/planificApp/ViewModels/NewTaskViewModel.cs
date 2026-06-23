@@ -58,7 +58,11 @@ public partial class NewTaskViewModel : ViewModelBase
         AreasInteres.Clear();
         foreach (var area in areas) AreasInteres.Add(area);
 
-        // Cargar las ubicaciones dinámicamente de la BD
+        // Cargar las ubicaciones dinámicamente de la BD.
+        // Guardamos la selección actual: al limpiar la colección, el ComboBox pierde su
+        // SelectedItem (queda null) y el combo se ve vacío. La restauramos al final.
+        var seleccionPrevia = UbicacionDisplay;
+
         var ubicacionesDb = await _ubicacionRepo.ObtenerUbicacionesPorUsuario(_sesion.UsuarioActual.IdUsuario);
         MisUbicaciones.Clear();
         MisUbicaciones.Add("— Sin ubicación —");
@@ -67,6 +71,10 @@ public partial class NewTaskViewModel : ViewModelBase
             if (!string.IsNullOrWhiteSpace(ubi.Nombre))
                 MisUbicaciones.Add(ubi.Nombre);
         }
+
+        UbicacionDisplay = !string.IsNullOrEmpty(seleccionPrevia) && MisUbicaciones.Contains(seleccionPrevia)
+            ? seleccionPrevia
+            : "— Sin ubicación —";
     }
 
     [RelayCommand]

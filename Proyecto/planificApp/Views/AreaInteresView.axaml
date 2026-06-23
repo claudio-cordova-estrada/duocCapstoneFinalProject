@@ -60,13 +60,13 @@
                     <ItemsControl ItemsSource="{Binding TareasPendientesFiltradas}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:Tarea">
-                                <Border Classes="card task-item" Margin="0 0 0 6" Tapped="TaskItem_Tapped" Tag="{Binding}" Background="{Binding Converter={StaticResource TareaAtrasadaBackgroundConverter}}" BorderBrush="{Binding Converter={StaticResource TareaAtrasadaBorderConverter}}" BorderThickness="1">
+                                <Border Classes="card task-item" Classes.atrasada="{Binding Converter={StaticResource TareaEsAtrasadaConverter}}" Margin="0 0 0 6" Tapped="TaskItem_Tapped" Tag="{Binding}" BorderThickness="1">
                                     <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                                         <Button Grid.Column="0" Classes="transparent" Padding="0" VerticalAlignment="Center" Margin="0 0 10 0" Click="TaskCheck_Click" Tag="{Binding}">
                                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="16" Content="&#xE45E;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                                         </Button>
-                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="{Binding Converter={StaticResource TareaAtrasadaForegroundConverter}}" VerticalAlignment="Center"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding HoraInicio}" FontSize="11" Foreground="{Binding Converter={StaticResource TareaAtrasadaForegroundConverter}}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding HoraInicio}" FontSize="11" Foreground="{DynamicResource TextTertiary}" VerticalAlignment="Center" Margin="0 0 8 0"/>
                                         <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="TaskDelete_Click" Tag="{Binding}">
                                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
                                         </Button>
@@ -93,7 +93,7 @@
                                         <Button Grid.Column="0" Classes="transparent" Padding="0" VerticalAlignment="Center" Margin="0 0 10 0" Click="TaskCheck_Click" Tag="{Binding}">
                                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="16" Content="&#xE186;" Foreground="{DynamicResource AccentColor}" VerticalAlignment="Center"/>
                                         </Button>
-                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="#6b6b6b" VerticalAlignment="Center" TextDecorations="Strikethrough"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Nombre}" FontSize="13" Foreground="{DynamicResource TextTertiary}" VerticalAlignment="Center" TextDecorations="Strikethrough"/>
                                         <TextBlock Grid.Column="2" Text="{Binding HoraInicio}" FontSize="11" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="0 0 8 0"/>
                                         <Button Grid.Column="3" Classes="transparent" Padding="4" VerticalAlignment="Center" Click="TaskDelete_Click" Tag="{Binding}">
                                             <Label FontFamily="{DynamicResource Phosphor}" FontSize="14" Content="&#xE4A6;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>

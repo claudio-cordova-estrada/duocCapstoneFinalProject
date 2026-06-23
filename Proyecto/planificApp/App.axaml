@@ -16,14 +16,14 @@
     </Application.Styles>
 
     <Application.Resources>
-        
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <MergeResourceInclude Source="Avares://planificApp/StyleControl/IconButton.axaml"></MergeResourceInclude>
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:BoolToTextConverter x:Key="BoolToTextConverter"/>        
-            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>        
+            <converters:BoolToTextConverter x:Key="BoolToTextConverter"/>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
             <converters:BoolToBgConverter x:Key="BoolToBgConverter"/>
             <converters:BoolToEstadoConverter x:Key="BoolToEstadoConverter"/>
             <converters:BoolToActionTextConverter x:Key="BoolToActionTextConverter"/>
@@ -32,9 +32,10 @@
             <converters:BoolToActivarColorConverter x:Key="BoolToActivarColorConverter"/>
             <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
 
-        
-        
+
+
         <helpers:TareaCheckIconConverter x:Key="TareaCheckIconConverter"/>
+        <helpers:TareaEsAtrasadaConverter x:Key="TareaEsAtrasadaConverter"/>
         <helpers:TareaNombreBrushConverter x:Key="TareaNombreBrushConverter"/>
         <helpers:BoolToChevronConverter x:Key="BoolToChevronConverter"/>
         <helpers:TareaVencidaBrushConverter x:Key="TareaVencidaBrushConverter"/>
@@ -49,134 +50,312 @@
         <helpers:BoolToAccentBackgroundConverter x:Key="BoolToAccentBackgroundConverter"/>
         <helpers:MetodoTransporteToIconConverter x:Key="MetodoTransporteToIconConverter"/>
         <helpers:MetodoTransporteToTextConverter x:Key="MetodoTransporteToTextConverter"/>
-        
-        <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>
-        <SolidColorBrush x:Key="SB1Background">#0a0a0a</SolidColorBrush>
-        <SolidColorBrush x:Key="SB2Background">#111111</SolidColorBrush>
-        <SolidColorBrush x:Key="MainBackground">#0f0f0f</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="CardBackground">#141414</SolidColorBrush>
-        <SolidColorBrush x:Key="PanelBackground">#141414</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="BorderDefault">#1e1e1e</SolidColorBrush>
-        <SolidColorBrush x:Key="BorderSubtle">#1a1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="BorderDashed">#222222</SolidColorBrush>
-        <SolidColorBrush x:Key="BorderDivider">#161616</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="TextPrimary">#e2e8f0</SolidColorBrush>
-        <SolidColorBrush x:Key="TextSecondary">#cccccc</SolidColorBrush>
-        <SolidColorBrush x:Key="TextTertiary">#aaaaaa</SolidColorBrush>
-        <SolidColorBrush x:Key="TextDisabled">#555555</SolidColorBrush>
-        <SolidColorBrush x:Key="TextMuted">#444444</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AccentColor">#a78bfa</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentHover">#c4b5fd</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentBackground">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentBackgroundLight">#241f45</SolidColorBrush>
-        <SolidColorBrush x:Key="AccentBorder">#3d3060</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AdminAccent">#fb923c</SolidColorBrush>
-        <SolidColorBrush x:Key="AdminAccentHover">#fdba74</SolidColorBrush>
-        <SolidColorBrush x:Key="AdminAccentBackground">#2d1a0a</SolidColorBrush>
-        <SolidColorBrush x:Key="AdminAccentBorder">#fb923c44</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="BadgeDangerBackground">#3d1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="BadgeDangerForeground">#f87171</SolidColorBrush>
-        <SolidColorBrush x:Key="BadgeWarningBackground">#2d2010</SolidColorBrush>
-        <SolidColorBrush x:Key="BadgeWarningForeground">#fb923c</SolidColorBrush>
-        <SolidColorBrush x:Key="BadgeInfoBackground">#1a2640</SolidColorBrush>
-        <SolidColorBrush x:Key="BadgeInfoForeground">#60a5fa</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AreaTrabajoBackground">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaTrabajoBorder">#a78bfa</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaTrabajoText">#c4b5fd</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaTrabajoChipBackground">#2a2050</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AreaEstudioBackground">#0d2a1e</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaEstudioBorder">#34d399</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaEstudioText">#6ee7b7</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaEstudioChipBackground">#0f3322</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AreaDeporteBackground">#2d1020</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaDeporteBorder">#f472b6</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaDeporteText">#f9a8d4</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaDeporteChipBackground">#3d1530</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="AreaLaboresBackground">#0d1e35</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaLaboresBorder">#60a5fa</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaLaboresText">#93c5fd</SolidColorBrush>
-        <SolidColorBrush x:Key="AreaLaboresChipBackground">#0f2540</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="TrasladoBackground">#210101</SolidColorBrush>
-        <SolidColorBrush x:Key="TrasladoBorder">#ef4444</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="HoverBackground">#161616</SolidColorBrush>
-        <SolidColorBrush x:Key="HoverBackgroundSubtle">#141414</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="ModalOverlay">#000000CC</SolidColorBrush>
-        <SolidColorBrush x:Key="ModalBackground">#141414</SolidColorBrush>
-        <SolidColorBrush x:Key="ModalBorder">#2a2a2a</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="MapBackground">#0e1515</SolidColorBrush>
-        <SolidColorBrush x:Key="MapBlock">#1a1f1f</SolidColorBrush>
-        <SolidColorBrush x:Key="MapRoad">#60a5fa</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="CalendarGridBackground">#1a1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="CalendarDayBackground">#0f0f0f</SolidColorBrush>
-        <SolidColorBrush x:Key="CalendarDayHeader">#111111</SolidColorBrush>
-        <SolidColorBrush x:Key="CalendarHourLine">#141414</SolidColorBrush>
-        <SolidColorBrush x:Key="CalendarDayOther">#222222</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="CalTrabajoBlockBorder">#44A78BFA</SolidColorBrush>
-        <SolidColorBrush x:Key="CalEstudioBlockBorder">#4434D399</SolidColorBrush>
-        <SolidColorBrush x:Key="CalDeporteBlockBorder">#44F472B6</SolidColorBrush>
-        <SolidColorBrush x:Key="CalLaboresBlockBorder">#4460A5FA</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="DangerBackground">#2d1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="DangerBorder">#3d1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="DangerForeground">#f87171</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="InputBackground">#0f0f0f</SolidColorBrush>
-        <SolidColorBrush x:Key="InputBorder">#222222</SolidColorBrush>
-        <SolidColorBrush x:Key="InputBorderFocus">#3d3060</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="PillBackground">#161616</SolidColorBrush>
-        <SolidColorBrush x:Key="PillBorder">#222222</SolidColorBrush>
-        <SolidColorBrush x:Key="PillActiveBackground">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="PillActiveBorder">#3d3060</SolidColorBrush>
-        <SolidColorBrush x:Key="PillActiveForeground">#a78bfa</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#161616</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBackgroundPressed">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBackgroundDisabled">#0f0f0f</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonForeground">#cccccc</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonForegroundPointerOver">#e2e8f0</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonForegroundPressed">#c4b5fd</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonForegroundDisabled">#555555</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBorderBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBorderBrushPressed">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ButtonBorderBrushDisabled">Transparent</SolidColorBrush>
-        
-        <SolidColorBrush x:Key="PrimaryBackground">#0f0f0f</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryForeground">#e2e8f0</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryHoverBackground">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryActiveBackground">#1e1a2e</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryHoverForeground">#c4b5fd</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryOutlineForeground">#e2e8f0</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryOutlineBackground">#3d3060</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#2d1a1a</SolidColorBrush>
-        <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#f87171</SolidColorBrush>
-        
-        <Color x:Key="SystemAccentColor">#a78bfa</Color>
-        
+
         <FontFamily x:Key="AkkoPro">avares://planificApp/Assets/Fonts/AkkoProRegular.ttf#Akko Pro</FontFamily>
         <FontFamily x:Key="AkkoProBold">avares://planificApp/Assets/Fonts/Akko-Pro-Bold.ttf#Akko Pro</FontFamily>
         <FontFamily x:Key="Phosphor">avares://planificApp/Assets/Fonts/Phosphor.ttf#Phosphor</FontFamily>
         <FontFamily x:Key="PhosphorFill">avares://planificApp/Assets/Fonts/Phosphor-Fill.ttf#Phosphor-Fill</FontFamily>
-        
         <FontFamily x:Key="Nunito">avares://planificApp/Assets/Fonts#Nunito</FontFamily>
+
+        <!-- Escala global de UI/fuente (la ajusta AppearanceService según el slider) -->
+        <x:Double x:Key="AppFontScale">1</x:Double>
+
+        <ResourceDictionary.ThemeDictionaries>
+
+            <!-- ===================== DARK ===================== -->
+            <ResourceDictionary x:Key="Dark">
+                <SolidColorBrush x:Key="AppBackground">#0f0f0f</SolidColorBrush>
+                <SolidColorBrush x:Key="SB1Background">#0a0a0a</SolidColorBrush>
+                <SolidColorBrush x:Key="SB2Background">#111111</SolidColorBrush>
+                <SolidColorBrush x:Key="MainBackground">#0f0f0f</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CardBackground">#141414</SolidColorBrush>
+                <SolidColorBrush x:Key="PanelBackground">#141414</SolidColorBrush>
+
+                <SolidColorBrush x:Key="BorderDefault">#1e1e1e</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderSubtle">#1a1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderDashed">#222222</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderDivider">#161616</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TextPrimary">#f3f5f9</SolidColorBrush>
+                <SolidColorBrush x:Key="TextSecondary">#d6dae1</SolidColorBrush>
+                <SolidColorBrush x:Key="TextTertiary">#b3b7bf</SolidColorBrush>
+                <SolidColorBrush x:Key="TextDisabled">#555555</SolidColorBrush>
+                <SolidColorBrush x:Key="TextMuted">#444444</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AccentColor">#a78bfa</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentHover">#c4b5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBackground">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBackgroundLight">#241f45</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBorder">#3d3060</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AdminAccent">#fb923c</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentHover">#fdba74</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentBackground">#2d1a0a</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentBorder">#fb923c44</SolidColorBrush>
+
+                <SolidColorBrush x:Key="BadgeDangerBackground">#3d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeDangerForeground">#f87171</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeWarningBackground">#2d2010</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeWarningForeground">#fb923c</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeInfoBackground">#1a2640</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeInfoForeground">#60a5fa</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaTrabajoBackground">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoBorder">#a78bfa</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoText">#c4b5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoChipBackground">#2a2050</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaEstudioBackground">#0d2a1e</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioBorder">#34d399</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioText">#6ee7b7</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioChipBackground">#0f3322</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaDeporteBackground">#2d1020</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteBorder">#f472b6</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteText">#f9a8d4</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteChipBackground">#3d1530</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaLaboresBackground">#0d1e35</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresBorder">#60a5fa</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresText">#93c5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresChipBackground">#0f2540</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TrasladoBackground">#210101</SolidColorBrush>
+                <SolidColorBrush x:Key="TrasladoBorder">#ef4444</SolidColorBrush>
+
+                <SolidColorBrush x:Key="HoverBackground">#161616</SolidColorBrush>
+                <SolidColorBrush x:Key="HoverBackgroundSubtle">#141414</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ModalOverlay">#000000CC</SolidColorBrush>
+                <SolidColorBrush x:Key="ModalBackground">#141414</SolidColorBrush>
+                <SolidColorBrush x:Key="ModalBorder">#2a2a2a</SolidColorBrush>
+
+                <SolidColorBrush x:Key="MapBackground">#0e1515</SolidColorBrush>
+                <SolidColorBrush x:Key="MapBlock">#1a1f1f</SolidColorBrush>
+                <SolidColorBrush x:Key="MapRoad">#60a5fa</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalendarGridBackground">#1a1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayBackground">#0f0f0f</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayHeader">#111111</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarHourLine">#141414</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayOther">#222222</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalTrabajoBlockBorder">#44A78BFA</SolidColorBrush>
+                <SolidColorBrush x:Key="CalEstudioBlockBorder">#4434D399</SolidColorBrush>
+                <SolidColorBrush x:Key="CalDeporteBlockBorder">#44F472B6</SolidColorBrush>
+                <SolidColorBrush x:Key="CalLaboresBlockBorder">#4460A5FA</SolidColorBrush>
+
+                <SolidColorBrush x:Key="DangerBackground">#2d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerBorder">#3d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerForeground">#f87171</SolidColorBrush>
+
+                <SolidColorBrush x:Key="InputBackground">#0f0f0f</SolidColorBrush>
+                <SolidColorBrush x:Key="InputBorder">#222222</SolidColorBrush>
+                <SolidColorBrush x:Key="InputBorderFocus">#3d3060</SolidColorBrush>
+
+                <SolidColorBrush x:Key="PillBackground">#161616</SolidColorBrush>
+                <SolidColorBrush x:Key="PillBorder">#222222</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveBackground">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveBorder">#3d3060</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveForeground">#a78bfa</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#161616</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundDisabled">#0f0f0f</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForeground">#cccccc</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">#e2e8f0</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">#c4b5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundDisabled">#555555</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushPressed">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushDisabled">Transparent</SolidColorBrush>
+
+                <SolidColorBrush x:Key="PrimaryBackground">#0f0f0f</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryForeground">#e2e8f0</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverBackground">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryActiveBackground">#1e1a2e</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverForeground">#c4b5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryOutlineForeground">#e2e8f0</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryOutlineBackground">#3d3060</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#2d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#f87171</SolidColorBrush>
+
+                <!-- Estados de botones rellenos (no usan los fondos de página) -->
+                <SolidColorBrush x:Key="AccentButtonBackground">#241f45</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonBackgroundHover">#4c4080</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonBackgroundPressed">#3d3060</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonForegroundPressed">#c4b5fd</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AdminButtonBackground">#2d1a0a</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonBackgroundHover">#4a2a10</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonBackgroundPressed">#3d2510</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonForegroundPressed">#fdba74</SolidColorBrush>
+
+                <SolidColorBrush x:Key="DangerHoverBackground">#4d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerHoverForeground">#fca5a5</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerHoverBorder">#5d2a2a</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedBackground">#5d1a1a</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedForeground">#fecaca</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedBorder">#6d2a2a</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TransparentHoverBackground">#2a2a2a</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalendarTodayBackground">#1c1832</SolidColorBrush>
+
+                <Color x:Key="SystemAccentColor">#a78bfa</Color>
             </ResourceDictionary>
-    </Application.Resources> 
+
+            <!-- ===================== LIGHT ===================== -->
+            <ResourceDictionary x:Key="Light">
+                <SolidColorBrush x:Key="AppBackground">#f4f4f7</SolidColorBrush>
+                <SolidColorBrush x:Key="SB1Background">#ececef</SolidColorBrush>
+                <SolidColorBrush x:Key="SB2Background">#f0f0f3</SolidColorBrush>
+                <SolidColorBrush x:Key="MainBackground">#f4f4f7</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CardBackground">#ffffff</SolidColorBrush>
+                <SolidColorBrush x:Key="PanelBackground">#ffffff</SolidColorBrush>
+
+                <SolidColorBrush x:Key="BorderDefault">#e1e1e6</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderSubtle">#ececef</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderDashed">#cfcfd6</SolidColorBrush>
+                <SolidColorBrush x:Key="BorderDivider">#eaeaee</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TextPrimary">#14141d</SolidColorBrush>
+                <SolidColorBrush x:Key="TextSecondary">#30303c</SolidColorBrush>
+                <SolidColorBrush x:Key="TextTertiary">#52525e</SolidColorBrush>
+                <SolidColorBrush x:Key="TextDisabled">#9a9aa4</SolidColorBrush>
+                <SolidColorBrush x:Key="TextMuted">#b2b2bc</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AccentColor">#7c5cf0</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentHover">#6a48e0</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBackground">#efeafe</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBackgroundLight">#e6defd</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentBorder">#cabdf7</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AdminAccent">#e07410</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentHover">#c8650a</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentBackground">#fdeede</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminAccentBorder">#e0741066</SolidColorBrush>
+
+                <SolidColorBrush x:Key="BadgeDangerBackground">#fde8e8</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeDangerForeground">#d23838</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeWarningBackground">#fcf0dc</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeWarningForeground">#b9690d</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeInfoBackground">#e4eefb</SolidColorBrush>
+                <SolidColorBrush x:Key="BadgeInfoForeground">#2870d0</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaTrabajoBackground">#efeafe</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoBorder">#7c5cf0</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoText">#5a3fc0</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaTrabajoChipBackground">#e3daf9</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaEstudioBackground">#e3f7ee</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioBorder">#16a86e</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioText">#0f8556</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaEstudioChipBackground">#d2f0e1</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaDeporteBackground">#fce7f0</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteBorder">#e0559b</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteText">#c0407f</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaDeporteChipBackground">#f8d8e7</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AreaLaboresBackground">#e5eefa</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresBorder">#3b82e0</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresText">#2c6cc8</SolidColorBrush>
+                <SolidColorBrush x:Key="AreaLaboresChipBackground">#d5e3f6</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TrasladoBackground">#fdeaea</SolidColorBrush>
+                <SolidColorBrush x:Key="TrasladoBorder">#ef4444</SolidColorBrush>
+
+                <SolidColorBrush x:Key="HoverBackground">#ececf0</SolidColorBrush>
+                <SolidColorBrush x:Key="HoverBackgroundSubtle">#f0f0f3</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ModalOverlay">#00000059</SolidColorBrush>
+                <SolidColorBrush x:Key="ModalBackground">#ffffff</SolidColorBrush>
+                <SolidColorBrush x:Key="ModalBorder">#e1e1e6</SolidColorBrush>
+
+                <SolidColorBrush x:Key="MapBackground">#e7eded</SolidColorBrush>
+                <SolidColorBrush x:Key="MapBlock">#d6e0e0</SolidColorBrush>
+                <SolidColorBrush x:Key="MapRoad">#2870d0</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalendarGridBackground">#f0f0f2</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayBackground">#ffffff</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayHeader">#f4f4f7</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarHourLine">#ececef</SolidColorBrush>
+                <SolidColorBrush x:Key="CalendarDayOther">#cccccf</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalTrabajoBlockBorder">#557c5cf0</SolidColorBrush>
+                <SolidColorBrush x:Key="CalEstudioBlockBorder">#5516a86e</SolidColorBrush>
+                <SolidColorBrush x:Key="CalDeporteBlockBorder">#55e0559b</SolidColorBrush>
+                <SolidColorBrush x:Key="CalLaboresBlockBorder">#553b82e0</SolidColorBrush>
+
+                <SolidColorBrush x:Key="DangerBackground">#fdeaea</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerBorder">#f5cccc</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerForeground">#d23838</SolidColorBrush>
+
+                <SolidColorBrush x:Key="InputBackground">#ffffff</SolidColorBrush>
+                <SolidColorBrush x:Key="InputBorder">#d6d6dc</SolidColorBrush>
+                <SolidColorBrush x:Key="InputBorderFocus">#cabdf7</SolidColorBrush>
+
+                <SolidColorBrush x:Key="PillBackground">#f0f0f3</SolidColorBrush>
+                <SolidColorBrush x:Key="PillBorder">#dcdce2</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveBackground">#ece5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveBorder">#cabdf7</SolidColorBrush>
+                <SolidColorBrush x:Key="PillActiveForeground">#6a48e0</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">#ececf0</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">#ece5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundDisabled">#f4f4f7</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForeground">#3a3a46</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">#1a1a26</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">#6a48e0</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundDisabled">#b2b2bc</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrush">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushPointerOver">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushPressed">Transparent</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBorderBrushDisabled">Transparent</SolidColorBrush>
+
+                <SolidColorBrush x:Key="PrimaryBackground">#ffffff</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryForeground">#1a1a26</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverBackground">#ece5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryActiveBackground">#ece5fd</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverForeground">#6a48e0</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryOutlineForeground">#1a1a26</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryOutlineBackground">#cabdf7</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverOutlineBackground">#fdeaea</SolidColorBrush>
+                <SolidColorBrush x:Key="PrimaryHoverOutlineForeground">#d23838</SolidColorBrush>
+
+                <!-- Estados de botones rellenos (no usan los fondos de página) -->
+                <SolidColorBrush x:Key="AccentButtonBackground">#7c5cf0</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonBackgroundHover">#6a48e0</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonBackgroundPressed">#5a3fc0</SolidColorBrush>
+                <SolidColorBrush x:Key="AccentButtonForegroundPressed">#ffffff</SolidColorBrush>
+
+                <SolidColorBrush x:Key="AdminButtonBackground">#e07410</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonBackgroundHover">#c8650a</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonBackgroundPressed">#b25a08</SolidColorBrush>
+                <SolidColorBrush x:Key="AdminButtonForegroundPressed">#ffffff</SolidColorBrush>
+
+                <SolidColorBrush x:Key="DangerHoverBackground">#fbd5d5</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerHoverForeground">#b52525</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerHoverBorder">#f0bcbc</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedBackground">#f7c5c5</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedForeground">#a01f1f</SolidColorBrush>
+                <SolidColorBrush x:Key="DangerPressedBorder">#e8a8a8</SolidColorBrush>
+
+                <SolidColorBrush x:Key="TransparentHoverBackground">#e2e2e8</SolidColorBrush>
+
+                <SolidColorBrush x:Key="CalendarTodayBackground">#ece4fd</SolidColorBrush>
+
+                <Color x:Key="SystemAccentColor">#7c5cf0</Color>
+            </ResourceDictionary>
+
+        </ResourceDictionary.ThemeDictionaries>
+
+            </ResourceDictionary>
+    </Application.Resources>
 </Application>

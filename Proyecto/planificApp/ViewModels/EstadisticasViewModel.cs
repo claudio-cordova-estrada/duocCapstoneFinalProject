@@ -49,6 +49,25 @@ public partial class EstadisticasViewModel : PageViewModel
 
     [ObservableProperty] private int _yearActual = DateTime.Now.Year;
 
+    // Pills de meses (solo visual): los meses futuros del año actual se muestran apagados.
+    [ObservableProperty] private ObservableCollection<MesPill> _meses = new();
+
+    private static readonly string[] _nombresMeses =
+        { "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic" };
+
+    private void ConstruirMeses()
+    {
+        var hoy = DateTime.Now;
+        Meses.Clear();
+        for (int i = 1; i <= 12; i++)
+        {
+            bool esFuturo = YearActual == hoy.Year && i > hoy.Month;
+            Meses.Add(new MesPill { Nombre = _nombresMeses[i - 1], Numero = i, Habilitado = !esFuturo });
+        }
+    }
+
+    partial void OnYearActualChanged(int value) => ConstruirMeses();
+
     // --- MÉTRICAS OBSERVABLES ---
     [ObservableProperty] private int _totalUsuarios;
     [ObservableProperty] private int _usuariosActivos;
@@ -65,6 +84,7 @@ public partial class EstadisticasViewModel : PageViewModel
         _usuarioRepo = usuarioRepo;
         _regionesService = regionesService;
 
+        ConstruirMeses();
         _ = InicializarAsync();
     }
 
@@ -169,4 +189,11 @@ public partial class EstadisticasViewModel : PageViewModel
         GeneracionesRealizadas = TotalUsuarios * 3;
         TareasModificadasGS = TotalUsuarios * 5;
     }
+}
+
+public class MesPill
+{
+    public string Nombre { get; set; } = string.Empty;
+    public int Numero { get; set; }
+    public bool Habilitado { get; set; }
 }

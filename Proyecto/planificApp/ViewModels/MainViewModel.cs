@@ -20,6 +20,7 @@ public partial class MainViewModel : ViewModelBase, INavigationService
     private readonly IAreaInteresRepository _areaRepo;
     private readonly ISesionService _sesion;
     private readonly PageFactory _pageFactory;
+    private readonly IAppearanceService _appearance;
     
     [ObservableProperty] private bool _sideMenuExpanded = true;
     
@@ -69,12 +70,17 @@ public partial class MainViewModel : ViewModelBase, INavigationService
 
     public bool ShowAppLayout => IsLoggedIn;
 
-    public MainViewModel(PageFactory pageFactory, ISesionService sesion, IAreaInteresRepository areaRepo)
+    public MainViewModel(PageFactory pageFactory, ISesionService sesion, IAreaInteresRepository areaRepo, IAppearanceService appearance)
     {
         _pageFactory = pageFactory;
         _sesion = sesion;
         _areaRepo = areaRepo;
+        _appearance = appearance;
     }
+
+    [RelayCommand]
+    private void ToggleTheme()
+        => _appearance.SetTheme(_appearance.Theme == AppTheme.Dark ? AppTheme.Light : AppTheme.Dark);
 
     public void Initialize()
     {

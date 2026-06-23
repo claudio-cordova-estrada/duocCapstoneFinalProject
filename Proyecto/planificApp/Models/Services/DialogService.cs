@@ -22,6 +22,20 @@ public class DialogService : IDialogService
             ? desktop.MainWindow
             : null;
 
+    // Evita que un diálogo supere el tamaño de la pantalla. En equipos con pantallas chicas
+    // las ventanas se salían de los bordes y no se podían cerrar; topamos ancho/alto al 95%
+    // del área útil del monitor donde está la app.
+    private void AjustarATamanoPantalla(Window dialog)
+    {
+        var owner = GetMainWindow();
+        var screen = owner?.Screens.ScreenFromVisual(owner) ?? owner?.Screens.Primary;
+        if (screen == null) return;
+
+        var scaling = screen.Scaling <= 0 ? 1 : screen.Scaling;
+        dialog.MaxWidth = screen.WorkingArea.Width / scaling * 0.95;
+        dialog.MaxHeight = screen.WorkingArea.Height / scaling * 0.95;
+    }
+
     public async Task<bool> ShowNewTaskDialog(string? preSelectedArea = null)
     {
         var window = GetMainWindow();
@@ -34,6 +48,7 @@ public class DialogService : IDialogService
 
         var viewModel = new NewTaskViewModel(tareaRepo, areaRepo, sesion, ubicacionRepo);
         var dialog = new NewTaskWindow { DataContext = viewModel, PreSelectedAreaId = preSelectedArea };
+        AjustarATamanoPantalla(dialog);
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
     }
@@ -49,6 +64,7 @@ public class DialogService : IDialogService
 
         var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
+        AjustarATamanoPantalla(dialog);
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
     }
@@ -64,6 +80,7 @@ public class DialogService : IDialogService
 
         var viewModel = new NewAreaViewModel(areaRepo, sesion, ubicacionRepo);
         var dialog = new NewAreaWindow { DataContext = viewModel };
+        AjustarATamanoPantalla(dialog);
         dialog.SetEditMode(area);
         await dialog.ShowDialog<bool>(window);
         return dialog.Result;
@@ -92,6 +109,7 @@ public class DialogService : IDialogService
 
         var viewModel = new CondicionesGeneracionViewModel(areaRepo, tareaRepo, ubicacionRepo, sesion, calendarioService);
         var dialog = new CondicionesGeneracionWindow { DataContext = viewModel };
+        AjustarATamanoPantalla(dialog);
         dialog.SetFechaLunes(fechaLunes);
 
         var result = await dialog.ShowDialog<bool>(window);
@@ -131,6 +149,7 @@ public class DialogService : IDialogService
         if (window == null) return null;
 
         var dialog = new AddLocationWindow(geoService);
+        AjustarATamanoPantalla(dialog);
         return await dialog.ShowDialog<LocationFormData>(window);
     }
 
@@ -140,6 +159,7 @@ public class DialogService : IDialogService
         if (window == null) return null;
 
         var dialog = new AddLocationWindow(geoService);
+        AjustarATamanoPantalla(dialog);
         dialog.SetEditMode(nombre, direccion, area, color, transporte);
         return await dialog.ShowDialog<LocationFormData>(window);
     }
@@ -150,6 +170,7 @@ public class DialogService : IDialogService
         if (window == null) return;
 
         var dialog = new CalcularRutaWindow(geoService, ubicaciones);
+        AjustarATamanoPantalla(dialog);
         await dialog.ShowDialog(window);
     }
 

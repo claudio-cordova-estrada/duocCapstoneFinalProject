@@ -18,6 +18,7 @@ public partial class ConfigViewModel : PageViewModel
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IUbicacionRepository _ubicacionRepo;
     private readonly ISesionService _sesion;
+    private readonly IAppearanceService _appearance;
 
     [ObservableProperty] private string _horaInicioHoras = "07";
     [ObservableProperty] private string _horaInicioMinutos = "30";
@@ -44,13 +45,48 @@ public partial class ConfigViewModel : PageViewModel
     private string? _ubicacionInicioOriginal;
     private List<DayOfWeek> _diasOriginal = new();
 
-    public ConfigViewModel(IUsuarioRepository usuarioRepo, IUbicacionRepository ubicacionRepo, ISesionService sesion)
+    public ConfigViewModel(IUsuarioRepository usuarioRepo, IUbicacionRepository ubicacionRepo, ISesionService sesion, IAppearanceService appearance)
         : base()
     {
         _usuarioRepo = usuarioRepo;
         _ubicacionRepo = ubicacionRepo;
         _sesion = sesion;
+        _appearance = appearance;
         PageName = ApplicationPageNames.UserConfig;
+    }
+
+    // --- Apariencia ---
+    // El tema y la escala se aplican y persisten al instante vía AppearanceService
+    // (independiente del botón Guardar).
+    public bool ModoOscuro
+    {
+        get => _appearance.Theme == AppTheme.Dark;
+        set
+        {
+            _appearance.SetTheme(value ? AppTheme.Dark : AppTheme.Light);
+            OnPropertyChanged();
+        }
+    }
+
+    public double FontScale
+    {
+        get => _appearance.FontScale;
+        set
+        {
+            _appearance.SetFontScale(value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(FontScalePorcentaje));
+        }
+    }
+
+    public string FontScalePorcentaje => $"{_appearance.FontScale * 100:0}%";
+
+    // Refresca el toggle/slider cuando la apariencia cambió desde otro lado (ej. botón del SB1).
+    public void NotifyAppearanceChanged()
+    {
+        OnPropertyChanged(nameof(ModoOscuro));
+        OnPropertyChanged(nameof(FontScale));
+        OnPropertyChanged(nameof(FontScalePorcentaje));
     }
 
     public async Task CargarConfigAsync()
@@ -229,6 +265,21 @@ public partial class ConfigViewModel : PageViewModel
         {
             Mensaje = $"Error: {ex.Message}";
             HayMensaje = true;
+        }
+    }
+
+    [RelayCommand]
+    private void ToggleDia(string? dia)
+    {
+        switch (dia)
+        {
+            case "Lunes": Lunes = !Lunes; break;
+            case "Martes": Martes = !Martes; break;
+            case "Miercoles": Miercoles = !Miercoles; break;
+            case "Jueves": Jueves = !Jueves; break;
+            case "Viernes": Viernes = !Viernes; break;
+            case "Sabado": Sabado = !Sabado; break;
+            case "Domingo": Domingo = !Domingo; break;
         }
     }
 

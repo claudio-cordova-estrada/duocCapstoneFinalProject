@@ -71,7 +71,8 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
 
         var tareas = await TareaRepo.ObtenerTareasPorArea(AreaSeleccionada.IdAreaInteres);
 
-        var pendientes = tareas.Where(t => t.FecCompletado == null).ToList();
+        // Más recientes arriba (la tarea recién creada aparece al tope de la lista).
+        var pendientes = tareas.Where(t => t.FecCompletado == null).OrderByDescending(t => t.FecCreacion).ToList();
         var completadas = tareas.Where(t => t.FecCompletado != null).ToList();
         var vencidas = pendientes.Count(t => (t.FecLimite != null && t.FecLimite < DateTime.Now) ||
                                              (t.FecLimite == null && t.FecInicio != null && t.FecInicio < DateTime.Now));

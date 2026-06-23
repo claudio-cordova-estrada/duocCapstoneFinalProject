@@ -14,6 +14,7 @@
         Background="{DynamicResource ModalBackground}">
 
     <Border Classes="modal-panel" Margin="0" Padding="24">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Spacing="14">
 
             <TextBlock Text="Nueva tarea" FontSize="16" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
@@ -113,5 +114,6 @@
             </Grid>
 
         </StackPanel>
+        </ScrollViewer>
     </Border>
 </Window>
