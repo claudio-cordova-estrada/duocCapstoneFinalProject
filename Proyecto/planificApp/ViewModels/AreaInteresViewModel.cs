@@ -33,9 +33,6 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
 
     public ObservableCollection<string> MisUbicaciones { get; } = new() { "— Sin ubicación —" };
 
-    private bool esModoEdicion;
-    private string? IdAreaEditando;
-
     public AreaInteresViewModel(ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, ISesionService sesion, IUbicacionRepository ubicacionRepo)
         : base(tareaRepo, areaRepo, sesion)
     {

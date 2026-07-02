@@ -4,14 +4,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using planificApp.Services;
 using planificApp.ViewModels;
-using PlanificApp.Models;
 using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -31,6 +28,7 @@ public partial class DatosView : UserControl
     private readonly Dictionary<TextBox, TextBlock> _fieldErrors = new();
 
     private bool _isEditingUbicacion = false;
+    private bool _isEditingFecha = false;
 
     public DatosView()
     {
@@ -38,15 +36,12 @@ public partial class DatosView : UserControl
 
         _fieldIcons[FieldNombre] = IconNombre;
         _fieldIcons[FieldCorreo] = IconCorreo;
-        _fieldIcons[FieldFecha] = IconFecha;
 
         _fieldErrors[FieldNombre] = ErrorNombre;
         _fieldErrors[FieldCorreo] = ErrorCorreo;
-        _fieldErrors[FieldFecha] = ErrorFecha;
 
         FieldNombre.GotFocus += Field_GotFocus;
         FieldCorreo.GotFocus += Field_GotFocus;
-        FieldFecha.GotFocus += Field_GotFocus;
 
         // Asignamos la recarga de comunas dinámicas al cambiar de región
         CmbRegion.SelectionChanged += CmbRegion_SelectionChanged;
@@ -239,31 +234,11 @@ public partial class DatosView : UserControl
                 return false;
             }
         }
-        else if (field == FieldFecha)
-        {
-            if (!DateTime.TryParse(texto, new CultureInfo("es-CL"), DateTimeStyles.None, out DateTime fechaCasteada))
-            {
-                MostrarError(errorBlock, "Formato inválido. Usa 'dd/mm/aaaa' o '30 abril 2026'.");
-                return false;
-            }
-            if (fechaCasteada > DateTime.Now)
-            {
-                MostrarError(errorBlock, "La fecha de nacimiento no puede estar en el futuro.");
-                return false;
-            }
-            if (fechaCasteada.Year < 1900)
-            {
-                MostrarError(errorBlock, "Por favor, ingresa una fecha de nacimiento válida.");
-                return false;
-            }
-            field.Text = fechaCasteada.ToString("dd MMMM yyyy", new CultureInfo("es-CL"));
-        }
-
         errorBlock.IsVisible = false;
         return true;
     }
 
-    private bool ValidarYGuardarUbicacion()
+    private async Task<bool> ValidarYGuardarUbicacionAsync()
     {
         if (CmbRegion.SelectedItem == null || CmbComuna.SelectedItem == null)
         {
@@ -277,9 +252,7 @@ public partial class DatosView : UserControl
         FieldUbicacion.Text = nuevaUbi;
 
         if (DataContext is DatosViewModel vm)
-        {
-            vm.Ubicacion = nuevaUbi;
-        }
+            await vm.GuardarUbicacionAsync(nuevaUbi);
 
         return true;
     }
@@ -291,22 +264,90 @@ public partial class DatosView : UserControl
     }
 
     // --- ACCIONES DE BOTONES ---
-    private void BtnNombre_Click(object? sender, RoutedEventArgs e)
+    private async void BtnNombre_Click(object? sender, RoutedEventArgs e)
     {
         if (FieldNombre.IsReadOnly) EnterEditMode(FieldNombre);
-        else if (ValidarCampo(FieldNombre)) ExitEditMode(FieldNombre);
+        else if (ValidarCampo(FieldNombre))
+        {
+            if (DataContext is DatosViewModel vm)
+                await vm.GuardarNombreAsync(FieldNombre.Text?.Trim() ?? string.Empty);
+            ExitEditMode(FieldNombre);
+        }
     }
 
-    private void BtnCorreo_Click(object? sender, RoutedEventArgs e)
+    private async void BtnCorreo_Click(object? sender, RoutedEventArgs e)
     {
         if (FieldCorreo.IsReadOnly) EnterEditMode(FieldCorreo);
-        else if (ValidarCampo(FieldCorreo)) ExitEditMode(FieldCorreo);
+        else if (ValidarCampo(FieldCorreo))
+        {
+            if (DataContext is DatosViewModel vm)
+            {
+                var (ok, error) = await vm.GuardarCorreoAsync(FieldCorreo.Text?.Trim() ?? string.Empty);
+                if (!ok)
+                {
+                    // El correo ya lo usa otro usuario: nos quedamos en edición para corregir.
+                    MostrarError(ErrorCorreo, error ?? "No se pudo guardar el correo.");
+                    return;
+                }
+            }
+            ExitEditMode(FieldCorreo);
+        }
     }
 
-    private void BtnFecha_Click(object? sender, RoutedEventArgs e)
+    private async void BtnFecha_Click(object? sender, RoutedEventArgs e)
     {
-        if (FieldFecha.IsReadOnly) EnterEditMode(FieldFecha);
-        else if (ValidarCampo(FieldFecha)) ExitEditMode(FieldFecha);
+        if (!_isEditingFecha)
+            EnterFechaEditMode();
+        else if (await ValidarYGuardarFechaAsync())
+            ExitFechaEditMode();
+    }
+
+    private void EnterFechaEditMode()
+    {
+        _isEditingFecha = true;
+        FieldFecha.IsVisible = false;
+        EditFechaPicker.IsVisible = true;
+
+        if (DataContext is DatosViewModel vm && vm.FechaNacimientoValor is DateTime actual)
+            EditFechaPicker.SelectedDate = actual;
+
+        IconFecha.Content = "\xEBA6"; // Check
+        IconFecha.Foreground = new SolidColorBrush(Color.Parse("#a78bfa"));
+    }
+
+    private void ExitFechaEditMode()
+    {
+        _isEditingFecha = false;
+        EditFechaPicker.IsVisible = false;
+        FieldFecha.IsVisible = true;
+
+        IconFecha.Content = "\xE3B2"; // Lápiz
+        IconFecha.Foreground = new SolidColorBrush(Color.Parse("#888888"));
+    }
+
+    private async Task<bool> ValidarYGuardarFechaAsync()
+    {
+        var sel = EditFechaPicker.SelectedDate;
+        if (sel == null)
+        {
+            MostrarError(ErrorFecha, "Por favor, selecciona tu fecha de nacimiento.");
+            return false;
+        }
+        if (sel.Value > DateTime.Now)
+        {
+            MostrarError(ErrorFecha, "La fecha de nacimiento no puede estar en el futuro.");
+            return false;
+        }
+        if (sel.Value.Year < 1900)
+        {
+            MostrarError(ErrorFecha, "Por favor, ingresa una fecha de nacimiento válida.");
+            return false;
+        }
+
+        ErrorFecha.IsVisible = false;
+        if (DataContext is DatosViewModel vm)
+            await vm.GuardarFechaAsync(sel.Value);
+        return true;
     }
 
     private async void BtnUbicacion_Click(object? sender, RoutedEventArgs e)
@@ -317,7 +358,7 @@ public partial class DatosView : UserControl
         }
         else
         {
-            if (ValidarYGuardarUbicacion())
+            if (await ValidarYGuardarUbicacionAsync())
             {
                 ExitUbicacionEditMode();
             }

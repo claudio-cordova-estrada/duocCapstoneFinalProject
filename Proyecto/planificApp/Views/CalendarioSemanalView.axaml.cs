@@ -13,13 +13,16 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using PlanificApp.Models;
 using PlanificApp.Models.Enums;
+using PlanificApp.Models.Services.Interfaces;
 using planificApp.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace planificApp.Views;
 
 public partial class CalendarioSemanalView : UserControl
 {
     private CalendarioSemanalViewModel? _viewModel;
+    private IAppearanceService? _appearance;
     private readonly Panel[] _dayPanels = new Panel[7];
     private readonly TextBlock[] _dayHeaderNames = new TextBlock[7];
     private readonly TextBlock[] _dayHeaderNums = new TextBlock[7];
@@ -166,6 +169,33 @@ public partial class CalendarioSemanalView : UserControl
             var offset = Math.Max(0, currentHour * PixelsPerHour - 200);
             scrollViewer.Offset = new Vector(0, offset);
         }
+    }
+
+    // El día actual (fondo de columna + cabecera + acento) se pinta en code-behind con ThemeBrush,
+    // que resuelve el color UNA sola vez. Al togglear el tema en vivo no se re-resuelve solo, así que
+    // nos suscribimos al cambio de tema y re-renderizamos con los brushes del tema nuevo.
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _appearance ??= App.Services?.GetService<IAppearanceService>();
+        if (_appearance != null)
+            _appearance.ThemeChanged += OnThemeChanged;
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_appearance != null)
+            _appearance.ThemeChanged -= OnThemeChanged;
+    }
+
+    private void OnThemeChanged()
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            UpdateDayHeaders();
+            RenderAllDays();
+        });
     }
 
     private void SetupDropHandlers()

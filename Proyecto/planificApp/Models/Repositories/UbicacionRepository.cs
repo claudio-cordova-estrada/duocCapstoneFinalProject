@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services;
 

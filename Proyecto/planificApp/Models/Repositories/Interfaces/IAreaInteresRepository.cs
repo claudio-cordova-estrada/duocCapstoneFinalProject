@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PlanificApp.Models;
 
 namespace PlanificApp.Models.Repositories.Interfaces;
 

@@ -1,10 +1,7 @@
-using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Layout;
 using Avalonia.Media;
 using PlanificApp.Models;
-using PlanificApp.Models.Enums;
 
 namespace planificApp.Views;
 

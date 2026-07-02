@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Mapsui;
 using Mapsui.Layers;
-using Avalonia.Input;
 using Mapsui.Projections;
 using Mapsui.Styles;
 using Mapsui.Tiling;
@@ -65,6 +64,13 @@ namespace planificApp.Views
                 {
                     var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
                     MiMapa.Map?.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), MiMapa.Map.Navigator.Resolutions[15]);
+                };
+
+                // Centro inicial en la comuna del usuario (cuando aún no tiene ubicaciones guardadas).
+                vm.CentrarEnUbicacionInicial = (latitud, longitud) =>
+                {
+                    var (x, y) = SphericalMercator.FromLonLat(longitud, latitud);
+                    MiMapa.Map?.Navigator?.CenterOnAndZoomTo(new MPoint(x, y), 13);
                 };
 
                 vm.TrazarRutaEnMapa = DibujarRuta;
@@ -274,10 +280,7 @@ namespace planificApp.Views
             MiMapa.Map.Layers.Add(capaTemporal);
             MiMapa.Refresh();
         }
-
-        // ==========================================
-        // NUEVA FUNCIÓN: Centrar y Zoom Automático
-        // ==========================================
+        
         private void BtnCentrarMapa_Click(object? sender, RoutedEventArgs e)
         {
             if (MiMapa.Map == null) return;

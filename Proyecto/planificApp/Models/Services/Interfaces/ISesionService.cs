@@ -1,5 +1,4 @@
 using System;
-using PlanificApp.Models;
 
 namespace PlanificApp.Models.Services.Interfaces;
 

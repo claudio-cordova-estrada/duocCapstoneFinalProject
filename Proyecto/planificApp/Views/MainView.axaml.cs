@@ -1,13 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
-using planificApp.Data;
 using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;

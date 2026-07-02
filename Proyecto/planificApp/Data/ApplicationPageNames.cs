@@ -21,7 +21,6 @@ public enum ApplicationPageNames
     UserDatos,
     UserSoporte,
     UserSobre,
-    UserSugerencias,
     // Admin
     AdminEstadisticas,
     AdminUsuarios,

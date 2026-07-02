@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Avalonia.Media;
 using PlanificApp.Models;
 
 namespace planificApp.Helpers;
@@ -73,54 +72,6 @@ public static class TareaAtrasada
     }
 }
 
-public class TareaAtrasadaForegroundConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is Tarea tarea && TareaAtrasada.EsAtrasada(tarea))
-            return new SolidColorBrush(Color.Parse("#ffffff"));
-
-        return new SolidColorBrush(Color.Parse("#e2e2e2"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaAtrasadaBackgroundConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is Tarea tarea && TareaAtrasada.EsAtrasada(tarea))
-            return new SolidColorBrush(Color.Parse("#2a1212"));
-
-        return new SolidColorBrush(Color.Parse("#141414"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaAtrasadaBorderConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is Tarea tarea && TareaAtrasada.EsAtrasada(tarea))
-            return new SolidColorBrush(Color.Parse("#3d1a1a"));
-
-        return new SolidColorBrush(Color.Parse("#1e1e1e"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
 // Devuelve true si la tarea está atrasada (para togglear la clase visual ".atrasada"
 // y dejar que los colores los resuelva el tema vía DynamicResource).
 public class TareaEsAtrasadaConverter : IValueConverter
@@ -136,88 +87,13 @@ public class TareaEsAtrasadaConverter : IValueConverter
     }
 }
 
-public class TareaCheckIconConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is DateTime)
-            return "\uE186"; // BoxCheck
-        return "\uE45E"; // Box
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaNombreBrushConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is DateTime)
-            return new SolidColorBrush(Color.Parse("#6b6b6b")); // completed = muted grey
-        return new SolidColorBrush(Color.Parse("#e2e2e2")); // active = TextPrimary
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaVencidaBrushConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is DateTime fecLimite && fecLimite < DateTime.Now)
-            return new SolidColorBrush(Color.Parse("#ffffff"));
-        return new SolidColorBrush(Color.Parse("#e2e2e2"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaVencidaBackgroundConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is DateTime fecLimite && fecLimite < DateTime.Now)
-            return new SolidColorBrush(Color.Parse("#2a1212"));
-        return new SolidColorBrush(Color.Parse("#141414"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
-public class TareaVencidaBorderConverter : IValueConverter
-{
-    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        if (value is DateTime fecLimite && fecLimite < DateTime.Now)
-            return new SolidColorBrush(Color.Parse("#3d1a1a"));
-        return new SolidColorBrush(Color.Parse("#1e1e1e"));
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
-    }
-}
-
 public class BoolToChevronConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is true)
-            return "\uE136"; // caret-down (Phosphor)
-        return "\uE13A"; // caret-right (Phosphor)
+            return ((char)0xE136).ToString(); // caret-down (Phosphor)
+        return ((char)0xE13A).ToString(); // caret-right (Phosphor)
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

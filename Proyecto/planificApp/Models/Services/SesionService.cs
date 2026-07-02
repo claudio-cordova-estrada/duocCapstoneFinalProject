@@ -1,5 +1,4 @@
 using System;
-using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
 

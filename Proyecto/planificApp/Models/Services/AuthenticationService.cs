@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
 using planificApp.Helpers;
@@ -20,6 +19,14 @@ public class AuthenticationService : IAuthenticationService
         var usuario = await _usuarioRepository.BuscarPorCorreo(correo);
         if (usuario == null) return null;
         if (!PasswordHelper.VerifyPassword(password, usuario.PasswordHash)) return null;
+
+        // Al volver a entrar, una cuenta inactiva se reactiva automáticamente.
+        if (!usuario.EstaActivo && !string.IsNullOrEmpty(usuario.IdUsuario))
+        {
+            usuario.EstaActivo = true;
+            await _usuarioRepository.ActualizarEstadoActivo(usuario.IdUsuario, true);
+        }
+
         return usuario;
     }
 

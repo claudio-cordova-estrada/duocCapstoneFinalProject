@@ -105,7 +105,7 @@
                                                             <TextBlock Grid.Column="2" FontSize="9" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center">
                                                                 <TextBlock.Text>
                                                                     <MultiBinding StringFormat="{}{0:F1}h">
-                                                                        <Binding Path="Bloques.Count"/>
+                                                                        <Binding Path="HorasPlanificadas"/>
                                                                     </MultiBinding>
                                                                 </TextBlock.Text>
                                                             </TextBlock>

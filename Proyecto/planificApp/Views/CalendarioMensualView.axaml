@@ -39,7 +39,7 @@
                         <ItemsControl ItemsSource="{Binding Tareas}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="vm:TareaDetalleSidebar">
-                                    <Border Background="#161616" BorderBrush="#2A2A2A" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                                    <Border Background="{DynamicResource PillBackground}" BorderBrush="{DynamicResource PillBorder}" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
                                         <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap"/>
                                     </Border>
                                 </DataTemplate>
@@ -68,8 +68,8 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:TareaDetalleSidebar">
                         <!-- El fondo rojizo oscuro resalta sobre el gris de las tareas normales -->
-                        <Border Background="#2a1010" BorderBrush="#5c1a1a" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
-                            <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="#f87171" FontWeight="Medium" TextWrapping="Wrap"/>
+                        <Border Background="{DynamicResource DangerBackground}" BorderBrush="{DynamicResource DangerBorder}" BorderThickness="1" CornerRadius="4" Padding="10 8" Margin="18 0 0 6">
+                            <TextBlock Text="{Binding Titulo}" FontSize="12" Foreground="{DynamicResource DangerForeground}" FontWeight="Medium" TextWrapping="Wrap"/>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

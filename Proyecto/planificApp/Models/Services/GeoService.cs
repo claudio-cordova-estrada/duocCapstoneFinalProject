@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using PlanificApp.Models;
 using PlanificApp.Models.Enums;
 using PlanificApp.Models.Services.Interfaces;
 using System;

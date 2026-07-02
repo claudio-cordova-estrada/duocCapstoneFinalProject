@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.Input;
 using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services.Interfaces;
-using planificApp.Data;
 
 namespace planificApp.ViewModels;
 
@@ -37,6 +36,15 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
     [ObservableProperty] private bool _sabadoSeleccionado;
     [ObservableProperty] private bool _domingoSeleccionado;
 
+    // Disponibilidad de cada día: un día que ya pasó (en la semana actual) no puede activarse.
+    [ObservableProperty] private bool _lunesHabilitado = true;
+    [ObservableProperty] private bool _martesHabilitado = true;
+    [ObservableProperty] private bool _miercolesHabilitado = true;
+    [ObservableProperty] private bool _juevesHabilitado = true;
+    [ObservableProperty] private bool _viernesHabilitado = true;
+    [ObservableProperty] private bool _sabadoHabilitado = true;
+    [ObservableProperty] private bool _domingoHabilitado = true;
+
     [ObservableProperty] private bool _puedeGenerar = true;
     [ObservableProperty] private DateTime _fechaLunes;
     [ObservableProperty] private bool _semanaSiguiente;
@@ -44,6 +52,11 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
     private List<Tarea> _todasLasTareas = new();
     private double _horasOcupadas = 0;
     private DateTime _baseFechaLunes;
+
+    // Preferencia de días del usuario (la del registro/config), para reaplicarla al cambiar de semana.
+    private bool _prefLunes = true, _prefMartes = true, _prefMiercoles = true,
+                 _prefJueves = true, _prefViernes = true, _prefSabado, _prefDomingo;
+    private bool _suprimirRecalculo;
 
     public CondicionesGeneracion Condiciones { get; private set; } = new();
     public bool ResultadoConfirmado { get; private set; }
@@ -86,6 +99,7 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         }
 
         InicializarDiasDesdeUsuario(usuario);
+        ActualizarDiasHabilitados();
         await CalcularHorasGeneracionAsync(FechaLunes);
         ActualizarPriorizacion();
     }
@@ -108,6 +122,7 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         if (_baseFechaLunes == default) return;
         FechaLunes = _baseFechaLunes.AddDays(value ? 7 : 0);
         ActualizarRangoFechas();
+        ActualizarDiasHabilitados();
         _ = RecalcularSemanaAsync();
     }
 
@@ -125,13 +140,41 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
             DayOfWeek.Thursday, DayOfWeek.Friday
         };
 
-        LunesSeleccionado = dias.Contains(DayOfWeek.Monday);
-        MartesSeleccionado = dias.Contains(DayOfWeek.Tuesday);
-        MiercolesSeleccionado = dias.Contains(DayOfWeek.Wednesday);
-        JuevesSeleccionado = dias.Contains(DayOfWeek.Thursday);
-        ViernesSeleccionado = dias.Contains(DayOfWeek.Friday);
-        SabadoSeleccionado = dias.Contains(DayOfWeek.Saturday);
-        DomingoSeleccionado = dias.Contains(DayOfWeek.Sunday);
+        _prefLunes = dias.Contains(DayOfWeek.Monday);
+        _prefMartes = dias.Contains(DayOfWeek.Tuesday);
+        _prefMiercoles = dias.Contains(DayOfWeek.Wednesday);
+        _prefJueves = dias.Contains(DayOfWeek.Thursday);
+        _prefViernes = dias.Contains(DayOfWeek.Friday);
+        _prefSabado = dias.Contains(DayOfWeek.Saturday);
+        _prefDomingo = dias.Contains(DayOfWeek.Sunday);
+    }
+
+    // Un día solo puede usarse si todavía no pasó (su fecha >= hoy). En "semana siguiente"
+    // quedan todos disponibles. Reaplicamos la preferencia del usuario solo sobre los disponibles,
+    // así un día no disponible queda en OFF y no suma horas.
+    private void ActualizarDiasHabilitados()
+    {
+        var hoy = DateTime.Today;
+        bool sig = SemanaSiguiente;
+
+        LunesHabilitado     = sig || FechaLunes.Date           >= hoy;
+        MartesHabilitado    = sig || FechaLunes.AddDays(1).Date >= hoy;
+        MiercolesHabilitado = sig || FechaLunes.AddDays(2).Date >= hoy;
+        JuevesHabilitado    = sig || FechaLunes.AddDays(3).Date >= hoy;
+        ViernesHabilitado   = sig || FechaLunes.AddDays(4).Date >= hoy;
+        SabadoHabilitado    = sig || FechaLunes.AddDays(5).Date >= hoy;
+        DomingoHabilitado   = sig || FechaLunes.AddDays(6).Date >= hoy;
+
+        // Suprimimos el recálculo por-día; el llamador recalcula las horas una sola vez al final.
+        _suprimirRecalculo = true;
+        LunesSeleccionado     = _prefLunes     && LunesHabilitado;
+        MartesSeleccionado    = _prefMartes    && MartesHabilitado;
+        MiercolesSeleccionado = _prefMiercoles && MiercolesHabilitado;
+        JuevesSeleccionado    = _prefJueves    && JuevesHabilitado;
+        ViernesSeleccionado   = _prefViernes   && ViernesHabilitado;
+        SabadoSeleccionado    = _prefSabado    && SabadoHabilitado;
+        DomingoSeleccionado   = _prefDomingo   && DomingoHabilitado;
+        _suprimirRecalculo = false;
     }
 
     private async void RecalcularTodo()
@@ -151,10 +194,14 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         double totalHorasDisponibles = horasPorDia * diasSeleccionados;
 
         var semanaFin = fechaLunes.AddDays(7);
+        // Solo contamos como "ocupado" el tiempo de los días que sí se van a generar
+        // (un día deshabilitado/no seleccionado no aporta ni resta horas).
+        var diasActivos = ObtenerDiasSeleccionados();
         var tareasSemana = _todasLasTareas.Where(t =>
             t.FecInicio.HasValue && t.HoraInicio.HasValue && t.HoraFin.HasValue &&
             t.FecInicio.Value.Date >= fechaLunes.Date &&
-            t.FecInicio.Value.Date < semanaFin.Date).ToList();
+            t.FecInicio.Value.Date < semanaFin.Date &&
+            diasActivos.Contains(t.FecInicio.Value.DayOfWeek)).ToList();
 
         _horasOcupadas = tareasSemana.Sum(t => (t.HoraFin!.Value - t.HoraInicio!.Value).TotalHours);
 
@@ -234,13 +281,13 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         HorasFuncionales = Math.Round(MaxHorasGeneracionSemanal - value, 1);
     }
 
-    partial void OnLunesSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnMartesSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnMiercolesSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnJuevesSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnViernesSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnSabadoSeleccionadoChanged(bool value) => RecalcularTodo();
-    partial void OnDomingoSeleccionadoChanged(bool value) => RecalcularTodo();
+    partial void OnLunesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnMartesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnMiercolesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnJuevesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnViernesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnSabadoSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
+    partial void OnDomingoSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
 
     private void ValidarPuedeGenerar()
     {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using PlanificApp.Models;
 using PlanificApp.Models.Enums;
 using PlanificApp.Models.Repositories.Interfaces;
 using PlanificApp.Models.Services;
@@ -47,6 +46,24 @@ public class UsuarioRepository : IUsuarioRepository
     {
         var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
         var update = Builders<Usuario>.Update.Set(u => u.UbicacionActual, ubicacionActual);
+        await _usuarios.UpdateOneAsync(filter, update);
+    }
+
+    public async Task ActualizarEstadoActivo(string idUsuario, bool estaActivo)
+    {
+        var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
+        var update = Builders<Usuario>.Update.Set(u => u.EstaActivo, estaActivo);
+        await _usuarios.UpdateOneAsync(filter, update);
+    }
+
+    public async Task ActualizarDatosPersonales(string idUsuario, string nombreCompleto, string correo, DateTime fecNacimiento, string ubicacion)
+    {
+        var filter = Builders<Usuario>.Filter.Eq(u => u.IdUsuario, idUsuario);
+        var update = Builders<Usuario>.Update
+            .Set(u => u.NombreCompleto, nombreCompleto)
+            .Set(u => u.Correo, correo)
+            .Set(u => u.FecNacimiento, fecNacimiento)
+            .Set(u => u.Ubicacion, ubicacion);
         await _usuarios.UpdateOneAsync(filter, update);
     }
 

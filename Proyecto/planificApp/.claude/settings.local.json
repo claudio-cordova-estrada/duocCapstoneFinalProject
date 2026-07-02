@@ -6,7 +6,8 @@
       "PowerShell(dotnet build \"C:\\\\Documentos\\\\GitHub\\\\duocCapstoneFinalProject\\\\Proyecto\\\\planificApp\\\\planificApp.csproj\" -c Debug --nologo -v minimal 2>&1)",
       "Bash(dotnet build *)",
       "Bash(git mv *)",
-      "mcp__visualize__show_widget"
+      "mcp__visualize__show_widget",
+      "PowerShell(python \"C:\\\\Users\\\\CLAUDI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Documentos-GitHub-duocCapstoneFinalProject-Proyecto-planificApp\\\\d38a7230-61aa-4685-8078-9455a07cbc84\\\\scratchpad\\\\edit_sprint1.py\")"
     ]
   }
 }

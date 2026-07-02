@@ -59,7 +59,8 @@
 
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Fecha de nacimiento" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
-                            <TextBox x:Name="FieldFecha" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding FecNacimiento}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <TextBox x:Name="FieldFecha" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Focusable="False" Cursor="Arrow" Text="{Binding FecNacimiento}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <CalendarDatePicker x:Name="EditFechaPicker" Grid.Row="0" Grid.Column="1" IsVisible="False" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona tu fecha de nacimiento" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                             <Button x:Name="BtnFecha" Grid.Row="0" Grid.Column="2" Classes="transparent" Click="BtnFecha_Click" VerticalAlignment="Center">
                                 <Label x:Name="IconFecha" Content="&#xE3B2;" FontFamily="{DynamicResource Phosphor}" FontSize="18" Foreground="{DynamicResource TextMuted}"/>
                             </Button>
@@ -69,7 +70,7 @@
                         <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="Ubicación" FontSize="15" Foreground="{DynamicResource TextDisabled}" Width="200" VerticalAlignment="Center"/>
                             
-                            <TextBox x:Name="FieldUbicacion" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Text="{Binding Ubicacion}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
+                            <TextBox x:Name="FieldUbicacion" Grid.Row="0" Grid.Column="1" IsReadOnly="True" Focusable="False" Cursor="Arrow" Text="{Binding Ubicacion}" FontSize="16" Foreground="{DynamicResource TextSecondary}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="0 6"/>
                             
                             <Grid x:Name="EditUbicacionPanel" Grid.Row="0" Grid.Column="1" ColumnDefinitions="*,*" ColumnSpacing="10" IsVisible="False" VerticalAlignment="Center">
                                 <ComboBox x:Name="CmbRegion" Grid.Column="0" HorizontalAlignment="Stretch" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Selecciona Región"/>

@@ -23,18 +23,18 @@
             </Setter>
         </Style>
         <Style Selector="ListBox.pill-list ListBoxItem">
-            <Setter Property="Background" Value="#121212"/>
-            <Setter Property="BorderBrush" Value="#2a2a2a"/>
+            <Setter Property="Background" Value="{DynamicResource PillBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"/>
             <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
         </Style>
         <Style Selector="ListBox.pill-list ListBoxItem:pointerover">
-            <Setter Property="Background" Value="#1f1f1f"/>
-            <Setter Property="BorderBrush" Value="#3a3a3a"/>
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
         </Style>
         <Style Selector="ListBox.pill-list ListBoxItem:selected">
-            <Setter Property="Background" Value="#1a0f08"/> 
-            <Setter Property="BorderBrush" Value="#ea580c"/> 
-            <Setter Property="Foreground" Value="#ea580c"/>
+            <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AdminAccent}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"/>
         </Style>
 
         <Style Selector="Button.row-btn">
@@ -70,6 +70,15 @@
                 <StackPanel Spacing="8">
                     <TextBlock Text="COMUNA" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                     <ListBox Classes="pill-list" ItemsSource="{Binding Comunas}" SelectedItem="{Binding ComunaSeleccionada}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </StackPanel>
+
+                <StackPanel Spacing="8">
+                    <TextBlock Text="ESTADO" FontSize="12" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                    <ListBox Classes="pill-list" ItemsSource="{Binding Estados}" SelectedItem="{Binding EstadoSeleccionado}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate><WrapPanel Orientation="Horizontal"/></ItemsPanelTemplate>
                         </ListBox.ItemsPanel>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using PlanificApp.Models.Enums;
 
 namespace PlanificApp.Models
@@ -66,6 +67,11 @@ namespace PlanificApp.Models
         public int NumeroDia { get; set; }
         public bool EsHoy { get; set; }
         public ObservableCollection<BloqueCalendario> Bloques { get; set; } = new();
+
+        // Horas de actividades de área planificadas ese día (sin contar los bloques de traslado).
+        public double HorasPlanificadas => Bloques
+            .Where(b => b.Tipo == TipoBloqueCalendario.BloqueInteres)
+            .Sum(b => (b.HoraFin - b.HoraInicio).TotalHours);
     }
 
     public class SemanaCalendario

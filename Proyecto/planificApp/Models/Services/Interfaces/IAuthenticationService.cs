@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using PlanificApp.Models;
 
 namespace PlanificApp.Models.Services.Interfaces;
 

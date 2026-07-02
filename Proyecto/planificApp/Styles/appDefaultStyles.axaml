@@ -120,6 +120,11 @@
         <Setter Property="Foreground" Value="{DynamicResource AccentButtonForegroundPressed}"></Setter>
     </Style>
 
+    <!-- Deshabilitado: se atenúa para que se vea claramente inactivo -->
+    <Style Selector="Button.accent:disabled">
+        <Setter Property="Opacity" Value="0.4"></Setter>
+    </Style>
+
     <!-- Admin accent button -->
     <Style Selector="Button.accent-admin">
         <Setter Property="Foreground" Value="#ffffff"></Setter>

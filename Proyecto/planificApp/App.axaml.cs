@@ -13,7 +13,6 @@ using PlanificApp.Models.Services.Interfaces;
 using PlanificApp.Models.Repositories;
 using PlanificApp.Models.Repositories.Interfaces;
 using System;
-using System.Reflection;
 
 [assembly: XmlnsDefinition("https://github.com/avaloniaui", "planificApp.StyleControl")]
 namespace planificApp;
@@ -28,13 +27,35 @@ public partial class App : Application
         DataTemplates.Add(new ViewLocator());
     }
 
+    public static void LogCrash(string origen, Exception? ex)
+    {
+        try
+        {
+            var dir = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "planificApp");
+            System.IO.Directory.CreateDirectory(dir);
+            System.IO.File.AppendAllText(System.IO.Path.Combine(dir, "crash.log"),
+                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ({origen})\n{ex}\n\n");
+        }
+        catch { /* nunca dejamos que el logger cause otra excepción */ }
+    }
+
     public override void OnFrameworkInitializationCompleted()
     {
+        // Diagnóstico: registra cualquier excepción no controlada en un archivo (varios flujos usan
+        // 'async void', cuyas excepciones tiran la app entera). Ver %APPDATA%/planificApp/crash.log
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            LogCrash("AppDomain", e.ExceptionObject as Exception);
+        System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            LogCrash("UnobservedTask", e.Exception);
+            e.SetObserved();
+        };
+
         var collection = new ServiceCollection();
         
         // Main ViewModels
         collection.AddSingleton<MainViewModel>();
-        collection.AddSingleton<AdminMainViewModel>();
         
         // Auth ViewModels
         collection.AddTransient<LoginViewModel>();
@@ -51,7 +72,6 @@ public partial class App : Application
         // User - Calendario ViewModels
         collection.AddTransient<CalendarioSemanalViewModel>();
         collection.AddTransient<CalendarioMensualViewModel>();
-        collection.AddTransient<SugerenciasViewModel>();
         collection.AddSingleton<PropuestasSemanalesViewModel>();
         collection.AddTransient<CondicionesGeneracionViewModel>();
         
@@ -64,7 +84,6 @@ public partial class App : Application
         
         // Admin ViewModels
         collection.AddTransient<EstadisticasViewModel>();
-        collection.AddTransient<EstadisticaUsuarioViewModel>();
         collection.AddTransient<UsuarioDetalleViewModel>();
         collection.AddTransient<UsuariosViewModel>();
 
@@ -90,7 +109,7 @@ public partial class App : Application
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();
         collection.AddSingleton<ISesionService>(sp => new SesionService(sp.GetRequiredService<IUsuarioRepository>()));
         collection.AddSingleton<IGeoService, GeoService>();
-collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
+		collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
         collection.AddSingleton<IGeneradorSemanalService, GeneradorSemanalService>();
         collection.AddSingleton<IDialogService, DialogService>();
         collection.AddSingleton<INavigationService>(sp => sp.GetRequiredService<MainViewModel>());
@@ -114,7 +133,6 @@ collection.AddSingleton<ICalendarioSemanalService, CalendarioSemanalService>();
             ApplicationPageNames.UserCalendarioSemanal => x.GetRequiredService<CalendarioSemanalViewModel>(),
             ApplicationPageNames.UserCalendarioMensual => x.GetRequiredService<CalendarioMensualViewModel>(),
             ApplicationPageNames.UserPropuestasSemanales => x.GetRequiredService<PropuestasSemanalesViewModel>(),
-            ApplicationPageNames.UserSugerencias => x.GetRequiredService<SugerenciasViewModel>(),
             // User - Otras
             ApplicationPageNames.UserUbicaciones => x.GetRequiredService<UbicacionesViewModel>(),
             ApplicationPageNames.UserConfig => x.GetRequiredService<ConfigViewModel>(),

@@ -1,7 +1,6 @@
 using planificApp.Services;
 using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
-using PlanificApp.Models.Services;
 using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -72,6 +71,10 @@ namespace planificApp.ViewModels
         public Action? MapaDebeActualizarse { get; set; }
         public Action<double, double>? EnfocarEnUbicacion { get; set; }
         public Action? BorrarPinTemporalDelMapa { get; set; }
+
+        // Centro inicial del mapa cuando el usuario aún no tiene ubicaciones guardadas
+        // (se resuelve geocodificando su comuna del registro). La View decide el zoom.
+        public Action<double, double>? CentrarEnUbicacionInicial { get; set; }
 
         public static string? UbicacionSeleccionadaIdTemporal { get; set; }
 
@@ -321,6 +324,24 @@ namespace planificApp.ViewModels
                 }
                 UbicacionSeleccionadaIdTemporal = null;
             }
+            else
+            {
+                // El mapa siempre arranca centrado en la comuna del usuario (la del registro).
+                // Las ubicaciones guardadas se ven como pines; el usuario hace click en una para enfocarla.
+                await CentrarMapaEnComunaUsuarioAsync();
+            }
+        }
+
+        // Geocodifica la comuna/región que el usuario indicó al registrarse y centra el mapa ahí.
+        // Si no hay dato o la geocodificación falla, la View mantiene su centro por defecto.
+        private async Task CentrarMapaEnComunaUsuarioAsync()
+        {
+            var ubiTexto = _sesionService.UsuarioActual?.Ubicacion;
+            if (string.IsNullOrWhiteSpace(ubiTexto)) return;
+
+            var geo = await _geoService.ValidarDireccionAsync(ubiTexto, $"{ubiTexto}, Chile");
+            if (geo != null)
+                CentrarEnUbicacionInicial?.Invoke(geo.Latitud, geo.Longitud);
         }
 
         private async void AgregarUbicacion(object parametro)

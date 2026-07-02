@@ -47,6 +47,16 @@ public partial class UsuariosViewModel : PageViewModel
         set { if (SetProperty(ref _textoBusqueda, value)) AplicarFiltros(); }
     }
 
+    // Filtro por estado: "Todos" (sin filtro), "Activos" o "Inactivos".
+    [ObservableProperty] private ObservableCollection<string> _estados = new() { "Todos", "Activos", "Inactivos" };
+
+    private string _estadoSeleccionado = "Todos";
+    public string EstadoSeleccionado
+    {
+        get => _estadoSeleccionado;
+        set { if (SetProperty(ref _estadoSeleccionado, value)) AplicarFiltros(); }
+    }
+
     // INYECTAMOS LA FÁBRICA Y LA NAVEGACIÓN
     public UsuariosViewModel(
         IUsuarioRepository usuarioRepo,
@@ -140,6 +150,11 @@ public partial class UsuariosViewModel : PageViewModel
                 (!string.IsNullOrEmpty(u.NombreCompleto) && u.NombreCompleto.ToLower().Contains(busqueda)) ||
                 (!string.IsNullOrEmpty(u.IdUsuario) && u.IdUsuario.ToLower().Contains(busqueda)));
         }
+
+        if (EstadoSeleccionado == "Activos")
+            filtrados = filtrados.Where(u => u.EstaActivo);
+        else if (EstadoSeleccionado == "Inactivos")
+            filtrados = filtrados.Where(u => !u.EstaActivo);
 
         UsuariosVisibles.Clear();
         foreach (var u in filtrados)

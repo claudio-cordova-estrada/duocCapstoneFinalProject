@@ -14,6 +14,16 @@
         CanResize="False"
         Background="{DynamicResource ModalBackground}">
 
+    <Window.Styles>
+        <!-- Día disponible: texto normal. Día deshabilitado (ya pasó): gris "muted". -->
+        <Style Selector="TextBlock.dia-label">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+        </Style>
+        <Style Selector="TextBlock.dia-label:disabled">
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
+        </Style>
+    </Window.Styles>
+
     <Border Classes="modal-panel" Margin="0" Padding="24">
         <StackPanel Spacing="16">
 
@@ -139,32 +149,32 @@
                     <TextBlock Text="D&#xED;AS PARA GENERACI&#xD3;N" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                     <StackPanel Spacing="4">
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding LunesSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Lunes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding LunesSeleccionado}" IsEnabled="{Binding LunesHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Lunes" FontSize="13" Classes="dia-label" IsEnabled="{Binding LunesHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding MartesSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Martes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding MartesSeleccionado}" IsEnabled="{Binding MartesHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Martes" FontSize="13" Classes="dia-label" IsEnabled="{Binding MartesHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding MiercolesSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Mi&#xE9;rcoles" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding MiercolesSeleccionado}" IsEnabled="{Binding MiercolesHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Mi&#xE9;rcoles" FontSize="13" Classes="dia-label" IsEnabled="{Binding MiercolesHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding JuevesSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Jueves" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding JuevesSeleccionado}" IsEnabled="{Binding JuevesHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Jueves" FontSize="13" Classes="dia-label" IsEnabled="{Binding JuevesHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding ViernesSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Viernes" FontSize="13" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding ViernesSeleccionado}" IsEnabled="{Binding ViernesHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Viernes" FontSize="13" Classes="dia-label" IsEnabled="{Binding ViernesHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding SabadoSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="S&#xE1;bado" FontSize="13" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding SabadoSeleccionado}" IsEnabled="{Binding SabadoHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="S&#xE1;bado" FontSize="13" Classes="dia-label" IsEnabled="{Binding SabadoHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                            <ToggleSwitch IsChecked="{Binding DomingoSeleccionado}" Grid.Column="0"/>
-                            <TextBlock Grid.Column="1" Text="Domingo" FontSize="13" Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
+                            <ToggleSwitch IsChecked="{Binding DomingoSeleccionado}" IsEnabled="{Binding DomingoHabilitado}" Grid.Column="0"/>
+                            <TextBlock Grid.Column="1" Text="Domingo" FontSize="13" Classes="dia-label" IsEnabled="{Binding DomingoHabilitado}" VerticalAlignment="Center"/>
                         </Grid>
                     </StackPanel>
                 </StackPanel>

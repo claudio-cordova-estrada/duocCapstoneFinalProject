@@ -9,7 +9,6 @@ using planificApp.Data;
 using PlanificApp.Models;
 using PlanificApp.Models.Services.Interfaces;
 using PlanificApp.Models.Repositories.Interfaces;
-using planificApp.Services;
 using planificApp.ViewModels;
 using planificApp.Views;
 
@@ -124,21 +123,24 @@ public class DialogService : IDialogService
 
     public async void ShowPropuestasSemanales(CondicionesGeneracion condiciones)
     {
-        var navigation = App.Services.GetRequiredService<INavigationService>();
-        var vm = App.Services.GetRequiredService<PropuestasSemanalesViewModel>();
-        vm.SetCondiciones(condiciones);
-
-        // Navegamos PRIMERO para que la página de propuestas (con su overlay
-        // "Generando propuestas...") quede visible mientras corre la generación,
-        // que puede tardar varios segundos (cálculo de traslados con Mongo + Google).
-        navigation.NavigateToPage(ApplicationPageNames.UserPropuestasSemanales);
-
+        // Todo el cuerpo va en try/catch: es 'async void', así que cualquier excepción que escape
+        // (incluida la navegación o la resolución de servicios) tiraría la app entera.
         try
         {
+            var navigation = App.Services.GetRequiredService<INavigationService>();
+            var vm = App.Services.GetRequiredService<PropuestasSemanalesViewModel>();
+            vm.SetCondiciones(condiciones);
+
+            // Navegamos PRIMERO para que la página de propuestas (con su overlay
+            // "Generando propuestas...") quede visible mientras corre la generación,
+            // que puede tardar varios segundos (cálculo de traslados con Mongo + Google).
+            navigation.NavigateToPage(ApplicationPageNames.UserPropuestasSemanales);
+
             await vm.GenerarPropuestasCommand.ExecuteAsync(null);
         }
         catch (Exception ex)
         {
+            App.LogCrash("ShowPropuestasSemanales", ex);
             System.Diagnostics.Debug.WriteLine($"[DIALOG] Error generando propuestas: {ex.Message}");
         }
     }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="800"
              x:Class="planificApp.Views.EstadisticasView"
+             x:Name="EstadisticasRoot"
              xmlns:vm="clr-namespace:planificApp.ViewModels"
              x:DataType="vm:EstadisticasViewModel">
 
@@ -33,20 +34,24 @@
         </Style>
         
         <Style Selector="ListBox.pill-list ListBoxItem">
-            <Setter Property="Background" Value="#121212"/>
-            <Setter Property="BorderBrush" Value="#2a2a2a"/>
+            <Setter Property="Background" Value="{DynamicResource PillBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PillBorder}"/>
             <Setter Property="Foreground" Value="{DynamicResource TextDisabled}"/>
         </Style>
         
         <Style Selector="ListBox.pill-list ListBoxItem:pointerover">
-            <Setter Property="Background" Value="#1f1f1f"/>
-            <Setter Property="BorderBrush" Value="#3a3a3a"/>
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderDefault}"/>
         </Style>
         
         <Style Selector="ListBox.pill-list ListBoxItem:selected">
-            <Setter Property="Background" Value="#1a0f08"/> 
-            <Setter Property="BorderBrush" Value="#ea580c"/> 
-            <Setter Property="Foreground" Value="#ea580c"/>
+            <Setter Property="Background" Value="{DynamicResource AdminAccentBackground}"/> 
+            <Setter Property="BorderBrush" Value="{DynamicResource AdminAccent}"/> 
+            <Setter Property="Foreground" Value="{DynamicResource AdminAccent}"/>
+        </Style>
+        <!-- Centra verticalmente el texto/placeholder del buscador (AutoCompleteBox) -->
+        <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
     </UserControl.Styles>
 
@@ -60,11 +65,12 @@
                         <TextBlock Text="Datos de uso · actualizado hoy" FontSize="14" Foreground="{DynamicResource TextDisabled}" Margin="0 -2 0 0"/>
                     </StackPanel>
 
-                    <Border Grid.Column="1" Background="#121212" BorderBrush="#222222" BorderThickness="1" CornerRadius="8" Width="300" Height="42" VerticalAlignment="Center">
+                    <Border Grid.Column="1" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" BorderThickness="1" CornerRadius="8" Width="300" Height="42" VerticalAlignment="Center">
                         <Grid ColumnDefinitions="Auto, *">
                             <Label Grid.Column="0" Content="&#xE318;" FontFamily="{DynamicResource Phosphor}" FontSize="20" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center" Margin="12 0 4 0"/>
                             <AutoCompleteBox Grid.Column="1" 
                  Text="{Binding TextoBusqueda}" 
+                 SelectedItem="{Binding SugerenciaSeleccionada}"
                  ItemsSource="{Binding SugerenciasBusqueda}"
                  PlaceholderText="Buscar nombre, correo, ID..." 
                  Background="Transparent" 
@@ -129,7 +135,14 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="vm:MesPill">
-                                    <Button Classes="pill-rounded" Classes.disabled="{Binding !Habilitado}" Margin="3 0" IsHitTestVisible="False">
+                                    <Button Classes="pill-rounded admin"
+                                            Classes.active="{Binding Seleccionado}"
+                                            Classes.disabled="{Binding !Habilitado}"
+                                            IsEnabled="{Binding Habilitado}"
+                                            Margin="3 0"
+                                            x:CompileBindings="False"
+                                            Command="{Binding #EstadisticasRoot.DataContext.SeleccionarMesCommand}"
+                                            CommandParameter="{Binding}">
                                         <TextBlock Text="{Binding Nombre}" FontSize="12"/>
                                     </Button>
                                 </DataTemplate>
