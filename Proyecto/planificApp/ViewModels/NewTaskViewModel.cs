@@ -21,10 +21,8 @@ public partial class NewTaskViewModel : ViewModelBase
     [ObservableProperty] private DateTime? _fecLimite;
     [ObservableProperty] private TimeSpan? _horaInicio;
     [ObservableProperty] private TimeSpan? _horaFin;
-    [ObservableProperty] private DateTime? _recordatorio;
 
     // --- PROPIEDADES DINÁMICAS (Las mismas del Inbox) ---
-    [ObservableProperty] private string _prioridadDisplay = "1 - Baja";
     [ObservableProperty] private string _tiempoDisplay = "— Sin definir —";
     [ObservableProperty] private string _actividadFisicaDisplay = "— Ninguna —";
     [ObservableProperty] private string _actividadMentalDisplay = "— Ninguna —";
@@ -37,7 +35,6 @@ public partial class NewTaskViewModel : ViewModelBase
 
     public ObservableCollection<AreaInteres> AreasInteres { get; } = new();
     public ObservableCollection<string> MisUbicaciones { get; } = new() { "— Sin ubicación —" };
-    public ObservableCollection<string> Prioridades { get; } = new() { "1 - Baja", "2 - Media", "3 - Alta", "4 - Urgente", "5 - Fija" };
     public ObservableCollection<string> Tiempos { get; } = new() { "— Sin definir —", "5 minutos", "10 minutos", "15 minutos", "30 minutos", "45 minutos", "1 hora", "1.5 horas", "2 horas", "3 horas", "4 horas" };
     public ObservableCollection<string> NivelesActividadFisica { get; } = new() { "— Ninguna —", "Activa", "Pasiva" };
     public ObservableCollection<string> NivelesActividadMental { get; } = new() { "— Ninguna —", "Obligación", "Recreación" };
@@ -97,7 +94,6 @@ public partial class NewTaskViewModel : ViewModelBase
         }
 
         // Convertir los textos del UI (Display) a valores de Base de Datos
-        int prioridadInt = int.Parse(PrioridadDisplay.Split(' ')[0]);
         int tiempoInt = TiempoDisplay switch
         {
             "5 minutos" => 5,
@@ -121,13 +117,11 @@ public partial class NewTaskViewModel : ViewModelBase
             FecLimite = FecLimite,
             HoraInicio = HoraInicio,
             HoraFin = HoraFin,
-            Prioridad = prioridadInt,
             TiempoEstimado = tiempoInt,
             Ubicacion = UbicacionDisplay == "— Sin ubicación —" ? null : UbicacionDisplay,
             IdAreaInteres = IdAreaInteres,
             TipoActividadFisica = ActividadFisicaDisplay == "— Ninguna —" ? null : ActividadFisicaDisplay,
             TipoActividadMental = ActividadMentalDisplay == "— Ninguna —" ? null : ActividadMentalDisplay,
-            Recordatorio = Recordatorio,
             FecCreacion = DateTime.Now
         };
 

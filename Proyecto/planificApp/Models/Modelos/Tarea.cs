@@ -6,6 +6,10 @@ using PlanificApp.Models.Enums;
 
 namespace PlanificApp.Models
 {
+    // Ignora campos que puedan quedar en documentos antiguos de Atlas y que ya no existen
+    // en el modelo (p. ej. la vieja "Prioridad"/"Recordatorio" de la tarea), para que
+    // deserializar tareas guardadas no lance FormatException.
+    [BsonIgnoreExtraElements]
     public class Tarea
     {
         [BsonId]
@@ -37,9 +41,6 @@ namespace PlanificApp.Models
         public MetodoTransporte? MetodoTransporte { get; set; }
         public int TiempoEstimado { get; set; }
         public string? IdAreaInteres { get; set; }
-        public DateTime? Recordatorio { get; set; }
-
-        public int Prioridad { get; set; } = 1;
 
         public bool? UsoGeneracion { get; set; }
         public bool ModificacionGeneracion { get; set; }

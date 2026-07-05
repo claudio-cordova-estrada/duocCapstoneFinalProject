@@ -16,7 +16,6 @@ public class PropuestaGeneracion
     public int MinimoDiasRequeridos { get; set; }
     public int DiasSeleccionadosCount { get; set; }
     public double HorasFuncionalesUsadas { get; set; }
-    public double HorasLibresUsadas { get; set; }
     public int TotalBloques { get; set; }
     public int TotalTareas { get; set; }
 }

@@ -32,14 +32,12 @@ public partial class InboxViewModel : TareaDetailViewModelBase
     [ObservableProperty] private string _quickAddNombre = string.Empty;
 
     // --- PROPIEDADES PARA EL PANEL DE DETALLES ---
-    [ObservableProperty] private string _prioridadDisplay = "1 - Baja";
     [ObservableProperty] private string _tiempoDisplay = "— Sin definir —";
     [ObservableProperty] private string _actividadFisicaDisplay = "— Ninguna —";
     [ObservableProperty] private string _actividadMentalDisplay = "— Ninguna —";
     [ObservableProperty] private string _ubicacionDisplay = "— Sin ubicación —"; // NUEVO
 
     // LISTAS
-    public ObservableCollection<string> Prioridades { get; } = new() { "1 - Baja", "2 - Media", "3 - Alta", "4 - Urgente", "5 - Fija" };
     public ObservableCollection<string> Tiempos { get; } = new() { "— Sin definir —", "5 minutos", "10 minutos", "15 minutos", "30 minutos", "45 minutos", "1 hora", "1.5 horas", "2 horas", "3 horas", "4 horas" };
     public ObservableCollection<string> NivelesActividadFisica { get; } = new() { "— Ninguna —", "Activa", "Pasiva" };
     public ObservableCollection<string> NivelesActividadMental { get; } = new() { "— Ninguna —", "Obligación", "Recreación" };
@@ -76,8 +74,6 @@ public partial class InboxViewModel : TareaDetailViewModelBase
 
         if (e.PropertyName == nameof(TareaSeleccionada) && TareaSeleccionada != null)
         {
-            PrioridadDisplay = Prioridades.FirstOrDefault(p => p.StartsWith(TareaSeleccionada.Prioridad.ToString())) ?? "1 - Baja";
-
             TiempoDisplay = TareaSeleccionada.TiempoEstimado switch
             {
                 0 => "— Sin definir —",
@@ -102,11 +98,6 @@ public partial class InboxViewModel : TareaDetailViewModelBase
                                ? "— Sin ubicación —"
                                : TareaSeleccionada.Ubicacion;
         }
-    }
-
-    partial void OnPrioridadDisplayChanged(string value)
-    {
-        if (!string.IsNullOrEmpty(value)) DetallePrioridad = int.Parse(value.Split(' ')[0]);
     }
 
     partial void OnTiempoDisplayChanged(string value)
@@ -260,7 +251,6 @@ public partial class InboxViewModel : TareaDetailViewModelBase
         {
             Nombre = QuickAddNombre.Trim(),
             IdUsuario = Sesion.UsuarioActual.IdUsuario,
-            Prioridad = 1,
             FecCreacion = DateTime.Now
         };
 

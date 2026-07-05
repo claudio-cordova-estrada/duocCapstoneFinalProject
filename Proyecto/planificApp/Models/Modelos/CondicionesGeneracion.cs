@@ -8,8 +8,6 @@ public class CondicionesGeneracion
     public List<AreaInteres> AreasConsiderar { get; set; } = new();
     public List<AreaPriorizada> AreasPriorizadas { get; set; } = new();
     public double MaxHorasGeneracionSemanal { get; set; }
-    public double HorasFuncionales { get; set; }
-    public double HorasLibres { get; set; }
     public List<DayOfWeek> DiasSeleccionados { get; set; } = new();
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }

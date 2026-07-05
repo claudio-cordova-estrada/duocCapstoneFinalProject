@@ -252,10 +252,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
             propuesta.MensajeInvalidacion = "Ning\u00fan d\u00eda tiene al menos 3 horas libres para equilibrar";
             return propuesta;
         }
-        if (condiciones.HorasFuncionales <= 0)
+        if (condiciones.MaxHorasGeneracionSemanal <= 0)
         {
             propuesta.EsValida = false;
-            propuesta.MensajeInvalidacion = "No hay horas funcionales disponibles";
+            propuesta.MensajeInvalidacion = "No hay horas disponibles para generar";
             return propuesta;
         }
 
@@ -315,9 +315,9 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         int numDias = diasGeneracion.Count;
         int diaIdx = 0;
 
-        // Objetivo de tiempo por día = horas funcionales repartidas entre los días (tope: la jornada).
+        // Objetivo de tiempo por día = horas disponibles repartidas entre los días (tope: la jornada).
         // La fase 1 (variedad) llena hasta acá con áreas distintas; la fase 2 rellena reutilizando.
-        double objetivoPorDia = Math.Min(maxHorasPorDia, condiciones.HorasFuncionales / numDias);
+        double objetivoPorDia = Math.Min(maxHorasPorDia, condiciones.MaxHorasGeneracionSemanal / numDias);
 
         // FASE 1 — Variedad (round-robin por vueltas): en cada vuelta repartimos a lo sumo UN bloque por
         // área, rotando el puntero de día y re-barajando el orden. Así los días se llenan parejos y, entre
@@ -508,10 +508,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
             propuesta.MensajeInvalidacion = "Ning\u00fan d\u00eda tiene 5 horas seguidas libres para una jornada intensiva";
             return propuesta;
         }
-        if (condiciones.HorasFuncionales <= 0)
+        if (condiciones.MaxHorasGeneracionSemanal <= 0)
         {
             propuesta.EsValida = false;
-            propuesta.MensajeInvalidacion = "No hay horas funcionales disponibles";
+            propuesta.MensajeInvalidacion = "No hay horas disponibles para generar";
             return propuesta;
         }
 
@@ -625,10 +625,10 @@ public class GeneradorSemanalService : IGeneradorSemanalService
             propuesta.MensajeInvalidacion = "Ning\u00fan d\u00eda tiene m\u00e1s de 1 hora libre";
             return propuesta;
         }
-        if (condiciones.HorasFuncionales <= 0)
+        if (condiciones.MaxHorasGeneracionSemanal <= 0)
         {
             propuesta.EsValida = false;
-            propuesta.MensajeInvalidacion = "No hay horas funcionales disponibles";
+            propuesta.MensajeInvalidacion = "No hay horas disponibles para generar";
             return propuesta;
         }
 

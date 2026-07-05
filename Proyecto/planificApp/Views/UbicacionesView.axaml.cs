@@ -189,7 +189,6 @@ namespace planificApp.Views
                             DireccionExacta = direccion,
                             EsTemporal = true,
                             ColorHex = "#10b981",
-                            UltimaVisitaFormateada = "Ubicación temporal",
                             TransportePreferido = "-",
                             Latitud = lonLat.lat,
                             Longitud = lonLat.lon

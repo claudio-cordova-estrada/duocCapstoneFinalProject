@@ -18,7 +18,7 @@ public partial class PropuestaPreviewWindow : Window
     {
         TxtTitulo.Text = propuesta.Nombre;
         TxtDescripcion.Text = propuesta.Descripcion;
-        TxtEstadisticas.Text = $"{propuesta.HorasFuncionalesUsadas:F1} hrs funcionales - {propuesta.TotalBloques} bloques - {propuesta.TotalTareas} tareas";
+        TxtEstadisticas.Text = $"{propuesta.HorasFuncionalesUsadas:F1} hrs planificadas - {propuesta.TotalBloques} bloques - {propuesta.TotalTareas} tareas";
 
         DiasPanel.Children.Clear();
 

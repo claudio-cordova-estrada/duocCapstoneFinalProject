@@ -124,17 +124,6 @@
                                 <TextBlock Text="{Binding MaxHorasGeneracionSemanal, StringFormat='{}{0:F1} hrs'}" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource AccentColor}"/>
                             </StackPanel>
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                                <StackPanel Spacing="2">
-                                    <TextBlock Text="HORAS FUNCIONALES" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                                    <TextBox Text="{Binding HorasFuncionales}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Spacing="2">
-                                    <TextBlock Text="HORAS LIBRES" FontSize="10" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.5"/>
-                                    <TextBox Text="{Binding HorasLibres}" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}"/>
-                                </StackPanel>
-                            </Grid>
-
                             <StackPanel Spacing="2">
                                 <TextBlock Text="{Binding RangoFechas}" FontSize="11" Foreground="{DynamicResource TextDisabled}" TextWrapping="Wrap"/>
                             </StackPanel>

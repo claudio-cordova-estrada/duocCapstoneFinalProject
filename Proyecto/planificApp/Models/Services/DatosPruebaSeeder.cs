@@ -187,7 +187,6 @@ public class DatosPruebaSeeder
                     Nombre = nombres[j],
                     IdUsuario = idUsuario,
                     IdAreaInteres = area.IdAreaInteres,
-                    Prioridad = (j % 5) + 1,
                     TiempoEstimado = tiempos[j % tiempos.Length],
                 };
 
@@ -212,7 +211,6 @@ public class DatosPruebaSeeder
             {
                 Nombre = n,
                 IdUsuario = idUsuario,
-                Prioridad = 2,
                 FecCreacion = hoy.AddDays(-2),
             });
         }

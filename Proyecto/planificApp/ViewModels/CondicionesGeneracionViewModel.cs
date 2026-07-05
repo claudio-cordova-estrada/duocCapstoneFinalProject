@@ -24,8 +24,6 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
     [ObservableProperty] private ObservableCollection<AreaPriorizada> _areasPriorizadas = new();
 
     [ObservableProperty] private double _maxHorasGeneracionSemanal;
-    [ObservableProperty] private double _horasFuncionales;
-    [ObservableProperty] private double _horasLibres;
     [ObservableProperty] private string _rangoFechas = string.Empty;
 
     [ObservableProperty] private bool _lunesSeleccionado = true;
@@ -186,23 +184,6 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
         MaxHorasGeneracionSemanal = Math.Max(0, totalHorasDisponibles - _horasOcupadas);
 
-        if (MaxHorasGeneracionSemanal <= 0)
-        {
-            HorasFuncionales = 0;
-            HorasLibres = 0;
-        }
-        else
-        {
-            double funcionalRatio = HorasFuncionales + HorasLibres > 0
-                ? HorasFuncionales / (HorasFuncionales + HorasLibres)
-                : 0.6;
-
-            if (funcionalRatio <= 0) funcionalRatio = 0.6;
-
-            HorasFuncionales = Math.Round(MaxHorasGeneracionSemanal * funcionalRatio, 1);
-            HorasLibres = Math.Round(MaxHorasGeneracionSemanal - HorasFuncionales, 1);
-        }
-
         ValidarPuedeGenerar();
     }
 
@@ -244,22 +225,6 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         AreasPriorizadas = new ObservableCollection<AreaPriorizada>(priorizadas);
     }
 
-    partial void OnHorasFuncionalesChanged(double value)
-    {
-        if (MaxHorasGeneracionSemanal <= 0) return;
-        if (value < 0) { HorasFuncionales = 0; return; }
-        if (value > MaxHorasGeneracionSemanal) { HorasFuncionales = MaxHorasGeneracionSemanal; return; }
-        HorasLibres = Math.Round(MaxHorasGeneracionSemanal - value, 1);
-    }
-
-    partial void OnHorasLibresChanged(double value)
-    {
-        if (MaxHorasGeneracionSemanal <= 0) return;
-        if (value < 0) { HorasLibres = 0; return; }
-        if (value > MaxHorasGeneracionSemanal) { HorasLibres = MaxHorasGeneracionSemanal; return; }
-        HorasFuncionales = Math.Round(MaxHorasGeneracionSemanal - value, 1);
-    }
-
     partial void OnLunesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
     partial void OnMartesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
     partial void OnMiercolesSeleccionadoChanged(bool value) { if (!_suprimirRecalculo) RecalcularTodo(); }
@@ -270,7 +235,8 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
     private void ValidarPuedeGenerar()
     {
-        PuedeGenerar = ObtenerDiasSeleccionadosCount() > 0 && MaxHorasGeneracionSemanal > 0;
+        PuedeGenerar = ObtenerDiasSeleccionadosCount() > 0
+            && MaxHorasGeneracionSemanal > 0;
     }
 
     private int ObtenerDiasSeleccionadosCount()
@@ -322,8 +288,6 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
             AreasConsiderar = AreasConsiderar.ToList(),
             AreasPriorizadas = AreasPriorizadas.ToList(),
             MaxHorasGeneracionSemanal = MaxHorasGeneracionSemanal,
-            HorasFuncionales = HorasFuncionales,
-            HorasLibres = HorasLibres,
             DiasSeleccionados = ObtenerDiasSeleccionados(),
             FechaInicio = FechaLunes,
             FechaFin = FechaLunes.AddDays(6)

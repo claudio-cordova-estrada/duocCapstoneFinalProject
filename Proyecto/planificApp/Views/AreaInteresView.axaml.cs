@@ -156,7 +156,6 @@ public partial class AreaInteresView : UserControl
         DetailFecLimite.SelectedDate = vm.TareaSeleccionada?.FecLimite;
         DetailHoraInicio.SelectedTime = vm.TareaSeleccionada?.HoraInicio;
         DetailHoraFin.SelectedTime = vm.TareaSeleccionada?.HoraFin;
-        DetailPrioridad.SelectedIndex = vm.DetallePrioridad - 1;
         DetailTiempoEstimado.SelectedIndex = DetalleTareaHelper.TiempoEstimadoToIndex(vm.DetalleTiempoEstimado);
         DetalleTareaHelper.PopulateAreaComboBox(DetailAreaInteres, vm.AreasInteres, vm.TareaSeleccionada?.IdAreaInteres);
         DetailEstado.Text = vm.DetalleEstado;
@@ -180,7 +179,6 @@ public partial class AreaInteresView : UserControl
         vm.DetalleFecLimite = DetailFecLimite.SelectedDate;
         vm.DetalleHoraInicio = DetailHoraInicio.SelectedTime;
         vm.DetalleHoraFin = DetailHoraFin.SelectedTime;
-        vm.DetallePrioridad = DetailPrioridad.SelectedIndex + 1;
         vm.DetalleTiempoEstimado = DetalleTareaHelper.TiempoEstimadoFromIndex(DetailTiempoEstimado.SelectedIndex);
         vm.DetalleIdAreaInteres = DetalleTareaHelper.GetSelectedAreaId(DetailAreaInteres);
         vm.DetalleTipoActividadFisica = DetalleTareaHelper.TipoActividadFisicaFromIndex(DetailTipoActividadFisica.SelectedIndex);

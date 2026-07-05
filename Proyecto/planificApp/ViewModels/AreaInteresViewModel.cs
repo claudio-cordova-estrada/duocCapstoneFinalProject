@@ -113,7 +113,6 @@ public partial class AreaInteresViewModel : TareaDetailViewModelBase
             Nombre = QuickAddNombre.Trim(),
             IdUsuario = Sesion.UsuarioActual.IdUsuario,
             IdAreaInteres = AreaSeleccionada.IdAreaInteres,
-            Prioridad = 1,
             FecCreacion = DateTime.Now
         };
 

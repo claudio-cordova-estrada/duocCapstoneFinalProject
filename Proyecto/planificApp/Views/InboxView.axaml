@@ -159,12 +159,6 @@
                             </StackPanel>
 
                             <StackPanel Spacing="4">
-                                <TextBlock Text="PRIORIDAD" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
-                                          ItemsSource="{Binding Prioridades}" SelectedItem="{Binding PrioridadDisplay}"/>
-                            </StackPanel>
-
-                            <StackPanel Spacing="4">
                                 <TextBlock Text="TIEMPO ESTIMADO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
                                 <ComboBox FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"
                                           ItemsSource="{Binding Tiempos}" SelectedItem="{Binding TiempoDisplay}"/>
@@ -182,11 +176,6 @@
                                           ItemsSource="{Binding NivelesActividadMental}" SelectedItem="{Binding ActividadMentalDisplay}"/>
                             </StackPanel>
                             
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="RECORDATORIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                <CalendarDatePicker x:Name="PickerRecordatorio" FontSize="14" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" PlaceholderText="Fecha del recordatorio" HorizontalAlignment="Stretch"/>
-                            </StackPanel>
-
                             <Button Classes="accent" HorizontalAlignment="Stretch" Click="SaveDetail_Click">
                                 <TextBlock Text="Guardar cambios" HorizontalAlignment="Center" FontSize="13"/>
                             </Button>

@@ -550,7 +550,6 @@ namespace planificApp.ViewModels
         public string? DireccionExacta { get; set; }
         public bool EsTemporal { get; set; }
         public string? ColorHex { get; set; }
-        public string? UltimaVisitaFormateada { get; set; }
         public string? TransportePreferido { get; set; }
         public double Latitud { get; set; }
         public double Longitud { get; set; }

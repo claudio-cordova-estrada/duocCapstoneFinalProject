@@ -38,7 +38,6 @@ public abstract partial class TareaDetailViewModelBase : PageViewModel
     public TimeSpan? DetalleHoraInicio { get; set; }
     public TimeSpan? DetalleHoraFin { get; set; }
     public string? DetalleUbicacion { get; set; }
-    public int DetallePrioridad { get; set; } = 1;
     public int DetalleTiempoEstimado { get; set; }
     public string? DetalleIdAreaInteres { get; set; }
     public string? DetalleTipoActividadFisica { get; set; }
@@ -58,7 +57,6 @@ public abstract partial class TareaDetailViewModelBase : PageViewModel
         DetalleHoraInicio = tarea.HoraInicio;
         DetalleHoraFin = tarea.HoraFin;
         DetalleUbicacion = tarea.Ubicacion;
-        DetallePrioridad = tarea.Prioridad;
         DetalleTiempoEstimado = tarea.TiempoEstimado;
         DetalleIdAreaInteres = tarea.IdAreaInteres;
         DetalleTipoActividadFisica = tarea.TipoActividadFisica;
@@ -118,7 +116,6 @@ public abstract partial class TareaDetailViewModelBase : PageViewModel
             TareaSeleccionada.FecLimite = DetalleFecLimite;
             TareaSeleccionada.HoraInicio = DetalleHoraInicio;
             TareaSeleccionada.HoraFin = DetalleHoraFin;
-            TareaSeleccionada.Prioridad = DetallePrioridad;
             TareaSeleccionada.Ubicacion = string.IsNullOrWhiteSpace(DetalleUbicacion) ? null : DetalleUbicacion;
             TareaSeleccionada.TiempoEstimado = DetalleTiempoEstimado;
             TareaSeleccionada.IdAreaInteres = DetalleIdAreaInteres;

@@ -117,7 +117,7 @@
 
                                         <Grid ColumnDefinitions="*,Auto,Auto,Auto">
                                             <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
-                                                <TextBlock FontSize="11" Foreground="{DynamicResource TextDisabled}" Text="{Binding HorasFuncionalesUsadas, StringFormat='{}{0:F1} hrs funcionales'}"/>
+                                                <TextBlock FontSize="11" Foreground="{DynamicResource TextDisabled}" Text="{Binding HorasFuncionalesUsadas, StringFormat='{}{0:F1} hrs planificadas'}"/>
                                                 <TextBlock FontSize="11" Foreground="{DynamicResource TextDisabled}" Text="{Binding DiasSeleccionadosCount, StringFormat='{}{0} d&#xED;as'}"/>
                                             </StackPanel>
                                             <Button Grid.Column="2" Classes="transparent" Margin="0 0 8 0"
