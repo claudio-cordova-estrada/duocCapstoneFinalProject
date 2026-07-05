@@ -39,4 +39,9 @@ public class BloqueAreaInteresScheduleRepository : IBloqueAreaInteresScheduleRep
     {
         await _bloques.DeleteManyAsync(b => b.IdUsuario == idUsuario && b.Fecha >= desde && b.Fecha < hasta);
     }
+
+    public async Task EliminarBloquesPorUsuario(string idUsuario)
+    {
+        await _bloques.DeleteManyAsync(b => b.IdUsuario == idUsuario);
+    }
 }

@@ -26,4 +26,7 @@ public class AreaInteresRepository : IAreaInteresRepository
 
     public async Task EliminarAreaInteres(string id) =>
         await _areas.DeleteOneAsync(a => a.IdAreaInteres == id);
+
+    public async Task EliminarAreasPorUsuario(string idUsuario) =>
+        await _areas.DeleteManyAsync(a => a.IdUsuario == idUsuario);
 }

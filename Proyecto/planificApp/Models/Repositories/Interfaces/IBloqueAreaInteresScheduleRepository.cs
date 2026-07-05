@@ -12,4 +12,5 @@ public interface IBloqueAreaInteresScheduleRepository
     Task EliminarBloque(string id);
     Task EliminarBloquesPorDia(string idUsuario, DateTime fecha);
     Task EliminarBloquesPorSemana(string idUsuario, DateTime desde, DateTime hasta);
+    Task EliminarBloquesPorUsuario(string idUsuario);
 }

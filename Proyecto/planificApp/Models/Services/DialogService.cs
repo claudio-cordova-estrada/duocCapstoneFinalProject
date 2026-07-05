@@ -95,6 +95,16 @@ public class DialogService : IDialogService
         return await dialog.ShowDialog<bool>(window);
     }
 
+    public async Task<bool> ShowConfirmDeleteUsuarioDialog(string nombreUsuario)
+    {
+        var window = GetMainWindow();
+        if (window == null) return false;
+
+        var dialog = new ConfirmDeleteUsuarioWindow();
+        dialog.SetUsuarioName(nombreUsuario);
+        return await dialog.ShowDialog<bool>(window);
+    }
+
     public async Task<CondicionesGeneracion?> ShowCondicionesGeneracionDialog(DateTime fechaLunes)
     {
         var window = GetMainWindow();

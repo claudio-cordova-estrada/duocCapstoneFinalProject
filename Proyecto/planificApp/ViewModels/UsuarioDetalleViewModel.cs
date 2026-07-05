@@ -26,6 +26,11 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     private readonly IRegionesService _regionesService;
     private readonly ITareaRepository _tareaRepo;
     private readonly IMetricasService _metricasService;
+    private readonly IAreaInteresRepository _areaRepo;
+    private readonly IUbicacionRepository _ubicacionRepo;
+    private readonly IBloqueAreaInteresScheduleRepository _bloqueRepo;
+    private readonly IDialogService _dialogService;
+    private readonly ISesionService _sesion;
     private Usuario? _usuarioOriginal;
 
     // --- DATOS PERSONALES ---
@@ -73,7 +78,7 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     };
     [ObservableProperty] private MesUI? _mesSeleccionado;
 
-    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IMetricasService metricasService)
+    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IMetricasService metricasService, IAreaInteresRepository areaRepo, IUbicacionRepository ubicacionRepo, IBloqueAreaInteresScheduleRepository bloqueRepo, IDialogService dialogService, ISesionService sesion)
     {
         PageName = ApplicationPageNames.AdminUsuarioDetalle;
         _navigationService = navigationService;
@@ -81,6 +86,11 @@ public partial class UsuarioDetalleViewModel : PageViewModel
         _regionesService = regionesService;
         _tareaRepo = tareaRepo;
         _metricasService = metricasService;
+        _areaRepo = areaRepo;
+        _ubicacionRepo = ubicacionRepo;
+        _bloqueRepo = bloqueRepo;
+        _dialogService = dialogService;
+        _sesion = sesion;
 
         // Selección automática del mes en curso del sistema
         MesSeleccionado = ListaMeses.FirstOrDefault(m => m.Numero == DateTime.Now.Month) ?? ListaMeses[0];
@@ -161,6 +171,55 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     {
         EsActivo = !EsActivo;
         ActualizarTextosVisuales();
+    }
+
+    // Elimina al usuario Y EN CASCADA todo lo que creó (tareas, áreas, ubicaciones y
+    // bloques de calendario). Es irreversible → pide confirmación antes de tocar la BD.
+    [RelayCommand]
+    private async Task EliminarUsuario()
+    {
+        MostrarError = false;
+        MostrarMensajeExito = false;
+
+        if (_usuarioOriginal == null || string.IsNullOrEmpty(_usuarioOriginal.IdUsuario))
+            return;
+
+        // Barrera de seguridad: el admin logueado no puede borrarse a sí mismo.
+        if (_sesion.UsuarioActual != null && _sesion.UsuarioActual.IdUsuario == _usuarioOriginal.IdUsuario)
+        {
+            ErrorValidacion = "No puedes eliminar tu propia cuenta mientras la sesión está iniciada.";
+            MostrarError = true;
+            return;
+        }
+
+        // Confirmación explícita: acción destructiva e irreversible.
+        var confirmado = await _dialogService.ShowConfirmDeleteUsuarioDialog(
+            string.IsNullOrWhiteSpace(Nombre) ? "este usuario" : Nombre);
+        if (!confirmado) return;
+
+        var idUsuario = _usuarioOriginal.IdUsuario;
+
+        try
+        {
+            // Orden: primero los datos dependientes y POR ÚLTIMO el usuario, para que si algo
+            // falla no quede un usuario "vivo" con datos ya borrados de forma silenciosa.
+            await _tareaRepo.EliminarTareasPorUsuario(idUsuario);
+            await _areaRepo.EliminarAreasPorUsuario(idUsuario);
+            await _ubicacionRepo.EliminarUbicacionesPorUsuario(idUsuario);
+            await _bloqueRepo.EliminarBloquesPorUsuario(idUsuario);
+            await _usuarioRepo.EliminarUsuario(idUsuario);
+        }
+        catch (Exception ex)
+        {
+            ErrorValidacion = $"No se pudo eliminar el usuario: {ex.Message}";
+            MostrarError = true;
+            Console.WriteLine($"Error al eliminar usuario en cascada: {ex}");
+            return;
+        }
+
+        // Volvemos al listado. UsuariosViewModel es transient: al navegar se reconstruye
+        // y recarga desde la BD, por lo que el usuario borrado ya no aparece.
+        _navigationService.NavigateToPage(ApplicationPageNames.AdminUsuarios);
     }
 
     private void ActualizarTextosVisuales()

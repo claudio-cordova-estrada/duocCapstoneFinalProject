@@ -9,4 +9,5 @@ public interface IUbicacionRepository
     Task<List<UbicacionGuardada>> ObtenerUbicacionesPorUsuario(string idUsuario);
     Task ActualizarUbicacion(string id, UbicacionGuardada ubicacionActualizada);
     Task EliminarUbicacion(string id);
+    Task EliminarUbicacionesPorUsuario(string idUsuario);
 }

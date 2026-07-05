@@ -93,4 +93,11 @@ public class UsuarioRepository : IUsuarioRepository
         // Reemplaza el usuario antiguo por la versión modificada en el panel de Admin
         await _usuarios.ReplaceOneAsync(u => u.IdUsuario == idUsuario, usuarioActualizado);
     }
+
+    public async Task EliminarUsuario(string idUsuario)
+    {
+        // Borra únicamente el documento del usuario. La eliminación en cascada de sus
+        // datos (tareas, áreas, ubicaciones, bloques) la coordina quien llama a este método.
+        await _usuarios.DeleteOneAsync(u => u.IdUsuario == idUsuario);
+    }
 }

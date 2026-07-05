@@ -9,4 +9,5 @@ public interface IAreaInteresRepository
     Task CrearAreaInteres(AreaInteres nuevaArea);
     Task ActualizarAreaInteres(string id, AreaInteres areaActualizada);
     Task EliminarAreaInteres(string id);
+    Task EliminarAreasPorUsuario(string idUsuario);
 }

@@ -14,6 +14,7 @@ public interface IDialogService
     Task<bool> ShowNewAreaDialog();
     Task<bool> ShowEditAreaDialog(AreaInteres area);
     Task<bool> ShowConfirmDeleteAreaDialog(AreaInteres area);
+    Task<bool> ShowConfirmDeleteUsuarioDialog(string nombreUsuario);
     Task<CondicionesGeneracion?> ShowCondicionesGeneracionDialog(DateTime fechaLunes);
     void ShowPropuestasSemanales(CondicionesGeneracion condiciones);
 

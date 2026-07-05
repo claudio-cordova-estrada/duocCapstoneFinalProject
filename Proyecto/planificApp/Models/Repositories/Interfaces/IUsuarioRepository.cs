@@ -19,4 +19,5 @@ public interface IUsuarioRepository
     // --- NUEVOS MÉTODOS PARA EL ADMINISTRADOR ---
     Task<IEnumerable<Usuario>> ObtenerTodosLosUsuarios();
     Task ActualizarUsuario(string idUsuario, Usuario usuarioActualizado);
+    Task EliminarUsuario(string idUsuario);
 }

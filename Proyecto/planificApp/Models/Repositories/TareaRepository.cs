@@ -86,4 +86,7 @@ public class TareaRepository : ITareaRepository
 
     public async Task EliminarTarea(string id) =>
         await _tareas.DeleteOneAsync(t => t.IdTarea == id);
+
+    public async Task EliminarTareasPorUsuario(string idUsuario) =>
+        await _tareas.DeleteManyAsync(t => t.IdUsuario == idUsuario);
 }

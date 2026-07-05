@@ -26,4 +26,7 @@ public class UbicacionRepository : IUbicacionRepository
 
     public async Task EliminarUbicacion(string id) =>
         await _ubicaciones.DeleteOneAsync(u => u.IdUbicacion == id);
+
+    public async Task EliminarUbicacionesPorUsuario(string idUsuario) =>
+        await _ubicaciones.DeleteManyAsync(u => u.IdUsuario == idUsuario);
 }

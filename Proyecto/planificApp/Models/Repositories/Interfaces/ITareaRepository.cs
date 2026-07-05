@@ -19,4 +19,5 @@ public interface ITareaRepository
     Task DescompletarTarea(string idTarea);
     Task ActualizarTarea(string id, Tarea tareaActualizada);
     Task EliminarTarea(string id);
+    Task EliminarTareasPorUsuario(string idUsuario);
 }
