@@ -525,7 +525,12 @@ private void OnDayDragOver(object? sender, DragEventArgs e)
     {
         double topPx = bloque.TopPx;
         double heightPx = bloque.HeightPx;
-        if (heightPx < MinBlockHeight) heightPx = MinBlockHeight;
+        // Los traslados tienen su propio mínimo (30px, más abajo) que se calcula desde su alto real
+        // y crece hacia arriba dejando fijo el borde inferior. Si les aplicáramos también el mínimo
+        // genérico, ese alto alterado correría el borde inferior ~10px y el traslado se solaparía con
+        // el bloque siguiente (bug del traslado corto tras una tarea fija, visible al generar).
+        if (bloque.Tipo != TipoBloqueCalendario.SeccionTraslado && heightPx < MinBlockHeight)
+            heightPx = MinBlockHeight;
 
         var panelWidth = panel.Bounds.Width > 0 ? panel.Bounds.Width : 190;
         var columnCount = bloque.ColumnCount;

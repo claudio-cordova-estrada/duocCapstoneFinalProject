@@ -183,6 +183,14 @@
                     </Button>
                 </Grid>
 
+                <!-- ⚠️ TEMP DEV: generador de datos de prueba para la entrega. Quitar antes de entregar. -->
+                <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right" Margin="0 6 0 0">
+                    <TextBlock Text="{Binding SeedResultado}" FontSize="12" Foreground="#4ade80" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="420"/>
+                    <Button Padding="12 6" CornerRadius="7" FontSize="12" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderDefault}" BorderThickness="1" Command="{Binding GenerarDatosPruebaCommand}">
+                        <TextBlock Text="Generar datos de prueba (dev)" Foreground="{DynamicResource TextSecondary}"/>
+                    </Button>
+                </StackPanel>
+
             </StackPanel>
         </ScrollViewer>
     </Border>

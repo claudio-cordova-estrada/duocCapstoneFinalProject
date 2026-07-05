@@ -19,6 +19,8 @@ public partial class EstadisticasViewModel : PageViewModel
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IRegionesService _regionesService;
     private readonly INavigationService _navigationService;
+    private readonly ITareaRepository _tareaRepo;
+    private readonly IGeneracionRepository _generacionRepo;
 
     private List<Usuario> _todosLosUsuarios = new();
 
@@ -102,12 +104,17 @@ public partial class EstadisticasViewModel : PageViewModel
     [ObservableProperty] private int _generacionesRealizadas;
     [ObservableProperty] private int _tareasModificadasGS;
 
-    public EstadisticasViewModel(IUsuarioRepository usuarioRepo, IRegionesService regionesService, INavigationService navigation)
+    // --- OBJETIVOS DEL PROYECTO (KPIs reales vs. meta) ---
+    [ObservableProperty] private ObservableCollection<ObjetivoKpi> _objetivos = new();
+
+    public EstadisticasViewModel(IUsuarioRepository usuarioRepo, IRegionesService regionesService, INavigationService navigation, ITareaRepository tareaRepo, IGeneracionRepository generacionRepo)
     {
         PageName = ApplicationPageNames.AdminEstadisticas;
         _usuarioRepo = usuarioRepo;
         _regionesService = regionesService;
         _navigationService = navigation;
+        _tareaRepo = tareaRepo;
+        _generacionRepo = generacionRepo;
 
         ConstruirMeses();
         _ = InicializarAsync();
@@ -121,6 +128,53 @@ public partial class EstadisticasViewModel : PageViewModel
 
         ActualizarSugerencias();
         CalcularMetricas();
+        await CalcularObjetivosAsync();
+    }
+
+    // Calcula los 4 objetivos específicos del proyecto con datos reales (globales, no filtrados).
+    private async Task CalcularObjetivosAsync()
+    {
+        try
+        {
+            var usuarios = _todosLosUsuarios;
+            int totalU = usuarios.Count;
+            int activos = usuarios.Count(u => u.EstaActivo);
+
+            var generaciones = await _generacionRepo.ObtenerTodas();
+            var usuariosConGen = generaciones
+                .Select(g => g.IdUsuario)
+                .Where(id => !string.IsNullOrEmpty(id))
+                .Distinct()
+                .ToHashSet();
+            int usanGen = usuarios.Count(u => !string.IsNullOrEmpty(u.IdUsuario) && usuariosConGen.Contains(u.IdUsuario!));
+
+            var tareas = await _tareaRepo.ObtenerTodasLasTareas();
+            var usadas = tareas.Where(t => t.UsoGeneracion == true).ToList();
+            int totalUsadas = usadas.Count;
+            int noModif = usadas.Count(t => !t.ModificacionGeneracion);
+            int completadasTiempo = usadas.Count(t => t.FecCompletado != null && t.CompletadoEnTiempo);
+
+            double p1 = totalU > 0 ? 100.0 * activos / totalU : 0;
+            double p2 = totalU > 0 ? 100.0 * usanGen / totalU : 0;
+            double p3 = totalUsadas > 0 ? 100.0 * noModif / totalUsadas : 0;
+            double p4 = totalUsadas > 0 ? 100.0 * completadasTiempo / totalUsadas : 0;
+
+            Objetivos = new ObservableCollection<ObjetivoKpi>
+            {
+                new() { Titulo = "Usuarios activos", Descripcion = "Que un 70% de los usuarios sean activos en los primeros 3 meses",
+                        Valor = p1, Meta = 70, Detalle = $"{activos} de {totalU} usuarios", Cumple = p1 >= 70 },
+                new() { Titulo = "Uso del motor de generación", Descripcion = "Que un 70% use la generación semanal (uso continuo, 6 meses)",
+                        Valor = p2, Meta = 70, Detalle = $"{usanGen} de {totalU} usuarios", Cumple = p2 >= 70 },
+                new() { Titulo = "Tareas de generación sin modificar", Descripcion = "Que el 60% de las tareas usadas en generación no se modifiquen (3 meses)",
+                        Valor = p3, Meta = 60, Detalle = $"{noModif} de {totalUsadas} tareas", Cumple = p3 >= 60 },
+                new() { Titulo = "Tareas de generación completadas en tiempo", Descripcion = "Que el 80% de las tareas usadas en generación se completen en tiempo (5 meses)",
+                        Valor = p4, Meta = 80, Detalle = $"{completadasTiempo} de {totalUsadas} tareas", Cumple = p4 >= 80 },
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al calcular objetivos: {ex.Message}");
+        }
     }
 
     private async Task CargarRegionesAsync()
@@ -277,4 +331,20 @@ public partial class MesPill : ObservableObject
     public int Numero { get; set; }
     [ObservableProperty] private bool _habilitado;
     [ObservableProperty] private bool _seleccionado;
+}
+
+// KPI de un objetivo específico del proyecto: valor real vs. meta, con estado y color.
+public class ObjetivoKpi
+{
+    public string Titulo { get; set; } = string.Empty;
+    public string Descripcion { get; set; } = string.Empty;
+    public double Valor { get; set; }
+    public double Meta { get; set; }
+    public string Detalle { get; set; } = string.Empty;
+    public bool Cumple { get; set; }
+
+    public string ValorTexto => $"{Valor:F0}%";
+    public string MetaTexto => $"Meta {Meta:F0}%";
+    public string ColorHex => Cumple ? "#4ade80" : "#fbbf24";
+    public string TextoEstado => Cumple ? "Cumple" : "En progreso";
 }

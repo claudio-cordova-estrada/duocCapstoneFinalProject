@@ -104,34 +104,31 @@
                             <TextBlock Text="Días para generación semanal" FontSize="15" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"/>
                             <TextBlock Text="Selecciona los días en los que deseas generar tu semana" FontSize="13" Foreground="{DynamicResource TextDisabled}" Margin="0 -10 0 0" HorizontalAlignment="Center"/>
 
-                            <!-- Row 1: Lunes-Viernes -->
-                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button Classes="pill-rounded" Classes.active="{Binding Lunes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Lunes">
+                            <!-- Los 7 días en un solo WrapPanel: bajan de línea cuando falta
+                                 espacio (ventana chica o escala de letra alta) en vez de desbordar. -->
+                            <WrapPanel HorizontalAlignment="Center">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Lunes}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Lunes">
                                     <TextBlock Text="Lunes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button Classes="pill-rounded" Classes.active="{Binding Martes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Martes">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Martes}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Martes">
                                     <TextBlock Text="Martes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button Classes="pill-rounded" Classes.active="{Binding Miercoles}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Miercoles">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Miercoles}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Miercoles">
                                     <TextBlock Text="Miércoles" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button Classes="pill-rounded" Classes.active="{Binding Jueves}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Jueves">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Jueves}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Jueves">
                                     <TextBlock Text="Jueves" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button Classes="pill-rounded" Classes.active="{Binding Viernes}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Viernes">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Viernes}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Viernes">
                                     <TextBlock Text="Viernes" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                            </StackPanel>
-
-                            <!-- Row 2: Sábado-Domingo -->
-                            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Button Classes="pill-rounded" Classes.active="{Binding Sabado}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Sabado">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Sabado}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Sabado">
                                     <TextBlock Text="Sábado" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                                <Button Classes="pill-rounded" Classes.active="{Binding Domingo}" Width="100" Command="{Binding ToggleDiaCommand}" CommandParameter="Domingo">
+                                <Button Classes="pill-rounded" Classes.active="{Binding Domingo}" MinWidth="88" Margin="4" Command="{Binding ToggleDiaCommand}" CommandParameter="Domingo">
                                     <TextBlock Text="Domingo" FontSize="13" HorizontalAlignment="Center"/>
                                 </Button>
-                            </StackPanel>
+                            </WrapPanel>
                         </StackPanel>
                     </Border>
 

@@ -24,6 +24,7 @@ public partial class PropuestasSemanalesViewModel : PageViewModel
     private readonly ISesionService _sesionService;
     private readonly ICalendarioSemanalService _calendarioService;
     private readonly IDialogService _dialogService;
+    private readonly IGeneracionRepository _generacionRepo;
 
     [ObservableProperty] private ObservableCollection<PropuestaGeneracion> _propuestas = new();
     [ObservableProperty] private bool _isLoading;
@@ -40,7 +41,8 @@ public partial class PropuestasSemanalesViewModel : PageViewModel
         IUbicacionRepository ubicacionRepo,
         ISesionService sesionService,
         ICalendarioSemanalService calendarioService,
-        IDialogService dialogService)
+        IDialogService dialogService,
+        IGeneracionRepository generacionRepo)
     {
         PageName = ApplicationPageNames.UserPropuestasSemanales;
 
@@ -51,6 +53,7 @@ public partial class PropuestasSemanalesViewModel : PageViewModel
         _sesionService = sesionService;
         _calendarioService = calendarioService;
         _dialogService = dialogService;
+        _generacionRepo = generacionRepo;
     }
 
     public void SetCondiciones(CondicionesGeneracion condiciones)
@@ -123,6 +126,17 @@ public partial class PropuestasSemanalesViewModel : PageViewModel
                 await _calendarioService.CalcularTrasladosAsync(dia, usuarioId);
             }
             await _calendarioService.GuardarCambiosAsync(propuesta.Semana, usuarioId);
+
+            // Registramos la generación aceptada (para métricas reales y el objetivo de uso continuo).
+            await _generacionRepo.Registrar(new Generacion
+            {
+                IdUsuario = usuarioId,
+                FecGeneracion = DateTime.Now,
+                FechaSemana = propuesta.Semana.FechaInicio,
+                Estrategia = propuesta.Nombre,
+                TotalBloques = propuesta.TotalBloques,
+                TotalTareas = propuesta.TotalTareas
+            });
         }
 
         var navigation = App.Services.GetRequiredService<INavigationService>();

@@ -87,6 +87,9 @@ public partial class App : Application
         collection.AddTransient<UsuarioDetalleViewModel>();
         collection.AddTransient<UsuariosViewModel>();
 
+        // ⚠️ TEMP DEV: generador de datos de prueba para la entrega. Quitar antes de entregar.
+        collection.AddTransient<PlanificApp.Models.Services.DatosPruebaSeeder>();
+
         // Configuration
         var config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
             .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
@@ -104,6 +107,7 @@ public partial class App : Application
         collection.AddSingleton<IAreaInteresRepository, AreaInteresRepository>();
         collection.AddSingleton<IUbicacionRepository, UbicacionRepository>();
         collection.AddSingleton<IBloqueAreaInteresScheduleRepository, BloqueAreaInteresScheduleRepository>();
+        collection.AddSingleton<IGeneracionRepository, GeneracionRepository>();
 
         // Services
         collection.AddSingleton<IAuthenticationService, AuthenticationService>();

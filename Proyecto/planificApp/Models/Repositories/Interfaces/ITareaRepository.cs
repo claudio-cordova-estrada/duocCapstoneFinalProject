@@ -20,4 +20,6 @@ public interface ITareaRepository
     Task ActualizarTarea(string id, Tarea tareaActualizada);
     Task EliminarTarea(string id);
     Task EliminarTareasPorUsuario(string idUsuario);
+    Task CrearTareasEnLote(IEnumerable<Tarea> tareas);
+    Task<List<Tarea>> ObtenerTodasLasTareas();
 }

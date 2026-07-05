@@ -66,7 +66,27 @@
             </Border>
 
             <Border Grid.Row="2"/>
-            
+
+            <!-- Atajos de credenciales de prueba (a la derecha de la pantalla) -->
+            <StackPanel Grid.Row="0" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="12" Margin="0 0 28 0">
+                <Button Width="76" Height="60" CornerRadius="10" Padding="0"
+                        Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" BorderThickness="1"
+                        ToolTip.Tip="Credenciales usuario" Command="{Binding RellenarUsuarioCommand}">
+                    <StackPanel Spacing="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="&#x1F464;" FontSize="18" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Usuario" FontSize="10" Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Width="76" Height="60" CornerRadius="10" Padding="0"
+                        Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" BorderThickness="1"
+                        ToolTip.Tip="Credenciales admin" Command="{Binding RellenarAdminCommand}">
+                    <StackPanel Spacing="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="&#x1F6E1;" FontSize="18" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Admin" FontSize="10" Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
         </Grid>
     </Border>
 </UserControl>

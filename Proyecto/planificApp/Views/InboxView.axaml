@@ -130,26 +130,27 @@
                                 </Grid>
                             </StackPanel>
 
-                            <Grid ColumnDefinitions="*,12,*">
-                                <StackPanel Grid.Column="0" Spacing="4">
-                                    <TextBlock Text="HORA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <TimePicker x:Name="DetailHoraInicio" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
-                                        <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraInicio_Click" Cursor="Hand">
-                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                                        </Button>
-                                    </Grid>
-                                </StackPanel>
-                                <StackPanel Grid.Column="2" Spacing="4">
-                                    <TextBlock Text="HORA FIN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
-                                    <Grid ColumnDefinitions="*,Auto">
-                                        <TimePicker x:Name="DetailHoraFin" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" MaxWidth="170"/>
-                                        <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraFin_Click" Cursor="Hand">
-                                            <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
-                                        </Button>
-                                    </Grid>
-                                </StackPanel>
-                            </Grid>
+                            <!-- Hora inicio / Hora fin. Apilados en vertical y a ancho completo:
+                                 el TimePicker es ancho y, lado a lado en este panel angosto, se
+                                 cortaba (peor al subir la escala de letra). -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="HORA INICIO" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TimePicker x:Name="DetailHoraInicio" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraInicio_Click" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="HORA FIN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TimePicker x:Name="DetailHoraFin" Grid.Column="0" FontSize="13" Foreground="{DynamicResource TextSecondary}" Background="{DynamicResource InputBackground}" BorderBrush="{DynamicResource InputBorder}" HorizontalAlignment="Stretch"/>
+                                    <Button Grid.Column="1" Classes="transparent" Padding="2" VerticalAlignment="Center" Click="ClearHoraFin_Click" Cursor="Hand">
+                                        <Label FontFamily="{DynamicResource Phosphor}" FontSize="12" Content="&#xE4FA;" Foreground="{DynamicResource TextDisabled}" VerticalAlignment="Center"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
 
                             <StackPanel Spacing="4">
                                 <TextBlock Text="UBICACIÓN" FontSize="11" Foreground="{DynamicResource TextDisabled}" LetterSpacing="0.6"/>

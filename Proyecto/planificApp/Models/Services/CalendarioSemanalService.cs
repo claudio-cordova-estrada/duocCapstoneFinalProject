@@ -420,6 +420,7 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                                 tarea.HoraInicio = sub.HoraInicio;
                                 tarea.HoraFin = sub.HoraFin;
                                 tarea.FecInicio = dia.Fecha;
+                                tarea.UsoGeneracion = true;   // quedó agendada por la generación semanal
                                 await _tareaRepo.ActualizarTarea(tarea.IdTarea!, tarea);
                             }
                         }

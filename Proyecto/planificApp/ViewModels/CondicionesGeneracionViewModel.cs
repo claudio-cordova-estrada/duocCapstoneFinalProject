@@ -47,11 +47,9 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
     [ObservableProperty] private bool _puedeGenerar = true;
     [ObservableProperty] private DateTime _fechaLunes;
-    [ObservableProperty] private bool _semanaSiguiente;
 
     private List<Tarea> _todasLasTareas = new();
     private double _horasOcupadas = 0;
-    private DateTime _baseFechaLunes;
 
     // Preferencia de días del usuario (la del registro/config), para reaplicarla al cambiar de semana.
     private bool _prefLunes = true, _prefMartes = true, _prefMiercoles = true,
@@ -77,8 +75,7 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
 
     public async Task InicializarAsync(DateTime fechaLunes)
     {
-        _baseFechaLunes = fechaLunes;
-        FechaLunes = SemanaSiguiente ? fechaLunes.AddDays(7) : fechaLunes;
+        FechaLunes = fechaLunes;
         ActualizarRangoFechas();
 
         if (_sesionService.UsuarioActual == null) return;
@@ -116,22 +113,6 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
             RangoFechas = $"Generaci\u00f3n desde el {FechaLunes.Day} de {mesInicio} hasta el {FechaLunes.AddDays(6).Day} de {mesFin}";
     }
 
-    // Feature: alternar entre semana actual y siguiente. Reubica FechaLunes y recalcula.
-    partial void OnSemanaSiguienteChanged(bool value)
-    {
-        if (_baseFechaLunes == default) return;
-        FechaLunes = _baseFechaLunes.AddDays(value ? 7 : 0);
-        ActualizarRangoFechas();
-        ActualizarDiasHabilitados();
-        _ = RecalcularSemanaAsync();
-    }
-
-    private async Task RecalcularSemanaAsync()
-    {
-        await CalcularHorasGeneracionAsync(FechaLunes);
-        ActualizarPriorizacion();
-    }
-
     private void InicializarDiasDesdeUsuario(Usuario usuario)
     {
         var dias = usuario.DiasGeneracionSemanal ?? new List<DayOfWeek>
@@ -149,21 +130,19 @@ public partial class CondicionesGeneracionViewModel : ViewModelBase
         _prefDomingo = dias.Contains(DayOfWeek.Sunday);
     }
 
-    // Un día solo puede usarse si todavía no pasó (su fecha >= hoy). En "semana siguiente"
-    // quedan todos disponibles. Reaplicamos la preferencia del usuario solo sobre los disponibles,
-    // así un día no disponible queda en OFF y no suma horas.
+    // Un día solo puede usarse si todavía no pasó (su fecha >= hoy). Reaplicamos la preferencia del
+    // usuario solo sobre los disponibles, así un día que ya pasó queda en OFF y no suma horas.
     private void ActualizarDiasHabilitados()
     {
         var hoy = DateTime.Today;
-        bool sig = SemanaSiguiente;
 
-        LunesHabilitado     = sig || FechaLunes.Date           >= hoy;
-        MartesHabilitado    = sig || FechaLunes.AddDays(1).Date >= hoy;
-        MiercolesHabilitado = sig || FechaLunes.AddDays(2).Date >= hoy;
-        JuevesHabilitado    = sig || FechaLunes.AddDays(3).Date >= hoy;
-        ViernesHabilitado   = sig || FechaLunes.AddDays(4).Date >= hoy;
-        SabadoHabilitado    = sig || FechaLunes.AddDays(5).Date >= hoy;
-        DomingoHabilitado   = sig || FechaLunes.AddDays(6).Date >= hoy;
+        LunesHabilitado     = FechaLunes.Date           >= hoy;
+        MartesHabilitado    = FechaLunes.AddDays(1).Date >= hoy;
+        MiercolesHabilitado = FechaLunes.AddDays(2).Date >= hoy;
+        JuevesHabilitado    = FechaLunes.AddDays(3).Date >= hoy;
+        ViernesHabilitado   = FechaLunes.AddDays(4).Date >= hoy;
+        SabadoHabilitado    = FechaLunes.AddDays(5).Date >= hoy;
+        DomingoHabilitado   = FechaLunes.AddDays(6).Date >= hoy;
 
         // Suprimimos el recálculo por-día; el llamador recalcula las horas una sola vez al final.
         _suprimirRecalculo = true;

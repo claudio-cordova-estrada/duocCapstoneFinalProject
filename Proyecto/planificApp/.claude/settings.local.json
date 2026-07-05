@@ -39,7 +39,9 @@
       "PowerShell(python \"C:\\\\Users\\\\CLAUDI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Documentos-GitHub-duocCapstoneFinalProject-Proyecto-planificApp\\\\d38a7230-61aa-4685-8078-9455a07cbc84\\\\scratchpad\\\\crear_review.py\" \"Sprint 3\" \"Sprint 3\" \"05/06/2026\" \"C:\\\\Users\\\\Claudio C E\\\\Downloads\\\\Documentos SCRUM\\\\08 Documento validando Sprint Review - Sprint 3.docx\" \"Sprint 2,Sprint 3\")",
       "Bash(python fix_docx_final.py)",
       "PowerShell(python \"C:\\\\Users\\\\CLAUDI~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Documentos-GitHub-duocCapstoneFinalProject-Proyecto-planificApp\\\\d38a7230-61aa-4685-8078-9455a07cbc84\\\\scratchpad\\\\fix_xlsx_final.py\")",
-      "Bash(python fix_carta.py)"
+      "Bash(python fix_carta.py)",
+      "PowerShell(dotnet build planificApp.csproj -clp:ErrorsOnly -nologo --no-incremental)",
+      "mcp__visualize__read_me"
     ]
   }
 }

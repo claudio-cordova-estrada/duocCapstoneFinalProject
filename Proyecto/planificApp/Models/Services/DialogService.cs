@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
 using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using PlanificApp.Models;
@@ -23,17 +24,40 @@ public class DialogService : IDialogService
 
     // Evita que un diálogo supere el tamaño de la pantalla. En equipos con pantallas chicas
     // las ventanas se salían de los bordes y no se podían cerrar; topamos ancho/alto al 95%
-    // del área útil del monitor donde está la app.
+    // del área útil del monitor donde está la app y, si hace falta, hacemos scrolleable el
+    // contenido para que ningún control (p. ej. los botones de acción) quede inalcanzable.
     private void AjustarATamanoPantalla(Window dialog)
     {
         var owner = GetMainWindow();
         var screen = owner?.Screens.ScreenFromVisual(owner) ?? owner?.Screens.Primary;
-        if (screen == null) return;
+        if (screen != null)
+        {
+            var scaling = screen.Scaling <= 0 ? 1 : screen.Scaling;
+            dialog.MaxWidth = screen.WorkingArea.Width / scaling * 0.95;
+            dialog.MaxHeight = screen.WorkingArea.Height / scaling * 0.95;
+        }
 
-        var scaling = screen.Scaling <= 0 ? 1 : screen.Scaling;
-        dialog.MaxWidth = screen.WorkingArea.Width / scaling * 0.95;
-        dialog.MaxHeight = screen.WorkingArea.Height / scaling * 0.95;
+        // Con SizeToContent la ventana crece con su contenido; al toparse contra MaxHeight
+        // el ScrollViewer permite desplazarse en vez de recortar. No lo duplicamos si la
+        // ventana ya trae su propio scroll.
+        if (dialog.Content is Control contenido && !YaTieneScroll(contenido))
+        {
+            dialog.Content = null; // desasocia el contenido antes de re-parentarlo
+            dialog.Content = new ScrollViewer
+            {
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                Content = contenido
+            };
+        }
     }
+
+    // ¿El contenido ya scrollea? (es un ScrollViewer, o su hijo directo lo es, como en
+    // las ventanas que envuelven un Border/panel alrededor de un ScrollViewer).
+    private static bool YaTieneScroll(Control contenido) =>
+        contenido is ScrollViewer
+        || (contenido is Decorator decorator && decorator.Child is ScrollViewer)
+        || (contenido is ContentControl contentControl && contentControl.Content is ScrollViewer);
 
     public async Task<bool> ShowNewTaskDialog(string? preSelectedArea = null)
     {
@@ -91,6 +115,7 @@ public class DialogService : IDialogService
         if (window == null) return false;
 
         var dialog = new ConfirmDeleteAreaWindow();
+        AjustarATamanoPantalla(dialog);
         dialog.SetAreaName(area.Nombre ?? "esta área");
         return await dialog.ShowDialog<bool>(window);
     }
@@ -101,6 +126,7 @@ public class DialogService : IDialogService
         if (window == null) return false;
 
         var dialog = new ConfirmDeleteUsuarioWindow();
+        AjustarATamanoPantalla(dialog);
         dialog.SetUsuarioName(nombreUsuario);
         return await dialog.ShowDialog<bool>(window);
     }
@@ -193,6 +219,7 @@ public class DialogService : IDialogService
         if (window == null) return;
 
         var dialog = new ConfirmDeleteLocationWindow();
+        AjustarATamanoPantalla(dialog);
         dialog.SetLocationName(nombre);
         await dialog.ShowDialog(window);
     }

@@ -22,11 +22,14 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         _calendarioService = calendarioService;
     }
 
-    private static readonly string[] NombresDias = { "Lun", "Mar", "Mi\u00e9", "Jue", "Vie", "S\u00e1b", "Dom" };
+    private static readonly string[] NombresDias = { "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom" };
     private const double MinBloqueHoras = 0.5;
     private const double MinTareaHoras = 0.5;
     private static readonly TimeSpan GapEntreBloques = TimeSpan.FromMinutes(30);
     private static readonly TimeSpan GapEntreTareas = TimeSpan.FromMinutes(15);
+    private static readonly List<(TimeSpan Inicio, TimeSpan Fin)> VacioOcupados = new();
+    // Hueco mínimo para que valga la pena un bloque de área (AjustarDuracionBloque no coloca < 1h).
+    private static readonly TimeSpan MinBloqueUtil = TimeSpan.FromHours(1);
 
     public async Task<List<PropuestaGeneracion>> GenerarPropuestasAsync(CondicionesGeneracion condiciones)
     {
@@ -47,9 +50,13 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         // Jornada libre real por día (jornada menos las tareas ya agendadas ese día): base de la factibilidad.
         var disponibilidad = CalcularDisponibilidadPorDia(condiciones, todasLasTareas);
 
-        var propuestaEq = await GenerarEquilibrio(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad);
-        var propuestaRush = await GenerarIntensiva(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad);
-        var propuestaRel = await GenerarRelajado(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad);
+        // Intervalos ya ocupados por tareas que el usuario fijó: la generación debe respetarlos
+        // (rellenar solo el tiempo libre, sin pisar ni mover lo que el usuario ya agendó).
+        var ocupadosPorDia = CalcularOcupadosPorDia(condiciones, todasLasTareas);
+
+        var propuestaEq = await GenerarEquilibrio(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad, ocupadosPorDia);
+        var propuestaRush = await GenerarIntensiva(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad, ocupadosPorDia);
+        var propuestaRel = await GenerarRelajado(condiciones, random, tareasElegibles, usuarioId, ubicacionInicio, disponibilidad, ocupadosPorDia);
 
         return new List<PropuestaGeneracion> { propuestaEq, propuestaRush, propuestaRel };
     }
@@ -127,6 +134,66 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         return (Math.Round(horasLibres, 2), Math.Round(huecoMax, 2));
     }
 
+    // Intervalos [inicio, fin] ya ocupados por tareas fijas del usuario en cada día de generación.
+    // La generación los trata como intocables: coloca sus bloques solo en el tiempo libre.
+    private Dictionary<DateTime, List<(TimeSpan Inicio, TimeSpan Fin)>> CalcularOcupadosPorDia(
+        CondicionesGeneracion condiciones, List<Tarea> todasLasTareas)
+    {
+        var dias = FiltrarDiasFuturos(ObtenerDiasGeneracion(condiciones));
+        var resultado = new Dictionary<DateTime, List<(TimeSpan Inicio, TimeSpan Fin)>>();
+        foreach (var dia in dias)
+        {
+            var ocupados = todasLasTareas
+                .Where(t => t.FecInicio.HasValue && t.HoraInicio.HasValue && t.HoraFin.HasValue &&
+                            t.FecInicio.Value.Date == dia.Fecha.Date && t.HoraFin.Value > t.HoraInicio.Value)
+                .Select(t => (Inicio: t.HoraInicio!.Value, Fin: t.HoraFin!.Value))
+                .ToList();
+            resultado[dia.Fecha] = FusionarIntervalos(ocupados);
+        }
+        return resultado;
+    }
+
+    // Une intervalos que se solapan o se tocan, devolviéndolos ordenados por inicio.
+    private static List<(TimeSpan Inicio, TimeSpan Fin)> FusionarIntervalos(
+        List<(TimeSpan Inicio, TimeSpan Fin)> intervalos)
+    {
+        var merged = new List<(TimeSpan Inicio, TimeSpan Fin)>();
+        foreach (var iv in intervalos.OrderBy(i => i.Inicio))
+        {
+            if (merged.Count > 0 && iv.Inicio <= merged[^1].Fin)
+            {
+                if (iv.Fin > merged[^1].Fin)
+                    merged[^1] = (merged[^1].Inicio, iv.Fin);
+            }
+            else merged.Add(iv);
+        }
+        return merged;
+    }
+
+    // Busca el primer hueco libre (>= inicioDeseado) que alcance 'minDuracion', saltando los
+    // compromisos fijos del usuario y dejando 'gap' de holgura alrededor de cada uno. Devuelve el
+    // inicio del hueco y su fin (el inicio del próximo compromiso o el fin de jornada). Si el único
+    // hueco que queda antes de una tarea fija es demasiado chico, lo salta y sigue buscando después
+    // de ella; así un bloque nunca pisa la tarea fija ni se coloca en un espacio inútil.
+    private static (TimeSpan Inicio, TimeSpan FinHueco) PrimerHuecoLibre(
+        TimeSpan inicioDeseado, List<(TimeSpan Inicio, TimeSpan Fin)> ocupados,
+        TimeSpan finJornada, TimeSpan gap, TimeSpan minDuracion)
+    {
+        // 'ocupados' viene ordenado y fusionado, así que el cursor avanza de forma monótona.
+        var cursor = inicioDeseado;
+        foreach (var o in ocupados)
+        {
+            // ¿Cabe un bloque útil entre el cursor y este compromiso (con holgura antes de él)?
+            if (o.Inicio > cursor && (o.Inicio - gap) - cursor >= minDuracion)
+                return (cursor, o.Inicio);
+
+            // No cabe (o el compromiso ya quedó atrás): saltamos a después de él, con holgura.
+            if (o.Fin + gap > cursor) cursor = o.Fin + gap;
+        }
+
+        return (cursor, finJornada);
+    }
+
     private TimeSpan CalcularHoraInicioDia(DateTime fecha, TimeSpan horaInicioJornada)
     {
         if (fecha.Date < DateTime.Today)
@@ -168,11 +235,12 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         return 0.0;                          // no cabe
     }
 
-#region Equilibrio — día por día, 3 áreas/día (5 si hay tareas por vencer), bloques 2-4h
+    #region Equilibrio — día por día, 3 áreas/día (5 si hay tareas por vencer), bloques 2-4h
 
     private async Task<PropuestaGeneracion> GenerarEquilibrio(CondicionesGeneracion condiciones, Random random,
         List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio,
-        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad)
+        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad,
+        Dictionary<DateTime, List<(TimeSpan Inicio, TimeSpan Fin)>> ocupadosPorDia)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Equilibrio, "Equilibrio",
             "Distribuye las actividades de forma pareja entre los d\u00edas seleccionados",
@@ -214,6 +282,11 @@ public class GeneradorSemanalService : IGeneradorSemanalService
             tareasPorArea[id] = tareasElegibles.Where(t => t.IdAreaInteres == id).ToList();
         }
 
+        // Un área tiene "tareas libres" si le quedan tareas elegibles sin usar en esta propuesta.
+        // Es la guardia que evita crear bloques de un eje temático que ya no tiene tareas nuevas.
+        bool TieneTareasLibres(string id) =>
+            tareasPorArea.TryGetValue(id, out var lista) && lista.Count > tareasUsadasPorArea[id].Count;
+
         // Tareas "por vencer": vencen dentro de la semana y son asignables (hay algún día de generación
         // en o antes de su fecha límite). Mientras queden pendientes, cada día admite hasta 5 áreas (si no, 3).
         var primerDiaGen = diasGeneracion.Min(d => d.Fecha);
@@ -226,15 +299,19 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
         var areasDelDia = diasGeneracion.ToDictionary(d => d.Fecha, d => new HashSet<string>());
 
-        // Orden de áreas: las que tienen tareas por vencer primero (para ubicarlas en días tempranos),
-        // luego el resto en el orden ya barajado por prioridad.
-        var areasConUrgencia = tareasPorVencerPendientes.Select(t => t.IdAreaInteres!).Distinct().ToHashSet();
-        var ordenAreas = areasOrdenadas.Where(a => areasConUrgencia.Contains(a.Area.IdAreaInteres!))
-            .Concat(areasOrdenadas.Where(a => !areasConUrgencia.Contains(a.Area.IdAreaInteres!)))
-            .ToList();
+        // Orden de una vuelta: baraja las áreas dentro de su nivel de prioridad (fresco cada vez) y pone
+        // adelante las que tienen tareas por vencer. Al re-barajar en cada vuelta, entre áreas de la misma
+        // prioridad la que va primera cambia de un día a otro (no sale siempre la misma).
+        List<AreaPriorizada> OrdenDeVuelta()
+        {
+            var barajado = BarajarPorPrioridad(areasOrdenadas, random);
+            var urgentes = tareasPorVencerPendientes.Select(t => t.IdAreaInteres!).Distinct().ToHashSet();
+            return barajado.Where(a => urgentes.Contains(a.Area.IdAreaInteres!))
+                .Concat(barajado.Where(a => !urgentes.Contains(a.Area.IdAreaInteres!)))
+                .ToList();
+        }
 
-        // Distribución round-robin: cada área reparte sus bloques en días DISTINTOS, rotando un puntero
-        // de día. Así se usan todos los días de forma pareja y un área no se repite el mismo día.
+        // Round-robin: un puntero de día rota para usar todos los días de forma pareja.
         int numDias = diasGeneracion.Count;
         int diaIdx = 0;
 
@@ -242,23 +319,29 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         // La fase 1 (variedad) llena hasta acá con áreas distintas; la fase 2 rellena reutilizando.
         double objetivoPorDia = Math.Min(maxHorasPorDia, condiciones.HorasFuncionales / numDias);
 
-        foreach (var areaP in ordenAreas)
+        // FASE 1 — Variedad (round-robin por vueltas): en cada vuelta repartimos a lo sumo UN bloque por
+        // área, rotando el puntero de día y re-barajando el orden. Así los días se llenan parejos y, entre
+        // áreas de la misma prioridad, la que va primera cambia de un día a otro. Termina cuando una vuelta
+        // completa no coloca nada.
+        bool progreso = true;
+        int guardiaVueltas = 0, maxVueltas = numDias * areasOrdenadas.Count + 10;
+        while (progreso && guardiaVueltas++ < maxVueltas)
         {
-            var area = areaP.Area;
-            var areaId = area.IdAreaInteres!;
-            var diasFallidos = new HashSet<DateTime>();
-
-            // Válvula de seguridad: como máximo intentamos ~ (éxitos + fallos) por área.
-            int intentos = 0, maxIntentos = numDias * 3 + 3;
-            while (horasAreaRestantes[areaId] >= 1.0 && intentos++ < maxIntentos)
+            progreso = false;
+            foreach (var areaP in OrdenDeVuelta())
             {
+                var area = areaP.Area;
+                var areaId = area.IdAreaInteres!;
+                if (horasAreaRestantes[areaId] < 1.0) continue;
+                if (!TieneTareasLibres(areaId)) continue;   // sin tareas nuevas, no aporta bloque
+
+                // Elegimos un día (rotando el puntero) donde el área no esté aún y quede lugar.
                 DiaCalendario? diaElegido = null;
                 int kElegido = 0;
                 for (int k = 0; k < numDias; k++)
                 {
                     var d = diasGeneracion[(diaIdx + k) % numDias];
                     if (areasDelDia[d.Fecha].Contains(areaId)) continue;   // no repetir el área el mismo día
-                    if (diasFallidos.Contains(d.Fecha)) continue;
                     int maxAreasDia = tareasPorVencerPendientes.Count(t => t.FecLimite!.Value.Date >= d.Fecha.Date) > 0 ? 5 : 3;
                     if (areasDelDia[d.Fecha].Count >= maxAreasDia) continue;
                     if (horasUsadasPorDia[d.Fecha] >= maxHorasPorDia) continue;
@@ -266,7 +349,7 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                     kElegido = k;
                     break;
                 }
-                if (diaElegido == null) break;   // no hay día disponible para esta área
+                if (diaElegido == null) continue;   // esta área no entra en ningún día por ahora
 
                 var fecha = diaElegido.Fecha;
 
@@ -275,18 +358,17 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                     usuarioId, ubicacionPorDia[fecha], area.UbicacionPred, area.MetodoTransportePred);
                 var horaDisponible = cursorPorDia[fecha] + TimeSpan.FromMinutes(viajeMin);
 
+                // Saltamos el tiempo ya ocupado por tareas fijas: el bloque arranca en el primer hueco
+                // libre y no puede pasar del inicio del próximo compromiso del usuario.
+                var (inicioLibre, finHueco) = PrimerHuecoLibre(horaDisponible,
+                    ocupadosPorDia.GetValueOrDefault(fecha) ?? VacioOcupados, horaFin, GapEntreBloques, MinBloqueUtil);
+                horaDisponible = inicioLibre;
+
                 double disponibleDia = maxHorasPorDia - horasUsadasPorDia[fecha];
-                double margenFinDia = (horaFin - horaDisponible - GapEntreBloques).TotalHours;
+                double margenFinDia = (finHueco - horaDisponible - GapEntreBloques).TotalHours;
                 // Cap 2h en equilibrio: bloques cortos para esparcir mejor (un área de 3h ocupa 2 días).
                 double bloqueHoras = AjustarDuracionBloque(Math.Min(disponibleDia, margenFinDia), horasAreaRestantes[areaId], 2.0);
-                if (bloqueHoras <= 0)
-                {
-                    diasFallidos.Add(fecha);   // este día ya no da para esta área; probamos otro
-                    continue;
-                }
-
-                if (!string.IsNullOrEmpty(area.UbicacionPred))
-                    ubicacionPorDia[fecha] = area.UbicacionPred;
+                if (bloqueHoras <= 0) continue;
 
                 var bloque = new BloqueCalendario
                 {
@@ -302,6 +384,13 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 LlenarBloqueConTareas(bloque, tareasPorArea[areaId], random, GapEntreTareas, fecha,
                     tareasUsadasPorArea[areaId]);
 
+                // Si no quedaron tareas colocables (todas ya usadas en otros bloques del eje), no
+                // agregamos un bloque vacío: probamos con otra área.
+                if (bloque.TareasInternas == null || bloque.TareasInternas.Count == 0) continue;
+
+                if (!string.IsNullOrEmpty(area.UbicacionPred))
+                    ubicacionPorDia[fecha] = area.UbicacionPred;
+
                 var diaSemana = propuesta.Semana.Dias.FirstOrDefault(d => d.Fecha.Date == fecha.Date);
                 if (diaSemana != null)
                 {
@@ -310,27 +399,25 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 }
 
                 // Marcamos como asignadas las tareas por vencer que este bloque efectivamente colocó.
-                if (bloque.TareasInternas != null)
-                    foreach (var sub in bloque.TareasInternas)
-                        tareasPorVencerPendientes.RemoveAll(t => t.IdTarea == sub.IdTarea);
+                foreach (var sub in bloque.TareasInternas)
+                    tareasPorVencerPendientes.RemoveAll(t => t.IdTarea == sub.IdTarea);
 
                 cursorPorDia[fecha] = AvanzarCursorConGap(horaDisponible, TimeSpan.FromHours(bloqueHoras));
                 horasUsadasPorDia[fecha] += bloqueHoras;
                 horasAreaRestantes[areaId] -= bloqueHoras;
                 areasDelDia[fecha].Add(areaId);
-                diaIdx = (diaIdx + kElegido + 1) % numDias;  // avanzar el puntero al siguiente día
+                diaIdx = (diaIdx + kElegido + 1) % numDias;   // avanzar el puntero al siguiente día
+                progreso = true;
             }
         }
 
         // FASE 2 — Relleno: completar cada día hasta su objetivo (horas funcionales/día). Primero se
         // agregan áreas nuevas (hasta el tope de distintas); si el día aún no llega al objetivo, se
         // REUTILIZAN áreas ya presentes con tareas todavía sin usar, para aprovechar el tiempo libre.
-        bool TieneTareasLibres(string id) =>
-            tareasPorArea.TryGetValue(id, out var lista) && lista.Count > tareasUsadasPorArea[id].Count;
-
         foreach (var dia in diasGeneracion)
         {
             var fecha = dia.Fecha;
+            var ordenDia = OrdenDeVuelta();   // orden barajado propio de este día (varía el relleno)
             int guardia = 0;
             while (objetivoPorDia - horasUsadasPorDia[fecha] >= 1.0 && guardia++ < 40)
             {
@@ -339,11 +426,11 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 // 1) Área NUEVA (no presente hoy) con tareas libres, si aún hay cupo de áreas distintas.
                 string? elegido = null;
                 if (areasDelDia[fecha].Count < maxAreasDia)
-                    elegido = ordenAreas.Select(a => a.Area.IdAreaInteres!)
+                    elegido = ordenDia.Select(a => a.Area.IdAreaInteres!)
                         .FirstOrDefault(id => !areasDelDia[fecha].Contains(id) && TieneTareasLibres(id));
 
                 // 2) Si no hay nueva, reutilizamos un área ya presente con tareas libres.
-                elegido ??= ordenAreas.Select(a => a.Area.IdAreaInteres!)
+                elegido ??= ordenDia.Select(a => a.Area.IdAreaInteres!)
                         .FirstOrDefault(id => areasDelDia[fecha].Contains(id) && TieneTareasLibres(id));
 
                 if (elegido == null) break;  // no queda nada para rellenar este día
@@ -353,7 +440,11 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                     usuarioId, ubicacionPorDia[fecha], area.UbicacionPred, area.MetodoTransportePred);
                 var horaDisponible = cursorPorDia[fecha] + TimeSpan.FromMinutes(viajeMin);
 
-                double margenFinDia = (horaFin - horaDisponible - GapEntreBloques).TotalHours;
+                var (inicioLibre, finHueco) = PrimerHuecoLibre(horaDisponible,
+                    ocupadosPorDia.GetValueOrDefault(fecha) ?? VacioOcupados, horaFin, GapEntreBloques, MinBloqueUtil);
+                horaDisponible = inicioLibre;
+
+                double margenFinDia = (finHueco - horaDisponible - GapEntreBloques).TotalHours;
                 double faltaObjetivo = objetivoPorDia - horasUsadasPorDia[fecha];
                 double bloqueHoras = AjustarDuracionBloque(Math.Min(margenFinDia, faltaObjetivo), 2.0, 2.0);
                 if (bloqueHoras <= 0) break;
@@ -404,7 +495,8 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
     private async Task<PropuestaGeneracion> GenerarIntensiva(CondicionesGeneracion condiciones, Random random,
         List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio,
-        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad)
+        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad,
+        Dictionary<DateTime, List<(TimeSpan Inicio, TimeSpan Fin)>> ocupadosPorDia)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Rushear, "Intensiva",
             "Concentra las actividades en la menor cantidad de d\u00edas posible",
@@ -468,7 +560,12 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                 usuarioId, ubicacionActual, area.UbicacionPred, area.MetodoTransportePred);
             var horaDisponible = cursor + TimeSpan.FromMinutes(viajeMin);
 
-            double margenFinDia = (horaFin - horaDisponible - GapEntreBloques).TotalHours;
+            // La jornada intensiva se concentra en un día, pero igual respeta lo que el usuario fijó ahí.
+            var (inicioLibre, finHueco) = PrimerHuecoLibre(horaDisponible,
+                ocupadosPorDia.GetValueOrDefault(fecha) ?? VacioOcupados, horaFin, GapEntreBloques, MinBloqueUtil);
+            horaDisponible = inicioLibre;
+
+            double margenFinDia = (finHueco - horaDisponible - GapEntreBloques).TotalHours;
             double faltaTope = topeDia - horasUsadas;
             // Bloques de 2h para que entren MÁS áreas distintas (Intensiva no topea la cantidad de áreas).
             double bloqueHoras = AjustarDuracionBloque(Math.Min(margenFinDia, faltaTope), 2.0, 2.0);
@@ -511,11 +608,12 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
     #endregion
 
-    #region Relajado — max 2h/d\u00eda, 1h per \u00e1rea, day-first, gaps between blocks
+    #region Relajado — max 2h bloque, 1h per area, day-first, gaps between blocks
 
     private async Task<PropuestaGeneracion> GenerarRelajado(CondicionesGeneracion condiciones, Random random,
         List<Tarea> tareasElegibles, string usuarioId, string ubicacionInicio,
-        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad)
+        Dictionary<DateTime, (double HorasLibres, double HuecoMax)> disponibilidad,
+        Dictionary<DateTime, List<(TimeSpan Inicio, TimeSpan Fin)>> ocupadosPorDia)
     {
         var propuesta = CrearPropuestaBase(TipoPropuesta.Relajado, "Relajado",
             "M\u00e1ximo 2 horas por d\u00eda, una sola \u00e1rea por d\u00eda con calma",
@@ -557,9 +655,11 @@ public class GeneradorSemanalService : IGeneradorSemanalService
             .ToDictionary(aP => aP.Area.IdAreaInteres!, aP => tareasElegibles.Where(t => t.IdAreaInteres == aP.Area.IdAreaInteres).ToList());
 
         // Una sola área por día en un bloque de 2h (o 1h si al área le queda poco). Máx 2h/día.
+        // Barajamos las áreas dentro de su nivel de prioridad para CADA día, así entre áreas de igual
+        // prioridad no toca siempre la misma (varía qué área cae cada día).
         foreach (var dia in diasGeneracion)
         {
-            foreach (var areaP in areasOrdenadas)
+            foreach (var areaP in BarajarPorPrioridad(areasOrdenadas, random))
             {
                 var area = areaP.Area;
                 var areaId = area.IdAreaInteres!;
@@ -570,13 +670,13 @@ public class GeneradorSemanalService : IGeneradorSemanalService
                     usuarioId, ubicacionPorDia[dia.Fecha], area.UbicacionPred, area.MetodoTransportePred);
                 var horaDisponible = cursorPorDia[dia.Fecha] + TimeSpan.FromMinutes(viajeMin);
 
-                double margenFinDia = (horaFin - horaDisponible - GapEntreBloques).TotalHours;
+                var (inicioLibre, finHueco) = PrimerHuecoLibre(horaDisponible,
+                    ocupadosPorDia.GetValueOrDefault(dia.Fecha) ?? VacioOcupados, horaFin, GapEntreBloques, MinBloqueUtil);
+                horaDisponible = inicioLibre;
+
+                double margenFinDia = (finHueco - horaDisponible - GapEntreBloques).TotalHours;
                 double bloqueHoras = AjustarDuracionBloque(Math.Min(maxHorasPorDia, margenFinDia), horasAreaRestantes[areaId], 2.0);
                 if (bloqueHoras <= 0) continue;
-
-                // El bloque se coloca: la ubicación actual del día pasa a ser la de esta área.
-                if (!string.IsNullOrEmpty(area.UbicacionPred))
-                    ubicacionPorDia[dia.Fecha] = area.UbicacionPred;
 
                 var bloque = new BloqueCalendario
                 {
@@ -591,6 +691,15 @@ public class GeneradorSemanalService : IGeneradorSemanalService
 
                 LlenarBloqueConTareas(bloque, tareasPorArea.GetValueOrDefault(areaId, new List<Tarea>()), random, GapEntreTareas, dia.Fecha,
                     tareasUsadasPorArea.GetValueOrDefault(areaId));
+
+                // Sin tareas colocables (todas ya usadas en días anteriores) no ponemos un bloque
+                // vacío: probamos con la siguiente área para este día.
+                if (bloque.TareasInternas == null || bloque.TareasInternas.Count == 0)
+                    continue;
+
+                // El bloque se coloca: la ubicación actual del día pasa a ser la de esta área.
+                if (!string.IsNullOrEmpty(area.UbicacionPred))
+                    ubicacionPorDia[dia.Fecha] = area.UbicacionPred;
 
                 var diaSemana = propuesta.Semana.Dias.FirstOrDefault(d => d.Fecha.Date == dia.Fecha.Date);
                 if (diaSemana != null)
@@ -628,14 +737,15 @@ public class GeneradorSemanalService : IGeneradorSemanalService
         var tareasParaBloque = tareasConLimite.Any() ? tareasConLimite : tareasSinLimite;
         if (!tareasParaBloque.Any()) tareasParaBloque = tareasArea.OrderBy(_ => random.Next()).Take(3).ToList();
 
-        // Prioritize tasks not yet used in this proposal, fallback to used ones if all exhausted
-        List<Tarea> tareasNoUsadas;
-        List<Tarea> tareasUsadasRepetir;
+        // Nunca repetimos una tarea ya usada en otro bloque del mismo eje temático: si ya se colocó,
+        // se descarta. Si tras el descarte no queda ninguna, dejamos el bloque vacío para que el
+        // llamador decida no agregarlo (evita repetir la misma tarea y rellenar bloques con ella).
         if (tareasYaUsadas != null && tareasYaUsadas.Count > 0)
         {
-            tareasNoUsadas = tareasParaBloque.Where(t => t.IdTarea == null || !tareasYaUsadas.Contains(t.IdTarea)).ToList();
-            tareasUsadasRepetir = tareasParaBloque.Where(t => t.IdTarea != null && tareasYaUsadas.Contains(t.IdTarea)).ToList();
-            tareasParaBloque = tareasNoUsadas.Any() ? tareasNoUsadas : tareasUsadasRepetir.Any() ? tareasUsadasRepetir : tareasParaBloque;
+            tareasParaBloque = tareasParaBloque
+                .Where(t => t.IdTarea == null || !tareasYaUsadas.Contains(t.IdTarea))
+                .ToList();
+            if (tareasParaBloque.Count == 0) return;
         }
 
         double duracionBloque = (bloque.HoraFin - bloque.HoraInicio).TotalHours;

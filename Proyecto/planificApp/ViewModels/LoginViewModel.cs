@@ -37,6 +37,21 @@ public partial class LoginViewModel : PageViewModel
     [RelayCommand] private void GoToRegistro() => _navigation.GoToRegistro();
     [RelayCommand] private void GoToRecuperarContra() => _navigation.GoToRecuperarContra();
 
+    // Atajos de prueba: autocompletan el formulario con credenciales conocidas.
+    [RelayCommand]
+    private void RellenarUsuario()
+    {
+        Correo = "michael@gmail.com";
+        Password = "asdfasdf";
+    }
+
+    [RelayCommand]
+    private void RellenarAdmin()
+    {
+        Correo = "c@planificapp.com";
+        Password = "asdfasdf";
+    }
+
     [RelayCommand]
     private async Task LoginAsync()
     {

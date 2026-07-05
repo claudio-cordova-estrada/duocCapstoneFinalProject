@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using PlanificApp.Models.Repositories.Interfaces;
@@ -89,4 +90,14 @@ public class TareaRepository : ITareaRepository
 
     public async Task EliminarTareasPorUsuario(string idUsuario) =>
         await _tareas.DeleteManyAsync(t => t.IdUsuario == idUsuario);
+
+    public async Task CrearTareasEnLote(IEnumerable<Tarea> tareas)
+    {
+        var lista = tareas.ToList();
+        if (lista.Count == 0) return;
+        await _tareas.InsertManyAsync(lista);
+    }
+
+    public async Task<List<Tarea>> ObtenerTodasLasTareas() =>
+        await _tareas.Find(_ => true).ToListAsync();
 }

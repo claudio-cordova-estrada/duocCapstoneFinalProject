@@ -1,9 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using planificApp.Data;
 using planificApp.Services;
 using PlanificApp.Models;
 using PlanificApp.Models.Repositories.Interfaces;
+using PlanificApp.Models.Services;
 using PlanificApp.Models.Services.Interfaces;
 using System;
 using System.Collections.ObjectModel;
@@ -31,6 +33,7 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     private readonly IBloqueAreaInteresScheduleRepository _bloqueRepo;
     private readonly IDialogService _dialogService;
     private readonly ISesionService _sesion;
+    private readonly IGeneracionRepository _generacionRepo;
     private Usuario? _usuarioOriginal;
 
     // --- DATOS PERSONALES ---
@@ -55,6 +58,9 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     [ObservableProperty] private bool _mostrarError = false;
     [ObservableProperty] private string _errorValidacion = string.Empty;
 
+    // ⚠️ TEMP DEV: resultado del generador de datos de prueba. Quitar antes de entregar.
+    [ObservableProperty] private string _seedResultado = string.Empty;
+
     public string TextoBotonEstado => EsActivo ? "Desactivar usuario" : "Reactivar Usuario";
     public string ColorTextoEstado => EsActivo ? "#ef4444" : "#38bdf8";
     public string StatusBadgeText => EsActivo ? "ACTIVO" : "INACTIVO";
@@ -78,7 +84,7 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     };
     [ObservableProperty] private MesUI? _mesSeleccionado;
 
-    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IMetricasService metricasService, IAreaInteresRepository areaRepo, IUbicacionRepository ubicacionRepo, IBloqueAreaInteresScheduleRepository bloqueRepo, IDialogService dialogService, ISesionService sesion)
+    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IMetricasService metricasService, IAreaInteresRepository areaRepo, IUbicacionRepository ubicacionRepo, IBloqueAreaInteresScheduleRepository bloqueRepo, IDialogService dialogService, ISesionService sesion, IGeneracionRepository generacionRepo)
     {
         PageName = ApplicationPageNames.AdminUsuarioDetalle;
         _navigationService = navigationService;
@@ -91,6 +97,7 @@ public partial class UsuarioDetalleViewModel : PageViewModel
         _bloqueRepo = bloqueRepo;
         _dialogService = dialogService;
         _sesion = sesion;
+        _generacionRepo = generacionRepo;
 
         // Selección automática del mes en curso del sistema
         MesSeleccionado = ListaMeses.FirstOrDefault(m => m.Numero == DateTime.Now.Month) ?? ListaMeses[0];
@@ -123,6 +130,30 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     partial void OnMesSeleccionadoChanged(MesUI? value)
     {
         _ = CargarMetricasDelAnioActualAsync();
+    }
+
+    // Recalcula la edad cuando cambia la fecha de nacimiento (carga inicial o el
+    // CalendarDatePicker de la vista), para que "EDAD" no quede siempre en 0.
+    partial void OnFechaNacimientoDateChanged(DateTime? value)
+    {
+        RecalcularEdad();
+    }
+
+    private void RecalcularEdad()
+    {
+        if (!FechaNacimientoDate.HasValue)
+        {
+            Edad = "—";
+            return;
+        }
+
+        var nacimiento = FechaNacimientoDate.Value.Date;
+        var hoy = DateTime.Today;
+        int edad = hoy.Year - nacimiento.Year;
+        // Resta 1 si todavía no cumplió años este año.
+        if (nacimiento > hoy.AddYears(-edad)) edad--;
+
+        Edad = edad < 0 ? "—" : $"{edad} años";
     }
 
     public async void CargarDatosUsuario(Usuario usuario)
@@ -236,6 +267,28 @@ public partial class UsuarioDetalleViewModel : PageViewModel
         _navigationService.NavigateToPage(ApplicationPageNames.AdminUsuarios);
     }
 
+    // ⚠️ TEMP DEV: siembra datos de prueba (áreas, ubicaciones, tareas) para el usuario
+    // abierto. Borra y regenera. Quitar antes de entregar (comando + botón en la vista +
+    // registro en DI + DatosPruebaSeeder.cs).
+    [RelayCommand]
+    private async Task GenerarDatosPrueba()
+    {
+        if (_usuarioOriginal == null || string.IsNullOrEmpty(_usuarioOriginal.IdUsuario))
+            return;
+
+        SeedResultado = "Generando datos de prueba…";
+        try
+        {
+            var seeder = App.Services.GetRequiredService<DatosPruebaSeeder>();
+            SeedResultado = await seeder.SembrarAsync(_usuarioOriginal.IdUsuario);
+        }
+        catch (Exception ex)
+        {
+            SeedResultado = $"Error al generar datos: {ex.Message}";
+            Console.WriteLine($"Error en DatosPruebaSeeder: {ex}");
+        }
+    }
+
     [RelayCommand]
     private async Task GuardarCambios()
     {
@@ -325,7 +378,13 @@ public partial class UsuarioDetalleViewModel : PageViewModel
 
             TareasCreadas = listaFinal.Count;
             TareasCompletadas = listaFinal.Count(t => t.CompletadoEnTiempo);
-            GeneracionesRealizadas = 0;
+
+            // Conteo real de generaciones del usuario en el año/mes seleccionado.
+            var generaciones = await _generacionRepo.ObtenerPorUsuario(_usuarioOriginal.IdUsuario);
+            var gensFiltradas = generaciones.Where(g => g.FecGeneracion.Year == YearActual);
+            if (MesSeleccionado != null)
+                gensFiltradas = gensFiltradas.Where(g => g.FecGeneracion.Month == MesSeleccionado.Numero);
+            GeneracionesRealizadas = gensFiltradas.Count();
         }
         catch (Exception ex)
         {
