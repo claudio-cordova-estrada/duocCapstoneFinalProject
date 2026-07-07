@@ -78,7 +78,11 @@
       "Bash(PYTHONIOENCODING=utf-8 python inspect_daily_fmt2.py)",
       "Bash(PYTHONIOENCODING=utf-8 python fill_daily.py)",
       "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
-      "Bash(PYTHONIOENCODING=utf-8 python final_audit.py)"
+      "Bash(PYTHONIOENCODING=utf-8 python final_audit.py)",
+      "Bash(ls -la \"C:/Users/Claudio C E/Downloads/3.1_APT122_DiarioReflexionFase3.docx\" 2>&1)",
+      "Bash(PYTHONIOENCODING=utf-8 python dump_diario.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python inspect_diario.py)",
+      "Bash(PYTHONIOENCODING=utf-8 python fill_diario.py)"
     ]
   }
 }
