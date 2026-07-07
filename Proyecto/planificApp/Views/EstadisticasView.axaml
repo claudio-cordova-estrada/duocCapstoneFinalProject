@@ -207,11 +207,11 @@
                             
                             <StackPanel Grid.Row="1" Grid.Column="0">
                                 <TextBlock Text="Generaciones modificadas" FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
-                                <TextBlock Text="0" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="{Binding GeneracionesModificadas}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="1">
                                 <TextBlock Text="Tareas en G.S." FontSize="11" Foreground="{DynamicResource TextDisabled}"/>
-                                <TextBlock Text="0" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+                                <TextBlock Text="{Binding TareasEnGS}" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="2">
                                 <TextBlock Text="Tareas mod. en G.S." FontSize="11" Foreground="{DynamicResource TextDisabled}"/>

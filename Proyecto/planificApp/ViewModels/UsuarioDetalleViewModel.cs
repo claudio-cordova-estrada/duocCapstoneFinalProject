@@ -27,7 +27,6 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     private readonly IUsuarioRepository _usuarioRepo;
     private readonly IRegionesService _regionesService;
     private readonly ITareaRepository _tareaRepo;
-    private readonly IMetricasService _metricasService;
     private readonly IAreaInteresRepository _areaRepo;
     private readonly IUbicacionRepository _ubicacionRepo;
     private readonly IBloqueAreaInteresScheduleRepository _bloqueRepo;
@@ -84,14 +83,13 @@ public partial class UsuarioDetalleViewModel : PageViewModel
     };
     [ObservableProperty] private MesUI? _mesSeleccionado;
 
-    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IMetricasService metricasService, IAreaInteresRepository areaRepo, IUbicacionRepository ubicacionRepo, IBloqueAreaInteresScheduleRepository bloqueRepo, IDialogService dialogService, ISesionService sesion, IGeneracionRepository generacionRepo)
+    public UsuarioDetalleViewModel(INavigationService navigationService, IUsuarioRepository usuarioRepo, IRegionesService regionesService, ITareaRepository tareaRepo, IAreaInteresRepository areaRepo, IUbicacionRepository ubicacionRepo, IBloqueAreaInteresScheduleRepository bloqueRepo, IDialogService dialogService, ISesionService sesion, IGeneracionRepository generacionRepo)
     {
         PageName = ApplicationPageNames.AdminUsuarioDetalle;
         _navigationService = navigationService;
         _usuarioRepo = usuarioRepo;
         _regionesService = regionesService;
         _tareaRepo = tareaRepo;
-        _metricasService = metricasService;
         _areaRepo = areaRepo;
         _ubicacionRepo = ubicacionRepo;
         _bloqueRepo = bloqueRepo;

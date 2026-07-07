@@ -128,9 +128,15 @@ public partial class UsuariosViewModel : PageViewModel
         AplicarFiltros();
     }
 
+    // Un administrador se identifica por el dominio de su correo (igual criterio que el login).
+    private static bool EsAdministrador(Usuario u) =>
+        !string.IsNullOrEmpty(u.Correo) && u.Correo.Trim().ToLower().Contains("@planificapp.");
+
     private void AplicarFiltros()
     {
-        var filtrados = _todosLosUsuarios.AsEnumerable();
+        // Los administradores no se listan: así un admin no puede abrir el detalle de otro admin
+        // (ni eliminarlo). Solo se gestionan usuarios normales.
+        var filtrados = _todosLosUsuarios.Where(u => !EsAdministrador(u));
 
         // Agregamos !string.IsNullOrEmpty para evitar el crash con nulos
         if (!string.IsNullOrEmpty(RegionSeleccionada) && RegionSeleccionada != "Todas")

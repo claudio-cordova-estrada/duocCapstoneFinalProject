@@ -541,27 +541,21 @@ public class CalendarioSemanalService : ICalendarioSemanalService
                     origenUbic = firstSaved;
             }
 
-            if (origenUbic == null || destinoUbic == null)
-            {
-                System.Diagnostics.Debug.WriteLine($"[TRASLADO] No se encontraron coordenadas: origen={ubicacionActual} ({origenUbic?.Nombre ?? "null"}) destino={ubicacionBloque} ({destinoUbic?.Nombre ?? "null"}), usando estimado {DefaultTravelMinutes}min");
-                nuevosTraslados.Add(CrearTrasladoEstimado(bloque, ubicacionActual, ubicacionBloque, metodoTransporte.Value));
-                ubicacionActual = ubicacionBloque;
-                continue;
-            }
-
-            var transporteStr = MetodoTransporteToGeoString(metodoTransporte.Value);
-            var modoGoogle = transporteStr switch
-            {
-                "A pie" => "WALK",
-                "Bus" => "TRANSIT",
-                _ => "DRIVE"
-            };
-
             var cacheKey = $"{ubicacionActual}|{ubicacionBloque}|{metodoTransporte.Value}";
             int duracionMin;
             bool estimado;
 
-            if (existingTraslados.TryGetValue(cacheKey, out var cached))
+            if (origenUbic == null || destinoUbic == null)
+            {
+                // Sin coordenadas: usamos un estimado. IMPORTANTE: antes esto creaba el traslado
+                // aparte y hacía 'continue', salteándose el tope contra el inicio de jornada de más
+                // abajo (por eso el traslado del primer bloque podía quedar antes del inicio del día).
+                // Ahora cae en la misma lógica (A2) que topa el traslado contra la jornada.
+                System.Diagnostics.Debug.WriteLine($"[TRASLADO] Sin coordenadas: origen={ubicacionActual} ({origenUbic?.Nombre ?? "null"}) destino={ubicacionBloque} ({destinoUbic?.Nombre ?? "null"}), estimado {DefaultTravelMinutes}min");
+                duracionMin = DefaultTravelMinutes;
+                estimado = true;
+            }
+            else if (existingTraslados.TryGetValue(cacheKey, out var cached))
             {
                 duracionMin = cached.Item1;
                 estimado = cached.Item2;
@@ -573,6 +567,14 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             }
             else
             {
+                var transporteStr = MetodoTransporteToGeoString(metodoTransporte.Value);
+                var modoGoogle = transporteStr switch
+                {
+                    "A pie" => "WALK",
+                    "Bus" => "TRANSIT",
+                    _ => "DRIVE"
+                };
+
                 try
                 {
                     var resultado = await _geoService.CalcularRutaGoogleAsync(
@@ -653,6 +655,18 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             ubicacionActual = ubicacionBloque;
             origenCache = destinoUbic;
         }
+
+        // Garantía dura: ningún traslado puede empezar antes del inicio de jornada. Si alguno
+        // quedó antes (por cualquier camino), lo recortamos; si se queda sin duración útil, se descarta.
+        nuevosTraslados.RemoveAll(t =>
+        {
+            if (t.HoraInicio < horaInicioJornada)
+            {
+                t.HoraInicio = horaInicioJornada;
+                t.DuracionMinutos = (int)(t.HoraFin - t.HoraInicio).TotalMinutes;
+            }
+            return t.HoraFin <= t.HoraInicio;
+        });
 
         // Pasada sincrónica final: volcamos todos los traslados de una sola vez.
         foreach (var t in nuevosTraslados)
@@ -784,35 +798,6 @@ public class CalendarioSemanalService : ICalendarioSemanalService
             "taxi" => MetodoTransporte.Auto,
             "bicicleta" => MetodoTransporte.Caminar,
             _ => null
-        };
-    }
-
-    private BloqueCalendario CrearTrasladoEstimado(BloqueCalendario bloqueSiguiente,
-        string origen, string destino, MetodoTransporte metodoTransporte)
-    {
-        var duracion = TimeSpan.FromMinutes(DefaultTravelMinutes);
-        if (duracion < DuracionMinima) duracion = DuracionMinima;
-
-        var horaInicio = bloqueSiguiente.HoraInicio - duracion;
-        if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
-
-        if (bloqueSiguiente.HoraInicio - horaInicio < DuracionMinima)
-        {
-            horaInicio = bloqueSiguiente.HoraInicio - DuracionMinima;
-            if (horaInicio < TimeSpan.Zero) horaInicio = TimeSpan.Zero;
-        }
-
-        return new BloqueCalendario
-        {
-            Tipo = TipoBloqueCalendario.SeccionTraslado,
-            HoraInicio = horaInicio,
-            HoraFin = bloqueSiguiente.HoraInicio,
-            UbicacionOrigen = origen,
-            UbicacionDestino = destino,
-            DuracionMinutos = (int)(bloqueSiguiente.HoraInicio - horaInicio).TotalMinutes,
-            EsEstimado = true,
-            MetodoTransporte = metodoTransporte,
-            ColorHex = "#ef4444"
         };
     }
 

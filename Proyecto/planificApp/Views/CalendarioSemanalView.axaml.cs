@@ -43,6 +43,9 @@ public partial class CalendarioSemanalView : UserControl
     private const double SnapMinutes = 15;
     private const double SnapPixels = PixelsPerHour * SnapMinutes / 60.0;
     private const double MinBlockHeight = PixelsPerHour * 15.0 / 60.0;
+    // Un traslado solo muestra su texto (duración + transporte) a partir de 25 min; por debajo
+    // queda demasiado chico para leerlo y se dibuja solo el cuadradito de color.
+    private const double TrasladoTextoMinHeight = PixelsPerHour * 25.0 / 60.0;
     private const double ResizeHandleSize = 6;
 
     private enum DragMode { None, Move, ResizeTop, ResizeBottom, MoveSubBloque, ResizeTopSubBloque, ResizeBottomSubBloque }
@@ -681,58 +684,58 @@ case TipoBloqueCalendario.SeccionTraslado:
                 border.CornerRadius = new CornerRadius(3);
                 border.Cursor = new Cursor(StandardCursorType.Arrow);
 
-                if (heightPx < 30)
-                {
-                    topPx = topPx + heightPx - 30;
-                    if (topPx < 0) topPx = 0;
-                    heightPx = 30;
-                    border.Margin = new Thickness(leftOffset, topPx, 2, 0);
-                    border.Height = heightPx;
-                }
+                // El traslado se dibuja con su alto REAL (proporcional a su duración): ya no lo
+                // estiramos hacia arriba, así un traslado corto pegado al arranque del día nunca
+                // invade el tiempo previo al inicio de jornada (la zona gris).
                 border.Margin = new Thickness(leftOffset, topPx, 2, 0);
                 border.Height = heightPx;
 
-                var durationText = bloque.DuracionMinutos.HasValue
-                    ? $"{bloque.DuracionMinutos} min"
-                    : "~15 min";
-                if (bloque.EsEstimado) durationText += " ~";
-                var transportLabel = bloque.MetodoTransporte switch
+                // El texto (duración + transporte) solo entra si el traslado mide al menos 25 min;
+                // por debajo no sería legible, así que dejamos solo el cuadradito de color.
+                if (heightPx >= TrasladoTextoMinHeight)
                 {
-                    MetodoTransporte.Caminar => "A pie",
-                    MetodoTransporte.Auto => "Auto",
-                    MetodoTransporte.Bus => "Bus",
-                    _ => ""
-                };
+                    var durationText = bloque.DuracionMinutos.HasValue
+                        ? $"{bloque.DuracionMinutos} min"
+                        : "~15 min";
+                    if (bloque.EsEstimado) durationText += " ~";
+                    var transportLabel = bloque.MetodoTransporte switch
+                    {
+                        MetodoTransporte.Caminar => "A pie",
+                        MetodoTransporte.Auto => "Auto",
+                        MetodoTransporte.Bus => "Bus",
+                        _ => ""
+                    };
 
-                var trasladoStack = new StackPanel
-                {
-                    Orientation = Orientation.Vertical,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Spacing = 1
-                };
+                    var trasladoStack = new StackPanel
+                    {
+                        Orientation = Orientation.Vertical,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Spacing = 1
+                    };
 
-                trasladoStack.Children.Add(new TextBlock
-                {
-                    Text = durationText,
-                    FontSize = 9,
-                    FontWeight = FontWeight.Bold,
-                    Foreground = TrasladoBorderBrush,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                });
-
-                if (!string.IsNullOrEmpty(transportLabel))
-                {
                     trasladoStack.Children.Add(new TextBlock
                     {
-                        Text = transportLabel,
-                        FontSize = 8,
+                        Text = durationText,
+                        FontSize = 9,
+                        FontWeight = FontWeight.Bold,
                         Foreground = TrasladoBorderBrush,
                         HorizontalAlignment = HorizontalAlignment.Center
                     });
-                }
 
-                border.Child = trasladoStack;
+                    if (!string.IsNullOrEmpty(transportLabel))
+                    {
+                        trasladoStack.Children.Add(new TextBlock
+                        {
+                            Text = transportLabel,
+                            FontSize = 8,
+                            Foreground = TrasladoBorderBrush,
+                            HorizontalAlignment = HorizontalAlignment.Center
+                        });
+                    }
+
+                    border.Child = trasladoStack;
+                }
                 break;
         }
 

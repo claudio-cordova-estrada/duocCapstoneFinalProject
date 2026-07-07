@@ -23,6 +23,8 @@ public partial class EstadisticasViewModel : PageViewModel
     private readonly IGeneracionRepository _generacionRepo;
 
     private List<Usuario> _todosLosUsuarios = new();
+    private List<Tarea> _todasLasTareas = new();
+    private List<Generacion> _todasLasGeneraciones = new();
 
     // Filtros de Ubicación
     [ObservableProperty] private ObservableCollection<string> _regiones = new();
@@ -102,6 +104,8 @@ public partial class EstadisticasViewModel : PageViewModel
     [ObservableProperty] private int _tareasCreadas;
     [ObservableProperty] private int _tareasCompletadas;
     [ObservableProperty] private int _generacionesRealizadas;
+    [ObservableProperty] private int _generacionesModificadas;
+    [ObservableProperty] private int _tareasEnGS;
     [ObservableProperty] private int _tareasModificadasGS;
 
     // --- OBJETIVOS DEL PROYECTO (KPIs reales vs. meta) ---
@@ -126,13 +130,17 @@ public partial class EstadisticasViewModel : PageViewModel
         var usuariosDb = await _usuarioRepo.ObtenerTodosLosUsuarios();
         _todosLosUsuarios = usuariosDb.ToList();
 
+        // Precargamos tareas y generaciones una sola vez; los filtros recalculan en memoria.
+        _todasLasTareas = await _tareaRepo.ObtenerTodasLasTareas();
+        _todasLasGeneraciones = await _generacionRepo.ObtenerTodas();
+
         ActualizarSugerencias();
         CalcularMetricas();
-        await CalcularObjetivosAsync();
+        CalcularObjetivos();
     }
 
     // Calcula los 4 objetivos específicos del proyecto con datos reales (globales, no filtrados).
-    private async Task CalcularObjetivosAsync()
+    private void CalcularObjetivos()
     {
         try
         {
@@ -140,16 +148,14 @@ public partial class EstadisticasViewModel : PageViewModel
             int totalU = usuarios.Count;
             int activos = usuarios.Count(u => u.EstaActivo);
 
-            var generaciones = await _generacionRepo.ObtenerTodas();
-            var usuariosConGen = generaciones
+            var usuariosConGen = _todasLasGeneraciones
                 .Select(g => g.IdUsuario)
                 .Where(id => !string.IsNullOrEmpty(id))
                 .Distinct()
                 .ToHashSet();
             int usanGen = usuarios.Count(u => !string.IsNullOrEmpty(u.IdUsuario) && usuariosConGen.Contains(u.IdUsuario!));
 
-            var tareas = await _tareaRepo.ObtenerTodasLasTareas();
-            var usadas = tareas.Where(t => t.UsoGeneracion == true).ToList();
+            var usadas = _todasLasTareas.Where(t => t.UsoGeneracion == true).ToList();
             int totalUsadas = usadas.Count;
             int noModif = usadas.Count(t => !t.ModificacionGeneracion);
             int completadasTiempo = usadas.Count(t => t.FecCompletado != null && t.CompletadoEnTiempo);
@@ -239,32 +245,59 @@ public partial class EstadisticasViewModel : PageViewModel
 
     private void CalcularMetricas()
     {
-        var usuariosFiltrados = _todosLosUsuarios.AsEnumerable();
+        // Ámbito geográfico (región/comuna): universo de usuarios para todas las métricas.
+        var usuariosAmbito = _todosLosUsuarios.AsEnumerable();
 
         if (!string.IsNullOrEmpty(RegionSeleccionada) && RegionSeleccionada != "Todas")
-            usuariosFiltrados = usuariosFiltrados.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(RegionSeleccionada));
+            usuariosAmbito = usuariosAmbito.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(RegionSeleccionada));
 
         if (!string.IsNullOrEmpty(ComunaSeleccionada) && ComunaSeleccionada != "Todas")
-            usuariosFiltrados = usuariosFiltrados.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(ComunaSeleccionada));
+            usuariosAmbito = usuariosAmbito.Where(u => !string.IsNullOrEmpty(u.Ubicacion) && u.Ubicacion.Contains(ComunaSeleccionada));
 
-        if (MesSeleccionado != null)
-            usuariosFiltrados = usuariosFiltrados.Where(u => u.FecCreacion.Year == YearActual && u.FecCreacion.Month == MesSeleccionado.Value);
-        else
-            usuariosFiltrados = usuariosFiltrados.Where(u => u.FecCreacion.Year == YearActual);
+        var listaAmbito = usuariosAmbito.ToList();
+        var idsAmbito = listaAmbito
+            .Select(u => u.IdUsuario)
+            .Where(id => !string.IsNullOrEmpty(id))
+            .ToHashSet();
 
-        var listaFinal = usuariosFiltrados.ToList();
+        // Usuarios: el filtro de año/mes aplica a su fecha de registro.
+        var usuariosPeriodo = listaAmbito.Where(u => EnPeriodo(u.FecCreacion)).ToList();
+        TotalUsuarios = usuariosPeriodo.Count;
+        UsuariosActivos = usuariosPeriodo.Count(u => u.EstaActivo);
 
-        // --- CÁLCULO DE MÉTRICAS (Lo que estaba en 0) ---
-        TotalUsuarios = listaFinal.Count;
-        UsuariosActivos = listaFinal.Count(u => u.EstaActivo);
+        // Tareas del ámbito, filtradas por periodo según su fecha de creación.
+        var tareasPeriodo = _todasLasTareas
+            .Where(t => !string.IsNullOrEmpty(t.IdUsuario) && idsAmbito.Contains(t.IdUsuario) && EnPeriodo(t.FecCreacion))
+            .ToList();
+        TareasCreadas = tareasPeriodo.Count;
+        TareasCompletadas = tareasPeriodo.Count(t => t.FecCompletado != null);
 
-        UsanGeneracionSemanal = (int)(UsuariosActivos * 0.4);
-        CambiosPorGeneracion = TotalUsuarios > 0 ? 2.4 : 0.0;
-        TareasCreadas = TotalUsuarios * 15;
-        TareasCompletadas = (int)(TareasCreadas * 0.85);
-        GeneracionesRealizadas = TotalUsuarios * 3;
-        TareasModificadasGS = TotalUsuarios * 5;
+        var tareasGS = tareasPeriodo.Where(t => t.UsoGeneracion == true).ToList();
+        TareasEnGS = tareasGS.Count;
+        TareasModificadasGS = tareasGS.Count(t => t.ModificacionGeneracion);
+
+        // Generaciones del ámbito, filtradas por periodo según su fecha.
+        var generacionesPeriodo = _todasLasGeneraciones
+            .Where(g => idsAmbito.Contains(g.IdUsuario) && EnPeriodo(g.FecGeneracion))
+            .ToList();
+        GeneracionesRealizadas = generacionesPeriodo.Count;
+
+        // Usuarios distintos del ámbito con al menos una generación en el periodo.
+        UsanGeneracionSemanal = generacionesPeriodo.Select(g => g.IdUsuario).Distinct().Count();
+
+        // El modelo no vincula cada tarea con la generación de la que salió, así que no se puede
+        // contar "generaciones modificadas" de forma fiable. Queda en 0 hasta que se registre ese dato.
+        GeneracionesModificadas = 0;
+
+        // Promedio real de tareas modificadas por generación.
+        CambiosPorGeneracion = GeneracionesRealizadas > 0
+            ? (double)TareasModificadasGS / GeneracionesRealizadas
+            : 0.0;
     }
+
+    // ¿La fecha cae en el año seleccionado (y en el mes, si hay uno elegido)?
+    private bool EnPeriodo(DateTime fecha) =>
+        fecha.Year == YearActual && (MesSeleccionado == null || fecha.Month == MesSeleccionado.Value);
 
     // Las sugerencias del buscador se calculan APARTE del texto: si se modificara SugerenciasBusqueda
     // dentro de OnTextoBusquedaChanged, el AutoCompleteBox crashea al cerrar el dropdown (vacía la
